@@ -190,18 +190,17 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 
 	private PTArmor getArmorFromDialog() {
 		String name = new String(mDialogNameET.getText().toString());
+		
 		if(name == null || name.contentEquals("")) {
 			return null;
 		}
 		
-		int spellFail;
-		int weight;
-		
 		String specialProperties = new String(mDialogSpecialPropertiesET.getText().toString());
 		int speed = mDialogSpeedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
 		
-		spellFail = mDialogASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
+		int spellFail = mDialogASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
 		
+		int weight;
 		try {
 			weight = Integer.parseInt(mDialogWeightET.getText().toString());
 		} catch (NumberFormatException e) {
