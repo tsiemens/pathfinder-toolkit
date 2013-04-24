@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +34,8 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	private Spinner mDialogLevel;
 	private Spinner mDialogPrepared;
 	private EditText mDialogDescription;
+	private OnTouchListener mSpinnerOnTouchListener;
+	private View mDialogView;
 	
 	private ViewGroup mContainer;
 	
@@ -60,31 +64,15 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	}
 
 	private void setListViews(View fragmentView) {
-		/*for(int i = 0; i < spellListViewIds.length; i++) {
-			mListViews[i] = (ListView) fragmentView.findViewById(spellListViewIds[i]);
-		}*/
 		mListView = (ListView) fragmentView.findViewById(R.id.spells);
 	}
 
 	private void setonItemClickListeners() {
-		/*for(int i = 0; i < mListViews.length; i++) {
-			mListViews[i].setOnItemClickListener(this);
-		}*/
 		mListView.setOnItemClickListener(this);
 	}
 
-	/*private void refreshSpellListViews() {
-		/*for(int i = 0; i < mCharacter.getSpellBook().getNumSpellLevels(); i++) {
-			refreshSpellListView();
-		}
-		refreshSpellListView();
-	}*/
 
 	private void refreshSpellListView() {
-		/*Log.v(TAG, "Creating a SpellBookAdapter for level " + level);
-		PTSpellBookAdapter adapter = new PTSpellBookAdapter(mContainer.getContext(),
-				R.layout.character_spellbook_frow,
-				mCharacter.getSpellBook().getSpells());*/
 		
 		PTSpellBookAdapter adapter = new PTSpellBookAdapter(mContainer.getContext(),
 				R.layout.character_spellbook_row,
@@ -111,10 +99,6 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	}
 	
 	private void showSpellDialog(PTSpell spell) {
-		///PTSpell spell = new PTSpell();
-		
-		//spell.setAsOtherSpell(selectedSpell);
-		//mCharacter.getSpellBook().deleteSpell(spell);
 		if(spell == null) {
 			spell = new PTSpell();
 		}
@@ -149,17 +133,29 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 			.setNegativeButton(R.string.cancel_button_text, this);
 		
 		AlertDialog alert = builder.create();
+		mDialogView = dialogView;
 		alert.show();
 	}
 	
 	private void setupSpinner(Spinner spinner, int options, int pos) {
-		//int[] optionArray = generateOptionArray(options);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				R.array.selectable_values_string, android.R.layout.simple_spinner_item);
+		
+		if(mSpinnerOnTouchListener == null) {
+			mSpinnerOnTouchListener = new OnTouchListener() {
+	            @Override
+	            public boolean onTouch(View v, MotionEvent event) {
+	                closeKeyboard();
+	                return false;
+	            }
+			};
+		}
 		
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		spinner.setAdapter(adapter);
 		spinner.setSelection(pos, true);
+		
+		spinner.setOnTouchListener(mSpinnerOnTouchListener);
 	}
 	
 	private String[] generateOptionArray(int options) {
@@ -204,12 +200,17 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 			break;
 		}
 		
-		//Close keyboard
+		closeKeyboard();
+	}
+	
+	private void closeKeyboard() {
 		InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		if(mDialogName.hasFocus())
-			iMM.hideSoftInputFromInputMethod(mDialogName.getWindowToken(), 0);
-		else if(mDialogDescription.hasFocus())
-			iMM.hideSoftInputFromInputMethod(mDialogDescription.getWindowToken(), 0);
+		if(mDialogName.hasFocus()) {
+			iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
+		}
+		else if(mDialogDescription.hasFocus()) {
+			iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
+		}
 	}
 	
 	private PTSpell getSpellFromDialog() {

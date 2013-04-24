@@ -5,13 +5,17 @@ import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.items.PTWeapon;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -40,8 +44,8 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 	private Spinner mDialogSizeSpinner;
 	private EditText mDialogWeightET;
 	private EditText mDialogSpecialPropertiesET;
-	
-	
+	private View mDialogView;
+	private OnTouchListener mSpinnerOnTouchListener;	
 	
 	private ViewGroup mContainer;
 	
@@ -143,6 +147,7 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 		.setNegativeButton(R.string.cancel_button_text, this);
 	
 	AlertDialog alert = builder.create();
+	mDialogView = dialogView;
 	alert.show();
 	}
 	
@@ -226,8 +231,25 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				optionResourceId, android.R.layout.simple_spinner_item);
 		
+		if(mSpinnerOnTouchListener == null) {
+			mSpinnerOnTouchListener = new OnTouchListener() {
+	            @Override
+	            public boolean onTouch(View v, MotionEvent event) {
+	                closeKeyboard();
+	                return false;
+	            }
+			};
+		}
+		
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		spinner.setAdapter(adapter);
+		
+		spinner.setOnTouchListener(mSpinnerOnTouchListener);
+	}
+	
+	private void closeKeyboard() {
+		InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
 	}
 	
 	private String getStringByResourceAndIndex(int resourceId, int position) {
