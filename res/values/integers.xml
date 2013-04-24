@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer name="max_dice_per_roll">30</integer>
+    <integer name="max_roll_sum">9999</integer>
+    
+    <integer name="fluff_dialog_max_lines">6</integer>
+    
+    <integer name="armor_spinner_offset">20</integer>
+    
+    <!-- Keys for set arrays -->
+    <integer name="key_strength">0</integer>
+    <integer name="key_dexterity">1</integer>
+    <integer name="key_constitution">2</integer>
+    <integer name="key_intelligence">3</integer>
+    <integer name="key_wisdom">4</integer>
+    <integer name="key_charisma">5</integer>
+    
+    <integer name="key_fort_save">0</integer>
+    <integer name="key_ref_save">1</integer>
+    <integer name="key_will_save">2</integer>
+    
+    <!-- Point buy calculator shit -->    
+    <integer-array name="HumanMods">
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+    </integer-array>
+    <integer name="calc_custom_option_offset">10</integer>
+    
+    <integer-array name="DwarfMods">
+        <item >0</item>
+        <item >0</item>
+        <item >2</item>
+        <item >0</item>
+        <item >2</item>
+        <item >-2</item>
+    </integer-array>
+    
+    <integer-array name="ElfMods">
+        <item >0</item>
+        <item >2</item>
+        <item >-2</item>
+        <item >2</item>
+        <item >0</item>
+        <item >0</item>
+    </integer-array>
+    
+    <integer-array name="HalflingMods">
+        <item >-2</item>
+        <item >2</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >2</item>
+    </integer-array>
+    
+    <integer-array name="GnomeMods">
+        <item >-2</item>
+        <item >0</item>
+        <item >2</item>
+        <item >0</item>
+        <item >0</item>
+        <item >2</item>
+    </integer-array>
+    
+    <integer-array name="HalfElfMods">
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+        <item >0</item>
+    </integer-array>
+    
+    <integer-array name="skill_ability_keys">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>0</item>
+        <item>3</item>
+        <item>5</item>
+        <item>1</item>
+        <item>5</item>
+        <item>1</item>
+        <item>1</item>
+        <item>5</item>
+        <item>4</item>
+        <item>5</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>4</item>
+        <item>1</item>
+        <item>4</item>
+        <item>1</item>
+        <item>3</item>
+        <item>1</item>
+        <item>4</item>
+        <item>0</item>
+        <item>5</item>
+    </integer-array>
+        
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="50dp"
+    	android:orientation="horizontal"
+    	android:paddingBottom="5dp">
+
+    <Button
+        android:id="@+id/buttonRoll"
+        android:layout_width="0px"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_weight="0.5"
+        android:text="@string/skill_checker_roll_button" />
+
+    <Spinner
+        android:id="@+id/spinnerSkillToRoll"
+        android:layout_height="fill_parent"
+        android:layout_width="0px"
+        android:gravity="center"
+        android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FF909090" />
+
+    <ListView
+        android:id="@+id/listViewPartyMembers"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

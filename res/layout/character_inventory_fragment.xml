@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+   <!-- Dummy view to remove edit text focus -->
+    <View
+    android:id="@+id/dummyView"
+    android:focusable="true" android:focusableInTouchMode="true"
+    android:layout_width="0px" android:layout_height="0px"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:weightSum="15" >
+        		
+        <TextView
+            android:id="@+id/tvGoldHeader"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/inventory_gold_header"/>
+        
+        <EditText
+            android:id="@+id/editTextGold"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:maxLines="1"
+            android:hint="@string/inventory_gold_hint"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"/>
+                
+        <TextView
+            android:id="@+id/tvWeightTotal"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:maxLines="1"
+            android:text="@string/inventory_total_weight_header"/>
+        
+         <Button
+            android:id="@+id/buttonAddItem"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/inventory_add_item_button" />
+         
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="14" >
+
+        <TextView
+            android:id="@+id/tvItemQuantityHeader"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/inventory_quantity_header" />
+
+        <TextView
+            android:id="@+id/tvItemNameHeader"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="8"
+            android:gravity="left|center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:scrollHorizontally="true"
+            android:text="@string/inventory_name_header" />
+
+        <TextView
+            android:id="@+id/tvItemWeightHeader"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/inventory_weight_header" />
+
+        <TextView
+            android:id="@+id/tvItemContainedHeader"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/inventory_contained_header" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FF909090" />
+
+    <ListView
+        android:id="@+id/listViewInventory"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

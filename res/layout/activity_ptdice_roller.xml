@@ -1,0 +1,222 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100" >
+
+    <RadioGroup
+        android:id="@+id/toggleGroupRollType"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="8" >
+
+        <ToggleButton
+            android:id="@+id/radiotoggleSingleRoll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:onClick="rollTypeClicked"
+            android:textOff="@string/roller_mode_single"
+            android:textOn="@string/roller_mode_single"
+            android:textSize="@dimen/dice_roller_button_text_larger" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleMultiRoll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:onClick="rollTypeClicked"
+            android:textOff="@string/roller_mode_multi"
+            android:textOn="@string/roller_mode_multi"
+            android:textSize="@dimen/dice_roller_button_text_larger" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleSumRoll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:onClick="rollTypeClicked"
+            android:textOff="@string/roller_mode_sum"
+            android:textOn="@string/roller_mode_sum"
+            android:textSize="@dimen/dice_roller_button_text_larger" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/toggleGroupDieType"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp" 
+        android:orientation="horizontal"
+        android:layout_weight="6" >
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD4Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d4"
+            android:textOn="@string/roller_die_d4"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD6Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d6"
+            android:textOn="@string/roller_die_d6"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD8Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d8"
+            android:textOn="@string/roller_die_d8"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD10Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d10"
+            android:textOn="@string/roller_die_d10"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD12Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d12"
+            android:textOn="@string/roller_die_d12"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD20Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d20"
+            android:textOn="@string/roller_die_d20"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+
+        <ToggleButton
+            android:id="@+id/radiotoggleD100Die"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="dieTypeClicked"
+            android:textOff="@string/roller_die_d100"
+            android:textOn="@string/roller_die_d100"
+            android:textSize="@dimen/dice_roller_button_text_smaller" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutRoller1"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        android:layout_weight="64" >
+
+        <LinearLayout
+            android:id="@+id/linearLayoutDiceNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:weightSum="3" >
+
+            <Button
+                android:id="@+id/buttonPlusDiceNumber"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/plus"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textViewDiceNumberPicker"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/buttonMinusDiceNumber"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/minus"
+                android:layout_weight="1" />
+            
+       </LinearLayout>
+       
+       <ListView 
+           android:id="@+id/rollResultListView"
+           android:layout_width="60dp"
+           android:layout_height="fill_parent"/>
+                    
+        <TextView
+            android:id="@+id/textViewRollResult"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:padding="20dp"
+            android:maxLines="1"
+            android:textSize="@dimen/dice_roller_result_text_size" />
+     
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewRollSum"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/roller_sum_label"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_weight="10" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutRoller2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:layout_weight="12" >
+
+        <Button
+            android:id="@+id/buttonRoll"
+            android:layout_width="@dimen/dice_roller_roll_button_width"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/roller_roll_button" />
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/roller_reset_button" />
+    </LinearLayout>
+
+</LinearLayout>
