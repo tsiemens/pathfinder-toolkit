@@ -4,12 +4,16 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +43,8 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 	private EditText mDialogWeightET;
 	private EditText mDialogNameET;
 	private EditText mDialogSpecialPropertiesET;
+	private View mDialogView;
+	private OnTouchListener mSpinnerOnTouchListener;
 	
 	private ViewGroup mContainer;
 
@@ -142,6 +148,7 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 			.setNegativeButton(R.string.cancel_button_text, this);
 		
 		AlertDialog alert = builder.create();
+		mDialogView = dialogView;
 		alert.show();
 	}
 	
@@ -223,7 +230,23 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				optionResourceId, android.R.layout.simple_spinner_item);
 		
+		if(mSpinnerOnTouchListener == null) {
+			mSpinnerOnTouchListener = new OnTouchListener() {
+	            @Override
+	            public boolean onTouch(View v, MotionEvent event) {
+	                closeKeyboard();
+	                return false;
+	            }
+			};
+		}
+		
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		spinner.setAdapter(adapter);
+		spinner.setOnTouchListener(mSpinnerOnTouchListener);
+	}
+	
+	private void closeKeyboard() {
+		InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
 	}
 }
