@@ -71,7 +71,7 @@ public class PTSave extends PTStat {
 	}
 	
 	public int getBase() {
-		return mBaseValue;
+		return super.getBaseValue();
 	}
 	
 	public int getTotal() {
@@ -84,7 +84,7 @@ public class PTSave extends PTStat {
 	}
 	
 	public void setBase(int base) {
-		mBaseValue = base;
+		super.setBaseValue(base);
 	}
 	
 	public void setMagicMod(int magicMod) {
@@ -101,7 +101,7 @@ public class PTSave extends PTStat {
 	
 	private void calculateTotal() {
 		mTotal = 0;
-		mTotal += mBaseValue;
+		mTotal += super.getBaseValue();
 		mTotal += mAbilityMod;
 		mTotal += mMagicMod;
 		mTotal += mMiscMod;
