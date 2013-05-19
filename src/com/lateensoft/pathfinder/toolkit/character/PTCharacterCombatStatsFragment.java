@@ -60,6 +60,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 	private EditText mCMBSizeEditText;
 	private TextView mCMDTextView;
 	private EditText mCMDDexEditText;
+	private EditText mCMDMiscModEditText;
 	
 	private TextView mFortTextView;
 	private EditText mFortBaseEditText;
@@ -218,6 +219,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 		mCharacter.getCombatStatSet().setStrengthMod(getEditTextInt(mCMBStrengthEditText));
 		mCharacter.getCombatStatSet().setSizeModifier(getEditTextInt(mCMBSizeEditText));
 		mCharacter.getCombatStatSet().setCMDDexMod(getEditTextInt(mCMDDexEditText));
+		mCharacter.getCombatStatSet().setCMDMiscMod(getEditTextInt(mCMDMiscModEditText));
 		updateCombatManeuverViews();
 	}
 	
@@ -264,7 +266,8 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 		setIntText(mCMBStrengthEditText, mCharacter.getCombatStatSet().getStrengthMod());
 		updateSizeModViews();
 		setIntText(mCMDTextView, mCharacter.getCombatStatSet().getCombatManeuverDefense());
-		setIntText(mCMDDexEditText, mCharacter.getCombatStatSet().getCMDDexMod());	
+		setIntText(mCMDDexEditText, mCharacter.getCombatStatSet().getCMDDexMod());
+		setIntText(mCMDMiscModEditText, mCharacter.getCombatStatSet().getCMDMiscMod());
 	}
 	
 	/**
@@ -284,7 +287,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 	}
 	
 
-	public void setIntText(TextView textView, int number) {
+	private void setIntText(TextView textView, int number) {
 		textView.setText(Integer.toString(number));
 	}
 	
@@ -421,8 +424,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 		setEditTextListeners(mBABSecondaryEditText);
 		
 		mCMBTextView = (TextView) fragmentView.findViewById(R.id.textViewCMB);
-		mCmbBABEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextCmbBAB);
+		mCmbBABEditText = (EditText) fragmentView.findViewById(R.id.editTextCmbBAB);
 		setEditTextListeners(mCmbBABEditText);
 		
 		mCMBStrengthEditText = (EditText) fragmentView
@@ -434,9 +436,10 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 		setEditTextListeners(mCMBSizeEditText);
 		
 		mCMDTextView = (TextView) fragmentView.findViewById(R.id.textViewCMD);
-		mCMDDexEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextCMDDex);
+		mCMDDexEditText = (EditText) fragmentView.findViewById(R.id.editTextCMDDex);
+		mCMDMiscModEditText = (EditText) fragmentView.findViewById(R.id.editTextCMDMiscMod);
 		setEditTextListeners(mCMDDexEditText);
+		setEditTextListeners(mCMDMiscModEditText);
 		
 		mFortTextView = (TextView) fragmentView.findViewById(R.id.tvFort);
 		mFortBaseEditText = (EditText) fragmentView.findViewById(R.id.etSaveFortBase);
@@ -513,7 +516,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 		else if(viewID == mArmourBonusEditText.getId() || viewID == mShieldBonusEditText.getId() 
 				|| viewID == mACDexEditText.getId() || viewID == mACSizeEditText.getId()
 				|| viewID == mNaturalArmourEditText.getId() || viewID == mDeflectEditText.getId()
-				|| viewID ==mACMiscEditText.getId() || viewID == mSpellResistEditText.getId()){
+				|| viewID == mACMiscEditText.getId() || viewID == mSpellResistEditText.getId()) {
 			updateAC();		
 			updateCombatManeuverViews();
 		}
@@ -522,7 +525,8 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment imp
 			updateBAB();
 		
 		else if(viewID == mCmbBABEditText.getId() || viewID == mCMBStrengthEditText.getId()
-				|| viewID == mCMDDexEditText.getId() || viewID == mCMBSizeEditText.getId()){
+				|| viewID == mCMDDexEditText.getId() || viewID == mCMBSizeEditText.getId()
+				|| viewID == mCMDMiscModEditText.getId()){
 			updateCombatManeuvers();
 			updateACViews();
 		}
