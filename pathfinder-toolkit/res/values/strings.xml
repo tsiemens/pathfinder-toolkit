@@ -1,0 +1,704 @@
+<resources>
+
+    <!-- General Strings -->
+    <string name="app_name">Pathfinder Toolkit</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main_menu">Pathfinder Toolkit</string>
+    <string name="title_activity_ability_calc">Pointbuy Calculator</string>
+    <string name="title_activity_character_sheet">Character Sheet</string>
+    <string name="title_activity_initiative_tracker">Initiative Tracker</string>
+    <string name="title_activity_skill_checker">Party Skill Checker</string>
+    <string name="title_activity_party_manager">Party Manager</string>
+    <string name="title_activity_party_member_editor">Party Member Editor</string>
+    <string name="empty_string">""</string>
+    <string name="auto_fill">Autofill</string>
+    
+    <string name="main_menu_icons_description">Icon for main menu item</string>
+
+    <!-- Global menu item strings -->
+    <string name="shared_menu_about">About</string>
+    <string name="shared_menu_ogl">Open Game License</string>
+    <string name="app_version_name">Version:</string>
+    <string name="development_header">Development</string>
+    <string name="development_text">Pathfinder Toolkit was developed by Gorden Larson and Trevor Siemens, operating as the Lateensoft group, using the Paizo Publishing, LLC Community Use Policy and Open Game License 1.0a. (viewable at http://paizo.com/pathfinderRPG/prd/openGameLicense.html )</string>
+    <string name="feedback_text">If you have any feedback for us, or encounter any bugs in this app, please email us at info@lateensoft.host56.com</string>
+    <string name="community_use_header">Community Use Notice</string>
+    <string name="community_use_clause">This application uses trademarks and/or copyrights owned by Paizo Publishing, LLC, which are used under Paizo\'s Community Use Policy. We are expressly prohibited from charging you to use or access this content. This application is not published, endorsed, or specifically approved by Paizo Publishing. For more information about Paizo\'s Community Use Policy, please visit paizo.com/communityuse. For more information about Paizo Publishing and Paizo products, please visit paizo.com.</string>
+    <string name="ogl_header_1">Product Identity:</string>
+    <string name="ogl_text_1"></string>
+    <string name="ogl_header_2"></string>
+    <string name="ogl_text_2"></string>
+
+    <!-- Main Menu Strings -->
+    <string-array name="main_menu_array">
+        <item>Dice Roller</item>
+        <item>Characters</item>
+        <item>Initiative Tracker</item>
+        <item>Party Skill Checker</item>
+        <item>Party Manager</item>
+        <item>Pointbuy Calculator</item>
+    </string-array>
+    <string name="rate_dialog_header">Please rate our app!</string>
+    <string name="rate_dialog_positive_button">Rate</string>
+    <string name="rate_dialog_negative_button">Later</string>
+
+    <!-- Character Sheet Tab Headers -->
+    <string name="tab_character_inventory">Inventory</string>
+    <string name="tab_character_weapons">Weapons</string>
+    <string name="tab_character_armor">Armor</string>
+    <string name="tab_character_feats">Feats / S.A.</string>
+    <string name="tab_character_skills">Skills</string>
+    <string name="tab_character_abilities">Abilities</string>
+    <string name="tab_character_fluff">Fluff</string>
+    <string name="tab_character_spells">Spells</string>
+    <string name="tab_character_combat_stats">Combat Stats</string>
+    <string name="menu_item_character_list">Characters</string>
+    <string name="menu_item_new_character">New Character</string>
+    <string name="menu_item_delete_character">Delete Character</string>
+	<string name="select_character_dialog_header">Select Character</string>
+	<string name="new_character_dialog_message">Create new character?</string>
+	<string name="delete_character_dialog_message_1">Are you sure you want to delete\u0020</string>
+	<string name="delete_character_dialog_message_2">\u003F \u000AThis action cannot be undone.</string>
+    
+    <!-- Dice Roller Strings -->
+    <string name="title_activity_ptdice_roller">Dice Roller</string>
+    <string name="roller_mode_single">Single Roll Mode</string>
+    <string name="roller_mode_multi">XdY Roll Mode</string>
+    <string name="roller_mode_sum">Cumulative Rolls Mode</string>
+    <string name="roller_die_d4">d4</string>
+    <string name="roller_die_d6">d6</string>
+    <string name="roller_die_d8">d8</string>
+    <string name="roller_die_d10">d10</string>
+    <string name="roller_die_d12">d12</string>
+    <string name="roller_die_d20">d20</string>
+    <string name="roller_die_d100">d%</string>
+    <string name="roller_sum_label">Sum =</string>
+    <string name="roller_roll_button">Roll</string>
+    <string name="roller_reset_button">Reset</string>
+
+    <!-- Character Stats Strings -->
+    <string-array name="abilities_short">
+        <item>STR</item>
+        <item>DEX</item>
+        <item>CON</item>
+        <item>INT</item>
+        <item>WIS</item>
+        <item>CHA</item>
+    </string-array>
+    <string-array name="save_names">
+        <item>Fortitude</item>
+        <item>Reflex</item>
+        <item>Will</item>
+    </string-array>
+
+    <string name="fluff_hint">Value</string>
+    <string name="str">STR</string>
+    <string name="dex">DEX</string>
+    <string name="con">CON</string>
+    <string name="inl">INT</string>
+    <string name="wis">WIS</string>
+    <string name="cha">CHA</string>
+    <string name="final_score">Final\nScore</string>
+    <string name="racial_mod">Racial\nMod</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="ability">Ability</string>
+    <string name="score">Score</string>
+    <string name="modifier">Mod.</string>
+    <string name="points">Points:</string>
+    <string name="three_spaces">   </string>
+
+    <string-array name="skills">
+        <item>Acrobatics</item>
+        <item>Appraise</item>
+        <item>Bluff</item>
+        <item>Climb</item>
+        <item>Craft</item>
+        <item>Diplomacy</item>
+        <item>Disable Device</item>
+        <item>Disguise</item>
+        <item>Escape Artist</item>
+        <item>Fly</item>
+        <item>Handle Animal</item>
+        <item>Heal</item>
+        <item>Intimidate</item>
+        <item>Knowledge (Arcana)</item>
+        <item>Knowledge (Dungeoneering)</item>
+        <item>Knowledge (Engineering)</item>
+        <item>Knowledge (Geography)</item>
+        <item>Knowledge (History)</item>
+        <item>Knowledge (Local)</item>
+        <item>Knowledge (Nature)</item>
+        <item>Knowledge (Nobility)</item>
+        <item>Knowledge (Planes)</item>
+        <item>Knowledge (Religion)</item>
+        <item>Linguistics</item>
+        <item>Perception</item>
+        <item>Perform</item>
+        <item>Profession</item>
+        <item>Ride</item>
+        <item>Sense Motive</item>
+        <item>Sleight of Hand</item>
+        <item>Spellcraft</item>
+        <item>Stealth</item>
+        <item>Survival</item>
+        <item>Swim</item>
+        <item>Use Magic Device</item>
+    </string-array>
+
+    <!-- Point buy calc strings -->
+    <string name="export_to_new_character">Export to new char</string>
+    <string name="export_to_existing_character">Export to existing char</string>
+    <string-array name="races_array">
+        <item>Human</item>
+        <item>Dwarf</item>
+        <item>Elf</item>
+        <item>Halfling</item>
+        <item>Gnome</item>
+        <item>Half-Elf</item>
+        <item>Half-Orc</item>
+        <item>Custom Race</item>
+    </string-array>
+    <string name="calc_custom_race_dialog_title">Custom Race: Set Modifiers</string>
+    <string-array name="calc_custom_race_mod_options">
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
+        <item>+6</item>
+        <item>+7</item>
+        <item>+8</item>
+        <item>+9</item>
+        <item>+10</item>
+	</string-array>
+    
+    
+    <!-- Character sheet strings -->
+    <!-- Combat Stats -->
+    <string name="combat_stats_empty_field">-</string>
+    <string name="combat_stats_current_hp">HP:</string>
+    <string name="combat_stats_total_hp">Total:</string>
+    <string name="combat_stats_damage_reduction">DR:</string>
+    <string name="combat_stats_wounds">Wounds:</string>
+    <string name="combat_stats_non_lethal">Non-Lethal Dmg:</string>
+    <string name="combat_stats_base_speed">Base Speed:</string>
+    <string name="combat_stats_initiative">Initiative:</string>
+    <string name="combat_stats_equals">=</string>
+    <string name="combat_stats_fort">FORT:</string>
+    <string name="combat_stats_ref">REF:</string>
+    <string name="combat_stats_will">WILL:</string>
+    <string name="combat_stats_base">Base</string>
+    <string name="combat_stats_ability_mod">Ability Mod</string>
+    <string name="combat_stats_magic_mod">Magic Mod</string>
+    <string name="combat_stats_temp_mod">Temp Mod</string>
+ <!-- general use -->
+    <string name="combat_stats_dex_mod">Dex Mod</string>
+ <!-- general use -->
+    <string name="combat_stats_misc_mod">Misc Mod</string>
+ <!-- general use -->
+    <string name="combat_stats_ac">AC:</string>
+    <string name="combat_stats_ac_equals">= 10 +</string>
+    <string name="combat_stats_armour">Armor Bonus</string>
+    <string name="combat_stats_shield">Shield Bonus</string>
+    <string name="combat_stats_size_mod">Size Mod</string>
+ <!-- general use -->
+    <string name="combat_stats_natural_armour">Natural Armor</string>
+    <string name="combat_stats_deflect_mod">Deflect. Mod</string>
+    <string name="combat_stats_touch">Touch:</string>
+    <string name="combat_stats_flat_footed">Flat Footed:</string>
+    <string name="combat_stats_spell_resist">Spell Resistance:</string>
+    <string name="combat_stats_bab">BAB:</string>
+    <string name="combat_stats_bab_primary">Primary</string>
+    <string name="combat_stats_slash">/</string>
+    <string name="combat_stats_bab_secondary">Second/Third/\u2026</string>
+    <string name="combat_stats_cmb">CMB:</string>
+    <string name="combat_stats_cmb_bab">BAB</string>
+    <string name="combat_stats_str_mod">Strength Mod</string>
+    <string name="combat_stats_cmd">CMD:</string>
+    <string name="combat_stats_cmd_equals">= 10 + CMB +</string>
+
+    <!-- Skills -->
+    <string name="skills_total_header">Total</string>
+    <string name="skills_ability_mod_header">Ability Mod.</string>
+    <string name="skills_rank_header">Rank</string>
+    <string name="skills_misc_header">Misc Mod.</string>
+    <string name="skills_class_skill_header">Class Skill</string>
+    <string name="skills_acp_header">Armor Check Penalty</string>
+
+    <!-- Inventory -->
+    <string name="inventory_add_item_button">+</string>
+    <string name="inventory_quantity_header">Qty.</string>
+    <string name="inventory_name_header">Item Name</string>
+    <string name="inventory_weight_header">Wt.</string>
+    <string name="inventory_contained_header">Cont.</string>
+    <string name="inventory_quantity_full">Quantity</string>
+    <string name="inventory_weight_full">Weight</string>
+    <string name="inventory_contained_full">Contained</string>
+    <string name="inventory_total_weight_header">Total Wt:</string>
+    <string name="inventory_gold_header">gp:</string>
+    <string name="inventory_gold_hint">Gold</string>
+    
+    <!-- Armor -->
+    <string name="add_armor_button">Add Armor</string>
+    <string name="armor_name_header">Name: \u0020</string>
+    <string name="armor_weight_header">Weight: \u0020</string>
+    <string name="armor_size_header">Size: \u0020</string>
+    <string name="armor_check_penalty_header">ACP: \u0020</string>
+    <string name="armor_spell_failure_header">ASF: \u0020</string>
+    <string name="armor_special_properties">Special Properties:\u0020</string>
+    <string name="armor_special_properties_hint">Special Properties</string>
+    <string name="armor_class_header">AC: \u0020</string>
+    <string name="armor_speed">Speed: \u0020</string>
+    <string name="armor_max_dex">Max Dex: \u0020</string>
+    <string name="new_armor_title">New Armor</string>
+    <string-array name="ac_spinner_options">
+        <item>-20</item>
+        <item>-19</item>
+        <item>-18</item>
+        <item>-17</item>
+        <item>-16</item>
+        <item>-15</item>
+        <item>-14</item>
+        <item>-13</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+	</string-array>
+
+    <string-array name="acp_spinner_options">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="size_spinner_options">
+        <item>S</item>
+        <item>M</item>
+        <item>L</item>
+    </string-array>
+    <string-array name="speed_spinner_options">
+		<item>0 ft.</item>
+		<item>5 ft.</item>
+		<item>10 ft.</item>
+		<item>15 ft.</item>
+		<item>20 ft.</item>
+		<item>25 ft.</item>
+		<item>30 ft.</item>
+		<item>35 ft.</item>
+		<item>40 ft.</item>
+		<item>45 ft.</item>
+		<item>50 ft.</item>
+		<item>55 ft.</item>
+		<item>60 ft.</item>
+		<item>65 ft.</item>
+		<item>70 ft.</item>
+		<item>75 ft.</item>
+		<item>80 ft.</item>
+		<item>85 ft.</item>
+		<item>90 ft.</item>
+		<item>95 ft.</item>
+		<item>100 ft.</item>
+		<item>105 ft.</item>
+		<item>110 ft.</item>
+		<item>115 ft.</item>
+		<item>120 ft.</item>
+	</string-array>
+	
+    <string-array name="armor_spell_fail_options">
+        <item>0%</item>
+        <item>5%</item>
+        <item>10%</item>
+        <item>15%</item>
+        <item>20%</item>
+        <item>25%</item>
+        <item>30%</item>
+        <item>35%</item>
+        <item>40%</item>
+        <item>45%</item>
+        <item>50%</item>
+        <item>55%</item>
+        <item>60%</item>
+        <item>65%</item>
+        <item>70%</item>
+        <item>75%</item>
+        <item>80%</item>
+        <item>85%</item>
+        <item>90%</item>
+        <item>95%</item>
+	</string-array>
+    
+    <!-- Weapons -->
+    <string name="add_weapon_button">Add Weapon</string>
+    <string name="weapon_name_header">Name: \u0020</string>
+    <string name="weapon_weight_header">Weight: \u0020</string>
+    <string name="weapon_size_header">Size: \u0020</string>
+    <string name="weapon_critical_header">Critical: \u0020</string>
+    <string name="weapon_range_header">Range: </string>
+    <string name="Weapon_special_properties">Special Properties:\u0020</string>
+    <string name="weapon_ammunition_header">Ammo: \u0020</string>
+    <string name="weapon_damage_header">Damage: \u0020</string>
+    <string name="weapon_total_attack_header">Attack:\u0020</string>
+    <string name="weapon_highest_atk">Attack:\u0020</string>
+    <string name="weapon_type_header">Type:\u0020</string>
+    <string name="new_weapon_title">New Weapon\u0020</string>
+    <string name="weapon_crit_hint">""</string>
+    
+    <string-array name="weapon_attack_bonus_options">
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>+0</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
+        <item>+6</item>
+        <item>+7</item>
+        <item>+8</item>
+        <item>+9</item>
+        <item>+10</item>
+        <item>+11</item>
+        <item>+12</item>
+        <item>+13</item>
+        <item>+14</item>
+        <item>+15</item>
+        <item>+16</item>
+        <item>+17</item>
+        <item>+18</item>
+        <item>+19</item>
+        <item>+20</item>
+        <item>+21</item>
+        <item>+22</item>
+        <item>+23</item>
+        <item>+24</item>
+        <item>+25</item>
+        <item>+26</item>
+        <item>+27</item>
+        <item>+28</item>
+        <item>+29</item>
+        <item>+30</item>
+        <item>+31</item>
+        <item>+32</item>
+        <item>+33</item>
+        <item>+34</item>
+        <item>+35</item>
+        <item>+36</item>
+        <item>+37</item>
+        <item>+38</item>
+        <item>+39</item>
+        <item>+40</item>
+	</string-array>
+	
+    <string-array name="weapon_crit_mult_options">
+        <item>0x</item>
+        <item>1x</item>
+        <item>2x</item>
+        <item>3x</item>
+        <item>4x</item>
+	</string-array>
+	
+    <string-array name="weapon_crit_range_options">
+        <item>10&#8211;20</item>
+        <item>11&#8211;20</item>
+        <item>12&#8211;20</item>
+        <item>13&#8211;20</item>
+        <item>14&#8211;20</item>
+        <item>15&#8211;20</item>
+        <item>16&#8211;20</item>
+        <item>17&#8211;20</item>
+        <item>18&#8211;20</item>
+        <item>19&#8211;20</item>
+        <item>20</item>
+	</string-array>
+	
+    <string-array name="weapon_type_options">
+        <item>S</item>
+        <item>P</item>
+        <item>B</item>
+        <item>P\/B</item>
+        <item>S\/B</item>
+        <item>S\/P</item>
+        <item>S\/P\/B</item>
+    </string-array>
+    
+    <string-array name="weapon_range_options">
+        <item>0 ft\.</item>
+        <item>5 ft\.</item>
+        <item>10 ft\.</item>
+        <item>15 ft\.</item>
+        <item>20 ft\.</item>
+        <item>25 ft\.</item>
+        <item>30 ft\.</item>
+        <item>35 ft\.</item>
+        <item>40 ft\.</item>
+        <item>45 ft\.</item>
+        <item>50 ft\.</item>
+        <item>55 ft\.</item>
+        <item>60 ft\.</item>
+        <item>65 ft\.</item>
+        <item>70 ft\.</item>
+        <item>75 ft\.</item>
+        <item>80 ft\.</item>
+        <item>85 ft\.</item>
+        <item>90 ft\.</item>
+        <item>95 ft\.</item>
+        <item>100 ft\.</item>
+	</string-array>
+    
+
+    <!-- Feats/Special Abilities -->
+    <string name="feats_add_button">Add Feat or Special Ability</string>
+    <string name="feats_description_hint">Description</string>
+    <string name="feats_name_hint">Name</string>
+
+    <string-array name="fluff_fields">
+        <item>Name</item>
+        <item>Alignment</item>
+        <item>XP</item>
+        <item>Next Level XP</item>
+        <item>Class</item>
+        <item>Race</item>
+        <item>Deity</item>
+        <item>Level</item>
+        <item>Size</item>
+        <item>Gender</item>
+        <item>Height</item>
+        <item>Weight</item>
+        <item>Eyes</item>
+        <item>Hair</item>
+        <item>Languages</item>
+        <item>Description</item>
+    </string-array>
+    
+    <string-array name="selectable_values_string">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+    </string-array>
+    <string-array name="skills_selectable_values_string">
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+    </string-array>
+    
+    
+
+    <string name="mod">Mod</string>
+    <string name="temp_mod">Temp\nMod</string>
+    <string name="temp_score">Temp\nScore</string>
+
+    <!-- Spellbook Strings -->
+    <string name="Lv">Level</string>
+    <string name="spellbook_add_spell_button">+</string>
+    <string name="spellbook_name">Name</string>
+    <string name="spellbook_prepared">Prepared</string>
+    <string name="spellbook_description">Description</string>
+    <string name="spell_name_header">Spell Name</string>
+    <string name="new_spell_title">New Spell</string>
+    <string name="delete_button_text">Delete</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Cancel</string>
+   
+    
+    <!-- Initiative Tracker Strings -->
+    <string name="menu_item_reset_encounter">Reset</string>
+    <string name="menu_item_add_encounter_member">Add Encounter Member</string>
+    <string name="initiative_tracker_roll_button">Roll for Initiative!</string>
+    <string name="new_encounter_member_dialog_title">New Character</string>
+    <string name="new_encounter_member_dialog_text">Add a new character or NPC to this encounter?</string>
+    <string name="reset_encounter_dialog_title">Reset Encounter</string>
+    <string name="reset_encounter_dialog_text">Reset the encounter? Tap \"Use Default\" to completely reset to the current party as it is shown in the Party Manager.</string>
+    <string name="use_defualt_party_button">Use Default</string>
+    
+    <!-- Skill Checker Strings -->
+    <string name="skill_checker_roll_button">Roll</string>
+    <string-array name="checkable_skills_array">
+        <item>Fort Save</item>
+        <item>Reflex Save</item>
+        <item>Will Save</item>
+        <item>Bluff</item>
+        <item>Disguise</item>
+        <item>Perception</item>
+        <item>Sense Motive</item>
+        <item>Stealth</item>
+    </string-array>
+
+    <!-- Party Manager Strings -->
+    <string name="menu_item_party_list">Parties</string>
+    <string name="menu_item_new_party">New Party</string>
+    <string name="menu_item_delete_party">Delete Party</string>
+    <string name="party_name_header">Party Name:</string>
+    <string name="party_name_hint">Party name</string>
+    <string name="party_member_name_header">Character Name:</string>
+    <string name="party_member_name_hint">Character name</string>
+    <string name="party_member_stat_hint">Value</string>
+    <string name="new_party_member_dialog_title">New Party Member</string>
+    <string name="new_party_member_dialog_text">Add a new member to this party?</string>
+
+    <string-array name="party_member_stats">
+        <item>Initiative</item>
+        <item>AC</item>
+        <item>Touch</item>
+        <item>Flat Footed</item>
+        <item>Spell Resistance</item>
+        <item>Damage Reduction</item>
+        <item>CMD</item>
+        <item>Fortitude Save</item>
+        <item>Reflex Save</item>
+        <item>Will Save</item>
+        <item>Bluff Skill Bonus</item>
+        <item>Disguise Skill Bonus</item>
+        <item>Perception Skill Bonus</item>
+        <item>Sense Motive Skill Bonus</item>
+        <item>Stealth Skill Bonus</item>
+    </string-array>
+
+    <string name="menu_item_done">Done</string>
+    <string name="menu_item_delete_member">Delete Party Member</string>
+    <string name="party_member_index_key">PM_INDEX</string>
+    <string name="party_id_key">PARTY_ID</string>
+
+</resources>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView 
+            android:id="@+id/armorName"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.75"
+            android:textStyle="bold|italic"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/armor_class_header"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorClass"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:orientation="horizontal"
+       android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/armor_check_penalty_header"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorCheckPenalty"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"/>
+        
+        <TextView 
+            android:text="@string/armor_max_dex"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold" />
+        
+         <TextView
+            android:id="@+id/armorMaxDex"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"/>
+         
+        <TextView
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:text="@string/armor_spell_failure_header"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorSpellFail"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:orientation="horizontal"
+       android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/armor_size_header"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorSize"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.3"/>
+        
+        <TextView 
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:text="@string/armor_speed"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorSpeed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.3"/>
+        
+        <TextView
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:text="@string/armor_weight_header"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorWeight"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.3"/>       
+        
+        
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:orientation="horizontal"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content">
+        
+        <TextView
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:text="@string/armor_special_properties"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/armorSpecial"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"/>
+        
+    </LinearLayout>
+    
+
+</LinearLayout>
