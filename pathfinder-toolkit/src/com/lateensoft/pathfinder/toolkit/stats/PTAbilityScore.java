@@ -5,6 +5,8 @@ public class PTAbilityScore {
 	private String mAbility;
 	private int mScore;
 	private static final String TAG = "PTAbilityScore";
+	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
 	
 	public PTAbilityScore(String ability, int score) {
 		mAbility = ability;
@@ -57,21 +59,11 @@ public class PTAbilityScore {
 	// Takes a raw ability score
 	// Returns the point cost
 	public int getAbilityPointCost() {
-		if (mScore <= -7) {
-			return -3;
-		} else if (mScore == 8) {
-			return -2;
-		} else if (mScore == 9) {
-			return -1;
-		} else if (mScore <= 13) {
-			return mScore - 10;
-		} else if (mScore <= 15) {
-			return (2 * (mScore - 14)) + 5;
-		} else if (mScore <= 17) {
-			return (3 * (mScore - 16)) + 10;
-		} else {
-			return 17;
+		for(int i = 0; i < SCORES.length; i++) {
+			if(mScore == SCORES[i]) {
+				return COSTS[i];
+			}
 		}
-		
+		return 0;
 	}
 }
