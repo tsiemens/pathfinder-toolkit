@@ -250,15 +250,15 @@ public class PTCombatStatSet {
 	
 	/**
 	 * 
-	 * @return CMB = BAB + Strength mod + size mod
+	 * @return CMB = BAB + Strength mod - size mod
 	 */
 	public int getCombatManeuverBonus(){
-		return mBABPrimary + mStrengthMod + mSizeMod;
+		return mBABPrimary + mStrengthMod - mSizeMod;
 	}
 	
 	/**
 	 * 
-	 * @return CMD = BAB + Strength mod + size mod + dex mod + 10
+	 * @return CMD = BAB + Strength mod - size mod + dex mod + 10
 	 */
 	public int getCombatManeuverDefense(){
 		return getCombatManeuverBonus() + mCMDDexMod + 10;

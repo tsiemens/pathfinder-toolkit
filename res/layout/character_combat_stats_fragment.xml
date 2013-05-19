@@ -656,7 +656,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/minus" />
 
             <LinearLayout
                 android:layout_width="60dp"
