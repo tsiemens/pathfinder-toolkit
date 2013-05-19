@@ -187,7 +187,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -270,7 +270,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -297,7 +297,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -332,7 +332,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -360,7 +360,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -388,7 +388,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -416,7 +416,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -629,7 +629,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -789,7 +789,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -817,7 +817,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -852,7 +852,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"
@@ -880,7 +880,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"
@@ -959,7 +959,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -987,7 +987,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -1022,7 +1022,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"
@@ -1050,7 +1050,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"
@@ -1129,7 +1129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -1157,7 +1157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
         	
         	<LinearLayout
                 android:layout_width="60dp"
@@ -1192,7 +1192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"
@@ -1220,7 +1220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/combat_stats_plus" />
+                android:text="@string/plus" />
             
             <LinearLayout
                 android:layout_width="60dp"

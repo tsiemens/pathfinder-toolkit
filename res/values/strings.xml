@@ -206,8 +206,6 @@
  <!-- general use -->
     <string name="combat_stats_dex_mod">Dex Mod</string>
  <!-- general use -->
-    <string name="combat_stats_plus">+</string>
- <!-- general use -->
     <string name="combat_stats_misc_mod">Misc Mod</string>
  <!-- general use -->
     <string name="combat_stats_ac">AC:</string>
