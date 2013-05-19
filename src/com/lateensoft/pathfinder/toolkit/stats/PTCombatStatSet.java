@@ -24,6 +24,8 @@ public class PTCombatStatSet {
 	private int mStrengthMod;
 	private int mCMDDexMod;
 	
+	private int mCMDMiscMod;
+	
 	private int mSpellResist;
 	
 	public PTCombatStatSet(){
@@ -48,6 +50,8 @@ public class PTCombatStatSet {
 		mBABSecondary = "";
 		mStrengthMod = 0;
 		mACDexMod = 0;
+		
+		mCMDMiscMod = 0;
 		
 		mSpellResist = 0;
 	}
@@ -248,6 +252,14 @@ public class PTCombatStatSet {
 		return mSpellResist;
 	}
 	
+	public int getCMDMiscMod(){
+		return mCMDMiscMod;
+	}
+	
+	public void setCMDMiscMod(int miscMod){
+		mCMDMiscMod = miscMod;
+	}
+	
 	/**
 	 * 
 	 * @return CMB = BAB + Strength mod - size mod
@@ -258,9 +270,9 @@ public class PTCombatStatSet {
 	
 	/**
 	 * 
-	 * @return CMD = BAB + Strength mod - size mod + dex mod + 10
+	 * @return CMD = BAB + Strength mod - size mod + dex mod + 10 + misc mod
 	 */
 	public int getCombatManeuverDefense(){
-		return getCombatManeuverBonus() + mCMDDexMod + 10;
+		return getCombatManeuverBonus() + mCMDDexMod + mCMDMiscMod + 10;
 	}
 }
