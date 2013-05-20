@@ -14,17 +14,18 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
+	final String TAG = "PTSkillsAdapter";
+	
 	Context mContext;
 	int mLayoutResourceId;
-	PTSkillSet mSkills = null;
-	String TAG = "PTSkillsAdapter";
+	PTSkill[] mSkills = null;
 
 	public PTSkillsAdapter(Context context, int layoutResourceId,
-			PTSkillSet skillSet) {
-		super(context, layoutResourceId, skillSet.getSkills());
+			PTSkill[] skills) {
+		super(context, layoutResourceId, skills);
 		mLayoutResourceId = layoutResourceId;
 		mContext = context;
-		mSkills = skillSet;
+		mSkills = skills;
 	}
 
 	@Override
@@ -52,15 +53,15 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 			holder = (SkillHolder) row.getTag();
 		}
 
-		holder.name.setText(mSkills.getSkill(position).getName());
-		holder.total.setText(Integer.toString(mSkills.getSkill(position).getSkillMod()));
-		holder.abilityName.setText(mSkills.getSkill(position).getKeyAbility());
-		holder.abilityMod.setText(Integer.toString(mSkills.getSkill(position).getAbilityMod()));
-		holder.rank.setText(Integer.toString(mSkills.getSkill(position).getRank()));
-		holder.miscMod.setText(Integer.toString(mSkills.getSkill(position).getMiscMod()));
-		holder.armorCheckPenalty.setText(Integer.toString(mSkills.getSkill(position).getArmorCheckPenalty()));
+		holder.name.setText(mSkills[position].getName());
+		holder.total.setText(Integer.toString(mSkills[position].getSkillMod()));
+		holder.abilityName.setText(mSkills[position].getKeyAbility());
+		holder.abilityMod.setText(Integer.toString(mSkills[position].getAbilityMod()));
+		holder.rank.setText(Integer.toString(mSkills[position].getRank()));
+		holder.miscMod.setText(Integer.toString(mSkills[position].getMiscMod()));
+		holder.armorCheckPenalty.setText(Integer.toString(mSkills[position].getArmorCheckPenalty()));
 		
-		if(mSkills.getSkill(position).isClassSkill() && mSkills.getSkill(position).getRank() > 0)
+		if(mSkills[position].isClassSkill() && mSkills[position].getRank() > 0)
 			holder.classSkill.setText(new String("3"));
 		else
 			holder.classSkill.setText(new String("0"));
@@ -68,8 +69,8 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		return row;
 	}
 	
-	public void updateList(PTSkillSet updatedSkillSet){
-		mSkills = updatedSkillSet;
+	public void updateList(PTSkill[] updatedSkills){
+		mSkills = updatedSkills;
 		notifyDataSetChanged();
 	}
 

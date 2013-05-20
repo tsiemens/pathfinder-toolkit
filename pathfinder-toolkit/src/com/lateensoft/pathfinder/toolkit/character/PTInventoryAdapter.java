@@ -51,7 +51,7 @@ public class PTInventoryAdapter extends ArrayAdapter<PTItem>{
 	
 		holder.name.setText(mItems[position].getName());
 
-		holder.weight.setText(Integer.toString(mItems[position].getWeight()));
+		holder.weight.setText(Double.toString(mItems[position].getWeight()));
 		
 		if(mItems[position].isContained())
 			holder.contained.setText("\u2713"); //Check mark

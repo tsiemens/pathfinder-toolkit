@@ -51,7 +51,7 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 		}
 		
 		holder.name.setText(mWeapons[position].getName());
-		holder.weight.setText(Integer.toString(mWeapons[position].getWeight()));
+		holder.weight.setText(Double.toString(mWeapons[position].getWeight()));
 		holder.totalAttackBonus.setText(Integer.toString(mWeapons[position].getTotalAttackBonus()));
 		holder.damage.setText(mWeapons[position].getDamage());
 		holder.range.setText(Integer.toString(mWeapons[position].getRange()));

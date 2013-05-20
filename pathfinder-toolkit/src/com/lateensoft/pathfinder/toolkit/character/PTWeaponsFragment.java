@@ -137,7 +137,7 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 			mDialogTypeSpinner.setSelection(weapon.getTypeInt(mContainer.getContext()));
 			mDialogRangeSpinner.setSelection(weapon.getRange()/5);
 			mDialogSizeSpinner.setSelection(weapon.getSizeInt());
-			mDialogWeightET.setText(Integer.toString(weapon.getWeight()));
+			mDialogWeightET.setText(Double.toString(weapon.getWeight()));
 			mDialogSpecialPropertiesET.setText(weapon.getSpecialProperties());
 			
 		}

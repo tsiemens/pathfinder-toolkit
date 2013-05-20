@@ -52,7 +52,7 @@ public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
 		}
 		
 		holder.name.setText(mArmor[position].getName());
-		holder.weight.setText(Integer.toString(mArmor[position].getWeight()));
+		holder.weight.setText(Double.toString(mArmor[position].getWeight()));
 		holder.ACBonus.setText(Integer.toString(mArmor[position].getACBonus()));
 		holder.checkPen.setText(Integer.toString(mArmor[position].getCheckPen()));
 		holder.maxDex.setText(Integer.toString(mArmor[position].getMaxDex()));

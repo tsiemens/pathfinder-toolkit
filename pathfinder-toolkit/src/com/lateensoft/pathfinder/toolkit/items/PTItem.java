@@ -2,11 +2,11 @@ package com.lateensoft.pathfinder.toolkit.items;
 
 public class PTItem {
 	String mName;
-	int mWeight;
+	double mWeight;
 	int mQuantity;
 	boolean mIsContained; //set if in a container such as a bag of holding (will be used to set effective weight to 0)
 	
-	public PTItem(String name, int weight, int quantity, boolean contained) {
+	public PTItem(String name, double weight, int quantity, boolean contained) {
 		mName = name;
 		mWeight = weight;
 		mQuantity = quantity;
@@ -39,7 +39,7 @@ public class PTItem {
 		mName = name;
 	}
 	
-	public int getWeight() {
+	public double getWeight() {
 		return mWeight;
 	}
 	

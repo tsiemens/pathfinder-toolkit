@@ -18,17 +18,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implements OnClickListener, OnItemClickListener{
+public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implements OnClickListener, OnItemClickListener, android.view.View.OnClickListener{
 	final String TAG = "PTCharacterSkillsFragment";
 	
 	private final int MENU_ITEM_AUTOFILL = 3;
 	
 	private ListView mSkillsListView;
+	
+	private Button	mFilterButton;
+	private boolean mIsFiltered = true;
 	
 	private Spinner mDialogSkillAbilityModSpinner;
 	private Spinner mDialogSkillRankSpinner;
@@ -36,7 +40,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implemen
 	private Spinner mDialogSkillACPSpinner;
 	private CheckBox mDialogClassSkillCheckBox;
 	
-	private int mSkillSeletedForEdit;
+	private PTSkill mSkillSelectedForEdit;
 	
 	private ViewGroup mContainer;
 	
@@ -53,9 +57,12 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implemen
 		
 		View fragmentView = inflater.inflate(R.layout.character_skills_fragment, container, false);
 		
+		mFilterButton = (Button) fragmentView.findViewById(R.id.buttonFilter);
+		setFilterButtonText();
+		mFilterButton.setOnClickListener(this);
+		
 		mSkillsListView = (ListView) fragmentView.findViewById(R.id.listViewCharacterSkills);
-		PTSkillsAdapter adapter = new PTSkillsAdapter(mContainer.getContext(), R.layout.character_skill_row, mCharacter.getSkillSet());
-		mSkillsListView.setAdapter(adapter);
+		setSkillsAdapter();
 		mSkillsListView.setOnItemClickListener(this);
 	
 		return fragmentView;
@@ -86,7 +93,12 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implemen
 				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		
-		PTSkill editableSkill = mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit);
+		PTSkill editableSkill;
+		if (mSkillSelectedForEdit != null){
+			editableSkill = mSkillSelectedForEdit;
+		} else {
+			return;
+		}
 		
 		skillInfoTextView.setText(editableSkill.getName()+" ("+editableSkill.getKeyAbility()+")");
 		
@@ -118,22 +130,34 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implemen
 		switch (selection) {
 		//OK button tapped
 		case DialogInterface.BUTTON_POSITIVE:
-			mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit).setAbilityMod(mDialogSkillAbilityModSpinner.getSelectedItemPosition()-10);
-			mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit).setRank(mDialogSkillRankSpinner.getSelectedItemPosition()-10);
-			mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit).setMiscMod(mDialogSkillMiscModSpinner.getSelectedItemPosition()-10);
-			mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit).setArmorCheckPenalty(mDialogSkillACPSpinner.getSelectedItemPosition()-10);
-			mCharacter.getSkillSet().getSkill(mSkillSeletedForEdit).setClassSkill(mDialogClassSkillCheckBox.isChecked());
+			mSkillSelectedForEdit.setAbilityMod(mDialogSkillAbilityModSpinner.getSelectedItemPosition()-10);
+			mSkillSelectedForEdit.setRank(mDialogSkillRankSpinner.getSelectedItemPosition()-10);
+			mSkillSelectedForEdit.setMiscMod(mDialogSkillMiscModSpinner.getSelectedItemPosition()-10);
+			mSkillSelectedForEdit.setArmorCheckPenalty(mDialogSkillACPSpinner.getSelectedItemPosition()-10);
+			mSkillSelectedForEdit.setClassSkill(mDialogClassSkillCheckBox.isChecked());
 			break;
 		case DialogInterface.BUTTON_NEGATIVE:
 			//Do nothing
 			break;
 		}
 		
-		((PTSkillsAdapter)mSkillsListView.getAdapter()).updateList(mCharacter.getSkillSet());
+		if( mSkillSelectedForEdit.getRank() <= 0 ){
+			//Prevent out of bounds exception from removing views
+			//Not terribly costly since very few times will a player save a skill with no rank
+			setSkillsAdapter();
+		} else {
+			updateSkillsList();
+		}
+		
+		mSkillSelectedForEdit = null;
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		mSkillSeletedForEdit = position;
+		if (mIsFiltered){
+			mSkillSelectedForEdit = mCharacter.getSkillSet().getTrainedSkill(position);
+		} else {
+			mSkillSelectedForEdit = mCharacter.getSkillSet().getSkill(position);
+		}
 		showSkillDialog();
 		
 	}
@@ -141,7 +165,41 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment implemen
 	@Override
 	public void onResume() {
 		super.onResume();
-		((PTSkillsAdapter)mSkillsListView.getAdapter()).updateList(mCharacter.getSkillSet());
+		updateSkillsList();
+	}
+	
+	private void updateSkillsList(){
+		if (mIsFiltered) {
+			((PTSkillsAdapter)mSkillsListView.getAdapter()).updateList(mCharacter.getSkillSet().getTrainedSkills());
+		} else {
+			((PTSkillsAdapter)mSkillsListView.getAdapter()).updateList(mCharacter.getSkillSet().getSkills());
+		}
+	}
+
+	private void setSkillsAdapter(){
+		PTSkillsAdapter adapter = null;
+		if (mIsFiltered) {
+			adapter = new PTSkillsAdapter(mContainer.getContext(), R.layout.character_skill_row, mCharacter.getSkillSet().getTrainedSkills());
+		} else {
+			adapter = new PTSkillsAdapter(mContainer.getContext(), R.layout.character_skill_row, mCharacter.getSkillSet().getSkills());
+		}
+		mSkillsListView.setAdapter(adapter);
+	}
+	
+	private void setFilterButtonText(){
+		if (mIsFiltered) {
+			mFilterButton.setText(R.string.skills_trained_filter);
+		} else {
+			mFilterButton.setText(R.string.skills_all_filter);
+		}
+	}
+	
+	@Override
+	public void onClick(View arg0) {
+		mIsFiltered = !mIsFiltered;
+		setFilterButtonText();
+		setSkillsAdapter();
+		
 	}
 	
 }

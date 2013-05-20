@@ -103,7 +103,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	}
 	
 	private void updateTotalWeight(){
-		int totalWeight = mCharacter.getInventory().getTotalWeight();
+		double totalWeight = mCharacter.getInventory().getTotalWeight();
 		
 		mTotalWeightText.setText(getActivity().getString(R.string.inventory_total_weight_header)
 				+" "+ totalWeight);
@@ -149,7 +149,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 					.setNeutralButton(R.string.delete_button_text, this);
 			mDialogItemNameEditText.setText(item.getName());
 			mDialogItemQuantityEditText.setText(Integer.toString(item.getQuantity()));
-			mDialogItemWeightEditText.setText(Integer.toString(item.getWeight()));
+			mDialogItemWeightEditText.setText(Double.toString(item.getWeight()));
 			mDialogItemContainedCheckbox.setChecked(item.isContained());
 		}
 		
@@ -224,11 +224,11 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			quantity = 1;
 		}
 		
-		int weight;
+		double weight;
 		try{
-		weight = (int)Double.parseDouble(mDialogItemWeightEditText.getText().toString());
+			weight = Double.parseDouble(mDialogItemWeightEditText.getText().toString());
 		}catch (NumberFormatException e){
-			weight = 1;
+			weight = 1.0;
 		}
 		boolean contained = mDialogItemContainedCheckbox.isChecked();
 		
