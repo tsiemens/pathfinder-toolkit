@@ -139,7 +139,7 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 			mDialogMaxDexSpinner.setSelection(armor.getMaxDex());
 			mDialogSpeedSpinner.setSelection(armor.getSpeed()/5);
 			mDialogASFSpinner.setSelection(armor.getSpellFail() / ASF_INCREMENT);
-			mDialogWeightET.setText(Integer.toString(armor.getWeight()));
+			mDialogWeightET.setText(Double.toString(armor.getWeight()));
 			mDialogSpecialPropertiesET.setText(mCharacter.getInventory().getArmor(mArmorSelectedForEdit).getSpecialProperties());
 		}
 		

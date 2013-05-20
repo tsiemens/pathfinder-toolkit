@@ -217,8 +217,8 @@ public class PTCharacterInventory {
 		return mWeapons.size();
 	}
 	
-	public int getTotalWeight() {
-		int totalWeight = 0;
+	public double getTotalWeight() {
+		double totalWeight = 0;
 		for(int i = 0; i < mItems.size(); i++) {
 			if(!mItems.get(i).isContained())
 				totalWeight += (mItems.get(i).getWeight())*(mItems.get(i).getQuantity());
