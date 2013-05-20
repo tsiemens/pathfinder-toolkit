@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyMemberEditorActivity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface.OnClickListener;
@@ -14,8 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,7 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class PTPartyManagerActivity extends Activity implements OnClickListener, OnItemClickListener{
+public class PTPartyManagerActivity extends SherlockActivity implements OnClickListener, OnItemClickListener{
 
 	private final int MENU_ITEM_PARTY_LIST = 0;
 	private final int MENU_ITEM_ADD_MEMBER = 1;
@@ -47,7 +48,7 @@ public class PTPartyManagerActivity extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		setContentView(R.layout.activity_party_manager);

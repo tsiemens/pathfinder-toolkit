@@ -1,11 +1,17 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterAbilityFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterCombatStatsFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterFeatsFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterFluffFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterInventoryFragment;
+import com.lateensoft.pathfinder.toolkit.character.PTCharacterSheetFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterSkillsFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacterSpellBookFragment;
 import com.lateensoft.pathfinder.toolkit.character.PTArmorFragment;
@@ -14,20 +20,17 @@ import com.lateensoft.pathfinder.toolkit.character.PTWeaponsFragment;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 //Currently an alternative to PTCharacterSheet, using the actionbar with tabs
-public class PTCharacterSheetActivity extends Activity implements
-		DialogInterface.OnClickListener {
+public class PTCharacterSheetActivity extends SherlockFragmentActivity implements
+		DialogInterface.OnClickListener, ActionBar.TabListener {
 
 	private final int MENU_ITEM_CHARACTER_LIST = 0;
 	private final int MENU_ITEM_NEW_CHARACTER = 1;
@@ -51,6 +54,7 @@ public class PTCharacterSheetActivity extends Activity implements
 	private final String TAG = "PTCharacterSheetActivity";
 
 	private ActionBar mActionBar;
+	private PTCharacterSheetFragment mCurrentFragment;
 	public PTCharacter mCharacter;
 
 	private PTDatabaseManager mSQLManager;
@@ -68,7 +72,7 @@ public class PTCharacterSheetActivity extends Activity implements
 		// Notice that setContentView() is not used, because we use the root
 		// android.R.id.content as the container for each fragment
 		// setup action bar for tabs
-		mActionBar = getActionBar();
+		mActionBar = getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -86,92 +90,67 @@ public class PTCharacterSheetActivity extends Activity implements
 		Tab tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_fluff)
-				.setTabListener(
-						new TabListener<PTCharacterFluffFragment>(this,
-								getString(R.string.tab_character_fluff),
-								PTCharacterFluffFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Combat Stats
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_combat_stats)
-				.setTabListener(
-						new TabListener<PTCharacterCombatStatsFragment>(this,
-								getString(R.string.tab_character_combat_stats),
-								PTCharacterCombatStatsFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Abilities
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_abilities)
-				.setTabListener(
-						new TabListener<PTCharacterAbilityFragment>(this,
-								getString(R.string.tab_character_abilities),
-								PTCharacterAbilityFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Skills
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_skills)
-				.setTabListener(
-						new TabListener<PTCharacterSkillsFragment>(this,
-								getString(R.string.tab_character_skills),
-								PTCharacterSkillsFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Inventory
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_inventory)
-				.setTabListener(
-						new TabListener<PTCharacterInventoryFragment>(this,
-								getString(R.string.tab_character_inventory),
-								PTCharacterInventoryFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Armor
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_armor)
-				.setTabListener(
-						new TabListener<PTArmorFragment>(this,
-								getString(R.string.tab_character_armor),
-								PTArmorFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Weapons
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_weapons)
-				.setTabListener(
-						new TabListener<PTWeaponsFragment>(this,
-								getString(R.string.tab_character_weapons),
-								PTWeaponsFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Feats
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_feats)
-				.setTabListener(
-						new TabListener<PTCharacterFeatsFragment>(this,
-								getString(R.string.tab_character_feats),
-								PTCharacterFeatsFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 
 		// Spells
 		tab = mActionBar
 				.newTab()
 				.setText(R.string.tab_character_spells)
-				.setTabListener(
-						new TabListener<PTCharacterSpellBookFragment>(this,
-								getString(R.string.tab_character_spells),
-								PTCharacterSpellBookFragment.class));
+				.setTabListener(this);
 		mActionBar.addTab(tab);
 	}
+	
+	
 
 	/**
 	 * Load the currently set character in shared prefs If there is no character
@@ -237,6 +216,8 @@ public class PTCharacterSheetActivity extends Activity implements
 		mSQLManager.updateCharacter(mCharacter);
 	}
 
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
@@ -279,8 +260,7 @@ public class PTCharacterSheetActivity extends Activity implements
 			}
 		}
 
-		return true;
-
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void autoFill() {
@@ -477,6 +457,59 @@ public class PTCharacterSheetActivity extends Activity implements
 		mActionBar.removeAllTabs(); // Used to prevent fragments from detaching
 									// when app gets killed
 		super.onPause();
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		PTCharacterSheetFragment newFrag = null;
+		switch (tab.getPosition()) {
+		case 0:
+			newFrag = new PTCharacterFluffFragment();
+			break;
+		case 1:
+			newFrag = new PTCharacterCombatStatsFragment();
+			break;
+		case 2:
+			newFrag = new PTCharacterAbilityFragment();
+			break;
+		case 3:
+			newFrag = new PTCharacterSkillsFragment();
+			break;
+		case 4:
+			newFrag = new PTCharacterInventoryFragment();
+			break;
+		case 5:
+			newFrag = new PTArmorFragment();
+			break;
+		case 6:
+			newFrag = new PTWeaponsFragment();
+			break;
+		case 7:
+			newFrag = new PTCharacterFeatsFragment();
+			break;
+		case 8:
+			newFrag = new PTCharacterSpellBookFragment();
+			break;
+		default:
+			break;
+		}
+		
+		if (newFrag != null) {
+			ft.replace(android.R.id.content, newFrag);
+			mCurrentFragment = newFrag;
+		}
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// do any saving with Current fragment
+		
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// Do nothing
+		
 	}
 
 }

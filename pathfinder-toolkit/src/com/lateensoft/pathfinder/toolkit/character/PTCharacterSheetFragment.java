@@ -1,8 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.lateensoft.pathfinder.toolkit.PTCharacterSheetActivity;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 
 //This is a base class for all fragments in the character sheet activity
-public class PTCharacterSheetFragment extends Fragment{
+public class PTCharacterSheetFragment extends SherlockFragment{
 	final String TAG = "PTCharacterSheetFragment";
 	public PTCharacter mCharacter;
 

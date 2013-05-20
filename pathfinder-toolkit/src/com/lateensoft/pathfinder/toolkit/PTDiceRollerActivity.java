@@ -1,14 +1,15 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class PTDiceRollerActivity extends Activity implements OnClickListener,
+public class PTDiceRollerActivity extends SherlockActivity implements OnClickListener,
 		RadioGroup.OnCheckedChangeListener {
 
 	int mCurrentDie = 4;
@@ -47,7 +48,7 @@ public class PTDiceRollerActivity extends Activity implements OnClickListener,
 
 		viewSetup();
 
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		mRollMode = ROLLMODE_SINGLE;

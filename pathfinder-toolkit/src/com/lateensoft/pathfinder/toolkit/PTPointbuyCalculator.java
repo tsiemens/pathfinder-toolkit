@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,8 +8,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -19,6 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
@@ -26,7 +27,7 @@ import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilityModSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilitySetCalc;
 
-public class PTPointbuyCalculator extends Activity {
+public class PTPointbuyCalculator extends SherlockActivity {
 	
 	static final int STR_KEY = 0;
 	static final int DEX_KEY = 1;
@@ -74,7 +75,7 @@ public class PTPointbuyCalculator extends Activity {
 		mRacesSpinner.setAdapter(adapter);
 		mRacesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());
 		
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mHumanRaceListener = new HumanRaceModSelectedListener();

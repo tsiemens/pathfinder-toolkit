@@ -1,5 +1,9 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
@@ -9,14 +13,11 @@ import com.lateensoft.pathfinder.toolkit.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
 
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -24,7 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class PTInitiativeTrackerActivity extends Activity implements OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener {
+public class PTInitiativeTrackerActivity extends SherlockActivity implements OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener {
 
 	private final int MENU_ITEM_RESET = 0;
 	private final int MENU_ITEM_ADD_MEMBER = 1;
@@ -46,7 +47,7 @@ public class PTInitiativeTrackerActivity extends Activity implements OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ptinitiative_tracker);
         
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mSQLManager = new PTDatabaseManager(getApplicationContext());
