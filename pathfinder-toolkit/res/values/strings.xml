@@ -236,6 +236,10 @@
     <string name="skills_misc_header">Misc Mod.</string>
     <string name="skills_class_skill_header">Class Skill</string>
     <string name="skills_acp_header">Armor Check Penalty</string>
+    
+    <string name="skills_filter_label">Filter:</string>
+    <string name="skills_trained_filter">Trained</string>
+    <string name="skills_all_filter">All</string>
 
     <!-- Inventory -->
     <string name="inventory_add_item_button">+</string>
