@@ -1,8 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
 public class PTStat {
-	String mName;
-	int mBaseValue;
+	private String mName;
+	private int mBaseValue;
 
 	public PTStat() {
 		mName = "";

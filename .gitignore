@@ -1,3 +1,6 @@
+# Test project
+*.log
+
 # built application files
 *.apk
 *.ap_
