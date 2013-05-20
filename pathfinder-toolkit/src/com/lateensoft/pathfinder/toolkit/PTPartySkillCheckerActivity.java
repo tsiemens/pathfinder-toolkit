@@ -1,18 +1,19 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -23,7 +24,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 
-public class PTPartySkillCheckerActivity extends Activity implements OnClickListener, OnItemSelectedListener{
+public class PTPartySkillCheckerActivity extends SherlockActivity implements OnClickListener, OnItemSelectedListener{
 
 	private final String TAG = "PTPartySkillCheckerActivity";
 	
@@ -44,7 +45,7 @@ public class PTPartySkillCheckerActivity extends Activity implements OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skill_checker);
         
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mSkillSelectedForRoll = 0;

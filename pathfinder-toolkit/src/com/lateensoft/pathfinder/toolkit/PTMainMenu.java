@@ -1,25 +1,25 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 
-public class PTMainMenu extends ListActivity implements OnClickListener {
+public class PTMainMenu extends SherlockListActivity implements OnClickListener {
 
 	private final String TAG = "PTMainMenu";
 	String mListLabels[];
