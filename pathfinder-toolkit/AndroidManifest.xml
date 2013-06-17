@@ -65,6 +65,11 @@
         </activity>
         <activity
             android:name=".PTMainMenu"
+            android:label="@string/title_activity_main_menu"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PTMainActivity"
             android:alwaysRetainTaskState="true"
             android:label="@string/title_activity_main_menu"
             android:launchMode="singleTop"
