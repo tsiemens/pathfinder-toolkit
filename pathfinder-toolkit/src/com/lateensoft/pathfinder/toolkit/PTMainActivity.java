@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -36,6 +38,8 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private ExpandableListView mDrawerList;
+	
+	private PTBasePageFragment mCurrentFragment;
 
 	String mListLabels[];
 	private PTUserPrefsManager mUserPrefsManager;
@@ -189,6 +193,25 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		}
 
 	}
+	
+	public void showView(long id) {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		PTBasePageFragment newFragment = null;
+		
+		
+		
+		if (id == PTNavDrawerAdapter.DICE_ROLLER_ID) {
+			newFragment = new PTDiceRollerFragment();
+			
+		}
+		
+		if (newFragment != null) {
+			fragmentTransaction.replace(R.id.content_frame, newFragment);
+			fragmentTransaction.commit();
+			mCurrentFragment = newFragment;
+		}
+	}
 
 	@Override
 	public void onGroupCollapse(int arg0) {
@@ -203,16 +226,30 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public boolean onGroupClick(ExpandableListView arg0, View arg1, int arg2,
-			long arg3) {
-		// TODO Auto-generated method stub
+	public boolean onGroupClick(ExpandableListView list, View parent, int position,
+			long id)
+	{
+		if (id != PTNavDrawerAdapter.CHARACTER_SHEET_ID ) {
+			if (id != ((PTNavDrawerAdapter)list.getExpandableListAdapter()).getSelectedItem()) {
+				((PTNavDrawerAdapter)list.getExpandableListAdapter()).setSelectedItem(id);
+				list.invalidateViews();
+				showView(id);		
+			}
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
 		return false;
 	}
 
 	@Override
-	public boolean onChildClick(ExpandableListView arg0, View arg1, int arg2,
-			int arg3, long arg4) {
-		// TODO Auto-generated method stub
+	public boolean onChildClick(ExpandableListView list, View parent, int groupPosition,
+			int childPosition, long id)
+	{
+		if (id != ((PTNavDrawerAdapter)list.getExpandableListAdapter()).getSelectedItem()) {
+			((PTNavDrawerAdapter)list.getExpandableListAdapter()).setSelectedItem(id);
+			list.invalidateViews();
+			showView(id);
+		}
+		mDrawerLayout.closeDrawer(mDrawerList);	
 		return false;
 	}
 }

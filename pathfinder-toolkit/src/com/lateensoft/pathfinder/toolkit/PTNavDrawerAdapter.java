@@ -5,6 +5,7 @@ import com.lateensoft.pathfinder.toolkit.PTMainMenuAdapter.MenuItemHolder;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	private String[] mGroupNames;
 	private int[] mGroupIconRes;
 	private String[] mCharacterSheetPages;
+	
+	private long mSelectedItem;
 	
 	public PTNavDrawerAdapter(Context context) {
 		mContext = context;
@@ -123,6 +126,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
+			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
@@ -147,6 +151,14 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			holder.divider.setVisibility(View.INVISIBLE);
 		}
 		
+		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == mSelectedItem) {
+			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+		} else {
+			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
+		}
+		
 		return row;
 	}
 
@@ -162,6 +174,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
+			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
@@ -191,6 +204,14 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			} else {
 				holder.divider.setVisibility(View.VISIBLE);
 			}
+		}
+		
+		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem) {
+			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+		} else {
+			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
 		}
 		
 		return row;
@@ -231,7 +252,16 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		
 	}
 	
+	public void setSelectedItem(long combinedItemId) {
+		mSelectedItem = combinedItemId;
+	}
+	
+	public long getSelectedItem() {
+		return mSelectedItem;
+	}
+	
 	static class ItemHolder {
+		View selectionBar;
 		TextView name;
 		ImageView icon;
 		ImageView groupState;

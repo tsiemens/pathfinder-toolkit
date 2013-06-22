@@ -60,7 +60,7 @@ public class PTMainMenu extends SherlockListActivity implements OnClickListener 
 
 		switch (position) {
 		case 0:
-			startActivity(new Intent(this, PTDiceRollerActivity.class));
+			startActivity(new Intent(this, PTDiceRollerFragment.class));
 			break;
 
 		case 1:

@@ -19,7 +19,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="true"
-            android:onClick="rollTypeClicked"
+            android:tag="roll_type_toggle"
             android:textOff="@string/roller_mode_single"
             android:textOn="@string/roller_mode_single"
             android:textSize="@dimen/dice_roller_button_text_larger" />
@@ -29,7 +29,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:onClick="rollTypeClicked"
+            android:tag="roll_type_toggle"
             android:textOff="@string/roller_mode_multi"
             android:textOn="@string/roller_mode_multi"
             android:textSize="@dimen/dice_roller_button_text_larger" />
@@ -39,7 +39,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:onClick="rollTypeClicked"
+            android:tag="roll_type_toggle"
             android:textOff="@string/roller_mode_sum"
             android:textOn="@string/roller_mode_sum"
             android:textSize="@dimen/dice_roller_button_text_larger" />
@@ -59,7 +59,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="true"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d4"
             android:textOn="@string/roller_die_d4"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -70,7 +70,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d6"
             android:textOn="@string/roller_die_d6"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -81,7 +81,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d8"
             android:textOn="@string/roller_die_d8"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -92,7 +92,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d10"
             android:textOn="@string/roller_die_d10"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -103,7 +103,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d12"
             android:textOn="@string/roller_die_d12"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -114,7 +114,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d20"
             android:textOn="@string/roller_die_d20"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
@@ -125,7 +125,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:checked="false"
-            android:onClick="dieTypeClicked"
+            android:tag="die_type_toggle"
             android:textOff="@string/roller_die_d100"
             android:textOn="@string/roller_die_d100"
             android:textSize="@dimen/dice_roller_button_text_smaller" />
