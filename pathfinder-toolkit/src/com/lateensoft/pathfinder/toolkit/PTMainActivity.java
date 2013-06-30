@@ -68,11 +68,11 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-		R.string.app_name, /* "open drawer" description */
-		R.string.app_name /* "close drawer" description */
-		) {
+				mDrawerLayout, /* DrawerLayout object */
+				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+				R.string.app_name, /* "open drawer" description */
+				R.string.app_name /* "close drawer" description */
+				) {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
@@ -135,6 +135,9 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Initialize the global menu items
+		if (mCurrentFragment != null) {
+			mCurrentFragment.onCreateOptionsMenu(menu);
+		}
 		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
 
 		// Add aditional menu items
@@ -162,7 +165,9 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		}
 
 		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			// handle local menu items here or leave blank
+			if (mCurrentFragment != null) {
+				mCurrentFragment.onOptionsItemSelected(item);
+			}
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -202,27 +207,65 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		
 		
 		if (id == PTNavDrawerAdapter.DICE_ROLLER_ID) {
-			newFragment = new PTDiceRollerFragment();
+			newFragment = new PTDiceRollerFragment();		
+		} else if ( id == PTNavDrawerAdapter.FLUFF_ID ) {
+			// TODO
 			
+		} else if ( id == PTNavDrawerAdapter.COMBAT_STATS_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.ABILITIES_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.SKILLS_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.INVENTORY_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.ARMOR_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.WEAPONS_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.FEATS_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.SPELLS_ID ) {
+			// TODO
+			
+		} else if ( id == PTNavDrawerAdapter.INITIATIVE_TRACKER_ID ) {
+			newFragment = new PTInitiativeTrackerFragment();
+			
+		} else if ( id == PTNavDrawerAdapter.SKILL_CHECKER_ID ) {
+			newFragment = new PTPartySkillCheckerFragment();
+			
+		} else if ( id == PTNavDrawerAdapter.PARTY_MANAGER_ID ) {
+			newFragment = new PTPartyManagerFragment();
+			
+		} else if ( id == PTNavDrawerAdapter.POINTBUY_ID ) {
+			newFragment = new PTPointbuyCalculatorFragment();
 		}
 		
 		if (newFragment != null) {
+			((PTNavDrawerAdapter)mDrawerList.getExpandableListAdapter()).setSelectedItem(id);
+			mDrawerList.invalidateViews();
 			fragmentTransaction.replace(R.id.content_frame, newFragment);
 			fragmentTransaction.commit();
 			mCurrentFragment = newFragment;
+			supportInvalidateOptionsMenu();
 		}
 	}
 
 	@Override
 	public void onGroupCollapse(int arg0) {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 
 	@Override
 	public void onGroupExpand(int arg0) {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 
 	@Override
@@ -231,8 +274,6 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	{
 		if (id != PTNavDrawerAdapter.CHARACTER_SHEET_ID ) {
 			if (id != ((PTNavDrawerAdapter)list.getExpandableListAdapter()).getSelectedItem()) {
-				((PTNavDrawerAdapter)list.getExpandableListAdapter()).setSelectedItem(id);
-				list.invalidateViews();
 				showView(id);		
 			}
 			mDrawerLayout.closeDrawer(mDrawerList);

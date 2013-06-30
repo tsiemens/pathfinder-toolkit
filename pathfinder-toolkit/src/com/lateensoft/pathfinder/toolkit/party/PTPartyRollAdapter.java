@@ -74,7 +74,7 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 		
 		return row;
 	}
-	
+
 	static class CharacterRollHolder {
 		TextView name;
 		TextView rollValue;

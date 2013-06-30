@@ -26,8 +26,8 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	public static long WEAPONS_ID = 26;
 	public static long FEATS_ID = 27;
 	public static long SPELLS_ID = 28;
-	public static long INITIATIVE_ID = 3;
-	public static long PARTY_TRACKER_ID = 4;
+	public static long INITIATIVE_TRACKER_ID = 3;
+	public static long SKILL_CHECKER_ID = 4;
 	public static long PARTY_MANAGER_ID = 5;
 	public static long POINTBUY_ID = 6;
 	

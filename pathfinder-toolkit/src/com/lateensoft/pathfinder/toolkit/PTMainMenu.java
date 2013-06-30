@@ -67,16 +67,16 @@ public class PTMainMenu extends SherlockListActivity implements OnClickListener 
 			startActivity(new Intent(this, PTCharacterSheetActivity.class));
 			break;
 		case 2:
-			startActivity(new Intent(this, PTInitiativeTrackerActivity.class));
+			startActivity(new Intent(this, PTInitiativeTrackerFragment.class));
 			break;
 		case 3:
-			startActivity(new Intent(this, PTPartySkillCheckerActivity.class));
+			startActivity(new Intent(this, PTPartySkillCheckerFragment.class));
 			break;
 		case 4:
-			startActivity(new Intent(this, PTPartyManagerActivity.class));
+			startActivity(new Intent(this, PTPartyManagerFragment.class));
 			break;
 		case 5:
-			startActivity(new Intent(this, PTPointbuyCalculator.class));
+			startActivity(new Intent(this, PTPointbuyCalculatorFragment.class));
 			break;
 		}
 	}
