@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.lateensoft.pathfinder.toolkit.PTMainMenuAdapter.MenuItemHolder;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;

@@ -22,8 +22,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class PTCharacterInventoryFragment extends PTCharacterSheetFragment implements OnItemClickListener, OnClickListener, android.content.DialogInterface.OnClickListener, OnFocusChangeListener{
-	final String TAG = "PTCharacterInventoryFragment";
+public class PTCharacterInventoryFragment extends PTCharacterSheetFragment implements 
+	OnItemClickListener, OnClickListener, 
+	android.content.DialogInterface.OnClickListener, OnFocusChangeListener{
+	
+	private static final String TAG = PTCharacterInventoryFragment.class.getSimpleName();
 	private ListView mItemsListView;
 	private Button mAddButton;
 	private EditText mGoldEditText;
@@ -33,8 +36,6 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	private EditText mDialogItemQuantityEditText;
 	private EditText mDialogItemWeightEditText;
 	private CheckBox mDialogItemContainedCheckbox;
-	
-	private ViewGroup mContainer;
 	
 	private int mItemSelectedForEdit;
 	private View mDummyView;
@@ -49,39 +50,31 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		
-		mContainer = container;
-		
-		View fragmentView = inflater.inflate(R.layout.character_inventory_fragment, 
+		mParentView = inflater.inflate(R.layout.character_inventory_fragment, 
 				container, false);
 		
-		mDummyView = (View) fragmentView.findViewById(R.id.dummyView);
+		mDummyView = (View) mParentView.findViewById(R.id.dummyView);
 		
-		mAddButton = (Button) fragmentView.findViewById(R.id.buttonAddItem);
+		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddItem);
 		mAddButton.setOnClickListener(this);
 		
-		mGoldEditText = (EditText) fragmentView.findViewById(R.id.editTextGold);
+		mGoldEditText = (EditText) mParentView.findViewById(R.id.editTextGold);
 		mGoldEditText.setOnFocusChangeListener(this);
-		mGoldEditText.setText(Double.toString(mCharacter.mGold));
 		
-		mTotalWeightText = (TextView)  fragmentView.findViewById(R.id.tvWeightTotal);
-		updateTotalWeight();
+		mTotalWeightText = (TextView)  mParentView.findViewById(R.id.tvWeightTotal);
 		
-		mItemsListView = (ListView) fragmentView.findViewById(R.id.listViewInventory);
-		refreshItemsListView();
+		mItemsListView = (ListView) mParentView.findViewById(R.id.listViewInventory);
 		mItemsListView.setOnItemClickListener(this);
 		
-		return fragmentView;
+		updateFragmentUI();
+		
+		return mParentView;
 	}
 	
-
-	
-
 	@Override
 	public void onResume() {
 		super.onResume();
 		mDummyView.requestFocus();
-		refreshItemsListView();
-		mGoldEditText.setText(Double.toString(mCharacter.mGold));
 	}
 
 	@Override
@@ -95,11 +88,9 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	private void refreshItemsListView(){
 		PTItem[] items = mCharacter.getInventory().getItems();	
 	
-		PTInventoryAdapter adapter = new PTInventoryAdapter(mContainer.getContext(), R.layout.character_inventory_row, items);
+		PTInventoryAdapter adapter = new PTInventoryAdapter(getActivity(), R.layout.character_inventory_row, items);
 		mItemsListView.setAdapter(adapter);
-
-		
-		
+	
 	}
 	
 	private void updateTotalWeight(){
@@ -239,6 +230,18 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	public void onFocusChange(View view, boolean isInFocus) {
 		if(!isInFocus)
 			mCharacter.mGold = Double.parseDouble(mGoldEditText.getText().toString());
+	}
+
+	@Override
+	public void updateFragmentUI() {
+		mGoldEditText.setText(Double.toString(mCharacter.mGold));
+		updateTotalWeight();
+		refreshItemsListView();	
+	}
+
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_inventory);
 	}
 	
 }

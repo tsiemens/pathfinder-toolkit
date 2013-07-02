@@ -12,12 +12,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:hasCode="true" android:allowBackup="true">
         <activity
-            android:name=".PTCharacterSheetActivity"
-            android:label="@string/title_activity_character_sheet"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
             android:name=".party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
             android:screenOrientation="portrait"
@@ -34,11 +28,6 @@
             android:label="@string/title_activity_party_member_editor"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".PTMainMenu"
-            android:label="@string/title_activity_main_menu"
-            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".PTMainActivity"

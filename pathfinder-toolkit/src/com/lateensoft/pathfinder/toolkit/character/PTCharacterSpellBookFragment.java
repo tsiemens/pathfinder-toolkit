@@ -25,7 +25,8 @@ import android.widget.Spinner;
 public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment implements
 	OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	
-	final String TAG = "PTCharacterSpellBookFragment";
+	private static final String TAG = PTCharacterSpellBookFragment.class.getSimpleName();
+	
 	private ListView mListView;
 	int mSpellSelectedForEdit;
 	private Button mAddButton;
@@ -49,18 +50,18 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		
 		mContainer = container;
 		
-		View fragmentView = inflater.inflate(R.layout.character_spellbook_fragment,
+		mParentView = inflater.inflate(R.layout.character_spellbook_fragment,
 				container, false);
 		
-		mAddButton = (Button) fragmentView.findViewById(R.id.addSpell);
+		mAddButton = (Button) mParentView.findViewById(R.id.addSpell);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		setListViews(fragmentView);
+		setListViews(mParentView);
 		refreshSpellListView();
 		setonItemClickListeners();
 		
-		return fragmentView;
+		return mParentView;
 	}
 
 	private void setListViews(View fragmentView) {
@@ -230,6 +231,17 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 			return null;
 		
 		return new PTSpell(name, level, prepared, description);
+	}
+
+	@Override
+	public void updateFragmentUI() {
+		refreshSpellListView();
+		
+	}
+	
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_spells);
 	}
 
 }

@@ -14,8 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -27,19 +25,23 @@ import android.widget.ImageView.ScaleType;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.lateensoft.pathfinder.toolkit.character.*;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
 
 public class PTMainActivity extends SherlockFragmentActivity implements
 		OnClickListener, OnChildClickListener, OnGroupClickListener,
 		OnGroupExpandListener, OnGroupCollapseListener {
-	private final String TAG = PTMainActivity.class.getSimpleName();
+	private static final String TAG = PTMainActivity.class.getSimpleName();
 
+	private static final String KEY_CURRENT_FRAGMENT = "fragment_id";
+	
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private ExpandableListView mDrawerList;
 	
 	private PTBasePageFragment mCurrentFragment;
+	private long mCurrentFragmentId = 0;
 
 	String mListLabels[];
 	private PTUserPrefsManager mUserPrefsManager;
@@ -47,6 +49,10 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (savedInstanceState != null) {
+			mCurrentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
+		}
 
 		mUserPrefsManager = new PTUserPrefsManager(this);
 		PTDatabaseManager SQLManager = new PTDatabaseManager(
@@ -61,9 +67,29 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		mListLabels = getResources().getStringArray(R.array.main_menu_array);
 
 		setContentView(R.layout.activity_drawer_main);
+		
+		setupNavDrawer();
 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+
+		if (mCurrentFragmentId != 0) {
+			showView(mCurrentFragmentId);
+		} else {
+			showView(PTNavDrawerAdapter.FLUFF_ID);
+		}
+		
 		showRateDialogIfRequired();
 
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putLong(KEY_CURRENT_FRAGMENT, mCurrentFragmentId);
+		super.onSaveInstanceState(outState);
+	}
+
+	private void setupNavDrawer() {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
@@ -100,9 +126,6 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		mDrawerList.setOnGroupClickListener(this);
 		mDrawerList.setOnGroupExpandListener(this);
 		mDrawerList.setOnGroupCollapseListener(this);
-
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void showRateDialogIfRequired() {
@@ -204,36 +227,34 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		PTBasePageFragment newFragment = null;
 		
-		
-		
 		if (id == PTNavDrawerAdapter.DICE_ROLLER_ID) {
 			newFragment = new PTDiceRollerFragment();		
 		} else if ( id == PTNavDrawerAdapter.FLUFF_ID ) {
-			// TODO
+			newFragment = new PTCharacterFluffFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.COMBAT_STATS_ID ) {
-			// TODO
+			newFragment = new PTCharacterCombatStatsFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.ABILITIES_ID ) {
-			// TODO
+			newFragment = new PTCharacterAbilityFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.SKILLS_ID ) {
-			// TODO
+			newFragment = new PTCharacterSkillsFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.INVENTORY_ID ) {
-			// TODO
+			newFragment = new PTCharacterInventoryFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.ARMOR_ID ) {
-			// TODO
+			newFragment = new PTCharacterArmorFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.WEAPONS_ID ) {
-			// TODO
+			newFragment = new PTCharacterWeaponsFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.FEATS_ID ) {
-			// TODO
+			newFragment = new PTCharacterFeatsFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.SPELLS_ID ) {
-			// TODO
+			newFragment = new PTCharacterSpellBookFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.INITIATIVE_TRACKER_ID ) {
 			newFragment = new PTInitiativeTrackerFragment();
@@ -254,6 +275,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 			fragmentTransaction.replace(R.id.content_frame, newFragment);
 			fragmentTransaction.commit();
 			mCurrentFragment = newFragment;
+			mCurrentFragmentId = id;
 			supportInvalidateOptionsMenu();
 		}
 	}
