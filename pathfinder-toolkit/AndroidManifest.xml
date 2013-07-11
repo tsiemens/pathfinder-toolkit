@@ -12,42 +12,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:hasCode="true" android:allowBackup="true">
         <activity
-            android:name=".PTDiceRollerActivity"
-            android:label="@string/title_activity_ptdice_roller"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".PTPointbuyCalculator"
-            android:label="@string/title_activity_ability_calc"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".PTCharacterSheetActivity"
-            android:label="@string/title_activity_character_sheet"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".PTPartyManagerActivity"
-            android:label="@string/title_activity_party_manager"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
             android:name=".party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".PTInitiativeTrackerActivity"
-            android:label="@string/title_activity_initiative_tracker"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <activity
-            android:name=".PTPartySkillCheckerActivity"
-            android:label="@string/title_activity_skill_checker"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
@@ -64,7 +30,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".PTMainMenu"
+            android:name=".PTMainActivity"
             android:alwaysRetainTaskState="true"
             android:label="@string/title_activity_main_menu"
             android:launchMode="singleTop"

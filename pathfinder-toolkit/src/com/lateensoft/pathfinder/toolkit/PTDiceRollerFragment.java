@@ -1,17 +1,13 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,7 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class PTDiceRollerActivity extends SherlockActivity implements OnClickListener,
+public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickListener,
 		RadioGroup.OnCheckedChangeListener {
 
 	int mCurrentDie = 4;
@@ -42,18 +38,23 @@ public class PTDiceRollerActivity extends SherlockActivity implements OnClickLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_ptdice_roller);
 
 		mDiceSet = new PTDiceSet();
+	}
 
-		viewSetup();
-
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mParentView = inflater.inflate(R.layout.fragment_dice_roller, container, false);
+		setTitle(R.string.title_activity_ptdice_roller);
+		setupContent();
 		mRollMode = ROLLMODE_SINGLE;
 		setRollTypeView(R.id.radiotoggleSingleRoll);
+	
+		return mParentView;
 	}
+
+
 
 	// Responds to roll type radio toggle buttons
 	public void rollTypeClicked(View view) {
@@ -133,29 +134,6 @@ public class PTDiceRollerActivity extends SherlockActivity implements OnClickLis
 			toggleButton.setChecked(true);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			// handle local menu items here
-
-			switch (item.getItemId()) {
-			case android.R.id.home: // Tapped the back button on the action bar,
-									// to
-									// return to main menu
-				finish();
-				break;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
-		return true;
-	}
-
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		ToggleButton toggleButton;
 		for (int j = 0; j < group.getChildCount(); j++) {
@@ -203,9 +181,9 @@ public class PTDiceRollerActivity extends SherlockActivity implements OnClickLis
 		}
 	}
 
-	public void onClick(View arg0) {
+	public void onClick(View view) {
 
-		switch (arg0.getId()) {
+		switch (view.getId()) {
 		case R.id.buttonRoll:
 			rollDice();
 			break;
@@ -223,6 +201,13 @@ public class PTDiceRollerActivity extends SherlockActivity implements OnClickLis
 			if (mDieQuantity > 1) {
 				mDieQuantity--;
 				mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
+			}
+			break;
+		default:
+			if ("roll_type_toggle".equals(view.getTag())) {
+				rollTypeClicked(view);
+			} else if ("die_type_toggle".equals(view.getTag())) {
+				dieTypeClicked(view);
 			}
 			break;
 		}
@@ -245,41 +230,49 @@ public class PTDiceRollerActivity extends SherlockActivity implements OnClickLis
 			for(int i = 0; i < rollResults.length; i++)
 				rollResultStrings[i] = Integer.toString(rollResults[i]);
 				
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, rollResultStrings);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, rollResultStrings);
 			mRollResultList.setAdapter(adapter);
 		}
 		else{
 			String[] emptyArray = new String[0];
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, emptyArray);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, emptyArray);
 			mRollResultList.setAdapter(adapter);
 		}
 	}
 
-	void viewSetup() {
-		mRollTypeRadioGroup = (RadioGroup) findViewById(R.id.toggleGroupRollType);
+	private void setupContent() {
+		mRollTypeRadioGroup = (RadioGroup) mParentView.findViewById(R.id.toggleGroupRollType);
 		mRollTypeRadioGroup.setOnCheckedChangeListener(this);
+		
+		for (int i = 0; i < mRollTypeRadioGroup.getChildCount(); i++) {
+			mRollTypeRadioGroup.getChildAt(i).setOnClickListener(this);
+		}
 
-		mDieTypeRadioGroup = (RadioGroup) findViewById(R.id.toggleGroupDieType);
+		mDieTypeRadioGroup = (RadioGroup) mParentView.findViewById(R.id.toggleGroupDieType);
 		mDieTypeRadioGroup.setOnCheckedChangeListener(this);
+		
+		for (int i = 0; i < mDieTypeRadioGroup.getChildCount(); i++) {
+			mDieTypeRadioGroup.getChildAt(i).setOnClickListener(this);
+		}
 
-		mDieQuantityUpButton = (Button) findViewById(R.id.buttonPlusDiceNumber);
+		mDieQuantityUpButton = (Button) mParentView.findViewById(R.id.buttonPlusDiceNumber);
 		mDieQuantityUpButton.setOnClickListener(this);
-		mDieQuantityDownButton = (Button) findViewById(R.id.buttonMinusDiceNumber);
+		mDieQuantityDownButton = (Button) mParentView.findViewById(R.id.buttonMinusDiceNumber);
 		mDieQuantityDownButton.setOnClickListener(this);
 
-		mRollButton = (Button) findViewById(R.id.buttonRoll);
+		mRollButton = (Button) mParentView.findViewById(R.id.buttonRoll);
 		mRollButton.setOnClickListener(this);
-		mResetButton = (Button) findViewById(R.id.buttonReset);
+		mResetButton = (Button) mParentView.findViewById(R.id.buttonReset);
 		mResetButton.setOnClickListener(this);
 
-		mDieQuantityLabel = (TextView) findViewById(R.id.textViewDiceNumberPicker);
+		mDieQuantityLabel = (TextView) mParentView.findViewById(R.id.textViewDiceNumberPicker);
 		mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
 
-		mRollResultLabel = (TextView) findViewById(R.id.textViewRollResult);
+		mRollResultLabel = (TextView) mParentView.findViewById(R.id.textViewRollResult);
 
-		mRollSumLabel = (TextView) findViewById(R.id.textViewRollSum);
+		mRollSumLabel = (TextView) mParentView.findViewById(R.id.textViewRollSum);
 		
-		mRollResultList = (ListView) findViewById(R.id.rollResultListView);
+		mRollResultList = (ListView) mParentView.findViewById(R.id.rollResultListView);
 		
 		resetRolls();
 	}

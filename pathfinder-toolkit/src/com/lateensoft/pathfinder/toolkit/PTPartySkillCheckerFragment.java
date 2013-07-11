@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
@@ -10,11 +8,11 @@ import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -24,9 +22,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 
-public class PTPartySkillCheckerActivity extends SherlockActivity implements OnClickListener, OnItemSelectedListener{
+public class PTPartySkillCheckerFragment extends PTBasePageFragment implements OnClickListener, OnItemSelectedListener{
 
-	private final String TAG = "PTPartySkillCheckerActivity";
+	private static final String TAG = PTPartySkillCheckerFragment.class.getSimpleName();
 	
 	public PTParty mParty;
 	
@@ -43,58 +41,47 @@ public class PTPartySkillCheckerActivity extends SherlockActivity implements OnC
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_skill_checker);
-        
-        ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mParentView = inflater.inflate(R.layout.fragment_skill_checker, container, false);
+		setTitle(R.string.title_activity_skill_checker);
 		
 		mSkillSelectedForRoll = 0;
 		
-		mSQLManager = new PTDatabaseManager(getApplicationContext());
-		mUserPrefsManager = new PTUserPrefsManager(getApplicationContext());
+		mSQLManager = new PTDatabaseManager(getActivity());
+		mUserPrefsManager = new PTUserPrefsManager(getActivity());
 		
-		mRollButton = (Button) findViewById(R.id.buttonRoll);
+		mRollButton = (Button) mParentView.findViewById(R.id.buttonRoll);
 		mRollButton.setOnClickListener(this);
 	
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				R.array.checkable_skills_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		mSkillSpinner = (Spinner) findViewById(R.id.spinnerSkillToRoll);
+		mSkillSpinner = (Spinner) mParentView.findViewById(R.id.spinnerSkillToRoll);
 		mSkillSpinner.setAdapter(adapter);
 		mSkillSpinner.setOnItemSelectedListener(this);
 		mSkillSpinner.setSelection(mSkillSelectedForRoll);
 		
-		mPartyMemberList = (ListView) findViewById(R.id.listViewPartyMembers);
+		mPartyMemberList = (ListView) mParentView.findViewById(R.id.listViewPartyMembers);
 		
 		loadEncounterParty();
 		resetPartyRolls();
+		
+		return mParentView;
     }
 	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			// handle local menu items here
-			
-			switch (item.getItemId()) {
-			case android.R.id.home: // Tapped the back button on the action bar,
-									// to
-									// return to main menu
-				finish();
-				break;
-			}
-		}
-
-		return true;
-
+		return super.onOptionsItemSelected(item);
 	}
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-		
-		// Initialize the global menu items
-		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
-        return true;
+		return super.onCreateOptionsMenu(menu);
     }
     
     /**
@@ -149,7 +136,7 @@ public class PTPartySkillCheckerActivity extends SherlockActivity implements OnC
 				break;
 			}		
 		}
-		PTPartyRollAdapter adapter = new PTPartyRollAdapter(this, R.layout.party_roll_row, memberNames, memberRollValues, critValues);
+		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
 		mPartyMemberList.setAdapter(adapter);
 	}
 	
@@ -208,7 +195,7 @@ public class PTPartySkillCheckerActivity extends SherlockActivity implements OnC
 	
 	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		refreshPartyView();
 	}

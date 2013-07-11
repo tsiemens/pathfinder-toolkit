@@ -1,14 +1,13 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -16,8 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
@@ -27,7 +24,7 @@ import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilityModSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilitySetCalc;
 
-public class PTPointbuyCalculator extends SherlockActivity {
+public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	
 	static final int STR_KEY = 0;
 	static final int DEX_KEY = 1;
@@ -60,14 +57,20 @@ public class PTPointbuyCalculator extends SherlockActivity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_ability_calculator);
+	}
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mParentView = inflater.inflate(R.layout.fragment_ability_calculator, container, false);
+		setTitle(R.string.title_activity_ability_calc);
+
 		isHuman = true;
 		
 		mAbilitySet = new PTAbilitySetCalc();
 		mRacialModSet = new PTAbilityModSet();
 		
-		mRacesSpinner = (Spinner) findViewById(R.id.races_spinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		mRacesSpinner = (Spinner) mParentView.findViewById(R.id.races_spinner);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 		        R.array.races_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
@@ -75,21 +78,20 @@ public class PTPointbuyCalculator extends SherlockActivity {
 		mRacesSpinner.setAdapter(adapter);
 		mRacesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());
 		
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		
 		mHumanRaceListener = new HumanRaceModSelectedListener();
-		findViewById(R.id.raceStr).setOnClickListener(mHumanRaceListener);
-		findViewById(R.id.raceDex).setOnClickListener(mHumanRaceListener);
-		findViewById(R.id.raceCon).setOnClickListener(mHumanRaceListener);
-		findViewById(R.id.raceInt).setOnClickListener(mHumanRaceListener);
-		findViewById(R.id.raceWis).setOnClickListener(mHumanRaceListener);
-		findViewById(R.id.raceCha).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceStr).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceDex).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceCon).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceInt).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceWis).setOnClickListener(mHumanRaceListener);
+		mParentView.findViewById(R.id.raceCha).setOnClickListener(mHumanRaceListener);
 		
 		for(int i = 0; i < NUM_ABILITIES; i++) {
 			updateInterfaceAbility(i);
 		}
 		updateInterfaceRaceMods();
+		
+		return mParentView;
 	}
 	
 	@Override
@@ -104,7 +106,7 @@ public class PTPointbuyCalculator extends SherlockActivity {
 				R.string.export_to_existing_character);
 		exportAbilitySetToExisting.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
-		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
+		super.onCreateOptionsMenu(menu);
 		return true;
 	}
 	
@@ -115,7 +117,7 @@ public class PTPointbuyCalculator extends SherlockActivity {
 		    // parent.getItemAtPosition(pos)
 			if(parent.getSelectedItemPosition() != CUSTOM_RACE_INDEX) {
 				isHuman = mRacialModSet.setRacialMods((int) parent.getSelectedItemId(),
-						getBaseContext());
+						getActivity());
 			
 				mAbilitySet.applyMods(mRacialModSet);
 				
@@ -135,9 +137,9 @@ public class PTPointbuyCalculator extends SherlockActivity {
 	}
 	
 	private void showCustomRaceDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		
-		LayoutInflater inflater = this.getLayoutInflater();
+		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
 		View dialogView = inflater.inflate(R.layout.calculator_custom_race_dialog, null);
 		mDialogStrSpinner = (Spinner) dialogView.findViewById(R.id.spCustomStrMod);
@@ -199,7 +201,7 @@ public class PTPointbuyCalculator extends SherlockActivity {
 	}
 
 	private void setupCustomRaceSpinner(Spinner spinner) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				R.array.calc_custom_race_mod_options, android.R.layout.simple_spinner_item);
 		
 		Resources r = getResources();
@@ -221,27 +223,27 @@ public class PTPointbuyCalculator extends SherlockActivity {
 			switch (id) {
 			case R.id.raceStr:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_strength), 
-						getBaseContext());
+						getActivity());
 				break;
 			case R.id.raceDex:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_dexterity), 
-						getBaseContext());
+						getActivity());
 				break;
 			case R.id.raceCon:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_constitution), 
-						getBaseContext());
+						getActivity());
 				break;
 			case R.id.raceInt:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_intelligence), 
-						getBaseContext());
+						getActivity());
 				break;
 			case R.id.raceWis:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_wisdom), 
-						getBaseContext());
+						getActivity());
 				break;
 			case R.id.raceCha:
 				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_charisma), 
-						getBaseContext());
+						getActivity());
 				break;
 			}
 			
@@ -260,46 +262,41 @@ public class PTPointbuyCalculator extends SherlockActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			mSQLManager = new PTDatabaseManager(this);
-			
-			switch (item.getItemId()) {
-			case android.R.id.home: 		//Tapped the back button on the action bar, to return to main menu
-				finish();
-				break;
-			case MENU_ITEM_EXPORT_TO_NEW:
-				PTCharacter character = mSQLManager.addNewCharacter("From calc", this);
-				character.setAbilitySet(mAbilitySet.getAbilitySetPostMods());
-				Resources r = getResources();
-				character.getFluff().setRace(r.getStringArray(R.array.races_array)
-						[mRacesSpinner.getSelectedItemPosition()]);
-				
-				PTUserPrefsManager userPrefsManager = new PTUserPrefsManager(this);
-				userPrefsManager.setSelectedCharacter(character.mID);
-				mSQLManager.updateCharacter(character);
-				startActivity(new Intent(this, PTCharacterSheetActivity.class));
-				finish();
-				break;
-			case MENU_ITEM_EXPORT_TO_EXISTING:
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(getString(R.string.select_character_dialog_header));
-				String[] characterList = mSQLManager.getCharacterNames();
-				
-				onCharacterExportSelectListener exportListener = 
-						new onCharacterExportSelectListener();
-				
-				builder.setSingleChoiceItems(characterList, -1,
-						exportListener).setPositiveButton(R.string.ok_button_text, exportListener)
-						.setNegativeButton(R.string.cancel_button_text, exportListener);
-				
-				AlertDialog alert = builder.create();
-				alert.show();
-				break;
-			}
+		mSQLManager = new PTDatabaseManager(getActivity());
+
+		switch (item.getItemId()) {
+		case MENU_ITEM_EXPORT_TO_NEW:
+			PTCharacter character = mSQLManager.addNewCharacter("From calc", getActivity());
+			character.setAbilitySet(mAbilitySet.getAbilitySetPostMods());
+			Resources r = getResources();
+			character.getFluff().setRace(r.getStringArray(R.array.races_array)
+					[mRacesSpinner.getSelectedItemPosition()]);
+
+			PTUserPrefsManager userPrefsManager = new PTUserPrefsManager(getActivity());
+			userPrefsManager.setSelectedCharacter(character.mID);
+			mSQLManager.updateCharacter(character);
+			((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
+			break;
+		case MENU_ITEM_EXPORT_TO_EXISTING:
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle(getString(R.string.select_character_dialog_header));
+			String[] characterList = mSQLManager.getCharacterNames();
+
+			onCharacterExportSelectListener exportListener = 
+					new onCharacterExportSelectListener();
+
+			builder.setSingleChoiceItems(characterList, -1,
+					exportListener).setPositiveButton(R.string.ok_button_text, exportListener)
+					.setNegativeButton(R.string.cancel_button_text, exportListener);
+
+			AlertDialog alert = builder.create();
+			alert.show();
+			break;
+
 		}
 		return true;
 	}
-	
+
 	public class onCharacterExportSelectListener implements DialogInterface.OnClickListener {
 		int mCharacterSelectedInDialog;
 		
@@ -313,12 +310,10 @@ public class PTPointbuyCalculator extends SherlockActivity {
 						[mRacesSpinner.getSelectedItemPosition()]);
 				
 				PTUserPrefsManager userPrefsManager = new PTUserPrefsManager(
-						PTPointbuyCalculator.this);
+						getActivity());
 				userPrefsManager.setSelectedCharacter(character.mID);
 				mSQLManager.updateCharacter(character);
-				startActivity(new Intent(PTPointbuyCalculator.this, 
-						PTCharacterSheetActivity.class));
-				finish();
+				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				break;
@@ -330,57 +325,35 @@ public class PTPointbuyCalculator extends SherlockActivity {
 			}
 		}
 	}
-	
-	@Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	super.onSaveInstanceState(outState);
-    	saveState();
-    }
-    
-    @Override
-    protected void onPause() {
-    	super.onPause();
-    	saveState();
-    }
-    
-    @Override
-    protected void onResume() {
-    	super.onResume();
-    	
-    }
-    
-    private void saveState() {
-    	//Derp
-    }
     
     public void updateInterfaceRaceMods() {
-		TextView t = new TextView(this);
+		TextView t = new TextView(getActivity());
 		int[] abilityMods = mRacialModSet.getMods();
 		int[] racialModIds = {R.id.raceStr, R.id.raceDex, R.id.raceCon, R.id.raceInt, R.id.raceWis, R.id.raceCha};
 		
 		for(int i = 0; i < NUM_ABILITIES; i++) {
-			t = (TextView) findViewById(racialModIds[i]);
+			t = (TextView) mParentView.findViewById(racialModIds[i]);
 			t.setText(Integer.toString(abilityMods[i]));
     	}
 	}
     
     public void updateInterfaceAbility(int key) {
-    	TextView t = new TextView(this);
+    	TextView t = new TextView(getActivity());
 		int[] modIds = {R.id.strMod, R.id.dexMod, R.id.conMod, R.id.intMod, R.id.wisMod, R.id.chaMod};
 		int[] finalScoreIds = {R.id.finStr, R.id.finDex, R.id.finCon, R.id.finInt, R.id.finWis, R.id.finCha};
 		int[] baseScoreIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt, R.id.baseWis, R.id.baseCha};
 		mAbilitySet.applyMods(mRacialModSet);
     	
-		t = (TextView) findViewById(modIds[key]);
+		t = (TextView) mParentView.findViewById(modIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getModifier()));
 		
-		t = (TextView) findViewById(baseScoreIds[key]);
+		t = (TextView) mParentView.findViewById(baseScoreIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScore(key).getScore()));
 		
-		t = (TextView) findViewById(finalScoreIds[key]);
+		t = (TextView) mParentView.findViewById(finalScoreIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getScore()));
 		
-		t = (TextView) findViewById(R.id.textCost);
+		t = (TextView) mParentView.findViewById(R.id.textCost);
 		t.setText(Integer.toString(mAbilitySet.getPointBuyCost()));
     }
     

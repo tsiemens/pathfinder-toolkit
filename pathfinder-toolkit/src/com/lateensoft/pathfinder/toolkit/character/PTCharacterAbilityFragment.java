@@ -16,8 +16,8 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 // Untested
 public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
-	static final String TAG = "PTCharacterAbilityFragment";
-	View mView;
+	private static final String TAG = PTCharacterAbilityFragment.class.getSimpleName();
+
 	Context mContext;
 	AbilityItemSelectedListener[] mAbilityItemSelectedListeners;
 	AbilityItemSelectedListener[] mTempAbilityItemSelectedListeners;
@@ -44,18 +44,15 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		
 		mContext = container.getContext();
 		
-		mView = inflater.inflate(R.layout.activity_character_sheet_abilities,
+		mParentView = inflater.inflate(R.layout.character_abilities_fragment,
 				container, false);
 		
 		mAbilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
 		mTempAbilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
 		
-		setupSpinners(mBaseScoreSpinners, baseScoreIds, mAbilityItemSelectedListeners, false);
-		setupSpinners(mTempScoreSpinners, tempScoreIds, mTempAbilityItemSelectedListeners, true);
-		updateMods(modIds, false);
-		updateMods(tempModIds, true);
+		updateFragmentUI();
 		
-		return mView;
+		return mParentView;
 	}
 	
 	public void updateInterfaceAbilities() {
@@ -68,17 +65,17 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
     	Spinner s = new Spinner(mContext);
     	TextView tv = new TextView(mContext);
     	
-		tv = (TextView) mView.findViewById(modIds[key]);
+		tv = (TextView) mParentView.findViewById(modIds[key]);
 		tv.setText(mCharacter.getAbilitySet().getAbilityScore(key).getModifier());
 		
-		s = (Spinner) mView.findViewById(baseScoreIds[key]);
+		s = (Spinner) mParentView.findViewById(baseScoreIds[key]);
 		s.setSelection((mCharacter.getAbilitySet().getAbilityScore(key).getScore()));
 		
-		s = (Spinner) mView.findViewById(tempScoreIds[key]);
+		s = (Spinner) mParentView.findViewById(tempScoreIds[key]);
 		s.setSelection((mCharacter.getTempAbilitySet()
 				.getAbilityScore(key).getScore()));
 		
-		tv = (TextView) mView.findViewById(tempModIds[key]);
+		tv = (TextView) mParentView.findViewById(tempModIds[key]);
 		tv.setText((mCharacter.getTempAbilitySet()
 				.getAbilityScore(key).getModifier()));
     }
@@ -93,7 +90,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		
 		for(int i = 0; i < viewIds.length; i++) {
 			listeners[i] = new AbilityItemSelectedListener(isTemp, i);
-			spinners[i] = (Spinner) mView.findViewById(viewIds[i]); 
+			spinners[i] = (Spinner) mParentView.findViewById(viewIds[i]); 
 			
 			spinners[i].setAdapter(adapter);
 
@@ -112,7 +109,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		TextView tv;
 		
 		for(int i = 0; i < viewIds.length; i++) {
-			tv = (TextView) mView.findViewById(viewIds[i]); 
+			tv = (TextView) mParentView.findViewById(viewIds[i]); 
 			if(isTemp) {
 				tv.setText(Integer.toString(mCharacter.getTempAbilitySet().getAbilityScore(i)
 					.getModifier()));
@@ -122,14 +119,6 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 						.getModifier()));
 			}
 		}
-	}
-	
-	public void onResume() {
-		super.onResume();
-		setupSpinners(mBaseScoreSpinners, baseScoreIds, mAbilityItemSelectedListeners, false);
-		setupSpinners(mTempScoreSpinners, tempScoreIds, mTempAbilityItemSelectedListeners, true);
-		updateMods(modIds, false);
-		updateMods(tempModIds, true);
 	}
 	
 	public class AbilityItemSelectedListener implements OnItemSelectedListener {
@@ -163,5 +152,18 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 			
 		}
 		
+	}
+
+	@Override
+	public void updateFragmentUI() {
+		setupSpinners(mBaseScoreSpinners, baseScoreIds, mAbilityItemSelectedListeners, false);
+		setupSpinners(mTempScoreSpinners, tempScoreIds, mTempAbilityItemSelectedListeners, true);
+		updateMods(modIds, false);
+		updateMods(tempModIds, true);
+	}
+	
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_abilities);
 	}
 }

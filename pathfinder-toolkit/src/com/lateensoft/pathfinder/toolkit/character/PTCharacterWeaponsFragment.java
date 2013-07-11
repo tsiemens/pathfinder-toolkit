@@ -25,10 +25,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class PTWeaponsFragment extends PTCharacterSheetFragment implements
+public class PTCharacterWeaponsFragment extends PTCharacterSheetFragment implements
 OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	
-	static final String TAG = "PTWeaponFragment";
+	private static final String TAG = PTCharacterWeaponsFragment.class.getSimpleName();
 	private static final int ATK_BONUS_OFFSET = 10;
 	private ListView mListView;
 	int mWeaponSelectedForEdit;
@@ -47,33 +47,29 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 	private View mDialogView;
 	private OnTouchListener mSpinnerOnTouchListener;	
 	
-	private ViewGroup mContainer;
-	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.v(TAG, "Starting onCreateView");
 		
-		mContainer = container;
-		
-		View fragmentView = inflater.inflate(R.layout.character_weapon_fragment,
+		mParentView = inflater.inflate(R.layout.character_weapon_fragment,
 				container, false);
 		
-		mAddButton = (Button) fragmentView.findViewById(R.id.buttonAddWeapon);
+		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddWeapon);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		mListView = (ListView) fragmentView.findViewById(R.id.listViewWeapons);
+		mListView = (ListView) mParentView.findViewById(R.id.listViewWeapons);
 		refreshWeaponsListView();
 
 		mListView.setOnItemClickListener(this);
 		
 		Log.v(TAG, "Finishing onCreateView");
-		return fragmentView;
+		return mParentView;
 	}
 
 	private void refreshWeaponsListView() {
-		PTWeaponAdapter adapter = new PTWeaponAdapter(mContainer.getContext(),
+		PTWeaponAdapter adapter = new PTWeaponAdapter(getActivity(),
 				R.layout.character_weapon_row,
 				mCharacter.getInventory().getWeaponArray());
 		
@@ -134,7 +130,7 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 			mDialogAmmunitionSpinner.setSelection(weapon.getAmmunition());
 			mDialogDamageET.setText(weapon.getDamage());
 			mDialogCriticalET.setText(weapon.getCritical());
-			mDialogTypeSpinner.setSelection(weapon.getTypeInt(mContainer.getContext()));
+			mDialogTypeSpinner.setSelection(weapon.getTypeInt(getActivity()));
 			mDialogRangeSpinner.setSelection(weapon.getRange()/5);
 			mDialogSizeSpinner.setSelection(weapon.getSizeInt());
 			mDialogWeightET.setText(Double.toString(weapon.getWeight()));
@@ -253,8 +249,18 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 	}
 	
 	private String getStringByResourceAndIndex(int resourceId, int position) {
-		Resources r = mContainer.getContext().getResources();
+		Resources r = getActivity().getResources();
 		String[] resource = r.getStringArray(resourceId);
 		return resource[position];
+	}
+
+	@Override
+	public void updateFragmentUI() {
+		refreshWeaponsListView();
+	}
+	
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_weapons);
 	}
 }

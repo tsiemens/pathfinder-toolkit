@@ -23,10 +23,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class PTArmorFragment extends PTCharacterSheetFragment implements
+public class PTCharacterArmorFragment extends PTCharacterSheetFragment implements
 	OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	
-	static final String TAG = "PTArmorFragment";
+	private static final String TAG = PTCharacterArmorFragment.class.getSimpleName();
 	private static final int AC_SPINNER_OFFSET = 20;
 	private static final int ASF_INCREMENT = 5;
 	private static final int SPEED_INCREMENT = 5;
@@ -46,34 +46,29 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 	private View mDialogView;
 	private OnTouchListener mSpinnerOnTouchListener;
 	
-	private ViewGroup mContainer;
-
-	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.v(TAG, "Starting onCreateView");
 		
-		mContainer = container;
-		
-		View fragmentView = inflater.inflate(R.layout.character_armor_fragment,
+		mParentView = inflater.inflate(R.layout.character_armor_fragment,
 				container, false);
 		
-		mAddButton = (Button) fragmentView.findViewById(R.id.buttonAddArmor);
+		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddArmor);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		mListView = (ListView) fragmentView.findViewById(R.id.lvArmor);
+		mListView = (ListView) mParentView.findViewById(R.id.lvArmor);
 		refreshArmorListView();
 
 		mListView.setOnItemClickListener(this);
 		
 		Log.v(TAG, "Finishing onCreateView");
-		return fragmentView;
+		return mParentView;
 	}
 	
 	private void refreshArmorListView() {
-		PTArmorAdapter adapter = new PTArmorAdapter(mContainer.getContext(),
+		PTArmorAdapter adapter = new PTArmorAdapter(getActivity(),
 				R.layout.character_armor_row,
 				mCharacter.getInventory().getArmorArray());
 		
@@ -247,5 +242,16 @@ public class PTArmorFragment extends PTCharacterSheetFragment implements
 	private void closeKeyboard() {
 		InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
+	}
+
+	@Override
+	public void updateFragmentUI() {
+		refreshArmorListView();
+		
+	}
+	
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_armor);
 	}
 }

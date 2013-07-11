@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.lateensoft.pathfinder.toolkit.PTCharacterSheetActivity;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTCharacterFluffFragment extends PTCharacterSheetFragment implements 
@@ -24,8 +23,6 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	int mFluffSelectedForEdit;
 	
 	private EditText mDialogFluff;
-	
-	private ViewGroup mContainer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,19 +34,14 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		mContainer = container;
-		/*Resources r = getActivity().getBaseContext().getResources();
+		mParentView = inflater.inflate(R.layout.character_fluff_fragment, 
+				container, false);
 		
-		String[] tempValues = new String[r.getStringArray(R.array.fluff_fields).length];
-		tempValues = r.getStringArray(R.array.fluff_fields);*/
-		
-		View view = inflater.inflate(R.layout.character_fluff_fragment, container, false);
-		
-		lv = (ListView) view.findViewById(R.id.fluff_list);
+		lv = (ListView) mParentView.findViewById(R.id.fluff_list);
 		refreshFluffListView();
 		lv.setOnItemClickListener(this);
 		
-		return view;		
+		return mParentView;		
 	}
 	
 	//An items has been clicked in the list
@@ -83,7 +75,7 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	}
 	
 	private void refreshFluffListView() {		
-		PTFluffAdapter adapter = new PTFluffAdapter(mContainer.getContext(),
+		PTFluffAdapter adapter = new PTFluffAdapter(getActivity(),
 				R.layout.character_fluff_row, 
 				mCharacter.getFluff().getFluffArray());
 		lv.setAdapter(adapter);
@@ -96,7 +88,7 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 			
 			mCharacter.getFluff().setFluffByIndex(mFluffSelectedForEdit, 
 					getFluffValueFromDialog());
-			((PTCharacterSheetActivity)getActivity()).updateCharacterDatabase();
+			updateCharacterDatabase();
 			refreshFluffListView();
 
 			
@@ -121,11 +113,13 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void updateFragmentUI() {
 		refreshFluffListView();
 	}
 	
-	
+	@Override
+	public String getFragmentTitle() {
+		return getString(R.string.tab_character_fluff);
+	}
 	
 }
