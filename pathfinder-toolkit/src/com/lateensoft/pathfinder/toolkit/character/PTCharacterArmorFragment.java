@@ -1,6 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	
 	private static final String TAG = PTCharacterArmorFragment.class.getSimpleName();
 	private static final String DIALOG_NAME = "ArmorDialog";
+	private static final int DIALOG_CODE = 1;
 	private ListView mListView;
 	int mArmorSelectedForEdit;
 	private Button mAddButton;
@@ -71,14 +74,15 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	}
 
 	private void showArmorDialog(PTArmor armor) {
-		android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-		android.support.v4.app.Fragment prev = getFragmentManager().findFragmentByTag(DIALOG_NAME);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag(DIALOG_NAME);
 	    if (prev != null) {
 	        ft.remove(prev);
 	    }
 		
 		ft.addToBackStack(null);
 		PTArmorDialogFragment newFragment = PTArmorDialogFragment.newInstance(armor);
+		newFragment.setTargetFragment(this, DIALOG_CODE);
 		newFragment.show(ft, DIALOG_NAME);
 	}
 	

@@ -126,5 +126,24 @@
         android:id="@+id/etArmorSpecialProperties"
         android:hint="@string/armor_special_properties_hint"
         android:imeOptions="actionDone"/>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+    	<Button
+    	    android:layout_weight="1"
+    	    android:layout_height="wrap_content"
+    	    android:id="@+id/btnSave"
+    	    android:text="Save" />
+    	
+    	<Button
+    	    android:layout_weight="1"
+    	    android:layout_height="wrap_content"
+    	    android:id="@+id/btnDelete"
+    	    android:text="Delete" />
+        
+    </LinearLayout>
 
 </LinearLayout>

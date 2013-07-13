@@ -4,12 +4,13 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,11 +19,12 @@ import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 public class PTArmorDialogFragment extends DialogFragment 
-	implements OnClickListener {
+	implements View.OnClickListener {
 	
 	private static final String TAG = PTArmorDialogFragment.class.getSimpleName();
 	private static final int AC_SPINNER_OFFSET = 20;
@@ -33,6 +35,8 @@ public class PTArmorDialogFragment extends DialogFragment
 	private PTArmor mArmor;
 	private OnArmorDialogReturnListener mListener;
 	
+	public Button mSaveBtn;
+	public Button mDeleteBtn;
 	private Spinner mDialogACSpinner;
 	private Spinner mDialogACPSpinner;
 	private Spinner mDialogSizeSpinner;
@@ -87,6 +91,8 @@ public class PTArmorDialogFragment extends DialogFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle SavedInstanceState) {
 		View view = inflater.inflate(R.layout.character_armor_dialog, null);
+		mSaveBtn = (Button) view.findViewById(R.id.btnSave);
+		mDeleteBtn = (Button) view.findViewById(R.id.btnDelete);
 		mDialogACSpinner = (Spinner) view.findViewById(R.id.spArmorClass);
 		mDialogACPSpinner = (Spinner) view.findViewById(R.id.spArmorCheckPenalty);
 		mDialogSizeSpinner = (Spinner) view.findViewById(R.id.spArmorSize);
@@ -98,6 +104,8 @@ public class PTArmorDialogFragment extends DialogFragment
 		mDialogNameET = (EditText) view.findViewById(R.id.armorName);
 		mDialogMaxDexSpinner = (Spinner) view.findViewById(R.id.spArmorMaxDex);
 		
+		mSaveBtn.setOnClickListener(this);
+		mDeleteBtn.setOnClickListener(this);
 		setupSpinner(mDialogACSpinner, R.array.ac_spinner_options);
 		setupSpinner(mDialogACPSpinner, R.array.acp_spinner_options);
 		setupSpinner(mDialogSizeSpinner, R.array.size_spinner_options);
@@ -151,31 +159,32 @@ public class PTArmorDialogFragment extends DialogFragment
 		iMM.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 	}
 	
-	public void onClick(DialogInterface dialogInterface, int selection) {
+	public void onClick(View view) {
 		updateArmorFromDialog();
 		ArmorReturn returnValue = new ArmorReturn();
 		returnValue.armor = mArmor;
 		
-		switch (selection) {
-		case DialogInterface.BUTTON_POSITIVE:
+		switch (view.getId()) {
+		case R.id.btnSave:
 			Log.v(TAG, "Add.edit armor OK: " + mDialogNameET.getText());
 			returnValue.action = ArmorAction.ADD_EDIT;	
 			break;
 		
-		case DialogInterface.BUTTON_NEUTRAL:
+		case R.id.btnDelete:
 			Log.v(TAG, "Deleting an armor");
 			returnValue.action = ArmorAction.DELETE;
 			break;
 		
-		case DialogInterface.BUTTON_NEGATIVE:
-			returnValue.action = ArmorAction.CANCEL;
-			break;
-		
 		default:
+			returnValue.action = ArmorAction.CANCEL;
 			break;
 		}
 		Log.v(TAG, "Returning an armor");
 		mListener.onArmorDialogReturn(returnValue);
+		int targetRequestCode = getTargetRequestCode();
+		Intent intent = getActivity().getIntent();
+		Fragment targetFragment = getTargetFragment();
+		targetFragment.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent);
 		Log.v(TAG, "Dismissing armor dialog");
 		dismiss();
 	}
