@@ -1,50 +1,31 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
-import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.items.PTArmor;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.items.PTArmor;
+
 public class PTCharacterArmorFragment extends PTCharacterSheetFragment implements
-	OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener{
+	OnItemClickListener, OnClickListener, OnArmorDialogReturnListener {
 	
 	private static final String TAG = PTCharacterArmorFragment.class.getSimpleName();
-	private static final int AC_SPINNER_OFFSET = 20;
-	private static final int ASF_INCREMENT = 5;
-	private static final int SPEED_INCREMENT = 5;
+	private static final String DIALOG_NAME = "ArmorDialog";
 	private ListView mListView;
 	int mArmorSelectedForEdit;
 	private Button mAddButton;
-	
-	private Spinner mDialogACSpinner;
-	private Spinner mDialogACPSpinner;
-	private Spinner mDialogSizeSpinner;
-	private Spinner mDialogSpeedSpinner;
-	private Spinner mDialogMaxDexSpinner;
-	private Spinner mDialogASFSpinner;
-	private EditText mDialogWeightET;
-	private EditText mDialogNameET;
-	private EditText mDialogSpecialPropertiesET;
-	private View mDialogView;
-	private OnTouchListener mSpinnerOnTouchListener;
+
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -90,69 +71,22 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	}
 
 	private void showArmorDialog(PTArmor armor) {
-		if(armor == null) {
-			armor = new PTArmor();
-		}
-	
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+		android.support.v4.app.Fragment prev = getFragmentManager().findFragmentByTag(DIALOG_NAME);
+	    if (prev != null) {
+	        ft.remove(prev);
+	    }
 		
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		
-		View dialogView = inflater.inflate(R.layout.character_armor_dialog, null);
-		mDialogACSpinner = (Spinner) dialogView.findViewById(R.id.spArmorClass);
-		mDialogACPSpinner = (Spinner) dialogView.findViewById(R.id.spArmorCheckPenalty);
-		mDialogSizeSpinner = (Spinner) dialogView.findViewById(R.id.spArmorSize);
-		mDialogSpeedSpinner = (Spinner) dialogView.findViewById(R.id.spArmorSpeed);
-		mDialogASFSpinner = (Spinner) dialogView.findViewById(R.id.spArmorSpellFailure);
-		mDialogWeightET = (EditText) dialogView.findViewById(R.id.etArmorWeight);
-		mDialogSpecialPropertiesET = (EditText) dialogView.findViewById(
-				R.id.etArmorSpecialProperties);
-		mDialogNameET = (EditText) dialogView.findViewById(R.id.armorName);
-		mDialogMaxDexSpinner = (Spinner) dialogView.findViewById(R.id.spArmorMaxDex);
-		
-		setupSpinner(mDialogACSpinner, R.array.ac_spinner_options);
-		setupSpinner(mDialogACPSpinner, R.array.acp_spinner_options);
-		setupSpinner(mDialogSizeSpinner, R.array.size_spinner_options);
-		setupSpinner(mDialogSpeedSpinner, R.array.speed_spinner_options);
-		setupSpinner(mDialogMaxDexSpinner, R.array.acp_spinner_options);
-		setupSpinner(mDialogASFSpinner, R.array.armor_spell_fail_options);
-		
-		if(mArmorSelectedForEdit < 0) {
-			builder.setTitle(R.string.new_armor_title);
-			mDialogACSpinner.setSelection(AC_SPINNER_OFFSET);
-		} else {
-			builder.setTitle(armor.getName()).setNeutralButton(R.string.delete_button_text,
-					this);
-			mDialogNameET.setText(mCharacter.getInventory()
-					.getArmor(mArmorSelectedForEdit).getName());
-			mDialogACSpinner.setSelection((mCharacter.getInventory()
-					.getArmor(mArmorSelectedForEdit).getACBonus()) + AC_SPINNER_OFFSET);
-			mDialogACPSpinner.setSelection(mCharacter.getInventory()
-					.getArmor(mArmorSelectedForEdit).getCheckPen());
-			mDialogSizeSpinner.setSelection(mCharacter.getInventory()
-					.getArmor(mArmorSelectedForEdit).getSizeInt());
-			mDialogMaxDexSpinner.setSelection(armor.getMaxDex());
-			mDialogSpeedSpinner.setSelection(armor.getSpeed()/5);
-			mDialogASFSpinner.setSelection(armor.getSpellFail() / ASF_INCREMENT);
-			mDialogWeightET.setText(Double.toString(armor.getWeight()));
-			mDialogSpecialPropertiesET.setText(mCharacter.getInventory().getArmor(mArmorSelectedForEdit).getSpecialProperties());
-		}
-		
-		builder.setView(dialogView)
-			.setPositiveButton(R.string.ok_button_text, this)
-			.setNegativeButton(R.string.cancel_button_text, this);
-		
-		AlertDialog alert = builder.create();
-		mDialogView = dialogView;
-		alert.show();
+		ft.addToBackStack(null);
+		PTArmorDialogFragment newFragment = PTArmorDialogFragment.newInstance(armor);
+		newFragment.show(ft, DIALOG_NAME);
 	}
 	
-	public void onClick(DialogInterface dialogInterface, int selection) {
-		PTArmor armor = getArmorFromDialog();
-		
-		switch (selection) {
-		case DialogInterface.BUTTON_POSITIVE:
-			Log.v(TAG, "Add.edit armor OK: " + mDialogNameET.getText());
+	public void onArmorDialogReturn(PTArmorDialogFragment.ArmorReturn val) {
+		PTArmor armor = val.armor;
+		switch (val.action) {
+		case ADD_EDIT:
+			Log.v(TAG, "Add.edit armor OK: " + armor.getName());
 			if(mArmorSelectedForEdit < 0) {
 				Log.v(TAG, "Adding an armor");
 				if(armor != null) {
@@ -161,93 +95,29 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 				}
 			} else {
 				Log.v(TAG, "Editing an armor");
-				
 				mCharacter.getInventory().setArmor(armor, mArmorSelectedForEdit);
 				refreshArmorListView();
 			}
 			
 			break;
 		
-		case DialogInterface.BUTTON_NEUTRAL:
+		case DELETE:
 			Log.v(TAG, "Deleting an armor");
 			mCharacter.getInventory().deleteArmor(mArmorSelectedForEdit);
 			refreshArmorListView();
 			break;
 		
-		case DialogInterface.BUTTON_NEGATIVE:
+		case CANCEL:
 			break;
 		
 		default:
 			break;
-
 		}
-	}
-
-	private PTArmor getArmorFromDialog() {
-		String name = new String(mDialogNameET.getText().toString());
-		
-		if(name == null || name.contentEquals("")) {
-			return null;
-		}
-		
-		String specialProperties = new String(mDialogSpecialPropertiesET.getText().toString());
-		int speed = mDialogSpeedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
-		
-		int spellFail = mDialogASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
-		
-		int weight;
-		try {
-			weight = Integer.parseInt(mDialogWeightET.getText().toString());
-		} catch (NumberFormatException e) {
-			weight = 1;
-		}
-		
-		int size = mDialogSizeSpinner.getSelectedItemPosition();
-		int ac = mDialogACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
-		int acp = mDialogACPSpinner.getSelectedItemPosition();
-		int maxDex = mDialogMaxDexSpinner.getSelectedItemPosition();
-		
-		PTArmor armor = new PTArmor();
-		armor.setName(name);
-		armor.setSpeed(speed);
-		armor.setSpecialProperties(specialProperties);
-		armor.setSpellFail(spellFail);
-		armor.setWeight(weight);
-		armor.setSize(size);
-		armor.setACBonus(ac);
-		armor.setCheckPen(acp);
-		armor.setMaxDex(maxDex);
-		return armor;
-	}
-
-	private void setupSpinner(Spinner spinner, int optionResourceId) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-				optionResourceId, android.R.layout.simple_spinner_item);
-		
-		if(mSpinnerOnTouchListener == null) {
-			mSpinnerOnTouchListener = new OnTouchListener() {
-	            @Override
-	            public boolean onTouch(View v, MotionEvent event) {
-	                closeKeyboard();
-	                return false;
-	            }
-			};
-		}
-		
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		spinner.setAdapter(adapter);
-		spinner.setOnTouchListener(mSpinnerOnTouchListener);
-	}
-	
-	private void closeKeyboard() {
-		InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromWindow(mDialogView.getWindowToken(), 0);
 	}
 
 	@Override
 	public void updateFragmentUI() {
 		refreshArmorListView();
-		
 	}
 	
 	@Override

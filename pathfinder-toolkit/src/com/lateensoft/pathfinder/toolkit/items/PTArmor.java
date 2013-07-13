@@ -1,5 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.items;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class PTArmor extends PTItem {
 	boolean mWorn;
 	int mACBonus;
@@ -12,7 +15,7 @@ public class PTArmor extends PTItem {
 	
 	public PTArmor() {
 		super();
-		mWorn = true;
+		mWorn =  true;
 		mACBonus = 0;
 		mCheckPen = 0;
 		mMaxDex = 10;
@@ -20,6 +23,34 @@ public class PTArmor extends PTItem {
 		mSpeed = 30;
 		mSpecialProperties = new String("");
 		mSize = "M";
+	}
+	
+	public PTArmor(Parcel in) {
+		super(in);
+		boolean[] worn = new boolean[1];
+		in.readBooleanArray(worn);
+		mWorn = worn[0];
+		mACBonus = in.readInt();
+		mCheckPen = in.readInt();
+		mMaxDex = in.readInt();
+		mSpellFail = in.readInt();
+		mSpeed = in.readInt();
+		mSpecialProperties = in.readString();
+		mSize = in.readString();
+	}
+	
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		boolean[] worn = new boolean[1];
+		worn[0] = mWorn;
+		out.writeBooleanArray(worn);
+		out.writeInt(mACBonus);
+		out.writeInt(mCheckPen);
+		out.writeInt(mMaxDex);
+		out.writeInt(mSpellFail);
+		out.writeInt(mSpeed);
+		out.writeString(mSpecialProperties);
+		out.writeString(mSize);
 	}
 	
 	public void setSize(String size) {
@@ -131,5 +162,13 @@ public class PTArmor extends PTItem {
 		mSize = sizeArray[size];
 	}
 	
-	
+	public static final Parcelable.Creator<PTArmor> CREATOR = new Parcelable.Creator<PTArmor>() {
+		public PTArmor createFromParcel(Parcel in) {
+			return new PTArmor(in);
+		}
+		
+		public PTArmor[] newArray(int size) {
+			return new PTArmor[size];
+		}
+	};
 }

@@ -1,0 +1,42 @@
+{
+	"data": {
+		"Holo.Demo": {},
+		"Holo.Demo.ListRowView": {
+			"android:background": "?selectableItemBackground"
+		},
+		"Holo.Demo.Theme | DemoThemeDark DemoThemeBarDark < Holo.Theme": {},
+		"Holo.Demo.Theme.Light | DemoThemeLight DemoThemeBarLight < Holo.Theme.Light": {},
+		"Holo.Demo.Theme.Light.DarkActionBar | DemoThemeLight DemoThemeBarDark < Holo.Theme.Light.DarkActionBar": {},
+		"Holo.Demo.Theme.Fullscreen | Fullscreen": {},
+		"Holo.Demo.Theme.Light.Fullscreen | Fullscreen": {},
+		"Holo.Demo.Theme.Light.DarkActionBar.Fullscreen | Fullscreen": {},
+		"Holo.Demo.Slider < Holo.Slider": {
+			"shadowColor": "#001E2F",
+			"shadow": "90%"
+		},
+		"Holo.Demo.Slider.Light": {
+			"shadowColor": "#6AA8CB",
+			"shadow": "30%"
+		}
+	},
+	"blocks": {
+		"DemoTheme": {
+			"demoListRowViewStyle": "@style/Holo.Demo.ListRowView",
+			"android:homeAsUpIndicator": "?homeAsUpIndicator",
+			"homeAsUpIndicator": "@drawable/home_as_up_indicator",
+		},
+		"DemoThemeDark | DemoTheme": {
+			"sliderStyle": "@style/Holo.Demo.Slider"
+		},
+		"DemoThemeLight | DemoTheme": {
+			"sliderStyle": "@style/Holo.Demo.Slider.Light"
+		}
+	},
+    "include": [
+        {
+            "name": "themes-core.json:styles", 
+            "type": "only blocks"
+        }
+    ],
+	"output": "values/themes.xml"
+}

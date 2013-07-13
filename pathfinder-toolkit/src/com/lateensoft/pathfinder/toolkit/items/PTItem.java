@@ -1,6 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.items;
 
-public class PTItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTItem implements Parcelable {
 	String mName;
 	double mWeight;
 	int mQuantity;
@@ -29,6 +32,25 @@ public class PTItem {
 		mName = "";
 		mWeight = 1;
 		mQuantity = 1;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeDouble(mWeight);
+		out.writeInt(mQuantity);
+		boolean[] contained = new boolean[1];
+		contained[0] = mIsContained;
+		out.writeBooleanArray(contained);
+	}
+	
+	public PTItem(Parcel in) {
+		mName = in.readString();
+		mWeight = in.readDouble();
+		mQuantity = in.readInt();
+		boolean[] contained = new boolean[1];
+		in.readBooleanArray(contained);
+		mIsContained = contained[0];
 	}
 	
 	public String getName() {
@@ -62,4 +84,19 @@ public class PTItem {
 	public void setIsContained(boolean isContained){
 		mIsContained = isContained;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Parcelable.Creator<PTItem> CREATOR = new Parcelable.Creator<PTItem>() {
+		public PTItem createFromParcel(Parcel in) {
+			return new PTItem(in);
+		}
+		
+		public PTItem[] newArray(int size) {
+			return new PTItem[size];
+		}
+	};
 }
