@@ -58,8 +58,7 @@ public class PTTableCreator {
 				"fort_save_id INTEGER, " +
 				"FOREIGN KEY (fort_save_id) REFRENCES Save(save_id), " +
 				"FOREIGN KEY (refl_save_id) REFRENCES Save(save_id), " +
-				"FOREIGN KEY (fort_save_id) REFRENCES Save(save_id), " +
-				")";
+				"FOREIGN KEY (fort_save_id) REFRENCES Save(save_id))";
 	}
 	
 	public String createCombatStatSet() {
@@ -109,7 +108,7 @@ public class PTTableCreator {
 				"FOREIGN KEY (con_key_integer) REFRENCES AbilityScore(ability_score_id), " +
 				"FOREIGN KEY (int_key_integer) REFRENCES AbilityScore(ability_score_id), " +
 				"FOREIGN KEY (wis_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (cha_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (cha_key_integer) REFRENCES AbilityScore(ability_score_id) " +
 				")";
 	}
 	
@@ -129,8 +128,7 @@ public class PTTableCreator {
 				"FOREIGN KEY (con_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
 				"FOREIGN KEY (int_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
 				"FOREIGN KEY (wis_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (cha_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				")";
+				"FOREIGN KEY (cha_post_key_integer) REFRENCES AbilityScore(ability_score_id))";
 	}
 	
 	public String createAbilityModSet() {
@@ -139,5 +137,46 @@ public class PTTableCreator {
 				"base_ability_set_id INTEGER, " +
 				"FOREIGN KEY (base_ability_set_id) REFRENCES AbilitySet(ability_set_id)" +
 				")";
+	}
+	
+	public String createItem() {
+		return "CREATE TABLE Item (" +
+				"item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"Name TEXT, " +
+				"Weight REAL, " +
+				"Quantity INTEGER, " +
+				"IsContained INTEGER" +
+				")";
+	}
+	
+	public String createArmor() {
+		return "CREATE TABLE Armor (" +
+				"armor_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"base_item_id INTEGER," +
+				"Worn INTEGER," +
+				"ACBonus INTEGER, " +
+				"CheckPen INTEGER, " +
+				"MaxDex INTEGER, " +
+				"SpellFail INTEGER," +
+				"Speed INTEGER, " +
+				"SpecialProperties TEXT," +
+				"Size TEXT, " +
+				"FOREIGN KEY (base_item_id) REFRENCES Item(item_id))";
+	}
+	
+	public String createWeapon() {
+		return "CREATE TABLE Weapon (" +
+				"weapon_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"base_item_id INTEGER," +
+				"TotalAttackBonus INTEGER, " +
+				"Attack TEXT, " +
+				"Damage TEXT, " +
+				"Critical TEXT, " +
+				"Range INTEGER, " +
+				"SpecialProperties TEXT, " +
+				"Ammunition INTEGER, " +
+				"Type TEXT, " +
+				"Size Text," +
+				"FOREIGN KEY (base_item_id) REFRENCES Item(item_id))";
 	}
 }
