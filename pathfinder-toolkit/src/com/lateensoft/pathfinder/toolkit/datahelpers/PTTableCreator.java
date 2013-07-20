@@ -14,14 +14,27 @@ public class PTTableCreator {
 	}
 	
 	public String createStat() {
-		return "CREATE TABLE Stat (stat_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Name TEXT, BaseValue INTEGER)";
+		return "CREATE TABLE Stat (" +
+				"stat_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"Name TEXT, " +
+				"BaseValue INTEGER)";
 	}
 	
 	public String createSkill() {
-		return "CREATE TABLE Skill (skill_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Name TEXT, ClassSkill INTEGER, KeyAbility TEXT, AbilityMod INTEGER, " +
-				"MiscMod INTEGER, ArmorCheckPenalty INTEGER, KeyAbilityKey INTEGER)";
+		return "CREATE TABLE Skill (" +
+				"skill_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"Name TEXT, " +
+				"ClassSkill INTEGER, " +
+				"KeyAbility TEXT, " +
+				"AbilityMod INTEGER, " +
+				"MiscMod INTEGER, " +
+				"ArmorCheckPenalty INTEGER, " +
+				"KeyAbilityKey INTEGER)";
+	}
+	
+	public String createSkillSet() {
+		return "CREATE TABLE SkillSet (skill_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"skill_ids TEXT)";
 	}
 	
 	public String createSave() {
@@ -49,8 +62,82 @@ public class PTTableCreator {
 				")";
 	}
 	
+	public String createCombatStatSet() {
+		return "CREATE TABLE CombatStatSet (" +
+				"combat_stat_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"TotalHP INTEGER, " +
+				"Wounds INTEGER, " +
+				"NonLethalDamange INTEGER, " +
+				"DmaageReduction INTEGER, " +
+				"BaseSpeedFt INTEGER, " +
+				"InitDexMod INTEGER, " +
+				"InitMiscMod INTEGER, " +
+				"ACArmour INTEGER, " +
+				"ACShield INTEGER, " +
+				"ACDexMod INTEGER," +
+				"SizeMod INTEGER, " +
+				"ACNaturalArmour, INTEGER, " +
+				"DeflectionMod INTEGER, " +
+				"ACMiscMod INTEGER, " +
+				"BABPrimary INTEGER, " +
+				"BABSecondary INTEGER, " +
+				"StrengthMod INTEGER, " +
+				"CMDDexMod INTEGER, " +
+				"CMDMiscMod INTEGER, " +
+				"SpellResist INTEGER)";
+	}
+	
 	public String createAbilityScore() {
 		return "CREATE TABLE AbilityScore (" +
-				"blah";
+				"ability_score_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"Ability TEXT, " +
+				"Score INTEGER" +
+				")";
+	}
+	
+	public String createAbilitySet() {
+		return "CREATE TABLE AbilitySet (" +
+				"ability_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"str_key INTEGER, " +
+				"dex_key INTEGER, " +
+				"con_key INTEGER, " +
+				"int_key INTEGER, " +
+				"wis_key INTEGER, " +
+				"cha_key ITNEGER, " +
+				"FOREIGN KEY (str_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (dex_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (con_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (int_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (wis_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (cha_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				")";
+	}
+	
+	public String createAbilitySetCalc() {
+		return "CREATE TABLE AbilitySetCalc (" +
+				"ability_set_calc_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"base_ability_set_id INTEGER," +
+				"str_post_key INTEGER, " +
+				"dex_post_key INTEGER, " +
+				"con_post_key INTEGER, " +
+				"int_post_key INTEGER, " +
+				"wis_post_key INTEGER, " +
+				"cha_post_key ITNEGER, " +
+				"FOREIGN KEY (base_ability_set_id) REFRENCES AbilitySet(ability_set_id), " +
+				"FOREIGN KEY (str_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (dex_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (con_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (int_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (wis_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				"FOREIGN KEY (cha_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
+				")";
+	}
+	
+	public String createAbilityModSet() {
+		return "CREATE TABLE AbilityModSet (" +
+				"ability_mod_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"base_ability_set_id INTEGER, " +
+				"FOREIGN KEY (base_ability_set_id) REFRENCES AbilitySet(ability_set_id)" +
+				")";
 	}
 }
