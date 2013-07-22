@@ -7,7 +7,7 @@ import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTNavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -44,7 +44,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public PTCharacter mCharacter;
 
 	private PTDatabaseManager mSQLManager;
-	private PTUserPrefsManager mUserPrefsManager;
 
 	private int mDialogMode;
 	private int mCharacterSelectedInDialog;
@@ -55,8 +54,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mSQLManager = new PTDatabaseManager(getActivity());
-		mUserPrefsManager = new PTUserPrefsManager(getActivity()
-				.getApplicationContext());
 		loadCurrentCharacter();
 		mCharacterSelectedInDialog = mCharacter.mID;
 		
@@ -93,7 +90,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * set in user prefs, it automatically generates a new one.
 	 */
 	public void loadCurrentCharacter() {
-		int currentCharacterID = mUserPrefsManager.getSelectedCharacter();
+		int currentCharacterID = PTSharedPreferences.getSharedInstance().getSelectedCharacter();
 
 		if (currentCharacterID == -1) { // There was no current character set in
 										// shared prefs
@@ -117,7 +114,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public void addNewCharacter() {
 		mCharacter = mSQLManager.addNewCharacter("New Adventurer",
 				getActivity().getApplicationContext());
-		mUserPrefsManager.setSelectedCharacter(mCharacter.mID);
+		PTSharedPreferences.getSharedInstance().setSelectedCharacter(mCharacter.mID);
 		performUpdateReset();
 		Log.v(TAG, "Added new character");
 	}
@@ -139,10 +136,10 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		if (characterIDs.length == 1) {
 			addNewCharacter();
 		} else if (currentCharacterIndex == 0) {
-			mUserPrefsManager.setSelectedCharacter(characterIDs[1]);
+			PTSharedPreferences.getSharedInstance().setSelectedCharacter(characterIDs[1]);
 			loadCurrentCharacter();
 		} else {
-			mUserPrefsManager.setSelectedCharacter(characterIDs[0]);
+			PTSharedPreferences.getSharedInstance().setSelectedCharacter(characterIDs[0]);
 			loadCurrentCharacter();
 		}
 
@@ -338,7 +335,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			if (mCharacterSelectedInDialog != mCharacter.mID) {
 				performUpdateReset();
 
-				mUserPrefsManager
+				PTSharedPreferences.getSharedInstance()
 						.setSelectedCharacter(mCharacterSelectedInDialog);
 				loadCurrentCharacter();
 			}
