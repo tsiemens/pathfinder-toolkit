@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 
 import android.content.Context;
@@ -24,34 +25,29 @@ public class PTSharedPreferences {
 	public static String KEY_INT_LAST_RATED_VERSION = "lastRateVersion";
 	public static String KEY_INT_LAST_USED_VERSION = "lastUsedVersion";
 	public static String KEY_INT_SELECTED_CHARACTER_ID = "selectedCharacter";
-	public static String KEY_INT_LAST_TAB = "lastTab";
 	public static String KEY_INT_SELECTED_PARTY_ID = "selectedParty";
 	public static String KEY_STRING_ENCOUNTER_PARTY_JSON = "encounterParty";
 	
-	private static PTSharedPreferences s_PTSharedPreferences;
+	private static PTSharedPreferences s_sharedInstance;
 
 	private SharedPreferences mSharedPreferences;
 	Editor mEditor;
 		
 	/**
 	 * Manages the shared preferences for the Pathfinder Toolkit application 
-	 * @param context
+	 * @return The singleton instance of the manager. 
 	 */
 	public static PTSharedPreferences getSharedInstance() {
-		return s_PTSharedPreferences;
+		if (s_sharedInstance == null) {
+			s_sharedInstance = new PTSharedPreferences();
+		}
+		return s_sharedInstance;
 	}
 	
-	/**
-	 * Initializes the static instance. Must be called prior to calling getInstance()
-	 */
-	public static void setup(Context context) {
-		s_PTSharedPreferences = new PTSharedPreferences(context);
-	}
-	
-	protected PTSharedPreferences(Context context){
-		Context appContext = context.getApplicationContext();
-		mSharedPreferences = context.getApplicationContext().getSharedPreferences(
-				KEY_APP_SHARED_PREFS_NAME, appContext.MODE_PRIVATE);
+	protected PTSharedPreferences(){
+		Context appContext = PTBaseApplication.getAppContext();
+		mSharedPreferences = appContext.getSharedPreferences(
+				KEY_APP_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
 		mEditor = mSharedPreferences.edit();
 	}
 	
@@ -121,39 +117,16 @@ public class PTSharedPreferences {
 	 * @param characterID
 	 * @return true if the save was successful, false otherwise
 	 */
-	@Deprecated
 	public boolean setSelectedCharacter(int characterID){
-		mEditor.putInt(KEY_INT_SELECTED_CHARACTER_ID, characterID);
-		Log.v(TAG, "Selected character set to "+characterID);
-		return mEditor.commit();
+		Log.i(TAG, "Selected character set to "+characterID);
+		return this.putInt(KEY_INT_SELECTED_CHARACTER_ID, characterID);
 	}
 	
 	/**
 	 * @return The ID of the currently selected character. Returns -1 if no character is selected
 	 */
-	@Deprecated
 	public int getSelectedCharacter(){
-		return mSharedPreferences.getInt(KEY_INT_SELECTED_CHARACTER_ID, -1);
-	}
-	
-	/**
-	 * Saves the last tab visited in character sheet to SharedPreferences
-	 * @param tab
-	 * @return true if the save was successful, false otherwise
-	 */
-	@Deprecated
-	public boolean setLastCharacterTab(int tab){
-		mEditor.putInt(KEY_INT_LAST_TAB, tab);
-		Log.v(TAG, "Save last tab to "+tab);
-		return mEditor.commit();
-	}
-	
-	/**
-	 * @return The last tab visited in character sheet. Returns 0 if no value is set.
-	 */
-	@Deprecated
-	public int getLastCharacterTab(){
-		return mSharedPreferences.getInt(KEY_INT_LAST_TAB, 0);
+		return this.getInt(KEY_INT_SELECTED_CHARACTER_ID, -1);
 	}
 	
 	/**
@@ -161,17 +134,14 @@ public class PTSharedPreferences {
 	 * @param characterID
 	 * @return true if the save was successful, false otherwise
 	 */
-	@Deprecated
 	public boolean setSelectedParty(int partyID){
-		mEditor.putInt(KEY_INT_SELECTED_PARTY_ID, partyID);
-		Log.v(TAG, "Selected party set to "+partyID);
-		return mEditor.commit();
+		Log.i(TAG, "Selected party set to "+partyID);
+		return this.putInt(KEY_INT_SELECTED_PARTY_ID, partyID);
 	}
 	
 	/**
 	 * @return The ID of the currently selected party. Returns -1 if no character is selected
 	 */
-	@Deprecated
 	public int getSelectedParty(){
 		return mSharedPreferences.getInt(KEY_INT_SELECTED_PARTY_ID, -1);
 	}
@@ -180,21 +150,19 @@ public class PTSharedPreferences {
 	 * Saves the current party in the encounter to shared prefs
 	 * @param encounterParty
 	 * @return true if the save was successful, false otherwise
+	 * 
 	 */
-	@Deprecated
 	public boolean setEncounterParty(PTParty encounterParty){
 		Gson gson = new Gson();
 		String partyJson = gson.toJson(encounterParty);
-		mEditor.putString(KEY_STRING_ENCOUNTER_PARTY_JSON, partyJson);
-		Log.v(TAG, "Saved current encounter party");
-		return mEditor.commit();
+		Log.i(TAG, "Saved current encounter party");
+		return this.putString(KEY_STRING_ENCOUNTER_PARTY_JSON, partyJson);
 	}
 	
 	/**
 	 * Should be getting from database in future
 	 * @return the current encounter party. returns null if none is saved.
 	 */
-	@Deprecated
 	public PTParty getEncounterParty(){
 		Gson gson = new Gson();
 		String partyJson = mSharedPreferences.getString(KEY_STRING_ENCOUNTER_PARTY_JSON, "");
@@ -205,18 +173,6 @@ public class PTSharedPreferences {
 			encounterParty = null;
 		}
 		return encounterParty;
-	}
-	
-	/**
-	 * Saves the unix time of the last time the user was asked to rate the app to SharedPreferences
-	 * @return true if the save was successful, false otherwise
-	 * @deprecated use putLong(KEY_LONG_LAST_RATE_PROMPT_TIME, defValue)
-	 */
-	@Deprecated
-	public boolean setRatePromptTime(){
-		long unixTime = System.currentTimeMillis();
-		mEditor.putLong(KEY_LONG_LAST_RATE_PROMPT_TIME, unixTime);
-		return mEditor.commit();
 	}
 	
 	/**
@@ -236,12 +192,12 @@ public class PTSharedPreferences {
 	 * Sets the last rated version (KEY_INT_LAST_RATED_VERSION) to the current version
 	 * @return true if the save was successful, false otherwise
 	 */
-	public boolean updateLastRatedVersion(Context context){
+	public boolean updateLastRatedVersion(){
+		Context context = PTBaseApplication.getAppContext();
 		PackageInfo pInfo;
 		try{
 			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			mEditor.putInt(KEY_INT_LAST_RATED_VERSION, pInfo.versionCode);
-			return mEditor.commit();
+			return this.putInt(KEY_INT_LAST_RATED_VERSION, pInfo.versionCode);
 		}catch (NameNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -253,7 +209,8 @@ public class PTSharedPreferences {
 	 * is the current version
 	 * @return true if the last rated version is not the current one (version code) 
 	 */
-	public boolean hasRatedCurrentVersion(Context context){
+	public boolean hasRatedCurrentVersion(){
+		Context context = PTBaseApplication.getAppContext();
 		int appCode = this.getInt(KEY_INT_LAST_RATED_VERSION, 0);
 		PackageInfo pInfo;
 		try{
@@ -269,12 +226,12 @@ public class PTSharedPreferences {
 	 * Sets the last used version (KEY_INT_LAST_RATED_VERSION) to the current version
 	 * @return true if the save was successful, false otherwise
 	 */
-	public boolean updateLastUsedVersion(Context context){
+	public boolean updateLastUsedVersion(){
+		Context context = PTBaseApplication.getAppContext();
 		PackageInfo pInfo;
 		try{
 			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			mEditor.putInt(KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
-			return mEditor.commit();
+			return this.putInt(KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
 		}catch (NameNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -285,7 +242,8 @@ public class PTSharedPreferences {
 	 * @return true if a new version of the app is running, since KEY_INT_LAST_USED_VERSION
 	 * was last updated
 	 */
-	public boolean isNewVersion(Context context){
+	public boolean isNewVersion(){
+		Context context = PTBaseApplication.getAppContext();
 		int appCode = this.getInt(KEY_INT_LAST_USED_VERSION, 0);
 		PackageInfo pInfo;
 		try{

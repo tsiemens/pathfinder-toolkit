@@ -60,9 +60,9 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 				this.getApplicationContext());
 
 		// Needs to update the database after upgrading
-		if (sharedPrefs.isNewVersion(this)) {
+		if (sharedPrefs.isNewVersion()) {
 			SQLManager.performUpdates(this);
-			sharedPrefs.updateLastUsedVersion(this);
+			sharedPrefs.updateLastUsedVersion();
 		}
 
 		mListLabels = getResources().getStringArray(R.array.main_menu_array);
@@ -132,7 +132,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	private void showRateDialogIfRequired() {
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
 		if (sharedPrefs.isLastRateTimeLongEnough()
-				&& !sharedPrefs.hasRatedCurrentVersion(this)) {
+				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
 		}
 	}
@@ -204,7 +204,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		
 		switch (selection) {
 		case DialogInterface.BUTTON_POSITIVE:
-			sharedPrefs.updateLastRatedVersion(this);
+			sharedPrefs.updateLastRatedVersion();
 			sharedPrefs.putLong(PTSharedPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
 					Calendar.getInstance().getTimeInMillis());
 			Log.v(TAG, "Attempting to open market page");
