@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.datahelpers;
 
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -180,7 +180,7 @@ public class PTSharedPreferences {
 	 */
 	public boolean isLastRateTimeLongEnough(){
 		long lastRateTime = this.getLong(KEY_LONG_LAST_RATE_PROMPT_TIME, 0L);
-		long currentUnixTime = Calendar.getInstance().getTimeInMillis();
+		long currentUnixTime = new GregorianCalendar().getTimeInMillis();
 		if( lastRateTime == 0L ){
 			this.putLong(KEY_LONG_LAST_RATE_PROMPT_TIME, currentUnixTime);
 			return false;
