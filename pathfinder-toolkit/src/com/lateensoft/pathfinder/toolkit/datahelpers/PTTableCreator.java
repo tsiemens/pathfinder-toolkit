@@ -179,4 +179,32 @@ public class PTTableCreator {
 				"Size Text," +
 				"FOREIGN KEY (base_item_id) REFRENCES Item(item_id))";
 	}
+	
+	public String createPartyMember() {
+		return "CREATE TABLE PartyMember (" +
+				"party_member_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"Name TEXT, " +
+				"Initiative INTEGER, " +
+				"AC INTEGER, " +
+				"Touch INTEGER, " +
+				"FlatFooted INTEGER, " +
+				"SpellResist INTEGER, " +
+				"DamageReduction INTEGER, " +
+				"CMD INTEGER, " +
+				"FortSave INTEGER, " +
+				"ReflexSave INTEGER, " +
+				"WillSave INTEGER, " +
+				"BluffSkillBonus INTEGER, " +
+				"PerceptionSkillBonus INTEGER, " +
+				"SenseMotiveSkillBonus INTEGER, " +
+				"StealthSkillBonus INTEGER, " +
+				"RolledValue INTEGER);";
+	}
+	
+	public String createParty() {
+		return "CREATE TABLE Party (" +
+				"party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"party_member_ids TEXT," +
+				"Name TEXT)";
+	}
 }
