@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import java.util.Calendar;
+
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -27,7 +29,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.*;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
 public class PTMainActivity extends SherlockFragmentActivity implements
 		OnClickListener, OnChildClickListener, OnGroupClickListener,
@@ -44,7 +46,6 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	private long mCurrentFragmentId = 0;
 
 	String mListLabels[];
-	private PTUserPrefsManager mUserPrefsManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,14 +55,14 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 			mCurrentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
 		}
 
-		mUserPrefsManager = new PTUserPrefsManager(this);
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
 		PTDatabaseManager SQLManager = new PTDatabaseManager(
 				this.getApplicationContext());
 
 		// Needs to update the database after upgrading
-		if (mUserPrefsManager.checkLastUsedVersion(this)) {
+		if (sharedPrefs.isNewVersion()) {
 			SQLManager.performUpdates(this);
-			mUserPrefsManager.setLastUsedVersion(this);
+			sharedPrefs.updateLastUsedVersion();
 		}
 
 		mListLabels = getResources().getStringArray(R.array.main_menu_array);
@@ -129,8 +130,9 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	}
 
 	private void showRateDialogIfRequired() {
-		if (mUserPrefsManager.checkLastRateTime()
-				&& mUserPrefsManager.checkLastRatedVersion(this)) {
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		if (sharedPrefs.isLastRateTimeLongEnough()
+				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
 		}
 	}
@@ -198,10 +200,13 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 
 	// For dialog
 	public void onClick(DialogInterface dialogInterface, int selection) {
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		
 		switch (selection) {
 		case DialogInterface.BUTTON_POSITIVE:
-			mUserPrefsManager.setLastRatedVersion(this);
-			mUserPrefsManager.setRatePromptTime();
+			sharedPrefs.updateLastRatedVersion();
+			sharedPrefs.putLong(PTSharedPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
+					Calendar.getInstance().getTimeInMillis());
 			Log.v(TAG, "Attempting to open market page");
 			String appPackageName = this.getPackageName();
 			try {
@@ -217,7 +222,8 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 			break;
 		default:
 			Log.v(TAG, "Delaying rate dialog.");
-			mUserPrefsManager.setRatePromptTime();
+			sharedPrefs.putLong(PTSharedPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
+					Calendar.getInstance().getTimeInMillis());
 		}
 
 	}

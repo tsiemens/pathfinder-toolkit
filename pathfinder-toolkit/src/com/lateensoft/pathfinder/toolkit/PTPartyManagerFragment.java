@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyMemberEditorActivity;
@@ -36,7 +36,6 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	public PTParty mParty;
 
 	private PTDatabaseManager mSQLManager;
-	private PTUserPrefsManager mUserPrefsManager;
 
 	private int mDialogMode;
 	private int mPartySelectedInDialog;
@@ -57,7 +56,6 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		setTitle(R.string.title_activity_party_manager);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
-		mUserPrefsManager = new PTUserPrefsManager(getActivity());
 
 		mPartyNameEditText = (EditText) mParentView
 				.findViewById(R.id.editTextPartyName);
@@ -74,7 +72,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 * user prefs, it automatically generates a new one.
 	 */
 	public void loadCurrentParty() {
-		int currentPartyID = mUserPrefsManager.getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
 
 		if (currentPartyID == -1) { // There was no current party set in shared
 									// prefs
@@ -91,7 +89,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	public void addNewParty() {
 		mParty = mSQLManager.addNewParty("New Party");
-		mUserPrefsManager.setSelectedParty(mParty.mID);
+		PTSharedPreferences.getSharedInstance().setSelectedParty(mParty.mID);
 		refreshPartyView();
 	}
 
@@ -112,10 +110,10 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		if (partyIDs.length == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
-			mUserPrefsManager.setSelectedParty(partyIDs[1]);
+			PTSharedPreferences.getSharedInstance().setSelectedParty(partyIDs[1]);
 			loadCurrentParty();
 		} else {
-			mUserPrefsManager.setSelectedParty(partyIDs[0]);
+			PTSharedPreferences.getSharedInstance().setSelectedParty(partyIDs[0]);
 			loadCurrentParty();
 		}
 
@@ -268,7 +266,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			if (mPartySelectedInDialog != mParty.mID) {
 				updatePartyDatabase(); // Ensures any data changed on the party
 										// in the current fragment is saved
-				mUserPrefsManager.setSelectedParty(mPartySelectedInDialog);
+				PTSharedPreferences.getSharedInstance().setSelectedParty(mPartySelectedInDialog);
 				loadCurrentParty();
 			}
 			break;

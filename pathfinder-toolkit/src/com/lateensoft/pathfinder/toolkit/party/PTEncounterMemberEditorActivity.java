@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
 /**
  * requires an intent with extras: R.string.party_member_index_key (int)
@@ -13,22 +13,20 @@ import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
  */
 public class PTEncounterMemberEditorActivity extends PTBasePartyMemberEditorActivity{
 
-	private final String TAG = "PTEncounterMemberEditorActivity";
+	private final String TAG = PTEncounterMemberEditorActivity.class.getSimpleName();
 	
-	private PTUserPrefsManager mUserPrefManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mUserPrefManager = new PTUserPrefsManager(this);
 		getDataFromExtras();
 	}
 	
 	protected void getDataFromExtras(){
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
-			mParty = mUserPrefManager.getEncounterParty();
+			mParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
 			if(mParty == null)
 				finish();
 			mPartyMemberIndex = extras.getInt(getString(R.string.party_member_index_key));
@@ -45,7 +43,7 @@ public class PTEncounterMemberEditorActivity extends PTBasePartyMemberEditorActi
 				mPartyMember.setName(mPartyMemberNameEditText.getText().toString());
 				mPartyMemberIndex = mParty.setPartyMember(mPartyMemberIndex, mPartyMember);
 			}
-			mUserPrefManager.setEncounterParty(mParty);
+			PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
 		}
 		super.onPause();
 	}

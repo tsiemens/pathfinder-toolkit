@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
@@ -29,7 +29,6 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	public PTParty mParty;
 	
 	private PTDatabaseManager mSQLManager;
-	private PTUserPrefsManager mUserPrefsManager;
 	
 	private Button mRollButton;
 	private Spinner mSkillSpinner;
@@ -52,7 +51,6 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		mSkillSelectedForRoll = 0;
 		
 		mSQLManager = new PTDatabaseManager(getActivity());
-		mUserPrefsManager = new PTUserPrefsManager(getActivity());
 		
 		mRollButton = (Button) mParentView.findViewById(R.id.buttonRoll);
 		mRollButton.setOnClickListener(this);
@@ -91,7 +89,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	 */
    	public void loadEncounterParty(){
    		
-   		PTParty currentEncounterParty = mUserPrefsManager.getEncounterParty();
+   		PTParty currentEncounterParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
    		//If there is no saved encounter party, get from party manager
    		//Also, if the encounter party was saved, but previously was empty, get from party manager.
    		//Thirdly, if the party in encounter is not rolled (not in an encounter) use default party
@@ -106,7 +104,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	}
    	
 	public void loadDefaultParty(){
-		int currentPartyID = mUserPrefsManager.getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
 		if(currentPartyID >= 0)
 			mParty = mSQLManager.getParty(currentPartyID);
 		else
