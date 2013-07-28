@@ -1,8 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-import android.content.ContentValues;
+import com.lateensoft.pathfinder.toolkit.repository.IStorable;
 
-public class PTStat {
+public class PTStat implements IStorable {
 	private String mName;
 	private int mBaseValue;
 	private int mId;

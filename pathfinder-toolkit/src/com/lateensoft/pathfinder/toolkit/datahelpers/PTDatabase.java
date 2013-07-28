@@ -58,34 +58,21 @@ public class PTDatabase extends SQLiteOpenHelper {
 	}
 	
 	public Cursor query(String table, String[] columns, String selection) {
-		init();
+		open();
 		Cursor result = mDatabase.query(true, table, columns, selection, null, 
 				null, null, null, null);
-		finish();
 		return result;
 	}
 
-	private void finish() {
-		mDatabase.endTransaction();
-		close();
-	}
-
-	private void init() {
-		open();
-		mDatabase.beginTransaction();
-	}
-	
 	public int update(String table, ContentValues values, String whereClause) {
-		init();
+		open();
 		int result = mDatabase.update(table, values, whereClause, null);
-		finish();
 		return result;
 	}
 	
 	public long insert(String table, ContentValues values) {
-		init();
+		open();
 		long result = mDatabase.insert(table, null, values);
-		finish();
 		return result;
 	}
 }

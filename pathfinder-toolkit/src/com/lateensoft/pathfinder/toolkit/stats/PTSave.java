@@ -1,6 +1,10 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-public class PTSave extends PTStat {
+import com.lateensoft.pathfinder.toolkit.repository.IStorable;
+
+public class PTSave extends PTStat implements IStorable {
+	private int SaveId;
+	//public int BaseStatId; //may be unnecessary
 	int mTotal;
 	int mAbilityMod;
 	int mMagicMod;
@@ -106,5 +110,9 @@ public class PTSave extends PTStat {
 		mTotal += mMagicMod;
 		mTotal += mMiscMod;
 		mTotal += mTempMod;
+	}
+	
+	public int id() {
+		return SaveId;
 	}
 }
