@@ -204,7 +204,10 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			}
 		}
 		
-		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem) {
+		// Show the selection indicator on the group, or on the character group is collapsed while a child is selected
+		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem || 
+				(getCombinedGroupId(getGroupId(groupPosition)) == CHARACTER_SHEET_ID &&
+				mSelectedItem >= FLUFF_ID && !isExpanded)) {
 			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
 			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
 		} else {
