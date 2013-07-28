@@ -6,12 +6,12 @@ import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.items.PTWeapon;
 
-public class PTCharacterInventory {
+public class PTInventory {
 	private ArrayList<PTItem> mItems;
 	private ArrayList<PTArmor> mArmor;
 	private ArrayList<PTWeapon> mWeapons;
 	
-	PTCharacterInventory(){
+	public PTInventory(){
 		mItems = new ArrayList<PTItem>();
 		mArmor = new ArrayList<PTArmor>();
 		mWeapons = new ArrayList<PTWeapon>();

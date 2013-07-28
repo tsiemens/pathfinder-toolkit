@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.character;
+package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTItem;

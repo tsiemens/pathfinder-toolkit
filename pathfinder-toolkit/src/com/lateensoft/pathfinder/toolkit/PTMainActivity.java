@@ -28,6 +28,15 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.*;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterAbilityFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterArmorFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterCombatStatsFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterFeatsFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterFluffFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterInventoryFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSkillsFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSpellBookFragment;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterWeaponsFragment;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 

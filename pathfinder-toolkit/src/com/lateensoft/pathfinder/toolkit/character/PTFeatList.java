@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
-public class PTCharacterFeatList {
+public class PTFeatList {
 	private ArrayList<PTFeat> mFeats;
 	
-	public PTCharacterFeatList(){
+	public PTFeatList(){
 		mFeats = new ArrayList<PTFeat>();
 		
 		//addFeat(new PTFeat("Sample Feat/Special Ability", "Add useful information here."));

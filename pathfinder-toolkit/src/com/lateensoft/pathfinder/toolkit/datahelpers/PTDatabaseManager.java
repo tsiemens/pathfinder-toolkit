@@ -2,7 +2,7 @@ package com.lateensoft.pathfinder.toolkit.datahelpers;
 
 import com.google.gson.*;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
+import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.stats.PTSkill;
 

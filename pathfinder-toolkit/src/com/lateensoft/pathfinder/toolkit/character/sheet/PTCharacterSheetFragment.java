@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.character;
+package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;

@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.character;
+package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import android.app.AlertDialog;
 import android.content.Context;

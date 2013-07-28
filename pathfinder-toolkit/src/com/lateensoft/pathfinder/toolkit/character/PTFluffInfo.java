@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import android.content.Context;
 import android.content.res.Resources;
 
-public class PTCharacterFluffInfo {
+public class PTFluffInfo {
 	String mName;
 	String mAlignment;
 	String mXP;
@@ -89,7 +89,7 @@ public class PTCharacterFluffInfo {
 		return r.getStringArray(R.array.fluff_fields);		
 	}
 	
-	public PTCharacterFluffInfo() {
+	public PTFluffInfo() {
 		mName = "";
 		mAlignment = "";
 		mXP = "";

@@ -10,52 +10,15 @@ public class PTSpellBook {
 	
 	public PTSpellBook() {
 		mSpells = new ArrayList<PTSpell>();
-		
-		/*
-		for(int i = 0; i < mSpells.size(); i++) {
-			mSpells.set(i, new ArrayList<PTSpell>());
-			// Dummy spell
-			//mSpells.get(i).add(new PTSpell());
-		}*/
-		//mSpells.add(new PTSpell());
 	}
-	
-	/*
-	public PTSpellBook(PTSpell[][] spells) {
-		setSpells(spells);
-	}*/
-	/*
-	public PTSpell[] getSpells(int level) {
-		if(level < 0 || mSpells.isEmpty() || mSpells == null || mSpells.get(level) == null
-				|| mSpells.get(level).isEmpty()) {
-			PTSpell[] newSpellArray = new PTSpell[1];
-			newSpellArray[0] = new PTSpell();
-			return newSpellArray;
-		}
-		PTSpell[] levelSpells = new PTSpell[mSpells.get(level).size()];
-		return (PTSpell[]) ((ArrayList<PTSpell>)mSpells.get(level)).toArray(levelSpells);
-	}*/
 	
 	public PTSpell[] getSpells() {
 		PTSpell[] spells = new PTSpell[mSpells.size()];
 		return (PTSpell[]) mSpells.toArray(spells);
 	}
+
 	
-	
-	/*
-	public void setSpells(PTSpell[][] spells) {
-		mSpells = new PTSpell[NUM_SPELL_LEVELS][mLargestLevelSet.value];
-		for(int j = 0; j < NUM_SPELL_LEVELS; j++) {
-			for(int i = 0; i < spells[j].length; i++) {
-				mSpells[j][i] = spells[j][i];
-			}
-			mSpellCount[j] = spells[j].length;
-		}
-	}*/
-	
-	public void deleteSpell(PTSpell spell) {
-		//mSpells.get(spell.getLevel()).remove(mSpells.get(spell.getLevel()).indexOf(spell));
-		
+	public void deleteSpell(PTSpell spell) {	
 		mSpells.remove(mSpells.indexOf(spell));
 	}
 	

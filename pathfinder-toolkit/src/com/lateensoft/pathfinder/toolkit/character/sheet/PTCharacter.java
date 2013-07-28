@@ -1,7 +1,11 @@
-package com.lateensoft.pathfinder.toolkit.character;
+package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import android.content.Context;
 
+import com.lateensoft.pathfinder.toolkit.character.PTFeatList;
+import com.lateensoft.pathfinder.toolkit.character.PTFluffInfo;
+import com.lateensoft.pathfinder.toolkit.character.PTInventory;
+import com.lateensoft.pathfinder.toolkit.character.PTSpellBook;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTSaveSet;
@@ -13,10 +17,10 @@ public class PTCharacter {
 	PTCombatStatSet mCombatStatSet;
 	PTSkillSet mSkillSet;
 	PTSaveSet mSaveSet;
-	PTCharacterFluffInfo mFluffInfo;
-	PTCharacterInventory mInventory;
+	PTFluffInfo mFluffInfo;
+	PTInventory mInventory;
 	public double mGold;
-	PTCharacterFeatList mFeats;
+	PTFeatList mFeats;
 	PTSpellBook mSpellBook;
 	
 	public int mID;
@@ -27,9 +31,9 @@ public class PTCharacter {
 		mCombatStatSet = new PTCombatStatSet();
 		mSkillSet = new PTSkillSet(context);
 		mSaveSet = new PTSaveSet(context);
-		mFluffInfo = new PTCharacterFluffInfo();
-		mInventory = new PTCharacterInventory();
-		mFeats = new PTCharacterFeatList();
+		mFluffInfo = new PTFluffInfo();
+		mInventory = new PTInventory();
+		mFeats = new PTFeatList();
 		mSpellBook = new PTSpellBook();
 		mGold = 0;
 		setName(name);
@@ -56,23 +60,23 @@ public class PTCharacter {
 		return mSkillSet;
 	}
 	
-	public PTCharacterInventory getInventory(){
+	public PTInventory getInventory(){
 		return mInventory;
 	}
 	
-	public void setInventory(PTCharacterInventory newInventory){
+	public void setInventory(PTInventory newInventory){
 		mInventory = newInventory;
 	}
 	
-	public PTCharacterFeatList getFeatList(){
+	public PTFeatList getFeatList(){
 		return mFeats;
 	}
 	
-	public void setFeatList(PTCharacterFeatList newFeats){
+	public void setFeatList(PTFeatList newFeats){
 		mFeats = newFeats;
 	}
 
-	public PTCharacterFluffInfo getFluff() {
+	public PTFluffInfo getFluff() {
 		return mFluffInfo;
 	}
 	

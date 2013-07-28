@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.character;
+package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.character.PTFeat;
 
 public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		implements OnClickListener, OnItemClickListener,
