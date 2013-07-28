@@ -1,8 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
+import android.content.ContentValues;
+
 public class PTStat {
 	private String mName;
 	private int mBaseValue;
+	private int mId;
 
 	public PTStat() {
 		mName = "";
@@ -17,6 +20,12 @@ public class PTStat {
 	public PTStat(String name, int baseValue) {
 		mName = name;
 		mBaseValue = baseValue;
+	}
+	
+	public PTStat(int id, String name, int baseValue) {
+		mName = name;
+		mBaseValue = baseValue;
+		mId = id;
 	}
 	
 	public PTStat(PTStat other) {
@@ -38,5 +47,9 @@ public class PTStat {
 	
 	public void setBaseValue(int baseValue) {
 		mBaseValue = baseValue;
+	}
+	
+	public int id() {
+		return mId;
 	}
 }
