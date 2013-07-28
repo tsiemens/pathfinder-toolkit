@@ -16,7 +16,31 @@ public class PTTableCreator {
 	}
 	
 	public void createTables(SQLiteDatabase db) {
-		// TODO
+		// TODO: create db?
+		db.beginTransaction();
+		db.execSQL(createStat());
+		db.execSQL(createSkill());
+		db.execSQL(createSkillSet());
+		db.execSQL(createSave());
+		db.execSQL(createSaveSet());
+		db.execSQL(createCombatStatSet());
+		db.execSQL(createAbilityScore());
+		db.execSQL(createAbilitySet());
+		db.execSQL(createAbilitySetCalc());
+		db.execSQL(createAbilityModSet());
+		db.execSQL(createItem());
+		db.execSQL(createArmor());
+		db.execSQL(createWeapon());
+		db.execSQL(createPartyMember());
+		db.execSQL(createParty());
+		db.execSQL(createSpell());
+		db.execSQL(createSpellBook());
+		db.execSQL(createFeat());
+		db.execSQL(createFeatList());
+		db.execSQL(createInventory());
+		db.execSQL(createFluffInfo());
+		db.execSQL(createCharacter());
+		db.endTransaction();
 	}
 	
 	public String createStat() {
