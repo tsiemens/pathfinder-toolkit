@@ -131,6 +131,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 
 	private void showRateDialogIfRequired() {
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		showRateAppPromptDialog();
 		if (sharedPrefs.isLastRateTimeLongEnough()
 				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
@@ -139,15 +140,8 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 
 	public void showRateAppPromptDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// Set up dialog layout
-
-		ImageView dialogMemeImage = new ImageView(this);
-		dialogMemeImage.setImageResource(R.drawable.rate_meme);
-		dialogMemeImage.setScaleType(ScaleType.FIT_CENTER);
-
-		builder.setTitle(getString(R.string.rate_dialog_header));
-
-		builder.setView(dialogMemeImage)
+		builder.setTitle(getString(R.string.rate_dialog_title))
+				.setMessage(getString(R.string.rate_dialog_message))
 				.setPositiveButton(
 						getString(R.string.rate_dialog_positive_button), this)
 				.setNegativeButton(

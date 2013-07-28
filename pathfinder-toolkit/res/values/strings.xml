@@ -38,7 +38,8 @@
         <item>Party Manager</item>
         <item>Pointbuy Calculator</item>
     </string-array>
-    <string name="rate_dialog_header">Please rate our app!</string>
+    <string name="rate_dialog_title">Please rate our app!</string>
+    <string name="rate_dialog_message">You rolled a 1 on your Rate Popup saving throw! Rate now to get a +5 cloak of ad avoidance. You can keep it until it slips back into the astral plane on the next update.</string>
     <string name="rate_dialog_positive_button">Rate</string>
     <string name="rate_dialog_negative_button">Later</string>
 
