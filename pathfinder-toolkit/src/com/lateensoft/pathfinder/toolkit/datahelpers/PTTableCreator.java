@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.datahelpers;
 
+import android.database.sqlite.SQLiteDatabase;
+
 public class PTTableCreator {
 	
 	public enum SQLDataType {
@@ -11,6 +13,10 @@ public class PTTableCreator {
 	}
 	
 	public PTTableCreator() {
+	}
+	
+	public void createTables(SQLiteDatabase db) {
+		// TODO
 	}
 	
 	public String createStat() {
