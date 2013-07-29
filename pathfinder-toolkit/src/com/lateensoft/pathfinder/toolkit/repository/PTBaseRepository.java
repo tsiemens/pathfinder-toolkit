@@ -25,6 +25,12 @@ public abstract class PTBaseRepository<T> {
 		return buildFromCursor(cursor);
 	}
 	
+	/**
+	 * This method must create the object that you want, but also must call the 
+	 * repository of a direct superclass or any members that have their own tables
+	 * @param cursor
+	 * @return
+	 */
 	protected abstract T buildFromCursor(Cursor cursor);
 
 	public int update(T object) {
@@ -38,8 +44,18 @@ public abstract class PTBaseRepository<T> {
 		return ID() + "=" + id;
 	}
 	
+	/**
+	 * Needs to package up the object so it can be stored in the database
+	 * Don't think you need to worry about superclass stuff...
+	 */
 	protected abstract ContentValues getContentValues(T object);
+	
+	/**
+	 * This method is used to update the superclass of an object
+	 * @param object
+	 */
 	protected abstract void baseUpdate(T object);
+	
 	protected abstract String TABLE();
 	protected abstract String[] COLUMNS();
 	protected abstract String ID();
