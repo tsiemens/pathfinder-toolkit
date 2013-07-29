@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="pref_app_theme"
+        android:title="@string/pref_app_theme_title"
+        android:summary="@string/pref_app_theme_summary"
+        android:dialogTitle="@string/pref_app_theme_title"
+        android:entries="@array/pref_app_theme_entries"
+        android:entryValues="@array/pref_app_theme_entry_values"
+        android:defaultValue="@string/pref_app_theme_default_value"
+        android:persistent="true" />
+
+    <Preference
+        android:key="pref_about_screen"
+        android:persistent="false"
+        android:title="@string/pref_about_screen_title" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lateensoft.pathfinder.toolkit.settings.PTAboutActivity"
+            android:targetPackage="com.lateensoft.pathfinder.toolkit" />
+    </Preference>
+</PreferenceScreen>

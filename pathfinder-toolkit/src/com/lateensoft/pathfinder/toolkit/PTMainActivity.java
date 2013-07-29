@@ -131,7 +131,6 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 
 	private void showRateDialogIfRequired() {
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
-		showRateAppPromptDialog();
 		if (sharedPrefs.isLastRateTimeLongEnough()
 				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
