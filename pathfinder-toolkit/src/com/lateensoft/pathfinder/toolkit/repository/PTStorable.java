@@ -1,5 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.repository;
 
-public interface IStorable {
+public interface PTStorable {
 	public int id();
 }

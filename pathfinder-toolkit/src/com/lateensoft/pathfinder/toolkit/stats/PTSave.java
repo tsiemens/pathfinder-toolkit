@@ -1,8 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-import com.lateensoft.pathfinder.toolkit.repository.IStorable;
+import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTSave extends PTStat implements IStorable {
+public class PTSave extends PTStat implements PTStorable {
 	private int SaveId;
 	//public int BaseStatId; //may be unnecessary
 	int mTotal;

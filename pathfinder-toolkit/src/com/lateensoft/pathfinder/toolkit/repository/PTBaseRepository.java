@@ -35,7 +35,7 @@ public abstract class PTBaseRepository<T> {
 
 	public int update(T object) {
 		baseUpdate(object);
-		String selector = getSelector(((IStorable)object).id());
+		String selector = getSelector(((PTStorable)object).id());
 		ContentValues values = getContentValues(object);
 		return mDatabase.update(TABLE(), values, selector);
 	}
