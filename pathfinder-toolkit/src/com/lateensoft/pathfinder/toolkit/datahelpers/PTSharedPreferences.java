@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
+import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 
 import android.content.Context;
@@ -243,15 +244,37 @@ public class PTSharedPreferences {
 	 * was last updated
 	 */
 	public boolean isNewVersion(){
-		Context context = PTBaseApplication.getAppContext();
 		int appCode = this.getInt(KEY_INT_LAST_USED_VERSION, 0);
+		return appCode != getAppVersionCode();
+	}
+	
+	/**
+	 * @return: The the incremental app version code, or -1 in the event of an error.
+	 */
+	public int getAppVersionCode() {
+		Context context = PTBaseApplication.getAppContext();
 		PackageInfo pInfo;
 		try{
 			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return appCode != pInfo.versionCode;
+			return pInfo.versionCode;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
-			return false;
+			return -1;
+		}
+	}
+	
+	/**
+	 * @return: The the human readable app version, or null in the event of an error.
+	 */
+	public String getAppVersionName() {
+		Context context = PTBaseApplication.getAppContext();
+		PackageInfo pInfo;
+		try{
+			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
