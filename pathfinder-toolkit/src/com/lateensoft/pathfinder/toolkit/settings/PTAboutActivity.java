@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.settings;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
@@ -10,6 +8,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
 public class PTAboutActivity extends SherlockActivity{
 
@@ -24,14 +23,10 @@ public class PTAboutActivity extends SherlockActivity{
 		
 		TextView versionText = (TextView)findViewById(R.id.tv_version);
 		
-		PackageInfo pInfo;
-		try{
-			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			versionText.setText(getString(R.string.about_app_version) + " " + pInfo.versionName);
-		}catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
+		versionText.setText(getString(R.string.about_app_version) + " " + 
+				PTSharedPreferences.getSharedInstance().getAppVersionName());
 
+		// Makes the html <a> tags clickable 
 		TextView oglText = (TextView)findViewById(R.id.tv_ogl_link);
 		oglText.setMovementMethod(LinkMovementMethod.getInstance());
 	}

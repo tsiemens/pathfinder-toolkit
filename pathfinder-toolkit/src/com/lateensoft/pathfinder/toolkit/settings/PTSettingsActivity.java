@@ -23,18 +23,6 @@ public class PTSettingsActivity extends SherlockPreferenceActivity{
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		addPreferencesFromResource(R.xml.prefs_general);
-		
-		Preference themePref = getPreferenceManager().findPreference("pref_app_theme");
-		themePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
-			@Override
-			public boolean onPreferenceChange(Preference arg0, Object arg1) {
-				startActivity(new Intent(PTSettingsActivity.this, PTSettingsActivity.class));
-				finish();
-				return true;
-			}
-		});
-
 	}
 	
 	@Override

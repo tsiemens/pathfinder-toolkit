@@ -42,17 +42,6 @@
     <string name="rate_dialog_negative_button">Later</string>
     
     <!-- Settings -->
-    <string name="pref_app_theme_title">App Theme</string>
-    <string name="pref_app_theme_summary">Change the colour scheme of the app</string>   
-    <string-array name="pref_app_theme_entries">
-        <item>Dark</item>
-        <item>Light</item>
-    </string-array>   
-    <string-array name="pref_app_theme_entry_values">
-        <item>dark</item>
-        <item>light</item>
-    </string-array>
-    <string name="pref_app_theme_default_value">dark</string>
     <string name="pref_about_screen_title">About Pathfinder Toolkit</string> 
     <string name="title_activity_about">About</string>
 
