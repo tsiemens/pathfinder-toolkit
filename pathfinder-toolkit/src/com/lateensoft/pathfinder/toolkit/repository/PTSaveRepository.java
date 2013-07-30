@@ -22,7 +22,7 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	}
 
 	@Override
-	protected PTSave buildFromCursor(Cursor cursor) {
+	protected PTSave buildTable(Cursor cursor) {
 		PTStatRepository statRepo = new PTStatRepository();
 		int baseIdIndex = cursor.getColumnIndex(STAT_ID);
 		int abilityModIndex = cursor.getColumnIndex(ABILITY_MOD);

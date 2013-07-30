@@ -1,7 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.repository;
 
+import java.util.Hashtable;
+
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Build;
 
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
 
@@ -55,6 +59,41 @@ public abstract class PTBaseRepository<T> {
 		baseDelete(object);
 		String selector = getSelector(((PTStorable)object).id());
 		return mDatabase.delete(TABLE(), selector);
+	}
+	
+	protected Hashtable<String, Object> getTableOfValues(Cursor cursor) {
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
+		String[] columns = COLUMNS();
+		int index;
+		for(int i = 0; i < columns.length; i++) {
+			index = cursor.getColumnIndex(columns[i]);
+			Object datum = getDatum(cursor, index);
+			table.put(columns[i], datum);
+		}
+		return table;
+	}
+	
+	@SuppressLint("NewApi")
+	protected Object getDatum(Cursor cursor, int index) {
+		int dataType;
+		if (Build.VERSION.SDK_INT >= 11) {
+			dataType = cursor.getType(index);
+		}
+		else {
+			// TODO some hack to find datatype on older devices
+			dataType = 0;
+		}
+		switch (dataType) {
+		case Cursor.FIELD_TYPE_FLOAT:
+			return cursor.getFloat(index);
+		case Cursor.FIELD_TYPE_INTEGER:
+			Integer wrapper = cursor.getInt(index);
+			return wrapper;
+		case Cursor.FIELD_TYPE_STRING:
+			return cursor.getString(index);
+		default:
+			return null;
+		}
 	}
 	
 	/**

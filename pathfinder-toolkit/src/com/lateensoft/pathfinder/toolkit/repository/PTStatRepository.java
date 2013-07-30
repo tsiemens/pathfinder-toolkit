@@ -6,7 +6,7 @@ import android.database.Cursor;
 import com.lateensoft.pathfinder.toolkit.stats.PTStat;
 
 public class PTStatRepository extends PTBaseRepository<PTStat>{	
-	static final String TABLE = "stat";
+	static final String TABLE = "Stat";
 	static final String ID = "stat_id";
 	static final String NAME = "Name";
 	static final String BASE_VALUE = "BaseValue";
@@ -17,7 +17,7 @@ public class PTStatRepository extends PTBaseRepository<PTStat>{
 	}
 
 	@Override
-	protected PTStat buildFromCursor(Cursor cursor) {
+	protected PTStat buildTable(Cursor cursor) {
 		int idIndex = cursor.getColumnIndex(ID);
 		int nameIndex = cursor.getColumnIndex(NAME);
 		int baseValueIndex = cursor.getColumnIndex(BASE_VALUE);

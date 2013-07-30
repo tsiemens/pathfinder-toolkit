@@ -1,6 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-public class PTSkill {
+import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
+
+public class PTSkill implements PTStorable {
 	String mName;
 	boolean mClassSkill;
 	String mKeyAbility;
@@ -9,6 +11,7 @@ public class PTSkill {
 	int mMiscMod;
 	int mArmorCheckPenalty;
 	int mKeyAbilityKey;
+	int mId;
 	
 	public PTSkill() {
 		mName = "";
@@ -21,7 +24,7 @@ public class PTSkill {
 		mKeyAbilityKey = 0;
 	}
 	
-	public PTSkill(String name, int abilityKey, String abilityString) {
+	public PTSkill(int id, String name, int abilityKey, String abilityString) {
 		mName = name;
 		mClassSkill = false;
 		mAbilityMod = 0;
@@ -30,6 +33,20 @@ public class PTSkill {
 		mArmorCheckPenalty = 0;
 		mKeyAbilityKey = abilityKey;
 		mKeyAbility = abilityString;
+		mId = id;
+	}
+	
+	public PTSkill(int id, String name, Boolean classSkill, int abilityMod, int rank,
+			int miscMod, int armorCheckPenalty, int abilityKey, String keyAbility) {
+		mName = name;
+		mClassSkill = false;
+		mAbilityMod = 0;
+		mRank = 0;
+		mMiscMod = 0;
+		mArmorCheckPenalty = 0;
+		mKeyAbilityKey = abilityKey;
+		mKeyAbility = keyAbility;
+		mId = id;
 	}
 	
 	/**
@@ -136,5 +153,10 @@ public class PTSkill {
 	
 	public void setKeyAbilityKey(int keyAbilityKey) {
 		mKeyAbilityKey = keyAbilityKey;
+	}
+
+	@Override
+	public int id() {
+		return mId;
 	}
 }
