@@ -25,7 +25,6 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	protected PTSave buildFromCursor(Cursor cursor) {
 		PTStatRepository statRepo = new PTStatRepository();
 		int baseIdIndex = cursor.getColumnIndex(STAT_ID);
-		//int totalIndex = cursor.getColumnIndex(TOTAL);
 		int abilityModIndex = cursor.getColumnIndex(ABILITY_MOD);
 		int magicModIndex = cursor.getColumnIndex(MAGIC_MOD);
 		int miscModIndex = cursor.getColumnIndex(MISC_MOD);
@@ -35,7 +34,6 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		PTStat baseStat = statRepo.query(baseId);
 		String name = baseStat.getName();
 		int baseValue = baseStat.getBaseValue();
-		//int total = cursor.getInt(totalIndex);
 		int abilityMod = cursor.getInt(abilityModIndex);
 		int magicMod = cursor.getInt(magicModIndex);
 		int miscMod = cursor.getInt(miscModIndex);
@@ -62,6 +60,13 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		PTStatRepository repo = new PTStatRepository();
 		repo.update(stat);
 	}
+	
+	@Override
+	protected void baseDelete(PTSave object) {
+		PTStat stat = (PTStat) object;
+		PTStatRepository repo = new PTStatRepository();
+		repo.delete(stat);
+	}	
 
 	@Override
 	protected String TABLE() {
@@ -76,5 +81,5 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	@Override
 	protected String ID() {
 		return ID;
-	}	
+	}
 }

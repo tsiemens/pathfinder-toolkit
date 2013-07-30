@@ -75,4 +75,10 @@ public class PTDatabase extends SQLiteOpenHelper {
 		long result = mDatabase.insert(table, null, values);
 		return result;
 	}
+	
+	public int delete(String table, String selector) {
+		open();
+		int result = mDatabase.delete(table, selector, null);
+		return result;
+	}
 }

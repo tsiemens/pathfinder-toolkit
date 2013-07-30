@@ -39,6 +39,11 @@ public class PTStatRepository extends PTBaseRepository<PTStat>{
 		// Do nothing
 	}
 	
+	@Override
+	protected void baseDelete(PTStat object) {
+		// Do nothing
+	}
+	
 	protected String TABLE() {
 		return TABLE;
 	}
@@ -49,5 +54,5 @@ public class PTStatRepository extends PTBaseRepository<PTStat>{
 	
 	protected String ID() {
 		return ID;
-	}
+	}	
 }

@@ -44,6 +44,19 @@ public abstract class PTBaseRepository<T> {
 		return ID() + "=" + id;
 	}
 	
+	public int delete(int id) {
+		T data = query(id);
+		baseDelete(data);
+		String selector = getSelector(id);
+		return mDatabase.delete(TABLE(), selector);
+	}
+	
+	public int delete(T object) {
+		baseDelete(object);
+		String selector = getSelector(((PTStorable)object).id());
+		return mDatabase.delete(TABLE(), selector);
+	}
+	
 	/**
 	 * Needs to package up the object so it can be stored in the database
 	 * Don't think you need to worry about superclass stuff...
@@ -55,6 +68,7 @@ public abstract class PTBaseRepository<T> {
 	 * @param object
 	 */
 	protected abstract void baseUpdate(T object);
+	protected abstract void baseDelete(T object);
 	
 	protected abstract String TABLE();
 	protected abstract String[] COLUMNS();

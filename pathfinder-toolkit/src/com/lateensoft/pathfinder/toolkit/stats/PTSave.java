@@ -4,7 +4,6 @@ import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
 public class PTSave extends PTStat implements PTStorable {
 	private int SaveId;
-	//public int BaseStatId; //may be unnecessary
 	int mTotal;
 	int mAbilityMod;
 	int mMagicMod;
