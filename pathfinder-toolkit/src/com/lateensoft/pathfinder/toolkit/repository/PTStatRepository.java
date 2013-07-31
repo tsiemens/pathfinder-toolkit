@@ -16,7 +16,6 @@ public class PTStatRepository extends PTBaseRepository<PTStat>{
 		super();
 	}
 
-	@Override
 	protected PTStat buildTable(Cursor cursor) {
 		int idIndex = cursor.getColumnIndex(ID);
 		int nameIndex = cursor.getColumnIndex(NAME);
@@ -54,5 +53,11 @@ public class PTStatRepository extends PTBaseRepository<PTStat>{
 	
 	protected String ID() {
 		return ID;
+	}
+
+	@Override
+	protected PTStat buildFromCursor(Cursor cursor) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

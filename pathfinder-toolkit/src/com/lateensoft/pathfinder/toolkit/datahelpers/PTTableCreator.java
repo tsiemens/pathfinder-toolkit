@@ -4,14 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class PTTableCreator {
 	
-	public enum SQLDataType {
-		NULL,
-		INTEGER,
-		REAL,
-		TEXT,
-		BLOB
-	}
-	
 	public PTTableCreator() {
 	}
 	
@@ -42,6 +34,8 @@ public class PTTableCreator {
 		db.execSQL(createCharacter());
 		db.endTransaction();
 	}
+	
+	//TODO: consider altering structure so low level stuff points to high level stuff
 	
 	public String createStat() {
 		return "CREATE TABLE Stat (" +
@@ -77,7 +71,7 @@ public class PTTableCreator {
 				"MagicMod INTEGER, " +
 				"MiscMod INTEGER, " +
 				"TempMod INTEGER, " +
-				"FOREIGN KEY(stat_id) REFRENCES Stat(stat_id)" +
+				"FOREIGN KEY(save_id) REFRENCES Stat(stat_id)" +
 				");";
 	}
 	

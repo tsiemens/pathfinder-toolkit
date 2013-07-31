@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.datahelpers;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
+import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -80,5 +81,27 @@ public class PTDatabase extends SQLiteOpenHelper {
 		open();
 		int result = mDatabase.delete(table, selector, null);
 		return result;
+	}
+	
+	public void create(String name, PTTableAttribute[] attributes) {
+		StringBuilder sb = new StringBuilder();
+		String create = String.format("CREATE TABLE %s (", name);
+		sb.append(create);
+		String columnTemplate = "%s %s";
+		String primaryKeyAddition = "PRIMARY KEY AUTOINCREMENT";
+		String comma = ", ";
+		for(int i = 0; i < attributes.length; i++) {
+			String columnName = attributes[i].GetColumn();
+			String columnType = attributes[i].GetType().name();
+			String columnDefine = String.format(columnTemplate, columnName, columnType);
+			sb.append(columnDefine);
+			if (attributes[i].isPrimaryKey) {
+				sb.append(primaryKeyAddition);
+			}
+			if ((i + 1) < attributes.length) {
+				sb.append(comma);
+			}
+			//TODO foreign keys
+		}
 	}
 }

@@ -8,9 +8,11 @@ import android.database.Cursor;
 import android.os.Build;
 
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
+import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
 
 public abstract class PTBaseRepository<T> {
 	private PTDatabase mDatabase;
+	protected PTTableAttributeSet mTableAttributeSet;
 	
 	// TODO Restrict T to IStorable?
 	public PTBaseRepository() {
@@ -61,39 +63,35 @@ public abstract class PTBaseRepository<T> {
 		return mDatabase.delete(TABLE(), selector);
 	}
 	
-	protected Hashtable<String, Object> getTableOfValues(Cursor cursor) {
-		Hashtable<String, Object> table = new Hashtable<String, Object>();
+	protected Hashtable<String, PTTableDatum> getTableOfValues(Cursor cursor) {
+		Hashtable<String, PTTableDatum> table = new Hashtable<String, PTTableDatum>();
 		String[] columns = COLUMNS();
-		int index;
 		for(int i = 0; i < columns.length; i++) {
-			index = cursor.getColumnIndex(columns[i]);
-			Object datum = getDatum(cursor, index);
+			PTTableDatum datum = getDatum(cursor, columns[i]);
 			table.put(columns[i], datum);
 		}
 		return table;
 	}
 	
-	@SuppressLint("NewApi")
-	protected Object getDatum(Cursor cursor, int index) {
-		int dataType;
-		if (Build.VERSION.SDK_INT >= 11) {
-			dataType = cursor.getType(index);
-		}
-		else {
-			// TODO some hack to find datatype on older devices
-			dataType = 0;
-		}
-		switch (dataType) {
-		case Cursor.FIELD_TYPE_FLOAT:
-			return cursor.getFloat(index);
-		case Cursor.FIELD_TYPE_INTEGER:
-			Integer wrapper = cursor.getInt(index);
-			return wrapper;
-		case Cursor.FIELD_TYPE_STRING:
-			return cursor.getString(index);
+	protected PTTableDatum getDatum(Cursor cursor, String column) {
+		int index = cursor.getColumnIndex(column);
+		SQLDataType type = mTableAttributeSet.getDataType(column);
+		Object data;
+		switch (type) {
+		case TEXT:
+			data = cursor.getString(index);
+			break;
+		case INTEGER:
+			data = cursor.getInt(index);
+			break;
+		case REAL:
+			data = cursor.getFloat(index);
+			break;
 		default:
-			return null;
+			data = null;
+			break;
 		}
+		return new PTTableDatum(data, column, type);
 	}
 	
 	/**
