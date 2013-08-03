@@ -19,7 +19,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilityModSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilitySetCalc;
@@ -272,8 +272,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)
 					[mRacesSpinner.getSelectedItemPosition()]);
 
-			PTUserPrefsManager userPrefsManager = new PTUserPrefsManager(getActivity());
-			userPrefsManager.setSelectedCharacter(character.mID);
+			PTSharedPreferences.getSharedInstance().setSelectedCharacter(character.mID);
 			mSQLManager.updateCharacter(character);
 			((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 			break;
@@ -309,9 +308,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 				character.getFluff().setRace(r.getStringArray(R.array.races_array)
 						[mRacesSpinner.getSelectedItemPosition()]);
 				
-				PTUserPrefsManager userPrefsManager = new PTUserPrefsManager(
-						getActivity());
-				userPrefsManager.setSelectedCharacter(character.mID);
+				PTSharedPreferences.getSharedInstance().setSelectedCharacter(character.mID);
 				mSQLManager.updateCharacter(character);
 				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 				break;

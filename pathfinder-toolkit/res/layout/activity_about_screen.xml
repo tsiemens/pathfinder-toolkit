@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp" >
+            
+            <ImageView 
+                android:id="@+id/iv_logo_banner"
+                android:layout_width="fill_parent"
+                android:layout_height="125dp"
+                android:padding="5dp"
+                android:gravity="center_horizontal"
+                android:src="@drawable/logo_banner"
+                android:contentDescription="@null"/>
+            
+            <TextView 
+                android:id="@+id/tv_version"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="@string/about_app_version"/>
+            
+            <TextView 
+                android:id="@+id/tv_company"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="@string/about_company_name"/>
+            
+            <TextView 
+                android:id="@+id/tv_feedback"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:paddingTop="10dp"
+                android:textSize="14sp"
+                android:autoLink="email"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/about_feedback"/>
+                    
+           <TextView 
+                android:id="@+id/tv_ogl_link"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textSize="14sp"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/about_ogl_link"/>
+           
+           <View 
+               android:layout_width="fill_parent"
+               android:layout_height="2dp"
+               android:background="@android:color/white"/>
+
+            <TextView 
+                android:id="@+id/tv_community_use_header"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="5sp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/about_community_use_header"/>
+            
+            <TextView 
+                android:id="@+id/tv_community_use"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:textSize="14sp"
+                android:text="@string/about_community_use_clause"/>
+     
+            
+        </LinearLayout>
+    </ScrollView>

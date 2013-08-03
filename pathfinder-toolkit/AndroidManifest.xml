@@ -5,12 +5,25 @@
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <application
+        android:name="com.lateensoft.pathfinder.toolkit.PTBaseApplication"
         android:icon="@drawable/ic_launcher_quillsword"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:hasCode="true" android:allowBackup="true">
+        <activity
+            android:name=".PTMainActivity"
+            android:alwaysRetainTaskState="true"
+            android:label="@string/title_activity_main_menu"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
@@ -29,17 +42,17 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
+		<activity
+            android:name=".settings.PTSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
         <activity
-            android:name=".PTMainActivity"
-            android:alwaysRetainTaskState="true"
-            android:label="@string/title_activity_main_menu"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".settings.PTAboutActivity"
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
     </application>
 

@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.party.PTEncounterMemberEditorActivity;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
@@ -35,7 +35,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	public PTParty mParty;
 
 	private PTDatabaseManager mSQLManager;
-	private PTUserPrefsManager mUserPrefsManager;
 
 	private int mDialogMode;
 	private boolean mHasRolled;
@@ -55,7 +54,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		setTitle(R.string.title_activity_initiative_tracker);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
-		mUserPrefsManager = new PTUserPrefsManager(getActivity());
 
 		mRollInitiativeButton = (Button) mParentView.findViewById(R.id.buttonRollInitiative);
 		mRollInitiativeButton.setOnClickListener(this);
@@ -167,8 +165,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * there is not current party, an empty party is set
 	 */
 	public void loadEncounterParty() {
-
-		PTParty currentEncounterParty = mUserPrefsManager.getEncounterParty();
+		PTParty currentEncounterParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
 		// If there is no saved encounter party, get from party manager
 		// Also, if the encounter party was saved, but previously was empty, get
 		// from party manager.
@@ -186,12 +183,12 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	}
 
 	public void loadDefaultParty() {
-		int currentPartyID = mUserPrefsManager.getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
 		if (currentPartyID >= 0)
 			mParty = mSQLManager.getParty(currentPartyID);
 		else
 			mParty = new PTParty("Empty Party");
-		mUserPrefsManager.setEncounterParty(mParty);
+		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
 		mHasRolled = false;
 		refreshPartyView();
 	}
@@ -200,7 +197,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		for (int i = 0; i < mParty.size(); i++) {
 			mParty.getPartyMember(i).setRolledValue(0);
 		}
-		mUserPrefsManager.setEncounterParty(mParty);
+		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
 		mHasRolled = false;
 		refreshPartyView();
 	}
@@ -237,7 +234,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 			mParty.getPartyMember(i).setRolledValue(
 					diceSet.singleRoll(20) + initiativeMod);
 		}
-		mUserPrefsManager.setEncounterParty(mParty);
+		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
 		mHasRolled = true;
 		loadEncounterParty();
 	}
@@ -258,7 +255,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	@Override
 	public void onPause() {
-		mUserPrefsManager.setEncounterParty(mParty);
+		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
 		super.onPause();
 	}
 }
