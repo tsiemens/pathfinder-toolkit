@@ -36,6 +36,17 @@ public class PTSkill implements PTStorable {
 		mId = id;
 	}
 	
+	public PTSkill(String name, int abilityKey, String abilityString) {
+		mName = name;
+		mClassSkill = false;
+		mAbilityMod = 0;
+		mRank = 0;
+		mMiscMod = 0;
+		mArmorCheckPenalty = 0;
+		mKeyAbilityKey = abilityKey;
+		mKeyAbility = abilityString;
+	}
+	
 	public PTSkill(int id, String name, Boolean classSkill, int abilityMod, int rank,
 			int miscMod, int armorCheckPenalty, int abilityKey, String keyAbility) {
 		mName = name;

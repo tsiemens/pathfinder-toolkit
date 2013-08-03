@@ -4,9 +4,11 @@ import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType
 
 public class PTTableAttributeSet {
 	private PTTableAttribute[] mAttributes;
+	private String mTable;
 	// TODO hashmap? Probably unnecessary
 	
-	public PTTableAttributeSet(PTTableAttribute[] attributes) {
+	public PTTableAttributeSet(String table, PTTableAttribute[] attributes) {
+		mTable = table;
 		mAttributes = attributes;
 	}
 	
@@ -18,6 +20,15 @@ public class PTTableAttributeSet {
 		return columns;
 	}
 	
+	public String getPrimaryKeyColumn() {
+		for(int i = 0; i < mAttributes.length; i++) {
+			if (mAttributes[i].isPrimaryKey) {
+				return mAttributes[i].GetColumn();
+			}
+		}
+		return null;
+	}
+	
 	public SQLDataType getDataType(String name) {
 		for(int i = 0; i < mAttributes.length; i++) {
 			if (mAttributes[i].GetColumn().equals(name)) {
@@ -25,5 +36,9 @@ public class PTTableAttributeSet {
 			}
 		}
 		return SQLDataType.NULL;
+	}
+	
+	public String getTable() {
+		return mTable;
 	}
 }

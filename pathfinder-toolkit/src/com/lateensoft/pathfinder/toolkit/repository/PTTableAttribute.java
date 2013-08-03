@@ -19,6 +19,12 @@ public class PTTableAttribute {
 		this.isPrimaryKey = isPrimaryKey;
 	}
 	
+	public PTTableAttribute(String column, SQLDataType dataType) {
+		mColumn = column;
+		mType = dataType;
+		isPrimaryKey = false;
+	}
+	
 	public String GetColumn() {
 		return mColumn;
 	}

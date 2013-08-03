@@ -2,7 +2,7 @@ package com.lateensoft.pathfinder.toolkit.stats;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTStat implements PTStorable {
+public abstract class PTStat implements PTStorable {
 	private String mName;
 	private int mBaseValue;
 	private int mId;

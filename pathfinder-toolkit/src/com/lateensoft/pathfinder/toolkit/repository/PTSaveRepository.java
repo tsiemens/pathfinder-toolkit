@@ -3,28 +3,31 @@ package com.lateensoft.pathfinder.toolkit.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.stats.PTStat;
 
 public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	static final String TABLE = "save";
-	static final String ID = "save_id";
-	static final String STAT_ID = "stat_id";
-	static final String TOTAL = "Total";
-	static final String ABILITY_MOD = "AbilityMod";
-	static final String MAGIC_MOD = "MagicMod";
-	static final String MISC_MOD = "MiscMod";
-	static final String TEMP_MOD = "TempMod";
-	static final String[] COLUMNS = {ID, STAT_ID, TOTAL, ABILITY_MOD, MAGIC_MOD, MISC_MOD, TEMP_MOD};
 	
 	public PTSaveRepository() {
 		super();
+		PTTableAttribute ID = new PTTableAttribute("save_id", SQLDataType.INTEGER, true);
+		PTTableAttribute CHARACTER_ID = new PTTableAttribute("character_id", SQLDataType.INTEGER);
+		PTTableAttribute NAME = new PTTableAttribute("Name", SQLDataType.TEXT);
+		PTTableAttribute BASEVALUE = new PTTableAttribute("BaseValue", SQLDataType.INTEGER);
+		PTTableAttribute TOTAL = new PTTableAttribute("Total", SQLDataType.INTEGER);
+		PTTableAttribute ABILITY_MOD = new PTTableAttribute("AbilityMod", SQLDataType.INTEGER);
+		PTTableAttribute MAGIC_MOD = new PTTableAttribute("MagicMod", SQLDataType.INTEGER);
+		PTTableAttribute MISC_MOD = new PTTableAttribute("MiscMod", SQLDataType.INTEGER);
+		PTTableAttribute TEMP_MOD = new PTTableAttribute("TempMod", SQLDataType.INTEGER);
+		PTTableAttribute[] attributes = {ID, CHARACTER_ID, NAME, BASEVALUE, TOTAL, ABILITY_MOD, MAGIC_MOD,
+				MISC_MOD, TEMP_MOD};
+		mTableAttributeSet = new PTTableAttributeSet(TABLE, attributes);
 	}
 
-	@Override
 	protected PTSave buildTable(Cursor cursor) {
-		PTStatRepository statRepo = new PTStatRepository();
-		int baseIdIndex = cursor.getColumnIndex(STAT_ID);
+		int characterIdIndex = cursor.getColumnIndex(CHARACTER_ID);
 		int abilityModIndex = cursor.getColumnIndex(ABILITY_MOD);
 		int magicModIndex = cursor.getColumnIndex(MAGIC_MOD);
 		int miscModIndex = cursor.getColumnIndex(MISC_MOD);
@@ -53,33 +56,10 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		values.put(TEMP_MOD, object.getTempMod());
 		return values;
 	}
-	
-	@Override
-	protected void baseUpdate(PTSave object) {
-		PTStat stat = (PTStat) object;
-		PTStatRepository repo = new PTStatRepository();
-		repo.update(stat);
-	}
-	
-	@Override
-	protected void baseDelete(PTSave object) {
-		PTStat stat = (PTStat) object;
-		PTStatRepository repo = new PTStatRepository();
-		repo.delete(stat);
-	}	
 
 	@Override
-	protected String TABLE() {
-		return TABLE;
-	}
-
-	@Override
-	protected String[] COLUMNS() {
-		return COLUMNS;
-	}
-
-	@Override
-	protected String ID() {
-		return ID;
+	protected PTSave buildFromCursor(Cursor cursor) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

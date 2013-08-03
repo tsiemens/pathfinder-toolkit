@@ -11,7 +11,6 @@ public class PTTableCreator {
 		// TODO: create db?
 		db.beginTransaction();
 		db.execSQL(createCharacter());
-		db.execSQL(createStat());
 		db.execSQL(createSkill());
 		db.execSQL(createSave());
 		db.execSQL(createCombatStatSet());
@@ -26,14 +25,6 @@ public class PTTableCreator {
 		db.execSQL(createFeat());
 		db.execSQL(createFluffInfo());
 		db.endTransaction();
-	}
-	
-	// TODO Are stats even used?
-	public String createStat() {
-		return "CREATE TABLE Stat (" +
-				"stat_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Name TEXT, " +
-				"BaseValue INTEGER);";
 	}
 	
 	public String createSkill() {
