@@ -12,6 +12,7 @@ public class PTSkill implements PTStorable {
 	int mArmorCheckPenalty;
 	int mKeyAbilityKey;
 	int mId;
+	int mCharacterId;
 	
 	public PTSkill() {
 		mName = "";
@@ -24,15 +25,13 @@ public class PTSkill implements PTStorable {
 		mKeyAbilityKey = 0;
 	}
 	
+	public PTSkill(int id, int characterId, String name, int abilityKey, String abilityString) {
+		this(id, name, abilityKey, abilityString);
+		mCharacterId = characterId;
+	}
+	
 	public PTSkill(int id, String name, int abilityKey, String abilityString) {
-		mName = name;
-		mClassSkill = false;
-		mAbilityMod = 0;
-		mRank = 0;
-		mMiscMod = 0;
-		mArmorCheckPenalty = 0;
-		mKeyAbilityKey = abilityKey;
-		mKeyAbility = abilityString;
+		this(name, abilityKey, abilityString);
 		mId = id;
 	}
 	
@@ -47,7 +46,7 @@ public class PTSkill implements PTStorable {
 		mKeyAbility = abilityString;
 	}
 	
-	public PTSkill(int id, String name, Boolean classSkill, int abilityMod, int rank,
+	public PTSkill(int id, int characterId, String name, Boolean classSkill, int abilityMod, int rank,
 			int miscMod, int armorCheckPenalty, int abilityKey, String keyAbility) {
 		mName = name;
 		mClassSkill = false;
@@ -58,6 +57,7 @@ public class PTSkill implements PTStorable {
 		mKeyAbilityKey = abilityKey;
 		mKeyAbility = keyAbility;
 		mId = id;
+		mCharacterId = characterId;
 	}
 	
 	/**
@@ -169,5 +169,9 @@ public class PTSkill implements PTStorable {
 	@Override
 	public int getID() {
 		return mId;
+	}
+	
+	public int getCharacterID() {
+		return mCharacterId;
 	}
 }

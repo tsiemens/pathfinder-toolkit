@@ -34,7 +34,7 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		PTTableAttribute tempMod = new PTTableAttribute(TEMP_MOD, SQLDataType.INTEGER);
 		PTTableAttribute[] attributes = {id, characterId, name, baseValue, total, abilityMod,
 				magicMod, miscMod, tempMod};
-		mTableAttributeSet = new PTTableAttributeSet(TABLE, attributes);
+		mTableInfo = new PTTableInfo(TABLE, attributes);
 	}
 
 	@Override

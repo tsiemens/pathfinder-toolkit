@@ -35,6 +35,7 @@ public class PTTableCreator {
 				"ClassSkill INTEGER, " +
 				"KeyAbility TEXT, " +
 				"AbilityMod INTEGER, " +
+				"Rank INTEGER, " +
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
 				"KeyAbilityKey INTEGER" +

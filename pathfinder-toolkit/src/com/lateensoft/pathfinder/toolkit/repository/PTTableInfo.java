@@ -2,12 +2,12 @@ package com.lateensoft.pathfinder.toolkit.repository;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
 
-public class PTTableAttributeSet {
+public class PTTableInfo {
 	private PTTableAttribute[] mAttributes;
 	private String mTable;
 	// TODO hashmap? Probably unnecessary
 	
-	public PTTableAttributeSet(String table, PTTableAttribute[] attributes) {
+	public PTTableInfo(String table, PTTableAttribute[] attributes) {
 		mTable = table;
 		mAttributes = attributes;
 	}
