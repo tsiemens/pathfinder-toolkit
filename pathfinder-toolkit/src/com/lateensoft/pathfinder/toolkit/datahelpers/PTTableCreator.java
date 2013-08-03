@@ -10,16 +10,12 @@ public class PTTableCreator {
 	public void createTables(SQLiteDatabase db) {
 		// TODO: create db?
 		db.beginTransaction();
+		db.execSQL(createCharacter());
 		db.execSQL(createStat());
 		db.execSQL(createSkill());
-		db.execSQL(createSkillSet());
 		db.execSQL(createSave());
-		db.execSQL(createSaveSet());
 		db.execSQL(createCombatStatSet());
 		db.execSQL(createAbilityScore());
-		db.execSQL(createAbilitySet());
-		db.execSQL(createAbilitySetCalc());
-		db.execSQL(createAbilityModSet());
 		db.execSQL(createItem());
 		db.execSQL(createArmor());
 		db.execSQL(createWeapon());
@@ -28,15 +24,11 @@ public class PTTableCreator {
 		db.execSQL(createSpell());
 		db.execSQL(createSpellBook());
 		db.execSQL(createFeat());
-		db.execSQL(createFeatList());
-		db.execSQL(createInventory());
 		db.execSQL(createFluffInfo());
-		db.execSQL(createCharacter());
 		db.endTransaction();
 	}
 	
-	//TODO: consider altering structure so low level stuff points to high level stuff
-	
+	// TODO Are stats even used?
 	public String createStat() {
 		return "CREATE TABLE Stat (" +
 				"stat_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -47,48 +39,37 @@ public class PTTableCreator {
 	public String createSkill() {
 		return "CREATE TABLE Skill (" +
 				"skill_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id INTEGER, " +
 				"Name TEXT, " +
 				"ClassSkill INTEGER, " +
 				"KeyAbility TEXT, " +
 				"AbilityMod INTEGER, " +
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
-				"KeyAbilityKey INTEGER);";
-	}
-	
-	public String createSkillSet() {
-		return "CREATE TABLE SkillSet (" +
-				"skill_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"skill_ids TEXT);";
+				"KeyAbilityKey INTEGER" +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createSave() {
 		return "CREATE TABLE Save (" +
 				"save_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"stat_id INTEGER, " +
+				"character_id, " +
+				"Name TEXT, " +
+				"BaseValue INTEGER, " +
 				"Total INTEGER, " +
 				"AbilityMod INTEGER, " +
 				"MagicMod INTEGER, " +
 				"MiscMod INTEGER, " +
 				"TempMod INTEGER, " +
-				"FOREIGN KEY(save_id) REFRENCES Stat(stat_id)" +
+				"FOREIGN KEY(character_id) REFRENCES Character(character_id)" +
 				");";
-	}
-	
-	public String createSaveSet() {
-		return "CREATE TABLE SaveSet (" +
-				"save_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"fort_save_id INTEGER, " +
-				"refl_save_id INTEGER, " +
-				"fort_save_id INTEGER, " +
-				"FOREIGN KEY (fort_save_id) REFRENCES Save(save_id), " +
-				"FOREIGN KEY (refl_save_id) REFRENCES Save(save_id), " +
-				"FOREIGN KEY (fort_save_id) REFRENCES Save(save_id));";
 	}
 	
 	public String createCombatStatSet() {
 		return "CREATE TABLE CombatStatSet (" +
 				"combat_stat_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id INTEGER, " +
 				"TotalHP INTEGER, " +
 				"Wounds INTEGER, " +
 				"NonLethalDamange INTEGER, " +
@@ -108,76 +89,42 @@ public class PTTableCreator {
 				"StrengthMod INTEGER, " +
 				"CMDDexMod INTEGER, " +
 				"CMDMiscMod INTEGER, " +
-				"SpellResist INTEGER);";
+				"SpellResist INTEGER" +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
+	// TODO: add something for set calc? Do we store that?
 	public String createAbilityScore() {
 		return "CREATE TABLE AbilityScore (" +
-				"ability_score_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"ability_score_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+				"character_id INTEGER,  " +
 				"Ability TEXT, " +
-				"Score INTEGER" +
-				");";
-	}
-	
-	public String createAbilitySet() {
-		return "CREATE TABLE AbilitySet (" +
-				"ability_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"str_key INTEGER, " +
-				"dex_key INTEGER, " +
-				"con_key INTEGER, " +
-				"int_key INTEGER, " +
-				"wis_key INTEGER, " +
-				"cha_key ITNEGER, " +
-				"FOREIGN KEY (str_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (dex_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (con_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (int_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (wis_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (cha_key_integer) REFRENCES AbilityScore(ability_score_id) " +
-				");";
-	}
-	
-	public String createAbilitySetCalc() {
-		return "CREATE TABLE AbilitySetCalc (" +
-				"ability_set_calc_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"base_ability_set_id INTEGER," +
-				"str_post_key INTEGER, " +
-				"dex_post_key INTEGER, " +
-				"con_post_key INTEGER, " +
-				"int_post_key INTEGER, " +
-				"wis_post_key INTEGER, " +
-				"cha_post_key ITNEGER, " +
-				"FOREIGN KEY (base_ability_set_id) REFRENCES AbilitySet(ability_set_id), " +
-				"FOREIGN KEY (str_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (dex_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (con_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (int_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (wis_post_key_integer) REFRENCES AbilityScore(ability_score_id), " +
-				"FOREIGN KEY (cha_post_key_integer) REFRENCES AbilityScore(ability_score_id));";
-	}
-	
-	public String createAbilityModSet() {
-		return "CREATE TABLE AbilityModSet (" +
-				"ability_mod_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"base_ability_set_id INTEGER, " +
-				"FOREIGN KEY (base_ability_set_id) REFRENCES AbilitySet(ability_set_id)" +
+				"Score INTEGER, " +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
 				");";
 	}
 	
 	public String createItem() {
 		return "CREATE TABLE Item (" +
 				"item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id INTEGER, " +
 				"Name TEXT, " +
 				"Weight REAL, " +
 				"Quantity INTEGER, " +
 				"IsContained INTEGER" +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
 				");";
 	}
 	
 	public String createArmor() {
 		return "CREATE TABLE Armor (" +
 				"armor_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"base_item_id INTEGER," +
+				"character_id INTEGER, " +
+				"Name TEXT, " +
+				"Weight REAL, " +
+				"Quantity INTEGER, " +
+				"IsContained INTEGER, " +
 				"Worn INTEGER," +
 				"ACBonus INTEGER, " +
 				"CheckPen INTEGER, " +
@@ -186,13 +133,18 @@ public class PTTableCreator {
 				"Speed INTEGER, " +
 				"SpecialProperties TEXT," +
 				"Size TEXT, " +
-				"FOREIGN KEY (base_item_id) REFRENCES Item(item_id));";
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createWeapon() {
 		return "CREATE TABLE Weapon (" +
 				"weapon_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"base_item_id INTEGER," +
+				"character_id INTEGER, " +
+				"Name TEXT, " +
+				"Weight REAL, " +
+				"Quantity INTEGER, " +
+				"IsContained INTEGER, " +
 				"TotalAttackBonus INTEGER, " +
 				"Attack TEXT, " +
 				"Damage TEXT, " +
@@ -202,12 +154,14 @@ public class PTTableCreator {
 				"Ammunition INTEGER, " +
 				"Type TEXT, " +
 				"Size Text," +
-				"FOREIGN KEY (base_item_id) REFRENCES Item(item_id));";
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createPartyMember() {
 		return "CREATE TABLE PartyMember (" +
 				"party_member_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"party_id INTEGER, " +
 				"Name TEXT, " +
 				"Initiative INTEGER, " +
 				"AC INTEGER, " +
@@ -223,56 +177,52 @@ public class PTTableCreator {
 				"PerceptionSkillBonus INTEGER, " +
 				"SenseMotiveSkillBonus INTEGER, " +
 				"StealthSkillBonus INTEGER, " +
-				"RolledValue INTEGER);";
+				"RolledValue INTEGER" +
+				"FOREIGN KEY (party_id) REFRENCES Party(party_id)" +
+				");";
 	}
 	
 	public String createParty() {
 		return "CREATE TABLE Party (" +
 				"party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"party_member_ids TEXT," +
 				"Name TEXT);";
 	}
 	
 	public String createSpell() {
 		return "CREATE TABLE Spell (" +
 				"spell_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id INTEGER, " +
 				"Name TEXT," +
 				"Prepared INTEGER," +
 				"Level INTEGER," +
-				"Description TEXT);";
+				"Description TEXT" +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createSpellBook() {
 		return "CREATE TABLE SpellBook (" +
 				"spell_book_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"spell_ids TEXT, " +
-				"SpellCount TEXT);";
+				"character_id INTEGER, " +
+				"SpellCount TEXT, " +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createFeat() {
 		return "CREATE TABLE Feat (" +
 				"feat_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id INTEGER, " +
 				"Name TEXT, " +
-				"Description TEXT);";
-	}
-	
-	public String createFeatList() {
-		return "CREATE TABLE FeatList (" +
-				"feat_list_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"feat_ids TEXT);";
-	}
-	
-	public String createInventory() {
-		return "CREATE TABLE Inventory (" +
-				"inventory_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"item_ids TEXT, " +
-				"armor_ids TEXT, " +
-				"weapon_ids TEXT);";
+				"Description TEXT, " +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				");";
 	}
 	
 	public String createFluffInfo() {
 		return "CREATE TABLE FluffInfo (" +
 				"fluff_info_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"character_id, " +
 				"Name TEXT, " +
 				"Alignment TEXT, " +
 				"XP TEXT, " +
@@ -290,30 +240,15 @@ public class PTTableCreator {
 				"Hair TEXT, " +
 				"Languages TEXT, " +
 				"Description TEXT, " +
-				"Other TEXT;)"; 
+				"Other TEXT, " +
+				"FOREIGN KEY (character_id) REFRENCES Character(character_id)" +
+				";)"; 
 	}
 	
 	public String createCharacter() {
 		return "CREATE TABLE Character (" +
 				"character_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"ability_set_id INTEGER, " +
-				"temp_ability_set_id INTEGER, " +
-				"combat_stat_set_id INTEGER, " +
-				"skill_set_id INTEGER, " +
-				"save_set_id INTEGER, " +
-				"fluff_info_id INTEGER, " +
-				"inventory_id INTEGER, " +
-				"Gold REAL, " +
-				"feat_list_id INTEGER, " +
-				"spell_book_id INTEGER, " +
-				"FOREIGN KEY (ability_set_id) REFRENCES AbilitySet(ability_set_id), " +
-				"FOREIGN KEY (temp_ability_set_id) REFRENCES AbilitySet(ability_set_id), " +
-				"FOREIGN KEY (combat_stat_set_id) REFRENCES CombatStatSet(combat_stat_set_id), " +
-				"FOREIGN KEY (skill_set_id) REFRENCES SkillSet(skill_set_id), " +
-				"FOREIGN KEY (fluff_info_id) REFRENCES FluffInfo(fluff_info_id), " +
-				"FOREIGN KEY (inventory_id) REFRENCES Inventory(inventory_id), " +
-				"FOREIGN KEY (feat_list_id) REFRENCES FeatList(feat_list_id), " +
-				"FORIENG KEY (spell_book_id) REFRENCES SpellBook(spell_book_id)" + 
+				"Tag TEXT " +
 				");";
 	}
 }
