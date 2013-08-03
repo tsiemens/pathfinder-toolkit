@@ -3,7 +3,8 @@ package com.lateensoft.pathfinder.toolkit.stats;
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
 public class PTSave extends PTStat implements PTStorable {
-	private int SaveId;
+	private int mSaveId;
+	private int mCharacterId;
 	int mTotal;
 	int mAbilityMod;
 	int mMagicMod;
@@ -26,6 +27,13 @@ public class PTSave extends PTStat implements PTStorable {
 		mMiscMod = 0;
 		mTempMod = 0;
 		calculateTotal();
+	}
+	
+	public PTSave(int id, int characterId, String name, int baseValue, int abilityMod, int magicMod,
+			int miscMod, int tempMod) {
+		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod);
+		mSaveId = id;
+		mCharacterId = characterId;
 	}
 	
 	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
@@ -111,7 +119,11 @@ public class PTSave extends PTStat implements PTStorable {
 		mTotal += mTempMod;
 	}
 	
-	public int id() {
-		return SaveId;
+	public int getID() {
+		return mSaveId;
+	}
+	
+	public int getCharacterID() {
+		return mCharacterId;
 	}
 }

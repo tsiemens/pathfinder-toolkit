@@ -31,19 +31,14 @@ public abstract class PTBaseRepository<T> {
 		String[] columns = mTableAttributeSet.getColumns();
 		Cursor cursor = mDatabase.query(table, columns, selector);
 		cursor.moveToFirst();
-		return buildFromCursor(cursor);
+		Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+		return buildFromHashTable(hashTable);
 	}
 	
-	/**
-	 * This method must create the object that you want, but also must call the 
-	 * repository of a direct superclass or any members that have their own tables
-	 * @param cursor
-	 * @return
-	 */
-	protected abstract T buildFromCursor(Cursor cursor);
+	protected abstract T buildFromHashTable(Hashtable<String, Object> hashTable);
 
 	public int update(T object) {
-		String selector = getSelector(((PTStorable)object).id());
+		String selector = getSelector(((PTStorable)object).getID());
 		ContentValues values = getContentValues(object);
 		String table = mTableAttributeSet.getTable();
 		return mDatabase.update(table, values, selector);
@@ -62,22 +57,22 @@ public abstract class PTBaseRepository<T> {
 	}
 	
 	public int delete(T object) {
-		String selector = getSelector(((PTStorable)object).id());
+		String selector = getSelector(((PTStorable)object).getID());
 		String table = mTableAttributeSet.getTable();
 		return mDatabase.delete(table, selector);
 	}
 	
-	protected Hashtable<String, PTTableDatum> getTableOfValues(Cursor cursor) {
-		Hashtable<String, PTTableDatum> table = new Hashtable<String, PTTableDatum>();
+	protected Hashtable<String, Object> getTableOfValues(Cursor cursor) {
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		String[] columns = mTableAttributeSet.getColumns();
 		for(int i = 0; i < columns.length; i++) {
-			PTTableDatum datum = getDatum(cursor, columns[i]);
+			Object datum = getDatum(cursor, columns[i]);
 			table.put(columns[i], datum);
 		}
 		return table;
 	}
 	
-	protected PTTableDatum getDatum(Cursor cursor, String column) {
+	protected Object getDatum(Cursor cursor, String column) {
 		int index = cursor.getColumnIndex(column);
 		SQLDataType type = mTableAttributeSet.getDataType(column);
 		Object data;
@@ -95,12 +90,11 @@ public abstract class PTBaseRepository<T> {
 			data = null;
 			break;
 		}
-		return new PTTableDatum(data, column, type);
+		return data;
 	}
 	
 	/**
 	 * Needs to package up the object so it can be stored in the database
-	 * Don't think you need to worry about superclass stuff...
 	 */
 	protected abstract ContentValues getContentValues(T object);
 }

@@ -167,7 +167,7 @@ public class PTSkill implements PTStorable {
 	}
 
 	@Override
-	public int id() {
+	public int getID() {
 		return mId;
 	}
 }

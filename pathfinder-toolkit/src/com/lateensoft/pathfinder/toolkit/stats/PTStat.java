@@ -49,7 +49,7 @@ public abstract class PTStat implements PTStorable {
 		mBaseValue = baseValue;
 	}
 	
-	public int id() {
+	public int getID() {
 		return mId;
 	}
 }

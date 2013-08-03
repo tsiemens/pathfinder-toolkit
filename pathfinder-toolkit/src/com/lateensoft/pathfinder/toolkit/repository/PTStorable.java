@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.repository;
 
 public interface PTStorable {
-	public int id();
+	public int getID();
+	public int getCharacterID();
 }
