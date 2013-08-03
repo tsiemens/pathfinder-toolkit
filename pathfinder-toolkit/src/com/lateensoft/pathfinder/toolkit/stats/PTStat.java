@@ -1,6 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-public class PTStat {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTStat implements Parcelable{
 	private String mName;
 	private int mBaseValue;
 
@@ -24,6 +27,17 @@ public class PTStat {
 		mBaseValue = other.getBaseValue();
 	}
 	
+	public PTStat(Parcel in) {
+		mName = in.readString();
+		mBaseValue = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeInt(mBaseValue);
+	}
+	
 	public String getName() {
 		return mName;
 	}
@@ -39,4 +53,19 @@ public class PTStat {
 	public void setBaseValue(int baseValue) {
 		mBaseValue = baseValue;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTStat> CREATOR = new Parcelable.Creator<PTStat>() {
+		public PTStat createFromParcel(Parcel in) {
+			return new PTStat(in);
+		}
+		
+		public PTStat[] newArray(int size) {
+			return new PTStat[size];
+		}
+	};
 }

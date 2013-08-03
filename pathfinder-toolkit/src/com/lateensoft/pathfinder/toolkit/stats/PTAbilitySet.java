@@ -1,13 +1,20 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
-public class PTAbilitySet {
-	private PTAbilityScore[] mAbilities;
-	static final String[] ABILITY_NAMES = {"Strength", "Dexterity", "Constitution",
+
+public class PTAbilitySet implements Parcelable{
+	private static final String TAG = PTAbilitySet.class.getSimpleName();
+	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
+	
+	public static final String[] ABILITY_NAMES = {"Strength", "Dexterity", "Constitution",
 		"Intelligence", "Wisdom", "Charisma"};
 	static final int BASE_ABILITY_SCORE = 10;
-	private static final String TAG = "PTAbilitySet";
+	
+	private PTAbilityScore[] mAbilities;
 	
 	public PTAbilitySet() {
 		//Resources res = android.content.res.Resources.getSystem();
@@ -18,6 +25,18 @@ public class PTAbilitySet {
 		for(int i = 0; i < ABILITY_NAMES.length; i++) {
 			mAbilities[i] = new PTAbilityScore(ABILITY_NAMES[i], BASE_ABILITY_SCORE);
 		}
+	}
+	
+	public PTAbilitySet(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mAbilities = (PTAbilityScore[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES, mAbilities);
+		out.writeBundle(objectBundle);
 	}
 	
 	// Given a string ability name and a score, sets the 
@@ -85,4 +104,19 @@ public class PTAbilitySet {
 	public int getLength(){
 		return mAbilities.length;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTAbilitySet> CREATOR = new Parcelable.Creator<PTAbilitySet>() {
+		public PTAbilitySet createFromParcel(Parcel in) {
+			return new PTAbilitySet(in);
+		}
+		
+		public PTAbilitySet[] newArray(int size) {
+			return new PTAbilitySet[size];
+		}
+	};
 }

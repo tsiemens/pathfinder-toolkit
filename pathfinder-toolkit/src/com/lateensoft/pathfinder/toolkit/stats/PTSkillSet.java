@@ -4,10 +4,15 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.lateensoft.pathfinder.toolkit.R;
 
-public class PTSkillSet {
+public class PTSkillSet implements Parcelable{
+	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
+	
 	PTSkill[] mSkills;
 	
 	public PTSkillSet(Context context) {
@@ -21,6 +26,18 @@ public class PTSkillSet {
 		for(int i = 0; i < skills.length; i++) {
 			mSkills[i] = new PTSkill(skills[i], skillAbilityKeys[i], skillAbilityShortStrings[skillAbilityKeys[i]]);
 		}
+	}
+	
+	public PTSkillSet(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mSkills = (PTSkill[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SKILLS);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SKILLS, mSkills);
+		out.writeBundle(objectBundle);
 	}
 	
 	public PTSkill getSkill(int index) {
@@ -63,6 +80,21 @@ public class PTSkillSet {
 	}
 	
 	//can set/get through reff to skill
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSkillSet> CREATOR = new Parcelable.Creator<PTSkillSet>() {
+		public PTSkillSet createFromParcel(Parcel in) {
+			return new PTSkillSet(in);
+		}
+		
+		public PTSkillSet[] newArray(int size) {
+			return new PTSkillSet[size];
+		}
+	};
 }
 
 

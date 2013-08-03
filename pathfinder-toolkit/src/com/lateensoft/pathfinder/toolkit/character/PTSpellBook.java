@@ -2,10 +2,17 @@ package com.lateensoft.pathfinder.toolkit.character;
 
 import java.util.ArrayList;
 
-public class PTSpellBook {
-	static final int NUM_SPELL_LEVELS = 10;
-	ArrayList<PTSpell> mSpells;
-	int mSpellCount[];
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTSpellBook implements Parcelable{
+	private static final String PARCEL_BUNDLE_KEY_SPELLS = "spells"; 
+	
+	private static final int NUM_SPELL_LEVELS = 10;
+	
+	private ArrayList<PTSpell> mSpells;
+
 	//LargestLevelSet mLargestLevelSet;
 	
 	public PTSpellBook() {
@@ -36,11 +43,22 @@ public class PTSpellBook {
 		return (PTSpell[]) ((ArrayList<PTSpell>)mSpells.get(level)).toArray(levelSpells);
 	}*/
 	
+	public PTSpellBook(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mSpells = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_SPELLS);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_SPELLS, mSpells);
+		out.writeBundle(objectBundle);
+	}
+	
 	public PTSpell[] getSpells() {
 		PTSpell[] spells = new PTSpell[mSpells.size()];
 		return (PTSpell[]) mSpells.toArray(spells);
 	}
-	
 	
 	/*
 	public void setSpells(PTSpell[][] spells) {
@@ -114,5 +132,20 @@ public class PTSpellBook {
 			this.addSpell(spell);
 		}
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSpellBook> CREATOR = new Parcelable.Creator<PTSpellBook>() {
+		public PTSpellBook createFromParcel(Parcel in) {
+			return new PTSpellBook(in);
+		}
+		
+		public PTSpellBook[] newArray(int size) {
+			return new PTSpellBook[size];
+		}
+	};
 
 }

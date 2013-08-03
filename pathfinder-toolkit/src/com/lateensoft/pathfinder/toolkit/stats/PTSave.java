@@ -1,5 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class PTSave extends PTStat {
 	int mTotal;
 	int mAbilityMod;
@@ -52,6 +55,23 @@ public class PTSave extends PTStat {
 		mMiscMod = other.getMiscMod();
 		mTempMod = other.getTempMod();
 		calculateTotal();
+	}
+	
+	public PTSave(Parcel in) {
+		super(in);
+		mAbilityMod = in.readInt();
+		mMagicMod = in.readInt();
+		mMiscMod = in.readInt();
+		mTempMod = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		out.writeInt(mAbilityMod);
+		out.writeInt(mMagicMod);
+		out.writeInt(mMiscMod);
+		out.writeInt(mTempMod);
 	}
 	
 	public int getAbilityMod() {
@@ -107,4 +127,19 @@ public class PTSave extends PTStat {
 		mTotal += mMiscMod;
 		mTotal += mTempMod;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSave> CREATOR = new Parcelable.Creator<PTSave>() {
+		public PTSave createFromParcel(Parcel in) {
+			return new PTSave(in);
+		}
+		
+		public PTSave[] newArray(int size) {
+			return new PTSave[size];
+		}
+	};
 }

@@ -4,8 +4,10 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class PTCharacterFluffInfo {
+public class PTCharacterFluffInfo implements Parcelable{
 	String mName;
 	String mAlignment;
 	String mXP;
@@ -23,6 +25,67 @@ public class PTCharacterFluffInfo {
 	String mHair;
 	String mLanguages;
 	String mDescription;
+	
+	public PTCharacterFluffInfo() {
+		mName = "";
+		mAlignment = "";
+		mXP = "";
+		mNextLevelXP = "";
+		mXPChange = "";
+		mPlayerClass = "";
+		mRace = "";
+		mDeity = "";
+		mLevel = "";
+		mSize = "";
+		mGender = "";
+		mHeight = "";
+		mWeight = new String("");
+		mEyes = new String("");
+		mHair = new String("");
+		mLanguages = new String("");
+		mDescription = new String("");
+	}
+	
+	public PTCharacterFluffInfo(Parcel in) {
+		mName = in.readString();
+		mAlignment = in.readString();
+		mXP = in.readString();
+		mNextLevelXP = in.readString();
+		mXPChange = in.readString();
+		mPlayerClass = in.readString();
+		mRace = in.readString();
+		mDeity = in.readString();
+		mLevel = in.readString();
+		mSize = in.readString();
+		mGender = in.readString();
+		mHeight = in.readString();
+		mWeight = in.readString();
+		mEyes = in.readString();
+		mHair = in.readString();
+		mLanguages = in.readString();
+		mDescription = in.readString();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeString(mAlignment);
+		out.writeString(mXP);
+		out.writeString(mNextLevelXP);
+		out.writeString(mXPChange);
+		out.writeString(mPlayerClass);
+		out.writeString(mRace);
+		out.writeString(mDeity);
+		out.writeString(mLevel);
+		out.writeString(mSize);
+		out.writeString(mGender);
+		out.writeString(mHeight);
+		out.writeString(mWeight);
+		out.writeString(mEyes);
+		out.writeString(mHair);
+		out.writeString(mLanguages);
+		out.writeString(mDescription);
+	}
 	
 	public String[] getFluffArray() {
 		String[] fluffArray = {mName, mAlignment, mXP, mNextLevelXP, mPlayerClass, mRace, mDeity,
@@ -87,26 +150,6 @@ public class PTCharacterFluffInfo {
 		Resources r = context.getResources();
 		
 		return r.getStringArray(R.array.fluff_fields);		
-	}
-	
-	public PTCharacterFluffInfo() {
-		mName = "";
-		mAlignment = "";
-		mXP = "";
-		mNextLevelXP = "";
-		mXPChange = "";
-		mPlayerClass = "";
-		mRace = "";
-		mDeity = "";
-		mLevel = "";
-		mSize = "";
-		mGender = "";
-		mHeight = "";
-		mWeight = new String("");
-		mEyes = new String("");
-		mHair = new String("");
-		mLanguages = new String("");
-		mDescription = new String("");
 	}
 	
 	public String getName() {
@@ -212,4 +255,19 @@ public class PTCharacterFluffInfo {
 	public void setRace(String race) {
 		mRace = race;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTCharacterFluffInfo> CREATOR = new Parcelable.Creator<PTCharacterFluffInfo>() {
+		public PTCharacterFluffInfo createFromParcel(Parcel in) {
+			return new PTCharacterFluffInfo(in);
+		}
+		
+		public PTCharacterFluffInfo[] newArray(int size) {
+			return new PTCharacterFluffInfo[size];
+		}
+	};
 }

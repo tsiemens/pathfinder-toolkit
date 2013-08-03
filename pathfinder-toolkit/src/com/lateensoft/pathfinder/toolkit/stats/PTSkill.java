@@ -1,6 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-public class PTSkill {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTSkill implements Parcelable{
 	String mName;
 	boolean mClassSkill;
 	String mKeyAbility;
@@ -30,6 +33,33 @@ public class PTSkill {
 		mArmorCheckPenalty = 0;
 		mKeyAbilityKey = abilityKey;
 		mKeyAbility = abilityString;
+	}
+	
+	public PTSkill(Parcel in) {
+		mName = in.readString();
+		boolean[] classSkill = new boolean[1];
+		in.readBooleanArray(classSkill);
+		mClassSkill = classSkill[0];
+		mKeyAbility = in.readString();
+		mAbilityMod = in.readInt();
+		mRank = in.readInt();
+		mMiscMod = in.readInt();
+		mArmorCheckPenalty = in.readInt();
+		mKeyAbilityKey = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		boolean[] classSkill = new boolean[1];
+		classSkill[0] = mClassSkill;
+		out.writeBooleanArray(classSkill);
+		out.writeString(mKeyAbility);
+		out.writeInt(mAbilityMod);
+		out.writeInt(mRank);
+		out.writeInt(mMiscMod);
+		out.writeInt(mArmorCheckPenalty);
+		out.writeInt(mKeyAbilityKey);
 	}
 	
 	/**
@@ -137,4 +167,19 @@ public class PTSkill {
 	public void setKeyAbilityKey(int keyAbilityKey) {
 		mKeyAbilityKey = keyAbilityKey;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSkill> CREATOR = new Parcelable.Creator<PTSkill>() {
+		public PTSkill createFromParcel(Parcel in) {
+			return new PTSkill(in);
+		}
+		
+		public PTSkill[] newArray(int size) {
+			return new PTSkill[size];
+		}
+	};
 }

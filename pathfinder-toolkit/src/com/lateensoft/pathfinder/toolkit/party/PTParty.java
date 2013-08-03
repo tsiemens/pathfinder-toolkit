@@ -2,11 +2,15 @@ package com.lateensoft.pathfinder.toolkit.party;
 
 import java.util.ArrayList;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
-public class PTParty {
+public class PTParty implements Parcelable{	
+	private final String TAG = PTParty.class.getSimpleName();
+	private static final String PARCEL_BUNDLE_KEY_MEMBERS = "party_members";
 	
-	private final String TAG = "PTParty";
 	private ArrayList<PTPartyMember> mPartyMembers;
 	private String mPartyName;
 	public int mID; //Used in SQL
@@ -19,6 +23,22 @@ public class PTParty {
 		else mPartyName = "";
 		
 		mID = 0;
+	}
+	
+	public PTParty(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mPartyMembers = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS);
+		mPartyName = in.readString();
+		mID = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS, mPartyMembers);
+		out.writeBundle(objectBundle);
+		out.writeString(mPartyName);
+		out.writeInt(mID);
 	}
 	
 	/**
@@ -230,4 +250,19 @@ public class PTParty {
 	public int size(){
 		return mPartyMembers.size();
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTParty> CREATOR = new Parcelable.Creator<PTParty>() {
+		public PTParty createFromParcel(Parcel in) {
+			return new PTParty(in);
+		}
+		
+		public PTParty[] newArray(int size) {
+			return new PTParty[size];
+		}
+	};
 }
