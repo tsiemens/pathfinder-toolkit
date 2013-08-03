@@ -12,6 +12,7 @@ import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +50,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	private int mCharacterSelectedInDialog;
 	
 	private OnClickListener mCharacterClickListener;
+	
+	private boolean mIsWaitingForResult = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,10 +82,19 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		loadCurrentCharacter();
-		updateFragmentUI();
-		updateTitle();
+		if (!mIsWaitingForResult) {
+			loadCurrentCharacter();
+			updateFragmentUI();
+			updateTitle();
+			mIsWaitingForResult = false;
+		}
 		Log.d(TAG, "resume");
+	}
+	
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		super.startActivityForResult(intent, requestCode);
+		mIsWaitingForResult = true;
 	}
 
 	/**

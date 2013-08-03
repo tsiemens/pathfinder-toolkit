@@ -45,6 +45,12 @@
     <string name="pref_about_screen_title">About Pathfinder Toolkit</string> 
     <string name="title_activity_about">About</string>
 
+    <!-- General Alerts -->
+    <string name="delete_button_text">Delete</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="error_alert_title">Error</string>
+    
     <!-- Character Sheet Tab Headers -->
     <string name="tab_character_inventory">Inventory</string>
     <string name="tab_character_weapons">Weapons</string>
@@ -257,6 +263,8 @@
     <string name="inventory_gold_header">gp:</string>
     <string name="inventory_gold_hint">Gold</string>
     
+    <string name="editor_name_required_alert">You must enter a name.</string>
+    
     <!-- Armor -->
     <string name="add_armor_button">Add Armor</string>
     <string name="armor_name_header">Name: \u0020</string>
@@ -270,6 +278,9 @@
     <string name="armor_speed">Speed: \u0020</string>
     <string name="armor_max_dex">Max Dex: \u0020</string>
     <string name="new_armor_title">New Armor</string>
+    <string name="edit_armor_title">Edit Armor</string>
+    <string name="delete_armor_alert_title">Delete</string>
+    <string name="delete_armor_alert_message">Are you sure you want to delete this armor?</string>
     <string-array name="ac_spinner_options">
         <item>-20</item>
         <item>-19</item>
@@ -645,9 +656,6 @@
     <string name="spellbook_description">Description</string>
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
-    <string name="delete_button_text">Delete</string>
-    <string name="ok_button_text">OK</string>
-    <string name="cancel_button_text">Cancel</string>
    
     
     <!-- Initiative Tracker Strings -->
@@ -702,6 +710,11 @@
         <item>Sense Motive Skill Bonus</item>
         <item>Stealth Skill Bonus</item>
     </string-array>
+    
+    <!-- Base Editor -->
+    <string name="editor_menu_item_done">Done</string>
+    <string name="editor_menu_item_cancel">Cancel</string>
+    <string name="editor_menu_item_delete">Delete</string>
 
     <string name="menu_item_done">Done</string>
     <string name="menu_item_delete_member">Delete Party Member</string>
