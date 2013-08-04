@@ -51,8 +51,7 @@ public abstract class PTBaseRepository<T> {
 		return idColumn + "=" + id;
 	}
 	
-	public int delete(int id) {
-		T data = query(id);
+	public int delete(long id) {
 		String selector = getSelector(id);
 		String table = mTableInfo.getTable();
 		return mDatabase.delete(table, selector);
