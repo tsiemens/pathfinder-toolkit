@@ -36,6 +36,12 @@ public class PTSave extends PTStat implements PTStorable {
 		mCharacterId = characterId;
 	}
 	
+	public PTSave(long characterId, String name, int baseValue,
+			int abilityMod, int magicMod, int miscMod, int tempMod) {
+		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod);
+		mCharacterId = characterId;
+	}
+	
 	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
 			int miscMod, int tempMod) {
 		super(name, baseValue);
@@ -64,7 +70,7 @@ public class PTSave extends PTStat implements PTStorable {
 		mTempMod = other.getTempMod();
 		calculateTotal();
 	}
-	
+
 	public int getAbilityMod() {
 		return mAbilityMod;
 	}
@@ -119,11 +125,11 @@ public class PTSave extends PTStat implements PTStorable {
 		mTotal += mTempMod;
 	}
 	
-	public long getID() {
+	public Long getID() {
 		return mSaveId;
 	}
 	
-	public long getCharacterID() {
+	public Long getCharacterID() {
 		return mCharacterId;
 	}
 }

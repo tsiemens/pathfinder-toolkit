@@ -78,12 +78,12 @@ public class PTAbilityScore implements PTStorable {
 	}
 
 	@Override
-	public long getID() {
+	public Long getID() {
 		return mId;
 	}
 
 	@Override
-	public long getCharacterID() {
+	public Long getCharacterID() {
 		return mCharacterId;
 	}
 }

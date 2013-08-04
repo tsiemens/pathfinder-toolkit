@@ -14,19 +14,18 @@ public class PTSaveRepositoryTest extends PTBaseRepositoryTest {
 	static final int TEMP_MOD = 0;
 	
 	public void testInsert() {
-		PTSave inserted = new PTSave(ID, mCharacterId, NAME, BASE_VALUE, ABILITY_MOD, 
+		PTSave inserted = new PTSave(mCharacterId, NAME, BASE_VALUE, ABILITY_MOD, 
 				MAGIC_MOD, MISC_MOD, TEMP_MOD);
 		PTSaveRepository repo = new PTSaveRepository();
-		repo.insert(inserted);
-		PTSave queried = repo.query(ID);
-		assertEquals(inserted.getAbilityMod(), queried.getAbilityMod());
-		assertEquals(inserted.getBase(), queried.getBase());
+		long id = repo.insert(inserted);
+		PTSave queried = repo.query(id);
+		assertEquals(inserted.getCharacterID(), queried.getCharacterID());
+		assertEquals(inserted.getName(), queried.getName());
 		assertEquals(inserted.getBaseValue(), queried.getBaseValue());
-		assertEquals(inserted.getID(), queried.getID());
+		assertEquals(inserted.getTotal(), queried.getTotal());
+		assertEquals(inserted.getAbilityMod(), queried.getAbilityMod());
 		assertEquals(inserted.getMagicMod(), queried.getMagicMod());
 		assertEquals(inserted.getMiscMod(), inserted.getMiscMod());
-		assertEquals(inserted.getName(), queried.getName());
 		assertEquals(inserted.getTempMod(), queried.getTempMod());
-		assertEquals(inserted.getCharacterID(), queried.getCharacterID());
 	}
 }

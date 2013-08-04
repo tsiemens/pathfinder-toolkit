@@ -55,7 +55,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		super.onCreate(savedInstanceState);
 		mSQLManager = new PTDatabaseManager(getActivity());
 		loadCurrentCharacter();
-		mCharacterSelectedInDialog = (int) mCharacter.mID;
+		mCharacterSelectedInDialog = mCharacter.getIDAsInt();
 		
 		setupCharacterClickListener();
 	}
@@ -104,7 +104,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			}
 
 		}
-		Log.v(TAG, "Loaded character: " + mCharacter.mID);
+		Log.v(TAG, "Loaded character: " + mCharacter.getIDAsInt());
 	}
 
 	/**
@@ -114,7 +114,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public void addNewCharacter() {
 		mCharacter = mSQLManager.addNewCharacter("New Adventurer",
 				getActivity().getApplicationContext());
-		PTSharedPreferences.getSharedInstance().setSelectedCharacter((int)mCharacter.mID);
+		PTSharedPreferences.getSharedInstance().setSelectedCharacter(mCharacter.getIDAsInt());
 		performUpdateReset();
 		Log.v(TAG, "Added new character");
 	}
@@ -125,7 +125,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public void deleteCurrentCharacter() {
 		int currentCharacterIndex = 0;
-		int currentCharacterID = (int) mCharacter.mID;
+		int currentCharacterID = mCharacter.getIDAsInt();
 		int characterIDs[] = mSQLManager.getCharacterIDs();
 
 		for (int i = 0; i < characterIDs.length; i++) {
@@ -258,7 +258,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 
 	private void showCharacterDialog() {
-		mCharacterSelectedInDialog = (int) mCharacter.mID; // actual current character
+		mCharacterSelectedInDialog =mCharacter.getIDAsInt(); // actual current character
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		
@@ -332,7 +332,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		switch (mDialogMode) {
 		case MENU_ITEM_CHARACTER_LIST:
 			// Check if "currently selected" character is the same as saved one
-			if (mCharacterSelectedInDialog != mCharacter.mID) {
+			if (mCharacterSelectedInDialog != mCharacter.getIDAsInt()) {
 				performUpdateReset();
 
 				PTSharedPreferences.getSharedInstance()

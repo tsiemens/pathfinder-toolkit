@@ -113,7 +113,7 @@ public class PTDatabaseManager extends SQLiteOpenHelper {
 		int characterID = cursor.getInt(cursor.getColumnIndex(colChtrID));
 		close();
 		
-		newCharacter.mID = characterID;
+		newCharacter.setID(characterID);
 		updateCharacter(newCharacter);
 		Log.v(TAG, "New character added to database: " + characterID);
 		
@@ -130,7 +130,7 @@ public class PTDatabaseManager extends SQLiteOpenHelper {
 		editCon.put(colChtrGSON, mGson.toJson(character));
 
 		open();
-		mDatabase.update(characterTable, editCon, colChtrID+"="+character.mID, null);
+		mDatabase.update(characterTable, editCon, colChtrID+"="+character.getIDAsInt(), null);
 		close();
 		Log.v(TAG, "Character saved in database");
 	}

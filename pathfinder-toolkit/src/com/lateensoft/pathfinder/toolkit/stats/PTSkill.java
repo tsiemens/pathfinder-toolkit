@@ -167,11 +167,11 @@ public class PTSkill implements PTStorable {
 	}
 
 	@Override
-	public long getID() {
+	public Long getID() {
 		return mId;
 	}
 	
-	public long getCharacterID() {
+	public Long getCharacterID() {
 		return mCharacterId;
 	}
 }

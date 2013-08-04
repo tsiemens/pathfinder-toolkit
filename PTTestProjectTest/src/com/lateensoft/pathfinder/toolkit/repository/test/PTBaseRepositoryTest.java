@@ -18,6 +18,6 @@ public class PTBaseRepositoryTest extends AndroidTestCase {
 		PTCharacter joe = new PTCharacter(CHARACTER_TAG, PTBaseApplication.getAppContext());
 		PTCharacterRepository repo = new PTCharacterRepository();
 		mCharacterId = repo.insert(joe);
-		assert(mCharacterId != INSERT_FAIL);
+		assertTrue(mCharacterId != INSERT_FAIL);
 	}
 }
