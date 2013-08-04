@@ -37,6 +37,7 @@ import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterInventoryFra
 import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSkillsFragment;
 import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSpellBookFragment;
 import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterWeaponsFragment;
+import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
@@ -90,7 +91,10 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		}
 		
 		showRateDialogIfRequired();
-
+		
+		
+		PTDatabase yeah = PTDatabase.getSharedInstance();
+		yeah.open();
 	}
 	
 	@Override

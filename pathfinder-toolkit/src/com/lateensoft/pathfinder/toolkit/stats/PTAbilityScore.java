@@ -1,12 +1,22 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
+import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTAbilityScore {
+
+public class PTAbilityScore implements PTStorable {
 	private String mAbility;
 	private int mScore;
 	private static final String TAG = "PTAbilityScore";
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
+	private int mId;
+	private int mCharacterId;
+	
+	public PTAbilityScore(int id, int characterId, String ability, int score) {
+		this(ability, score);
+		mId = id;
+		mCharacterId = characterId;
+	}
 	
 	public PTAbilityScore(String ability, int score) {
 		mAbility = ability;
@@ -65,5 +75,15 @@ public class PTAbilityScore {
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public int getID() {
+		return mId;
+	}
+
+	@Override
+	public int getCharacterID() {
+		return mCharacterId;
 	}
 }

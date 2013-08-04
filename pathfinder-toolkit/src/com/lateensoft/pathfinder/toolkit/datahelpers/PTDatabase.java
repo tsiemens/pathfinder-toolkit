@@ -28,7 +28,12 @@ public class PTDatabase extends SQLiteOpenHelper {
 	
 	protected PTDatabase() {
 		super(PTBaseApplication.getAppContext(), DB_NAME, null, dbVersion);
-		//mDatabase = getWritableDatabase();
+		mDatabase = getWritableDatabase();
+	}
+	
+	public void forceCreate() {
+		PTTableCreator tableCreator = new PTTableCreator();
+		tableCreator.createTables(mDatabase);
 	}
 
 	@Override
