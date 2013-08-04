@@ -6,12 +6,13 @@ import com.lateensoft.pathfinder.toolkit.character.PTFeatList;
 import com.lateensoft.pathfinder.toolkit.character.PTFluffInfo;
 import com.lateensoft.pathfinder.toolkit.character.PTInventory;
 import com.lateensoft.pathfinder.toolkit.character.PTSpellBook;
+import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 import com.lateensoft.pathfinder.toolkit.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTSaveSet;
 import com.lateensoft.pathfinder.toolkit.stats.PTSkillSet;
 
-public class PTCharacter {
+public class PTCharacter implements PTStorable {
 	PTAbilitySet mAbilitySet;
 	PTAbilitySet mTempAbilitySet;
 	PTCombatStatSet mCombatStatSet;
@@ -24,6 +25,12 @@ public class PTCharacter {
 	PTSpellBook mSpellBook;
 	
 	public int mID;
+	private String mTag;
+	
+	public PTCharacter(int id, String name, Context context) {
+		this(name, context);
+		mID = id;
+	}
 	
 	public PTCharacter(String name, Context context) {
 		mAbilitySet = new PTAbilitySet();
@@ -37,6 +44,7 @@ public class PTCharacter {
 		mSpellBook = new PTSpellBook();
 		mGold = 0;
 		setName(name);
+		mTag = name;
 		mID = 0;
 	}
 	
@@ -99,5 +107,19 @@ public class PTCharacter {
 	
 	public void setSpellBook(PTSpellBook spellBook) {
 		mSpellBook = spellBook;
+	}
+
+	@Override
+	public int getID() {
+		return mID;
+	}
+
+	@Override
+	public int getCharacterID() {
+		return mID;
+	}
+	
+	public String getTag() {
+		return mTag;
 	}
 }

@@ -57,6 +57,7 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	protected ContentValues getContentValues(PTSave object) {
 		ContentValues values = new ContentValues();
 		values.put(ID, object.getID());
+		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(NAME, object.getName());
 		values.put(BASE_VALUE, object.getBaseValue());
 		values.put(TOTAL, object.getTotal());

@@ -10,8 +10,6 @@ public class PTTableCreator {
 	}
 	
 	public void createTables(SQLiteDatabase db) {
-		// TODO: create db?
-		db.beginTransaction();
 		db.execSQL(createCharacter());
 		db.execSQL(createSkill());
 		db.execSQL(createSave());
@@ -26,7 +24,6 @@ public class PTTableCreator {
 		db.execSQL(createSpellBook());
 		db.execSQL(createFeat());
 		db.execSQL(createFluffInfo());
-		db.endTransaction();
 	}
 	
 	public String createSkill() {

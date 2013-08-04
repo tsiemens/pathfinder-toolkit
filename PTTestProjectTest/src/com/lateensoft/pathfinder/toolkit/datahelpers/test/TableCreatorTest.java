@@ -8,6 +8,5 @@ public class TableCreatorTest extends AndroidTestCase {
 	public void testCreation() {
 		PTDatabase db = PTDatabase.getSharedInstance();
 		db.open();
-		db.forceCreate();
 	}
 }
