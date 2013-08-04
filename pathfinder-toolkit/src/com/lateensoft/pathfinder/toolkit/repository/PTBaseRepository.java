@@ -27,7 +27,7 @@ public abstract class PTBaseRepository<T> {
 		return mDatabase.insert(table, values);
 	}
 
-	public T query(int id) {
+	public T query(long id) {
 		String selector = getSelector(id);
 		String table = mTableInfo.getTable();
 		String[] columns = mTableInfo.getColumns();
@@ -46,7 +46,7 @@ public abstract class PTBaseRepository<T> {
 		return mDatabase.update(table, values, selector);
 	}
 	
-	protected String getSelector(int id) {
+	protected String getSelector(long id) {
 		String idColumn = mTableInfo.getPrimaryKeyColumn();
 		return idColumn + "=" + id;
 	}

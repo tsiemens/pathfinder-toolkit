@@ -11,8 +11,8 @@ public class PTSkill implements PTStorable {
 	int mMiscMod;
 	int mArmorCheckPenalty;
 	int mKeyAbilityKey;
-	int mId;
-	int mCharacterId;
+	long mId;
+	long mCharacterId;
 	
 	public PTSkill() {
 		mName = "";
@@ -167,11 +167,11 @@ public class PTSkill implements PTStorable {
 	}
 
 	@Override
-	public int getID() {
+	public long getID() {
 		return mId;
 	}
 	
-	public int getCharacterID() {
+	public long getCharacterID() {
 		return mCharacterId;
 	}
 }

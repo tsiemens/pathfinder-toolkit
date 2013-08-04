@@ -55,7 +55,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		super.onCreate(savedInstanceState);
 		mSQLManager = new PTDatabaseManager(getActivity());
 		loadCurrentCharacter();
-		mCharacterSelectedInDialog = mCharacter.mID;
+		mCharacterSelectedInDialog = (int) mCharacter.mID;
 		
 		setupCharacterClickListener();
 	}
@@ -114,7 +114,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public void addNewCharacter() {
 		mCharacter = mSQLManager.addNewCharacter("New Adventurer",
 				getActivity().getApplicationContext());
-		PTSharedPreferences.getSharedInstance().setSelectedCharacter(mCharacter.mID);
+		PTSharedPreferences.getSharedInstance().setSelectedCharacter((int)mCharacter.mID);
 		performUpdateReset();
 		Log.v(TAG, "Added new character");
 	}
@@ -125,7 +125,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public void deleteCurrentCharacter() {
 		int currentCharacterIndex = 0;
-		int currentCharacterID = mCharacter.mID;
+		int currentCharacterID = (int) mCharacter.mID;
 		int characterIDs[] = mSQLManager.getCharacterIDs();
 
 		for (int i = 0; i < characterIDs.length; i++) {
@@ -258,7 +258,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 
 	private void showCharacterDialog() {
-		mCharacterSelectedInDialog = mCharacter.mID; // actual current character
+		mCharacterSelectedInDialog = (int) mCharacter.mID; // actual current character
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		

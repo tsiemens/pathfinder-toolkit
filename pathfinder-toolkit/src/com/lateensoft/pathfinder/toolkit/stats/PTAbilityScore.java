@@ -9,8 +9,8 @@ public class PTAbilityScore implements PTStorable {
 	private static final String TAG = "PTAbilityScore";
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
-	private int mId;
-	private int mCharacterId;
+	private long mId;
+	private long mCharacterId;
 	
 	public PTAbilityScore(int id, int characterId, String ability, int score) {
 		this(ability, score);
@@ -78,12 +78,12 @@ public class PTAbilityScore implements PTStorable {
 	}
 
 	@Override
-	public int getID() {
+	public long getID() {
 		return mId;
 	}
 
 	@Override
-	public int getCharacterID() {
+	public long getCharacterID() {
 		return mCharacterId;
 	}
 }

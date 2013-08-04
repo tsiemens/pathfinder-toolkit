@@ -16,7 +16,8 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	public PTCharacterRepository() {
 		super();
 		PTTableAttribute id = new PTTableAttribute(ID, SQLDataType.INTEGER, true);
-		PTTableAttribute[] columns = {id};
+		PTTableAttribute tag = new PTTableAttribute(TAG, SQLDataType.TEXT);
+		PTTableAttribute[] columns = {id, tag};
 		mTableInfo = new PTTableInfo(TABLE, columns);
 	}
 	

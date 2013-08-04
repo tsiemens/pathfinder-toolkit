@@ -10,13 +10,14 @@ import android.test.AndroidTestCase;
 public class PTBaseRepositoryTest extends AndroidTestCase {
 	protected PTDatabase mDatabase;
 	protected final String CHARACTER_TAG = "Joe";
-	protected final String CHARACTER_ID;
+	protected long mCharacterId;
+	protected final int INSERT_FAIL = -1;
 	
 	protected void setUp() {
 		mDatabase = PTDatabase.getSharedInstance();
-		PTCharacter joe = new PTCharacter("Joe", PTBaseApplication.getAppContext());
+		PTCharacter joe = new PTCharacter(CHARACTER_TAG, PTBaseApplication.getAppContext());
 		PTCharacterRepository repo = new PTCharacterRepository();
-		repo.insert(joe);
-		// TODO need to get id on insert
+		mCharacterId = repo.insert(joe);
+		assert(mCharacterId != INSERT_FAIL);
 	}
 }

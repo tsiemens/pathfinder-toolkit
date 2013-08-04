@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 public abstract class PTStat implements PTStorable {
 	private String mName;
 	private int mBaseValue;
-	private int mId;
+	private long mId;
 
 	public PTStat() {
 		mName = "";
@@ -49,7 +49,7 @@ public abstract class PTStat implements PTStorable {
 		mBaseValue = baseValue;
 	}
 	
-	public int getID() {
+	public long getID() {
 		return mId;
 	}
 }

@@ -24,12 +24,12 @@ public class PTCharacter implements PTStorable {
 	PTFeatList mFeats;
 	PTSpellBook mSpellBook;
 	
-	public int mID;
+	public long mID;
 	private String mTag;
 	
-	public PTCharacter(int id, String name, Context context) {
+	public PTCharacter(long mCharacterId, String name, Context context) {
 		this(name, context);
-		mID = id;
+		mID = mCharacterId;
 	}
 	
 	public PTCharacter(String name, Context context) {
@@ -110,12 +110,12 @@ public class PTCharacter implements PTStorable {
 	}
 
 	@Override
-	public int getID() {
+	public long getID() {
 		return mID;
 	}
 
 	@Override
-	public int getCharacterID() {
+	public long getCharacterID() {
 		return mID;
 	}
 	
