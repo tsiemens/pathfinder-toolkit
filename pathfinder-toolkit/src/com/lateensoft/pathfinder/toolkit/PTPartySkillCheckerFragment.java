@@ -46,7 +46,6 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mParentView = inflater.inflate(R.layout.fragment_skill_checker, container, false);
-		setTitle(R.string.title_activity_skill_checker);
 		
 		mSkillSelectedForRoll = 0;
 		
@@ -98,7 +97,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    		}
    		else{
    			mParty = currentEncounterParty;
-   					
+   			mParty.setName(mParty.getName() + " (in encounter)");
    			refreshPartyView();	
    		}
    	}
@@ -136,6 +135,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		}
 		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
 		mPartyMemberList.setAdapter(adapter);
+		setActionBarTitle(R.string.title_activity_skill_checker, mParty.getName());
 	}
 	
 	public void resetPartyRolls(){

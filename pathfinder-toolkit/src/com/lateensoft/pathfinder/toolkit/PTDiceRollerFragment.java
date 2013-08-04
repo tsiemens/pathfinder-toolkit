@@ -46,7 +46,7 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mParentView = inflater.inflate(R.layout.fragment_dice_roller, container, false);
-		setTitle(R.string.title_activity_ptdice_roller);
+		setActionBarTitle(R.string.title_activity_ptdice_roller, null);
 		setupContent();
 		mRollMode = ROLLMODE_SINGLE;
 		setRollTypeView(R.id.radiotoggleSingleRoll);

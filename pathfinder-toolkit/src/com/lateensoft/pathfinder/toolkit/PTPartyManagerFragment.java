@@ -53,7 +53,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			Bundle savedInstanceState) {
 		mParentView = inflater.inflate(R.layout.fragment_party_manager,
 				container, false);
-		setTitle(R.string.title_activity_party_manager);
+		setActionBarTitle(R.string.title_activity_party_manager, null);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
 

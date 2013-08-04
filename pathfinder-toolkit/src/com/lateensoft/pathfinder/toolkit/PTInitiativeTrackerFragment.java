@@ -51,7 +51,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mParentView = inflater.inflate(R.layout.fragment_initiative_tracker, container, false);
-		setTitle(R.string.title_activity_initiative_tracker);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
 
@@ -209,6 +208,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 				R.layout.party_roll_row, memberNames, memberRollValues, null);
 		mPartyMemberList.setAdapter(adapter);
 		mRollInitiativeButton.setEnabled(!mHasRolled);
+		setActionBarTitle(R.string.title_activity_initiative_tracker, mParty.getName());
 	}
 
 	/**

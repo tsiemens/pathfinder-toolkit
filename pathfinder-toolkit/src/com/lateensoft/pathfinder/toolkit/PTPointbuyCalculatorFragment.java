@@ -62,7 +62,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mParentView = inflater.inflate(R.layout.fragment_ability_calculator, container, false);
-		setTitle(R.string.title_activity_ability_calc);
+		setActionBarTitle(R.string.title_activity_ability_calc, null);
 
 		isHuman = true;
 		

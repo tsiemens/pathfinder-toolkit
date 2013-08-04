@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit;
 
 import android.view.View;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -20,11 +21,15 @@ public class PTBasePageFragment extends SherlockFragment{
 		return false;
 	}
 	
-	protected void setTitle(String title) {
-		((SherlockFragmentActivity)getActivity()).getSupportActionBar().setTitle(title);
+	protected void setActionBarTitle(String title, String subtitle) {
+		ActionBar ab = ((SherlockFragmentActivity)getActivity()).getSupportActionBar();
+		ab.setTitle(title);
+		ab.setSubtitle(subtitle);
 	}
 	
-	protected void setTitle(int resId) {
-		((SherlockFragmentActivity)getActivity()).getSupportActionBar().setTitle(resId);
+	protected void setActionBarTitle(int titleResId, String subtitle) {
+		ActionBar ab = ((SherlockFragmentActivity)getActivity()).getSupportActionBar();
+		ab.setTitle(titleResId);
+		ab.setSubtitle(subtitle);
 	}
 }

@@ -71,7 +71,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 	
 	public void updateTitle() {
-		setTitle(getFragmentTitle() + " (" + mCharacter.getName() + ")");
+		setActionBarTitle(mCharacter.getName(), getFragmentTitle());
 	}
 
 	@Override
