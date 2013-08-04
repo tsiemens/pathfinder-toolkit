@@ -14,6 +14,8 @@
     <string name="empty_string">""</string>
     <string name="auto_fill">Autofill</string>
     
+    <string name="autofill_toast_text">Character stats autofilled</string>
+    
     <string name="main_menu_icons_description">Icon for main menu item</string>
 
     <!-- Global menu item strings -->

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 //This is a base class for all fragments in the character sheet activity
 public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
@@ -239,6 +240,10 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 							mCharacter.getAbilitySet().getAbilityScore(key)
 									.getModifier());
 		}
+		
+		Toast.makeText(getActivity(), 
+				getString(R.string.autofill_toast_text),
+				Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -250,6 +255,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 				MENU_ITEM_CHARACTER_LIST, Menu.NONE,
 				R.string.menu_item_character_list);
 		characterListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		characterListItem.setIcon(R.drawable.ic_menu_character_list);
 
 		MenuItem newCharacterItem = menu.add(Menu.NONE,
 				MENU_ITEM_NEW_CHARACTER, Menu.NONE,
@@ -264,6 +270,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		MenuItem autoFillItem = menu.add(Menu.NONE, MENU_ITEM_AUTOFILL,
 				Menu.NONE, R.string.auto_fill);
 		autoFillItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		autoFillItem.setIcon(R.drawable.ic_menu_autofill);
 
 		super.onCreateOptionsMenu(menu);
 		return true;
