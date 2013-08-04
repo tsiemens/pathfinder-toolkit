@@ -10,7 +10,7 @@ import com.lateensoft.pathfinder.toolkit.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.stats.PTStat;
 
 public class PTSaveRepository extends PTBaseRepository<PTSave> {
-	static final String TABLE = "save";
+	static final String TABLE = "Save";
 	static final String ID = "save_id";
 	static final String CHARACTER_ID = "character_id";
 	static final String NAME = "Name";

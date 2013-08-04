@@ -92,9 +92,6 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		
 		showRateDialogIfRequired();
 		
-		
-		PTDatabase yeah = PTDatabase.getSharedInstance();
-		yeah.open();
 	}
 	
 	@Override

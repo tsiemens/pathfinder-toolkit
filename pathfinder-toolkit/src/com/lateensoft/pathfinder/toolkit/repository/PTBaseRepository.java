@@ -2,10 +2,8 @@ package com.lateensoft.pathfinder.toolkit.repository;
 
 import java.util.Hashtable;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Build;
 
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
 import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
