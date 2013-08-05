@@ -94,6 +94,10 @@ public abstract class PTBaseRepository<T> {
 		return data;
 	}
 	
+	protected Boolean isIDSet(PTStorable object) {
+		return object.getID() == 0;
+	}
+	
 	/**
 	 * Needs to package up the object so it can be stored in the database
 	 */

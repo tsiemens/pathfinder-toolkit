@@ -32,7 +32,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	@Override
 	protected ContentValues getContentValues(PTCharacter object) {
 		ContentValues values = new ContentValues();
-		if (object.getID() != 0) { 
+		if (!isIDSet(object)) { 
 			values.put(ID, object.getID());
 		}
 		values.put(TAG, object.getTag());

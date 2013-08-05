@@ -67,15 +67,15 @@ public class PTTableCreator {
 				"TotalHP INTEGER, " +
 				"Wounds INTEGER, " +
 				"NonLethalDamange INTEGER, " +
-				"DmaageReduction INTEGER, " +
+				"DmageReduction INTEGER, " +
 				"BaseSpeedFt INTEGER, " +
 				"InitDexMod INTEGER, " +
 				"InitMiscMod INTEGER, " +
-				"ACArmour INTEGER, " +
+				"ACArmor INTEGER, " +
 				"ACShield INTEGER, " +
 				"ACDexMod INTEGER," +
 				"SizeMod INTEGER, " +
-				"ACNaturalArmour, INTEGER, " +
+				"ACNaturalArmor, INTEGER, " +
 				"DeflectionMod INTEGER, " +
 				"ACMiscMod INTEGER, " +
 				"BABPrimary INTEGER, " +

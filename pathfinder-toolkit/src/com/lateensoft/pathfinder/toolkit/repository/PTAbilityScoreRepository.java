@@ -38,7 +38,9 @@ public class PTAbilityScoreRepository extends PTBaseRepository<PTAbilityScore> {
 	@Override
 	protected ContentValues getContentValues(PTAbilityScore object) {
 		ContentValues values = new ContentValues();
-		values.put(ID, object.getID());
+		if (!isIDSet(object)) {
+			values.put(ID, object.getID());
+		}
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(ABILITY, object.getAbility());
 		values.put(SCORE, object.getScore());

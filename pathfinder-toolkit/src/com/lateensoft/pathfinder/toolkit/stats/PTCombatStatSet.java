@@ -1,6 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
-public class PTCombatStatSet {
+import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
+
+public class PTCombatStatSet implements PTStorable {
 	private int mTotalHP;
 	private int mWounds;
 	private int mNonLethalDamage;
@@ -27,6 +29,15 @@ public class PTCombatStatSet {
 	private int mCMDMiscMod;
 	
 	private int mSpellResist;
+	
+	private long mId;
+	private long mCharacterId;
+	
+	public PTCombatStatSet(long id, long characterId) {
+		this();
+		mId = id;
+		mCharacterId = characterId;
+	}
 	
 	public PTCombatStatSet(){
 		mTotalHP = 0;
@@ -274,5 +285,15 @@ public class PTCombatStatSet {
 	 */
 	public int getCombatManeuverDefense(){
 		return getCombatManeuverBonus() + mCMDDexMod + mCMDMiscMod + 10;
+	}
+
+	@Override
+	public Long getID() {
+		return mId;
+	}
+
+	@Override
+	public Long getCharacterID() {
+		return mCharacterId;
 	}
 }

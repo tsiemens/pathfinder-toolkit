@@ -3,11 +3,9 @@ package com.lateensoft.pathfinder.toolkit.repository;
 import java.util.Hashtable;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.stats.PTSave;
-import com.lateensoft.pathfinder.toolkit.stats.PTStat;
 
 public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	static final String TABLE = "Save";
@@ -56,7 +54,7 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	@Override
 	protected ContentValues getContentValues(PTSave object) {
 		ContentValues values = new ContentValues();
-		if(object.getID() != 0) { 
+		if(!isIDSet(object)) { 
 			values.put(ID, object.getID());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());

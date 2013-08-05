@@ -6,7 +6,6 @@ import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType
 import com.lateensoft.pathfinder.toolkit.stats.PTSkill;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 
 public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	static final String TABLE = "Skill";
@@ -55,7 +54,9 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	@Override
 	protected ContentValues getContentValues(PTSkill object) {
 		ContentValues values = new ContentValues();
-		values.put(ID, object.getID());
+		if (!isIDSet(object)) {
+			values.put(ID, object.getID());
+		}
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(NAME, object.getName());
 		values.put(CLASS_SKILL, object.isClassSkill());
