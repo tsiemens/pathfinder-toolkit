@@ -128,7 +128,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
-			holder.divider = (View)row.findViewById(R.id.divider_view);
 			
 			row.setTag(holder);
 		}
@@ -143,18 +142,12 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		holder.groupState.setImageResource(R.drawable.expander_open_holo_dark);
 		holder.groupState.setVisibility(View.INVISIBLE);
 		
-		if (isLastChild) {
-			holder.divider.setVisibility(View.VISIBLE);
-		} else {
-			holder.divider.setVisibility(View.INVISIBLE);
-		}
-		
 		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == mSelectedItem) {
 			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoChildItemDarkGrey));
 		} else {
 			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoChildItemGrey));
 		}
 		
 		return row;
@@ -176,7 +169,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
-			holder.divider = (View)row.findViewById(R.id.divider_view);
 			
 			row.setTag(holder);
 		}
@@ -194,14 +186,8 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		
 		if (getGroupId(groupPosition) != CHARACTER_SHEET_ID) {
 			holder.groupState.setVisibility(View.INVISIBLE);
-			holder.divider.setVisibility(View.VISIBLE);
 		} else {
 			holder.groupState.setVisibility(View.VISIBLE);
-			if (isExpanded) {
-				holder.divider.setVisibility(View.INVISIBLE);
-			} else {
-				holder.divider.setVisibility(View.VISIBLE);
-			}
 		}
 		
 		// Show the selection indicator on the group, or on the character group is collapsed while a child is selected
@@ -266,7 +252,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		TextView name;
 		ImageView icon;
 		ImageView groupState;
-		View divider;
 	}
 
 }
