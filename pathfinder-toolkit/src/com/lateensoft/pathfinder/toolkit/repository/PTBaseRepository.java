@@ -8,7 +8,7 @@ import android.database.Cursor;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
 import com.lateensoft.pathfinder.toolkit.repository.PTTableAttribute.SQLDataType;
 
-public abstract class PTBaseRepository<T> {
+public abstract class PTBaseRepository<T extends PTStorable> {
 	private PTDatabase mDatabase;
 	protected PTTableInfo mTableInfo;
 	
@@ -58,7 +58,7 @@ public abstract class PTBaseRepository<T> {
 	}
 	
 	public int delete(T object) {
-		String selector = getSelector(((PTStorable)object).getID());
+		String selector = getSelector(object.getID());
 		String table = mTableInfo.getTable();
 		return mDatabase.delete(table, selector);
 	}
