@@ -53,18 +53,18 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		mParentView = inflater.inflate(
-				R.layout.character_skills_fragment, container, false);
+		setRootView(inflater.inflate(
+				R.layout.character_skills_fragment, container, false));
 
-		mFilterButton = (Button) mParentView.findViewById(R.id.buttonFilter);
+		mFilterButton = (Button) getRootView().findViewById(R.id.buttonFilter);
 		mFilterButton.setOnClickListener(this);
 
-		mSkillsListView = (ListView) mParentView
+		mSkillsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewCharacterSkills);
 		mSkillsListView.setOnItemClickListener(this);
 		updateFragmentUI();
 
-		return mParentView;
+		return getRootView();
 	}
 
 	/**

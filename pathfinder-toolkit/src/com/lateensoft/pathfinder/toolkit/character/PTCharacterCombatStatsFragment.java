@@ -94,11 +94,11 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		mParentView = inflater.inflate(
-				R.layout.character_combat_stats_fragment, container, false);
-		setupViews(mParentView);
+		setRootView(inflater.inflate(
+				R.layout.character_combat_stats_fragment, container, false));
+		setupViews(getRootView());
 
-		return mParentView;
+		return getRootView();
 	}
 
 	public void updateAllViews() {

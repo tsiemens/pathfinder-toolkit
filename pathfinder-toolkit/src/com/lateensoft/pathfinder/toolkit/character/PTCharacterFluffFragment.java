@@ -34,14 +34,14 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		mParentView = inflater.inflate(R.layout.character_fluff_fragment, 
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_fluff_fragment, 
+				container, false));
 		
-		lv = (ListView) mParentView.findViewById(R.id.fluff_list);
+		lv = (ListView) getRootView().findViewById(R.id.fluff_list);
 		refreshFluffListView();
 		lv.setOnItemClickListener(this);
 		
-		return mParentView;		
+		return getRootView();		
 	}
 	
 	//An items has been clicked in the list

@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -15,8 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
@@ -61,7 +61,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mParentView = inflater.inflate(R.layout.fragment_ability_calculator, container, false);
+		setRootView(inflater.inflate(R.layout.fragment_ability_calculator, container, false));
 		setTitle(R.string.title_activity_ability_calc);
 
 		isHuman = true;
@@ -69,7 +69,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		mAbilitySet = new PTAbilitySetCalc();
 		mRacialModSet = new PTAbilityModSet();
 		
-		mRacesSpinner = (Spinner) mParentView.findViewById(R.id.races_spinner);
+		mRacesSpinner = (Spinner) getRootView().findViewById(R.id.races_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 		        R.array.races_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
@@ -79,19 +79,19 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		mRacesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());
 		
 		mHumanRaceListener = new HumanRaceModSelectedListener();
-		mParentView.findViewById(R.id.raceStr).setOnClickListener(mHumanRaceListener);
-		mParentView.findViewById(R.id.raceDex).setOnClickListener(mHumanRaceListener);
-		mParentView.findViewById(R.id.raceCon).setOnClickListener(mHumanRaceListener);
-		mParentView.findViewById(R.id.raceInt).setOnClickListener(mHumanRaceListener);
-		mParentView.findViewById(R.id.raceWis).setOnClickListener(mHumanRaceListener);
-		mParentView.findViewById(R.id.raceCha).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceStr).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceDex).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceCon).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceInt).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceWis).setOnClickListener(mHumanRaceListener);
+		getRootView().findViewById(R.id.raceCha).setOnClickListener(mHumanRaceListener);
 		
 		for(int i = 0; i < NUM_ABILITIES; i++) {
 			updateInterfaceAbility(i);
 		}
 		updateInterfaceRaceMods();
 		
-		return mParentView;
+		return getRootView();
 	}
 	
 	@Override
@@ -329,7 +329,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		int[] racialModIds = {R.id.raceStr, R.id.raceDex, R.id.raceCon, R.id.raceInt, R.id.raceWis, R.id.raceCha};
 		
 		for(int i = 0; i < NUM_ABILITIES; i++) {
-			t = (TextView) mParentView.findViewById(racialModIds[i]);
+			t = (TextView) getRootView().findViewById(racialModIds[i]);
 			t.setText(Integer.toString(abilityMods[i]));
     	}
 	}
@@ -341,16 +341,16 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		int[] baseScoreIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt, R.id.baseWis, R.id.baseCha};
 		mAbilitySet.applyMods(mRacialModSet);
     	
-		t = (TextView) mParentView.findViewById(modIds[key]);
+		t = (TextView) getRootView().findViewById(modIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getModifier()));
 		
-		t = (TextView) mParentView.findViewById(baseScoreIds[key]);
+		t = (TextView) getRootView().findViewById(baseScoreIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScore(key).getScore()));
 		
-		t = (TextView) mParentView.findViewById(finalScoreIds[key]);
+		t = (TextView) getRootView().findViewById(finalScoreIds[key]);
 		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getScore()));
 		
-		t = (TextView) mParentView.findViewById(R.id.textCost);
+		t = (TextView) getRootView().findViewById(R.id.textCost);
 		t.setText(Integer.toString(mAbilitySet.getPointBuyCost()));
     }
     

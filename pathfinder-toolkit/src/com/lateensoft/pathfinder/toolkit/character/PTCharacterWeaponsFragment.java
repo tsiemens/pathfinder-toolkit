@@ -52,20 +52,20 @@ OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickLis
 		super.onCreate(savedInstanceState);
 		Log.v(TAG, "Starting onCreateView");
 		
-		mParentView = inflater.inflate(R.layout.character_weapon_fragment,
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_weapon_fragment,
+				container, false));
 		
-		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddWeapon);
+		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddWeapon);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		mListView = (ListView) mParentView.findViewById(R.id.listViewWeapons);
+		mListView = (ListView) getRootView().findViewById(R.id.listViewWeapons);
 		refreshWeaponsListView();
 
 		mListView.setOnItemClickListener(this);
 		
 		Log.v(TAG, "Finishing onCreateView");
-		return mParentView;
+		return getRootView();
 	}
 
 	private void refreshWeaponsListView() {
