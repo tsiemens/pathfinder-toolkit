@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="holoBlue">#2ea7d4</color>
     <color name="holoDialogGrey">#282828</color>
-    <color name="holoDialogDarkGrey">#202020</color>
-    <color name="holoChildItemGrey">#3a3a3a</color>
-    <color name="holoChildItemDarkGrey">#323232</color>
+    <color name="holo_dialog_dark_grey">#202020</color>
+    <color name="holo_dialog_lighter_grey">#323232</color>
 </resources>

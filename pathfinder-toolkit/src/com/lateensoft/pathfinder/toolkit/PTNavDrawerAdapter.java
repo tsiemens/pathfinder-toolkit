@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +123,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
-			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
@@ -143,11 +141,9 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		holder.groupState.setVisibility(View.INVISIBLE);
 		
 		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == mSelectedItem) {
-			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoChildItemDarkGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoChildItemGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holo_dialog_lighter_grey));
 		}
 		
 		return row;
@@ -165,7 +161,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
-			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
@@ -194,10 +189,8 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem || 
 				(getCombinedGroupId(getGroupId(groupPosition)) == CHARACTER_SHEET_ID &&
 				mSelectedItem >= FLUFF_ID && !isExpanded)) {
-			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
 			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
 		}
 		
@@ -248,7 +241,6 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	}
 	
 	static class ItemHolder {
-		View selectionBar;
 		TextView name;
 		ImageView icon;
 		ImageView groupState;
