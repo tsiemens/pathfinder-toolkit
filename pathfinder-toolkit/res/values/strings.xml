@@ -251,6 +251,8 @@
     <string name="skills_filter_label">Filter:</string>
     <string name="skills_trained_filter">Trained</string>
     <string name="skills_all_filter">All</string>
+    
+    <string name="edit_skill_title">Edit Skill</string>
 
     <!-- Inventory -->
     <string name="inventory_add_item_button">+</string>

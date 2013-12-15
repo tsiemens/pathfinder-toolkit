@@ -35,19 +35,19 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
     private static final int ASF_INCREMENT = 5;
     private static final int SPEED_INCREMENT = 5;
 	
-	private Spinner mDialogACSpinner;
-    private Spinner mDialogACPSpinner;
-    private Spinner mDialogSizeSpinner;
-    private Spinner mDialogSpeedSpinner;
-    private Spinner mDialogMaxDexSpinner;
-    private Spinner mDialogASFSpinner;
-    private EditText mDialogWeightET;
-    private EditText mDialogNameET;
-    private EditText mDialogSpecialPropertiesET;
-	private OnTouchListener mSpinnerOnTouchListener;
+	private Spinner m_ACSpinner;
+    private Spinner m_ACPSpinner;
+    private Spinner m_sizeSpinner;
+    private Spinner m_speedSpinner;
+    private Spinner m_maxDexSpinner;
+    private Spinner m_ASFSpinner;
+    private EditText m_weightET;
+    private EditText m_nameET;
+    private EditText m_specialPropertiesET;
+	private OnTouchListener m_spinnerOnTouchListener;
 	
-	private PTArmor mArmor;
-	private boolean mArmorIsNew = false;
+	private PTArmor m_armor;
+	private boolean m_armorIsNew = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,9 +56,9 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		mArmor = getIntent().getExtras().getParcelable(INTENT_EXTRAS_KEY_ARMOR);
-		if (mArmor == null) {
-			mArmorIsNew = true;
+		m_armor = getIntent().getExtras().getParcelable(INTENT_EXTRAS_KEY_ARMOR);
+		if (m_armor == null) {
+			m_armorIsNew = true;
 		}
 		
 		setupContentView();
@@ -68,7 +68,7 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
 	    inflater.inflate(R.menu.base_editor_menu, menu);
-	    if (mArmorIsNew) {
+	    if (m_armorIsNew) {
 	    	menu.findItem(R.id.mi_delete).setVisible(false);
 	    }
 		return true;
@@ -77,9 +77,9 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.mi_done) {
 			if (updateArmorValues()) {
-			 Log.v(TAG, (mArmorIsNew?"Add":"Edit")+" armor done: " + mDialogNameET.getText());
+			 Log.v(TAG, (m_armorIsNew?"Add":"Edit")+" armor done: " + m_nameET.getText());
              Intent resultData = new Intent();
-             resultData.putExtra(INTENT_EXTRAS_KEY_ARMOR, mArmor);
+             resultData.putExtra(INTENT_EXTRAS_KEY_ARMOR, m_armor);
 			 setResult(RESULT_OK, resultData);
              finish();
 			} else {
@@ -98,80 +98,80 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 	}
 	
 	private void setupContentView() {
-		if(mArmor == null) {
-			mArmor = new PTArmor();
+		if(m_armor == null) {
+			m_armor = new PTArmor();
 		}
 
 		setContentView(R.layout.character_armor_editor);
 
-		mDialogACSpinner = (Spinner) findViewById(R.id.spArmorClass);
-		mDialogACPSpinner = (Spinner) findViewById(R.id.spArmorCheckPenalty);
-		mDialogSizeSpinner = (Spinner) findViewById(R.id.spArmorSize);
-		mDialogSpeedSpinner = (Spinner) findViewById(R.id.spArmorSpeed);
-		mDialogASFSpinner = (Spinner) findViewById(R.id.spArmorSpellFailure);
-		mDialogWeightET = (EditText) findViewById(R.id.etArmorWeight);
-		mDialogSpecialPropertiesET = (EditText) findViewById(
+		m_ACSpinner = (Spinner) findViewById(R.id.spArmorClass);
+		m_ACPSpinner = (Spinner) findViewById(R.id.spArmorCheckPenalty);
+		m_sizeSpinner = (Spinner) findViewById(R.id.spArmorSize);
+		m_speedSpinner = (Spinner) findViewById(R.id.spArmorSpeed);
+		m_ASFSpinner = (Spinner) findViewById(R.id.spArmorSpellFailure);
+		m_weightET = (EditText) findViewById(R.id.etArmorWeight);
+		m_specialPropertiesET = (EditText) findViewById(
 				R.id.etArmorSpecialProperties);
-		mDialogNameET = (EditText) findViewById(R.id.armorName);
-		mDialogMaxDexSpinner = (Spinner) findViewById(R.id.spArmorMaxDex);
+		m_nameET = (EditText) findViewById(R.id.armorName);
+		m_maxDexSpinner = (Spinner) findViewById(R.id.spArmorMaxDex);
 
-		setupSpinner(mDialogACSpinner, R.array.ac_spinner_options);
-		setupSpinner(mDialogACPSpinner, R.array.acp_spinner_options);
-		setupSpinner(mDialogSizeSpinner, R.array.size_spinner_options);
-		setupSpinner(mDialogSpeedSpinner, R.array.speed_spinner_options);
-		setupSpinner(mDialogMaxDexSpinner, R.array.acp_spinner_options);
-		setupSpinner(mDialogASFSpinner, R.array.armor_spell_fail_options);
+		setupSpinner(m_ACSpinner, R.array.ac_spinner_options);
+		setupSpinner(m_ACPSpinner, R.array.acp_spinner_options);
+		setupSpinner(m_sizeSpinner, R.array.size_spinner_options);
+		setupSpinner(m_speedSpinner, R.array.speed_spinner_options);
+		setupSpinner(m_maxDexSpinner, R.array.acp_spinner_options);
+		setupSpinner(m_ASFSpinner, R.array.armor_spell_fail_options);
 
-		if(mArmorIsNew) {
+		if(m_armorIsNew) {
 			setTitle(R.string.new_armor_title);
-			mDialogACSpinner.setSelection(AC_SPINNER_OFFSET);
+			m_ACSpinner.setSelection(AC_SPINNER_OFFSET);
 		} else {
 			setTitle(R.string.edit_armor_title);
-			mDialogNameET.setText(mArmor.getName());
-			mDialogACSpinner.setSelection(mArmor.getACBonus() + AC_SPINNER_OFFSET);
-			mDialogACPSpinner.setSelection(mArmor.getCheckPen());
-			mDialogSizeSpinner.setSelection(mArmor.getSizeInt());
-			mDialogMaxDexSpinner.setSelection(mArmor.getMaxDex());
-			mDialogSpeedSpinner.setSelection(mArmor.getSpeed()/5);
-			mDialogASFSpinner.setSelection(mArmor.getSpellFail() / ASF_INCREMENT);
-			mDialogWeightET.setText(Double.toString(mArmor.getWeight()));
-			mDialogSpecialPropertiesET.setText(mArmor.getSpecialProperties());
+			m_nameET.setText(m_armor.getName());
+			m_ACSpinner.setSelection(m_armor.getACBonus() + AC_SPINNER_OFFSET);
+			m_ACPSpinner.setSelection(m_armor.getCheckPen());
+			m_sizeSpinner.setSelection(m_armor.getSizeInt());
+			m_maxDexSpinner.setSelection(m_armor.getMaxDex());
+			m_speedSpinner.setSelection(m_armor.getSpeed()/5);
+			m_ASFSpinner.setSelection(m_armor.getSpellFail() / ASF_INCREMENT);
+			m_weightET.setText(Double.toString(m_armor.getWeight()));
+			m_specialPropertiesET.setText(m_armor.getSpecialProperties());
 		}
 	}
 	
 	private boolean updateArmorValues() {
-		String name = new String(mDialogNameET.getText().toString());
+		String name = new String(m_nameET.getText().toString());
         
         if(name == null || name.contentEquals("")) {
                 return false;
         }
         
-        String specialProperties = new String(mDialogSpecialPropertiesET.getText().toString());
-        int speed = mDialogSpeedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
+        String specialProperties = new String(m_specialPropertiesET.getText().toString());
+        int speed = m_speedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
         
-        int spellFail = mDialogASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
+        int spellFail = m_ASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
         
         int weight;
         try {
-                weight = Integer.parseInt(mDialogWeightET.getText().toString());
+                weight = Integer.parseInt(m_weightET.getText().toString());
         } catch (NumberFormatException e) {
                 weight = 1;
         }
         
-        int size = mDialogSizeSpinner.getSelectedItemPosition();
-        int ac = mDialogACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
-        int acp = mDialogACPSpinner.getSelectedItemPosition();
-        int maxDex = mDialogMaxDexSpinner.getSelectedItemPosition();
+        int size = m_sizeSpinner.getSelectedItemPosition();
+        int ac = m_ACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
+        int acp = m_ACPSpinner.getSelectedItemPosition();
+        int maxDex = m_maxDexSpinner.getSelectedItemPosition();
         
-        mArmor.setName(name);
-        mArmor.setSpeed(speed);
-        mArmor.setSpecialProperties(specialProperties);
-        mArmor.setSpellFail(spellFail);
-        mArmor.setWeight(weight);
-        mArmor.setSize(size);
-        mArmor.setACBonus(ac);
-        mArmor.setCheckPen(acp);
-        mArmor.setMaxDex(maxDex);
+        m_armor.setName(name);
+        m_armor.setSpeed(speed);
+        m_armor.setSpecialProperties(specialProperties);
+        m_armor.setSpellFail(spellFail);
+        m_armor.setWeight(weight);
+        m_armor.setSize(size);
+        m_armor.setACBonus(ac);
+        m_armor.setCheckPen(acp);
+        m_armor.setMaxDex(maxDex);
         return true;
 	}
 
@@ -179,8 +179,8 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 				optionResourceId, android.R.layout.simple_spinner_item);
 
-		if(mSpinnerOnTouchListener == null) {
-			mSpinnerOnTouchListener = new OnTouchListener() {
+		if(m_spinnerOnTouchListener == null) {
+			m_spinnerOnTouchListener = new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					closeKeyboard();
@@ -191,7 +191,7 @@ public class PTCharacterArmorEditActivity extends SherlockActivity {
 
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		spinner.setAdapter(adapter);
-		spinner.setOnTouchListener(mSpinnerOnTouchListener);
+		spinner.setOnTouchListener(m_spinnerOnTouchListener);
 	}
 	
 	private void showDeleteConfirmation() {

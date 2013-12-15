@@ -87,8 +87,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			loadCurrentCharacter();
 			updateFragmentUI();
 			updateTitle();
-			mIsWaitingForResult = false;
 		}
+		mIsWaitingForResult = false;
 		Log.d(TAG, "resume");
 	}
 	
