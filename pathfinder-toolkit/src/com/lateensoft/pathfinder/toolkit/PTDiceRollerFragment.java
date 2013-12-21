@@ -48,6 +48,7 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 
 		setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
 		setTitle(R.string.title_activity_ptdice_roller);
+		setSubtitle(null);
 		
 		setupContent();
 		mRollMode = ROLLMODE_SINGLE;

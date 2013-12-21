@@ -64,6 +64,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 		setRootView(inflater.inflate(R.layout.fragment_ability_calculator, container, false));
 		setTitle(R.string.title_activity_ability_calc);
+		setSubtitle(null);
 
 		isHuman = true;
 		

@@ -55,6 +55,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		setRootView(inflater.inflate(R.layout.fragment_party_manager,
 				container, false));
 		setTitle(R.string.title_activity_party_manager);
+		setSubtitle(null);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
 

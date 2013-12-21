@@ -48,6 +48,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 
 		setRootView(inflater.inflate(R.layout.fragment_skill_checker, container, false));
 		setTitle(R.string.title_activity_skill_checker);
+		setSubtitle(null);
 		
 		mSkillSelectedForRoll = 0;
 		
