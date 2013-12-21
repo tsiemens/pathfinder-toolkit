@@ -14,13 +14,6 @@ Pathfinder Toolkit is an application for use with the Pathfinder Roleplaying Gam
 
 * [Open Game License version 1.0a](http://paizo.com/pathfinderRPG/prd/openGameLicense.html)
 
-## Acknowledgements
-
-This project uses a few open source libraries
-
-* [ActionBarSherlock](http://actionbarsherlock.com/)
-* [HoloEverywhere](https://github.com/Prototik/HoloEverywhere)
-
 ## Contributors
 
 Pathfinder Toolkit is primarily maintained by Gord Larson and Trevor Siemens
