@@ -46,18 +46,18 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 
 		mContainer = container;
 
-		mParentView = inflater.inflate(R.layout.character_feats_fragment,
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_feats_fragment,
+				container, false));
 
-		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddFeat);
+		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
 		mAddButton.setOnClickListener(this);
 
-		mFeatsListView = (ListView) mParentView
+		mFeatsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewFeats);
 		refreshFeatsListView();
 		mFeatsListView.setOnItemClickListener(this);
 
-		return mParentView;
+		return getRootView();
 	}
 
 	private void refreshFeatsListView() {

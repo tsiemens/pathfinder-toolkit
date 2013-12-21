@@ -1,28 +1,23 @@
 package com.lateensoft.pathfinder.toolkit.settings;
 
-import android.content.Intent;
+import android.app.ActionBar;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.lateensoft.pathfinder.toolkit.R;
+public class PTSettingsActivity extends PreferenceActivity {
 
-public class PTSettingsActivity extends SherlockPreferenceActivity{
-
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		addPreferencesFromResource(R.xml.prefs_general);
+		// Because we only have general settings now, we have no headers,
+		// and just pass off to the fragment handling prefs.
+        getFragmentManager().beginTransaction().replace(android.R.id.content,
+                new PTGeneralPrefsFragment()).commit();
 	}
 	
 	@Override

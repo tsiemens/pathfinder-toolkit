@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
@@ -15,6 +13,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -51,20 +51,21 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mParentView = inflater.inflate(R.layout.fragment_party_manager,
-				container, false);
-		setActionBarTitle(R.string.title_activity_party_manager, null);
+
+		setRootView(inflater.inflate(R.layout.fragment_party_manager,
+				container, false));
+		setTitle(R.string.title_activity_party_manager);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
 
-		mPartyNameEditText = (EditText) mParentView
+		mPartyNameEditText = (EditText) getRootView()
 				.findViewById(R.id.editTextPartyName);
 
-		mPartyMemberList = (ListView) mParentView
+		mPartyMemberList = (ListView) getRootView()
 				.findViewById(R.id.listViewPartyMembers);
 		mPartyMemberList.setOnItemClickListener(this);
 
-		return mParentView;
+		return getRootView();
 	}
 
 	/**

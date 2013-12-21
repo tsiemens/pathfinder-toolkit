@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
@@ -16,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -50,19 +50,21 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mParentView = inflater.inflate(R.layout.fragment_initiative_tracker, container, false);
+
+		setRootView(inflater.inflate(R.layout.fragment_initiative_tracker, container, false));
+		setTitle(R.string.title_activity_initiative_tracker);
 
 		mSQLManager = new PTDatabaseManager(getActivity());
 
-		mRollInitiativeButton = (Button) mParentView.findViewById(R.id.buttonRollInitiative);
+		mRollInitiativeButton = (Button) getRootView().findViewById(R.id.buttonRollInitiative);
 		mRollInitiativeButton.setOnClickListener(this);
 
-		mPartyMemberList = (ListView) mParentView.findViewById(R.id.listViewEncounterMembers);
+		mPartyMemberList = (ListView) getRootView().findViewById(R.id.listViewEncounterMembers);
 		mPartyMemberList.setOnItemClickListener(this);
 
 		mHasRolled = false;
 		
-		return mParentView;
+		return getRootView();
 	}
 
 	@Override
@@ -208,7 +210,8 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 				R.layout.party_roll_row, memberNames, memberRollValues, null);
 		mPartyMemberList.setAdapter(adapter);
 		mRollInitiativeButton.setEnabled(!mHasRolled);
-		setActionBarTitle(R.string.title_activity_initiative_tracker, mParty.getName());
+		setTitle(R.string.title_activity_initiative_tracker);
+		setSubtitle(mParty.getName());
 	}
 
 	/**

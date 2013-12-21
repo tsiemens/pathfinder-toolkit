@@ -30,19 +30,20 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mParentView = inflater.inflate(R.layout.character_armor_fragment,
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_armor_fragment,
+				container, false));
 		
-		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddArmor);
+		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddArmor);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		mListView = (ListView) mParentView.findViewById(R.id.lvArmor);
+		mListView = (ListView) getRootView().findViewById(R.id.lvArmor);
 		refreshArmorListView();
 
 		mListView.setOnItemClickListener(this);
 		
-		return mParentView;
+		Log.v(TAG, "Finishing onCreateView");
+		return getRootView();
 	}
 	
 	private void refreshArmorListView() {

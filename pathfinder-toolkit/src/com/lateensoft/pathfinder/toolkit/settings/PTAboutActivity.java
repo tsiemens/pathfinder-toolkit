@@ -1,16 +1,16 @@
 package com.lateensoft.pathfinder.toolkit.settings;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
-public class PTAboutActivity extends SherlockActivity{
+public class PTAboutActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class PTAboutActivity extends SherlockActivity{
 		
 		setContentView(R.layout.activity_about_screen);
 		
-		ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		TextView versionText = (TextView)findViewById(R.id.tv_version);

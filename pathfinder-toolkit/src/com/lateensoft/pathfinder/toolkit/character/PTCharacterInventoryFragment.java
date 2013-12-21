@@ -50,25 +50,25 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		
-		mParentView = inflater.inflate(R.layout.character_inventory_fragment, 
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_inventory_fragment, 
+				container, false));
 		
-		mDummyView = (View) mParentView.findViewById(R.id.dummyView);
+		mDummyView = (View) getRootView().findViewById(R.id.dummyView);
 		
-		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddItem);
+		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddItem);
 		mAddButton.setOnClickListener(this);
 		
-		mGoldEditText = (EditText) mParentView.findViewById(R.id.editTextGold);
+		mGoldEditText = (EditText) getRootView().findViewById(R.id.editTextGold);
 		mGoldEditText.setOnFocusChangeListener(this);
 		
-		mTotalWeightText = (TextView)  mParentView.findViewById(R.id.tvWeightTotal);
+		mTotalWeightText = (TextView)  getRootView().findViewById(R.id.tvWeightTotal);
 		
-		mItemsListView = (ListView) mParentView.findViewById(R.id.listViewInventory);
+		mItemsListView = (ListView) getRootView().findViewById(R.id.listViewInventory);
 		mItemsListView.setOnItemClickListener(this);
 		
 		updateFragmentUI();
 		
-		return mParentView;
+		return getRootView();
 	}
 	
 	@Override

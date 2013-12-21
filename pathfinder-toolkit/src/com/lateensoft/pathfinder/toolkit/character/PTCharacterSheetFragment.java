@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.PTBasePageFragment;
 import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTNavDrawerAdapter;
@@ -16,6 +14,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -71,7 +71,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 	
 	public void updateTitle() {
-		setActionBarTitle(mCharacter.getName(), getFragmentTitle());
+		setTitle(mCharacter.getName());
+		setSubtitle(getFragmentTitle());
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		} else {
 			Log.v(TAG, "Loading character");
 			mCharacter = mSQLManager.getCharacter(currentCharacterID);
-			if (mParentView != null) {
+			if (getRootView() != null) {
 				updateFragmentUI();
 			}
 
