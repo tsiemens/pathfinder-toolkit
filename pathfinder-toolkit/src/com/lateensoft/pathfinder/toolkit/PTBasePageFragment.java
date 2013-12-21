@@ -1,15 +1,13 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import android.app.Fragment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+public class PTBasePageFragment extends Fragment{
 
-public class PTBasePageFragment extends SherlockFragment{
-
-	protected View mParentView;
+	private View m_rootView;
 
 	public boolean onCreateOptionsMenu(Menu menu) {		
 		return true;
@@ -21,10 +19,18 @@ public class PTBasePageFragment extends SherlockFragment{
 	}
 	
 	protected void setTitle(String title) {
-		((SherlockFragmentActivity)getActivity()).getSupportActionBar().setTitle(title);
+		getActivity().getActionBar().setTitle(title);
 	}
 	
 	protected void setTitle(int resId) {
-		((SherlockFragmentActivity)getActivity()).getSupportActionBar().setTitle(resId);
+		getActivity().getActionBar().setTitle(resId);
+	}
+	
+	protected View getRootView() {
+		return m_rootView;
+	}
+	
+	protected void setRootView(View rootView) {
+		m_rootView =rootView;
 	}
 }

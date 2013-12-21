@@ -50,18 +50,18 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		
 		mContainer = container;
 		
-		mParentView = inflater.inflate(R.layout.character_spellbook_fragment,
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_spellbook_fragment,
+				container, false));
 		
-		mAddButton = (Button) mParentView.findViewById(R.id.addSpell);
+		mAddButton = (Button) getRootView().findViewById(R.id.addSpell);
 		mAddButton.setOnClickListener(this);
 		
 		mListView = new ListView(container.getContext());
-		setListViews(mParentView);
+		setListViews(getRootView());
 		refreshSpellListView();
 		setonItemClickListeners();
 		
-		return mParentView;
+		return getRootView();
 	}
 
 	private void setListViews(View fragmentView) {

@@ -4,8 +4,8 @@
     android:versionName="1.1.1" >
 
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="15"
+        android:targetSdkVersion="19" />
 
     <application
         android:name="com.lateensoft.pathfinder.toolkit.PTBaseApplication"

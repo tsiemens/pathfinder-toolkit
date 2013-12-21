@@ -2,7 +2,10 @@ package com.lateensoft.pathfinder.toolkit;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -10,11 +13,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -24,14 +27,11 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.character.*;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 
-public class PTMainActivity extends SherlockFragmentActivity implements
+public class PTMainActivity extends Activity implements
 		OnClickListener, OnChildClickListener, OnGroupClickListener,
 		OnGroupExpandListener, OnGroupCollapseListener {
 	private static final String TAG = PTMainActivity.class.getSimpleName();
@@ -71,8 +71,8 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 		
 		setupNavDrawer();
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 
 		if (mCurrentFragmentId != 0) {
 			showView(mCurrentFragmentId);
@@ -103,12 +103,12 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
-				supportInvalidateOptionsMenu();
+				invalidateOptionsMenu();
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
-				supportInvalidateOptionsMenu();
+				invalidateOptionsMenu();
 			}
 		};
 		mDrawerToggle.syncState();
@@ -222,7 +222,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 	}
 	
 	public void showView(long id) {
-		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		PTBasePageFragment newFragment = null;
 		
@@ -275,7 +275,7 @@ public class PTMainActivity extends SherlockFragmentActivity implements
 			fragmentTransaction.commit();
 			mCurrentFragment = newFragment;
 			mCurrentFragmentId = id;
-			supportInvalidateOptionsMenu();
+			invalidateOptionsMenu();
 		}
 	}
 
