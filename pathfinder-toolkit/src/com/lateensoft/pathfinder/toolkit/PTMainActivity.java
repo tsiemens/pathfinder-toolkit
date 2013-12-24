@@ -226,9 +226,7 @@ public class PTMainActivity extends Activity implements
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		PTBasePageFragment newFragment = null;
 		
-		if (id == PTNavDrawerAdapter.DICE_ROLLER_ID) {
-			newFragment = new PTDiceRollerFragment();		
-		} else if ( id == PTNavDrawerAdapter.FLUFF_ID ) {
+		if ( id == PTNavDrawerAdapter.FLUFF_ID ) {
 			newFragment = new PTCharacterFluffFragment();
 			
 		} else if ( id == PTNavDrawerAdapter.COMBAT_STATS_ID ) {
@@ -266,11 +264,18 @@ public class PTMainActivity extends Activity implements
 			
 		} else if ( id == PTNavDrawerAdapter.POINTBUY_ID ) {
 			newFragment = new PTPointbuyCalculatorFragment();
-		}
+		
+		} else if (id == PTNavDrawerAdapter.DICE_ROLLER_ID) {
+			newFragment = new PTDiceRollerFragment();		
+		} 
 		
 		if (newFragment != null) {
 			((PTNavDrawerAdapter)mDrawerList.getExpandableListAdapter()).setSelectedItem(id);
 			mDrawerList.invalidateViews();
+			if (newFragment instanceof PTCharacterSheetFragment) {
+				mDrawerList.expandGroup(0);
+			}
+			
 			fragmentTransaction.replace(R.id.content_frame, newFragment);
 			fragmentTransaction.commit();
 			mCurrentFragment = newFragment;
