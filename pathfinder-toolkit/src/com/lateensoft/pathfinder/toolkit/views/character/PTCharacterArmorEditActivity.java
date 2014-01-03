@@ -73,15 +73,16 @@ public class PTCharacterArmorEditActivity extends Activity {
 	    }
 		return true;
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.mi_done) {
 			if (updateArmorValues()) {
-			 Log.v(TAG, (m_armorIsNew?"Add":"Edit")+" armor done: " + m_nameET.getText());
-             Intent resultData = new Intent();
-             resultData.putExtra(INTENT_EXTRAS_KEY_ARMOR, m_armor);
-			 setResult(RESULT_OK, resultData);
-             finish();
+				Log.v(TAG, (m_armorIsNew?"Add":"Edit")+" armor done: " + m_nameET.getText());
+				Intent resultData = new Intent();
+				resultData.putExtra(INTENT_EXTRAS_KEY_ARMOR, m_armor);
+				setResult(RESULT_OK, resultData);
+				finish();
 			} else {
 				showInvalidNameDialog();
 			}

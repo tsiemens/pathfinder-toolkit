@@ -31,6 +31,12 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
+            android:name=".views.character.PTCharacterWeaponEditActivity"
+            android:label="@string/new_weapon_title"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+        <activity
             android:name=".views.character.PTCharacterSkillEditActivity"
             android:label="@string/edit_skill_title"
             android:screenOrientation="portrait"
