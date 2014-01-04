@@ -144,14 +144,14 @@ public class PTCharacterWeaponEditActivity extends Activity {
 	private boolean updateWeaponValues() {
 		String name = new String(m_nameET.getText().toString());
         
-        if(name == null || name.contentEquals("")) {
+        if(name == null || name.isEmpty()) {
                 return false;
         }
         
         int attack = m_highestAtkSpinner.getSelectedItemPosition() - ATK_BONUS_OFFSET;;
-		int weight;
+		double weight;
 		try {
-			weight = Integer.parseInt(m_weightET.getText().toString());
+			weight = Double.parseDouble(m_weightET.getText().toString());
 		} catch (NumberFormatException e) {
 			weight = 1;
 		}
@@ -160,17 +160,12 @@ public class PTCharacterWeaponEditActivity extends Activity {
 		int ammo = m_ammoSpinner.getSelectedItemPosition();
 		String damage = new String(m_damageET.getText().toString());
 		String critical = new String(m_criticalET.getText().toString());
-		Log.d(TAG, "3s");
 		String specialProperties = new String(m_specialPropertiesET.getText().toString());
-		Log.d(TAG, "4s");
 		String type = new String(getStringByResourceAndIndex(R.array.weapon_type_options,
 				m_typeSpinner.getSelectedItemPosition()));
-		Log.d(TAG, "5s");
 		String size = new String(getStringByResourceAndIndex(R.array.size_spinner_options,
 				m_sizeSpinner.getSelectedItemPosition()));
         
-		Log.d(TAG, "weapon is "+m_weapon);
-		
 		m_weapon.setName(name);
 		m_weapon.setTotalAttackBonus(attack);
 		m_weapon.setWeight(weight);
@@ -206,7 +201,7 @@ public class PTCharacterWeaponEditActivity extends Activity {
 	
 	private void showDeleteConfirmation() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.delete_weapon_alert_title);
+		builder.setTitle(R.string.delete_alert_title);
 		builder.setMessage(R.string.delete_weapon_alert_message);
 		OnClickListener ocl = new OnClickListener() {
 			

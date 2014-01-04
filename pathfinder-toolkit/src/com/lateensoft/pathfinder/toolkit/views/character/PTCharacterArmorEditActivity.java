@@ -143,7 +143,7 @@ public class PTCharacterArmorEditActivity extends Activity {
 	private boolean updateArmorValues() {
 		String name = new String(m_nameET.getText().toString());
         
-        if(name == null || name.contentEquals("")) {
+        if(name == null || name.isEmpty()) {
                 return false;
         }
         
@@ -197,7 +197,7 @@ public class PTCharacterArmorEditActivity extends Activity {
 	
 	private void showDeleteConfirmation() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.delete_armor_alert_title);
+		builder.setTitle(R.string.delete_alert_title);
 		builder.setMessage(R.string.delete_armor_alert_message);
 		OnClickListener ocl = new OnClickListener() {
 			
