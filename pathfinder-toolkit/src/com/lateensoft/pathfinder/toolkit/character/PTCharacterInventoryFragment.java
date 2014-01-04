@@ -105,11 +105,11 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	}
 	
 	private void showItemEditor(PTItem item) {
-		Intent weaponEditIntent = new Intent(getActivity(),
+		Intent itemEditIntent = new Intent(getActivity(),
 				PTCharacterInventoryEditActivity.class);
-		weaponEditIntent.putExtra(
+		itemEditIntent.putExtra(
 				PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_ITEM, item);
-		startActivityForResult(weaponEditIntent, 0);
+		startActivityForResult(itemEditIntent, 0);
 	}
 	
 	@Override
@@ -118,9 +118,9 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		case Activity.RESULT_OK:
 			PTItem item = data.getExtras().getParcelable(
 					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_ITEM);
-			Log.v(TAG, "Add.edit weapon OK: " + item.getName());
+			Log.v(TAG, "Add/edit feat OK: " + item.getName());
 			if(mItemSelectedForEdit < 0) {
-				Log.v(TAG, "Adding as item");
+				Log.v(TAG, "Adding an item");
 				if(item != null) {
 					mCharacter.getInventory().addItem(item);
 					refreshItemsListView();

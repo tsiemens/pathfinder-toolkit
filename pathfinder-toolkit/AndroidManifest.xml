@@ -49,6 +49,12 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
+            android:name=".views.character.PTCharacterFeatEditActivity"
+            android:label="@string/new_item_title"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+        <activity
             android:name=".party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
             android:screenOrientation="portrait"

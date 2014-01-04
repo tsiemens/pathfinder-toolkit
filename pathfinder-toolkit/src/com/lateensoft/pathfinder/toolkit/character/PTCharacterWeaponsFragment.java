@@ -67,7 +67,6 @@ OnClickListener, OnItemClickListener{
 
 
 	public void onClick(View v) {
-		Log.v(TAG, "Add button clicked");
 		mWeaponSelectedForEdit = -1;
 		//showWeaponDialog(null);
 		showWeaponEditor(null);
