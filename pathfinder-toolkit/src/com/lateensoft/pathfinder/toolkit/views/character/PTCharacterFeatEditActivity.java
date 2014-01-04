@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.EditText;
 
@@ -8,6 +7,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.character.PTFeat;
 
 public class PTCharacterFeatEditActivity extends PTParcelableEditorActivity {
+	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterFeatEditActivity.class.getSimpleName();
 	
     private EditText m_nameET;
@@ -15,11 +15,6 @@ public class PTCharacterFeatEditActivity extends PTParcelableEditorActivity {
 	
 	private PTFeat m_feat;
 	private boolean m_featIsNew = false;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
 	
 	@Override
 	protected void setupContentView() {

@@ -1,35 +1,18 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 
-public class PTCharacterArmorEditActivity extends Activity {
+public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
+	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterArmorEditActivity.class.getSimpleName();
-	
-	public static final int RESULT_CUSTOM_DELETE = RESULT_FIRST_USER;
-	public static final String INTENT_EXTRAS_KEY_ARMOR = "armor";
-	
-	public static final int FLAG_NEW_ARMOR = 0x1;
 
 	private static final int AC_SPINNER_OFFSET = 20;
     private static final int ASF_INCREMENT = 5;
@@ -50,59 +33,7 @@ public class PTCharacterArmorEditActivity extends Activity {
 	private boolean m_armorIsNew = false;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		m_armor = getIntent().getExtras().getParcelable(INTENT_EXTRAS_KEY_ARMOR);
-		if (m_armor == null) {
-			m_armorIsNew = true;
-		}
-		
-		setupContentView();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.base_editor_menu, menu);
-	    if (m_armorIsNew) {
-	    	menu.findItem(R.id.mi_delete).setVisible(false);
-	    }
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.mi_done) {
-			if (updateArmorValues()) {
-				Log.v(TAG, (m_armorIsNew?"Add":"Edit")+" armor done: " + m_nameET.getText());
-				Intent resultData = new Intent();
-				resultData.putExtra(INTENT_EXTRAS_KEY_ARMOR, m_armor);
-				setResult(RESULT_OK, resultData);
-				finish();
-			} else {
-				showInvalidNameDialog();
-			}
-		} else if (item.getItemId() == R.id.mi_cancel || 
-				item.getItemId() == android.R.id.home) {
-			setResult(RESULT_CANCELED);
-			finish();
-		} else if (item.getItemId() == R.id.mi_delete) {
-			showDeleteConfirmation();
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-		return true;
-	}
-	
-	private void setupContentView() {
-		if(m_armor == null) {
-			m_armor = new PTArmor();
-		}
-
+	protected void setupContentView() {
 		setContentView(R.layout.character_armor_editor);
 
 		m_ACSpinner = (Spinner) findViewById(R.id.spArmorClass);
@@ -115,13 +46,21 @@ public class PTCharacterArmorEditActivity extends Activity {
 				R.id.etArmorSpecialProperties);
 		m_nameET = (EditText) findViewById(R.id.armorName);
 		m_maxDexSpinner = (Spinner) findViewById(R.id.spArmorMaxDex);
+		
+		m_spinnerOnTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				closeKeyboard();
+				return false;
+			}
+		};
 
-		setupSpinner(m_ACSpinner, R.array.ac_spinner_options);
-		setupSpinner(m_ACPSpinner, R.array.acp_spinner_options);
-		setupSpinner(m_sizeSpinner, R.array.size_spinner_options);
-		setupSpinner(m_speedSpinner, R.array.speed_spinner_options);
-		setupSpinner(m_maxDexSpinner, R.array.acp_spinner_options);
-		setupSpinner(m_ASFSpinner, R.array.armor_spell_fail_options);
+		setupSpinner(m_ACSpinner, R.array.ac_spinner_options, AC_SPINNER_OFFSET, m_spinnerOnTouchListener);
+		setupSpinner(m_ACPSpinner, R.array.acp_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_sizeSpinner, R.array.size_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_speedSpinner, R.array.speed_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_maxDexSpinner, R.array.acp_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_ASFSpinner, R.array.armor_spell_fail_options, 0, m_spinnerOnTouchListener);
 
 		if(m_armorIsNew) {
 			setTitle(R.string.new_armor_title);
@@ -139,18 +78,19 @@ public class PTCharacterArmorEditActivity extends Activity {
 			m_specialPropertiesET.setText(m_armor.getSpecialProperties());
 		}
 	}
-	
-	private boolean updateArmorValues() {
+
+	@Override
+	protected void updateEditedParcelableValues() throws InvalidValueException {
 		String name = new String(m_nameET.getText().toString());
-        
-        if(name == null || name.isEmpty()) {
-                return false;
-        }
-        
-        String specialProperties = new String(m_specialPropertiesET.getText().toString());
-        int speed = m_speedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
-        
-        int spellFail = m_ASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
+
+		if(name == null || name.isEmpty()) {
+			throw new InvalidValueException(getString(R.string.editor_name_required_alert));
+		}
+
+		String specialProperties = new String(m_specialPropertiesET.getText().toString());
+		int speed = m_speedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
+
+		int spellFail = m_ASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
         
         int weight;
         try {
@@ -173,57 +113,25 @@ public class PTCharacterArmorEditActivity extends Activity {
         m_armor.setACBonus(ac);
         m_armor.setCheckPen(acp);
         m_armor.setMaxDex(maxDex);
-        return true;
 	}
 
-	private void setupSpinner(Spinner spinner, int optionResourceId) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-				optionResourceId, android.R.layout.simple_spinner_item);
+	@Override
+	protected Parcelable getEditedParcelable() {
+		return m_armor;
+	}
 
-		if(m_spinnerOnTouchListener == null) {
-			m_spinnerOnTouchListener = new OnTouchListener() {
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					closeKeyboard();
-					return false;
-				}
-			};
+	@Override
+	protected void setParcelableToEdit(Parcelable p) {
+		if(p == null) {
+			m_armorIsNew = true;
+			m_armor = new PTArmor();
+		} else {
+			m_armor = (PTArmor) p;
 		}
-
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		spinner.setAdapter(adapter);
-		spinner.setOnTouchListener(m_spinnerOnTouchListener);
-	}
-	
-	private void showDeleteConfirmation() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.delete_alert_title);
-		builder.setMessage(R.string.delete_alert_message);
-		OnClickListener ocl = new OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (which == DialogInterface.BUTTON_NEGATIVE) {
-					setResult(RESULT_CUSTOM_DELETE);
-					finish();
-				}
-			}
-		};
-		builder.setPositiveButton(R.string.cancel_button_text, ocl);
-		builder.setNegativeButton(R.string.ok_button_text, ocl);
-		builder.show();
-	}
-	
-	private void showInvalidNameDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.error_alert_title);
-		builder.setMessage(R.string.editor_name_required_alert);
-		builder.setNeutralButton(R.string.ok_button_text, null);
-		builder.show();
 	}
 
-	private void closeKeyboard() {
-		InputMethodManager iMM = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	@Override
+	protected boolean isParcelableDeletable() {
+		return !m_armorIsNew;
 	}
 }

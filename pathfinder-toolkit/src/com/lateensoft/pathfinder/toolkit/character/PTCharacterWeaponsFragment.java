@@ -76,7 +76,7 @@ OnClickListener, OnItemClickListener{
 		Intent weaponEditIntent = new Intent(getActivity(),
 				PTCharacterWeaponEditActivity.class);
 		weaponEditIntent.putExtra(
-				PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_WEAPON, weapon);
+				PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, weapon);
 		startActivityForResult(weaponEditIntent, 0);
 	}
 
@@ -85,7 +85,7 @@ OnClickListener, OnItemClickListener{
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTWeapon weapon = data.getExtras().getParcelable(
-					PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_WEAPON);
+					PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add.edit weapon OK: " + weapon.getName());
 			if(mWeaponSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a weapon");
@@ -101,7 +101,7 @@ OnClickListener, OnItemClickListener{
 			
 			break;
 		
-		case PTCharacterWeaponEditActivity.RESULT_CUSTOM_DELETE:
+		case PTCharacterWeaponEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a weapon");
 			mCharacter.getInventory().deleteWeapon(mWeaponSelectedForEdit);
 			refreshWeaponsListView();

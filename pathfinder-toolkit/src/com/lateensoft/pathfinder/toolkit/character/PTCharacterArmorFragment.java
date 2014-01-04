@@ -74,7 +74,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 		Intent armorEditIntent = new Intent(getActivity(),
 				PTCharacterArmorEditActivity.class);
 		armorEditIntent.putExtra(
-				PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_ARMOR, armor);
+				PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, armor);
 		startActivityForResult(armorEditIntent, 0);
 	}
 	
@@ -83,7 +83,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTArmor armor = data.getExtras().getParcelable(
-					PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_ARMOR);
+					PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add.edit armor OK: " + armor.getName());
 			if(mArmorSelectedForEdit < 0) {
 				Log.v(TAG, "Adding an armor");
@@ -99,7 +99,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 			
 			break;
 		
-		case PTCharacterArmorEditActivity.RESULT_CUSTOM_DELETE:
+		case PTCharacterArmorEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an armor");
 			mCharacter.getInventory().deleteArmor(mArmorSelectedForEdit);
 			refreshArmorListView();

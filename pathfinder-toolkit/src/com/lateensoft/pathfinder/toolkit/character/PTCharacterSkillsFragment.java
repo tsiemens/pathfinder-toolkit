@@ -66,7 +66,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		Intent skillEditIntent = new Intent(getActivity(),
 				PTCharacterSkillEditActivity.class);
 		skillEditIntent.putExtra(
-				PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_SKILL,skill);
+				PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE,skill);
 		startActivityForResult(skillEditIntent, 0);
 	}
 	
@@ -75,7 +75,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTSkill skill = data.getExtras().getParcelable(
-					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_SKILL);
+					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Edit skill OK: " + skill.getName());
 			if (mSkillSelectedForEdit != null) {
 				mSkillSelectedForEdit.setAbilityMod(skill.getAbilityMod());

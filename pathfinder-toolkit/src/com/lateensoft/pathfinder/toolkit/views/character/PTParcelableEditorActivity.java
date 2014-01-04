@@ -134,6 +134,7 @@ public abstract class PTParcelableEditorActivity extends Activity{
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		spinner.setAdapter(adapter);
 		spinner.setOnTouchListener(touchListener);
+		spinner.setSelection(defaultSelection, false);
 	}
 	
 	/**

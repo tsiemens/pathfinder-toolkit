@@ -108,7 +108,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		Intent itemEditIntent = new Intent(getActivity(),
 				PTCharacterInventoryEditActivity.class);
 		itemEditIntent.putExtra(
-				PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_ITEM, item);
+				PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, item);
 		startActivityForResult(itemEditIntent, 0);
 	}
 	
@@ -117,8 +117,8 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTItem item = data.getExtras().getParcelable(
-					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_ITEM);
-			Log.v(TAG, "Add/edit feat OK: " + item.getName());
+					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
+			Log.v(TAG, "Add/edit item OK: " + item.getName());
 			if(mItemSelectedForEdit < 0) {
 				Log.v(TAG, "Adding an item");
 				if(item != null) {
@@ -135,7 +135,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			
 			break;
 		
-		case PTCharacterInventoryEditActivity.RESULT_CUSTOM_DELETE:
+		case PTCharacterInventoryEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
 			mCharacter.getInventory().deleteItem(mItemSelectedForEdit);
 			refreshItemsListView();

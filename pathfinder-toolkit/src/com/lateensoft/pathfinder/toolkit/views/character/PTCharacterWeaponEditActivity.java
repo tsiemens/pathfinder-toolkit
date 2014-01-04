@@ -1,36 +1,17 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+import android.os.Parcelable;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTWeapon;
 
-public class PTCharacterWeaponEditActivity extends Activity {
+public class PTCharacterWeaponEditActivity extends PTParcelableEditorActivity {
+	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterWeaponEditActivity.class.getSimpleName();
-	
-	public static final int RESULT_CUSTOM_DELETE = RESULT_FIRST_USER;
-	public static final String INTENT_EXTRAS_KEY_WEAPON = "weapon";
-	
-	public static final int FLAG_NEW_WEAPON = 0x1;
 
 	private static final int ATK_BONUS_OFFSET = 10;
 	
@@ -48,61 +29,9 @@ public class PTCharacterWeaponEditActivity extends Activity {
 	
 	private PTWeapon m_weapon;
 	private boolean m_weaponIsNew = false;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		m_weapon = getIntent().getExtras().getParcelable(INTENT_EXTRAS_KEY_WEAPON);
-		if (m_weapon == null) {
-			m_weaponIsNew = true;
-		}
-		
-		setupContentView();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.base_editor_menu, menu);
-	    if (m_weaponIsNew) {
-	    	menu.findItem(R.id.mi_delete).setVisible(false);
-	    }
-		return true;
-	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.mi_done) {
-			if (updateWeaponValues()) {
-				Log.v(TAG, (m_weaponIsNew?"Add":"Edit")+" weapon done: " + m_nameET.getText());
-				Intent resultData = new Intent();
-				resultData.putExtra(INTENT_EXTRAS_KEY_WEAPON, m_weapon);
-				setResult(RESULT_OK, resultData);
-				finish();
-			} else {
-				showInvalidNameDialog();
-			}
-		} else if (item.getItemId() == R.id.mi_cancel || 
-				item.getItemId() == android.R.id.home) {
-			setResult(RESULT_CANCELED);
-			finish();
-		} else if (item.getItemId() == R.id.mi_delete) {
-			showDeleteConfirmation();
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-		return true;
-	}
-	
-	private void setupContentView() {
-		if(m_weapon == null) {
-			m_weapon = new PTWeapon();
-		}
-
+	protected void setupContentView() {
 		setContentView(R.layout.character_weapon_editor);
 
 		m_nameET = (EditText) findViewById(R.id.etWeaponName);
@@ -117,11 +46,12 @@ public class PTCharacterWeaponEditActivity extends Activity {
 		m_specialPropertiesET = (EditText) findViewById(
 				R.id.etWeaponSpecialProperties);
 
-		setupSpinner(m_highestAtkSpinner, R.array.weapon_attack_bonus_options);
-		setupSpinner(m_ammoSpinner, R.array.selectable_values_string);
-		setupSpinner(m_sizeSpinner, R.array.size_spinner_options);
-		setupSpinner(m_typeSpinner, R.array.weapon_type_options);
-		setupSpinner(m_rangeSpinner, R.array.weapon_range_options);
+		setupSpinner(m_highestAtkSpinner, R.array.weapon_attack_bonus_options,
+				ATK_BONUS_OFFSET, m_spinnerOnTouchListener);
+		setupSpinner(m_ammoSpinner, R.array.selectable_values_string, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_sizeSpinner, R.array.size_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_typeSpinner, R.array.weapon_type_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_rangeSpinner, R.array.weapon_range_options, 0, m_spinnerOnTouchListener);
 
 		if(m_weaponIsNew) {
 			setTitle(R.string.new_weapon_title);
@@ -141,11 +71,18 @@ public class PTCharacterWeaponEditActivity extends Activity {
 		}
 	}
 	
-	private boolean updateWeaponValues() {
-		String name = new String(m_nameET.getText().toString());
+	private String getStringByResourceAndIndex(int resourceId, int position) {
+		Resources r = getResources();
+		String[] resource = r.getStringArray(resourceId);
+		return resource[position];
+	}
+
+	@Override
+	protected void updateEditedParcelableValues() throws InvalidValueException {
+String name = new String(m_nameET.getText().toString());
         
         if(name == null || name.isEmpty()) {
-                return false;
+        	throw new InvalidValueException(getString(R.string.editor_name_required_alert));
         }
         
         int attack = m_highestAtkSpinner.getSelectedItemPosition() - ATK_BONUS_OFFSET;;
@@ -176,65 +113,26 @@ public class PTCharacterWeaponEditActivity extends Activity {
 		m_weapon.setSpecialProperties(specialProperties);
 		m_weapon.setType(type);
 		m_weapon.setSize(size);
-		
-        return true;
 	}
 
-	private void setupSpinner(Spinner spinner, int optionResourceId) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-				optionResourceId, android.R.layout.simple_spinner_item);
+	@Override
+	protected Parcelable getEditedParcelable() {
+		return m_weapon;
+	}
 
-		if(m_spinnerOnTouchListener == null) {
-			m_spinnerOnTouchListener = new OnTouchListener() {
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					closeKeyboard();
-					return false;
-				}
-			};
+	@Override
+	protected void setParcelableToEdit(Parcelable p) {
+		if (p == null) {
+			m_weaponIsNew = true;
+			m_weapon = new PTWeapon();
+		} else {
+			m_weapon = (PTWeapon) p;
 		}
-
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		spinner.setAdapter(adapter);
-		spinner.setOnTouchListener(m_spinnerOnTouchListener);
-	}
-	
-	private void showDeleteConfirmation() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.delete_alert_title);
-		builder.setMessage(R.string.delete_alert_message);
-		OnClickListener ocl = new OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (which == DialogInterface.BUTTON_NEGATIVE) {
-					setResult(RESULT_CUSTOM_DELETE);
-					finish();
-				}
-			}
-		};
-		builder.setPositiveButton(R.string.cancel_button_text, ocl);
-		builder.setNegativeButton(R.string.ok_button_text, ocl);
-		builder.show();
-	}
-	
-	private String getStringByResourceAndIndex(int resourceId, int position) {
-		Resources r = getResources();
-		String[] resource = r.getStringArray(resourceId);
-		return resource[position];
-	}
-	
-	private void showInvalidNameDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.error_alert_title);
-		builder.setMessage(R.string.editor_name_required_alert);
-		builder.setNeutralButton(R.string.ok_button_text, null);
-		builder.show();
 	}
 
-	private void closeKeyboard() {
-		InputMethodManager iMM = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	@Override
+	protected boolean isParcelableDeletable() {
+		return !m_weaponIsNew;
 	}
 
 }
