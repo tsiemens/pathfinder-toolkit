@@ -198,7 +198,7 @@ public class PTCharacterArmorEditActivity extends Activity {
 	private void showDeleteConfirmation() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.delete_alert_title);
-		builder.setMessage(R.string.delete_armor_alert_message);
+		builder.setMessage(R.string.delete_alert_message);
 		OnClickListener ocl = new OnClickListener() {
 			
 			@Override

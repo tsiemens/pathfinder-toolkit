@@ -271,6 +271,7 @@
     <string name="delete_item_alert_message">Are you sure you want to delete this item?</string>
     
     <string name="delete_alert_title">Delete</string>
+    <string name="delete_alert_message">Are you sure you want to delete this?</string>
     <string name="editor_name_required_alert">You must enter a name.</string>
     
     <!-- Armor -->
@@ -287,7 +288,7 @@
     <string name="armor_max_dex">Max Dex: \u0020</string>
     <string name="new_armor_title">New Armor</string>
     <string name="edit_armor_title">Edit Armor</string>
-    <string name="delete_armor_alert_message">Are you sure you want to delete this armor?</string>
+    
     <string-array name="ac_spinner_options">
         <item>-20</item>
         <item>-19</item>
@@ -417,8 +418,6 @@
     <string name="new_weapon_title">New Weapon</string>
     <string name="edit_weapon_title">Edit Weapon</string>
     
-    <string name="delete_weapon_alert_message">Are you sure you want to delete this weapon?</string>
-    
     <string-array name="weapon_attack_bonus_options">
         <item>-10</item>
         <item>-9</item>
@@ -536,7 +535,6 @@
     <string name="feats_name_hint">Name</string>
     <string name="new_feat_title">New Feat</string>
     <string name="edit_feat_title">Edit Feat</string>
-    <string name="delete_feat_alert_message">Are you sure you want to delete this feat?</string>
     
     <string-array name="fluff_fields">
         <item>Name</item>

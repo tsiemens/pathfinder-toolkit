@@ -1,21 +1,17 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
@@ -28,11 +24,6 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	private ListView mFeatsListView;
 	private Button mAddButton;
 
-	private EditText mDialogFeatNameEditText;
-	private EditText mDialogFeatDescEditText;
-
-	private ViewGroup mContainer;
-
 	private int mFeatSelectedForEdit;
 
 	@Override
@@ -44,8 +35,6 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-
-		mContainer = container;
 
 		setRootView(inflater.inflate(R.layout.character_feats_fragment,
 				container, false));
@@ -64,7 +53,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	private void refreshFeatsListView() {
 		String[] featNames = mCharacter.getFeatList().getFeatNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				mContainer.getContext(), android.R.layout.simple_list_item_1,
+				getActivity(), android.R.layout.simple_list_item_1,
 				featNames);
 		mFeatsListView.setAdapter(adapter);
 
@@ -88,7 +77,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		Intent featEditIntent = new Intent(getActivity(),
 				PTCharacterFeatEditActivity.class);
 		featEditIntent.putExtra(
-				PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_FEAT, feat);
+				PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);
 		startActivityForResult(featEditIntent, 0);
 	}
 
@@ -97,7 +86,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTFeat item = data.getExtras().getParcelable(
-					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_FEAT);
+					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add/edit feat OK: " + item.getName());
 			if(mFeatSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a feat");
@@ -113,7 +102,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 			
 			break;
 		
-		case PTCharacterFeatEditActivity.RESULT_CUSTOM_DELETE:
+		case PTCharacterFeatEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
 			mCharacter.getFeatList().deleteFeat(mFeatSelectedForEdit);
 			refreshFeatsListView();
