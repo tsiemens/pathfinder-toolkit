@@ -598,6 +598,21 @@
         <item>39</item>
         <item>40</item>
     </string-array>
+    
+    <string-array name="spell_level_selectable_values_string">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+  	</string-array>
+    
     <string-array name="skills_selectable_values_string">
         <item>-10</item>
         <item>-9</item>
@@ -659,14 +674,14 @@
     <string name="temp_score">Temp\nScore</string>
 
     <!-- Spellbook Strings -->
-    <string name="Lv">Level</string>
+    <string name="spellbook_level">Level</string>
     <string name="spellbook_add_spell_button">+</string>
     <string name="spellbook_name">Name</string>
     <string name="spellbook_prepared">Prepared</string>
     <string name="spellbook_description">Description</string>
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
-   
+   	<string name="edit_spell_title">Edit Spell</string>
     
     <!-- Initiative Tracker Strings -->
     <string name="menu_item_reset_encounter">Reset</string>

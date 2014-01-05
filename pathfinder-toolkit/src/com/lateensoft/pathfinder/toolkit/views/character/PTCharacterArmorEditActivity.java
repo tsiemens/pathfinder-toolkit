@@ -64,7 +64,6 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
 
 		if(m_armorIsNew) {
 			setTitle(R.string.new_armor_title);
-			m_ACSpinner.setSelection(AC_SPINNER_OFFSET);
 		} else {
 			setTitle(R.string.edit_armor_title);
 			m_nameET.setText(m_armor.getName());
