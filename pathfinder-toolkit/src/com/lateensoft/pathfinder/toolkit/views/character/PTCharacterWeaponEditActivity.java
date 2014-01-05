@@ -8,6 +8,7 @@ import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTWeapon;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterWeaponEditActivity extends PTParcelableEditorActivity {
 	@SuppressWarnings("unused")

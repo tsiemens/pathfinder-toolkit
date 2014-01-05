@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
 	@SuppressWarnings("unused")

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.stats.PTSkill;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {
 	@SuppressWarnings("unused")

@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 import android.os.Parcelable;
 import android.view.MotionEvent;
@@ -22,7 +23,7 @@ public class PTCharacterSpellEditActivity extends PTParcelableEditorActivity {
 	private OnTouchListener m_spinnerOnTouchListener;
 
 	private PTSpell m_spell;
-	private boolean m_spellIsNew;
+	private boolean m_spellIsNew = false;
 
 	@Override
 	protected void setupContentView() {

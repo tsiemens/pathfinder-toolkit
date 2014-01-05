@@ -3,12 +3,14 @@ package com.lateensoft.pathfinder.toolkit;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
-import com.lateensoft.pathfinder.toolkit.party.PTEncounterMemberEditorActivity;
 import com.lateensoft.pathfinder.toolkit.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyMember;
+import com.lateensoft.pathfinder.toolkit.party.PTPartyMemberEditorActivity;
 import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSpellEditActivity;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +43,8 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	private Button mRollInitiativeButton;
 	private ListView mPartyMemberList;
+	
+	private int m_partyMemberSelectedForEdit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,14 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 		mHasRolled = false;
 		
+		loadEncounterParty();
 		return getRootView();
+	}
+	
+	@Override
+	public void onPause() {
+		updateDatabase();
+		super.onPause();
 	}
 
 	@Override
@@ -94,7 +105,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 		MenuItem addMemberListItem = menu.add(Menu.NONE, MENU_ITEM_ADD_MEMBER,
 				Menu.NONE, R.string.menu_item_add_encounter_member);
-		addMemberListItem.setIcon(android.R.drawable.ic_menu_add);
+		addMemberListItem.setIcon(R.drawable.ic_action_new);
 		addMemberListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		super.onCreateOptionsMenu(menu);
@@ -129,6 +140,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	}
 
 	// Click method for the party selection dialog
+	@Override
 	public void onClick(DialogInterface dialogInterface, int selection) {
 		switch (selection) {
 		case DialogInterface.BUTTON_POSITIVE:
@@ -144,16 +156,15 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	/**
 	 * Called when dialog positive button is tapped
 	 */
-	public void performPositiveDialogAction() {
+	private void performPositiveDialogAction() {
 		switch (mDialogMode) {
 		case MENU_ITEM_RESET:
 			resetPartyRolls();
 			break;
 
 		case MENU_ITEM_ADD_MEMBER:
-			launchPartyMemberEditor(mParty.addPartyMember(new PTPartyMember(
-					"NPC")));
-			refreshPartyView();
+			m_partyMemberSelectedForEdit = -1;
+			showPartyMemberEditor(null);
 			break;
 
 		}
@@ -165,7 +176,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * in user prefs, it pulls the default currently set in party manager If
 	 * there is not current party, an empty party is set
 	 */
-	public void loadEncounterParty() {
+	private void loadEncounterParty() {
 		PTParty currentEncounterParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
 		// If there is no saved encounter party, get from party manager
 		// Also, if the encounter party was saved, but previously was empty, get
@@ -183,22 +194,22 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		}
 	}
 
-	public void loadDefaultParty() {
+	private void loadDefaultParty() {
 		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
 		if (currentPartyID >= 0)
 			mParty = mSQLManager.getParty(currentPartyID);
 		else
 			mParty = new PTParty("Empty Party");
-		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
+		updateDatabase();
 		mHasRolled = false;
 		refreshPartyView();
 	}
 
-	public void resetPartyRolls() {
+	private void resetPartyRolls() {
 		for (int i = 0; i < mParty.size(); i++) {
 			mParty.getPartyMember(i).setRolledValue(0);
 		}
-		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
+		updateDatabase();
 		mHasRolled = false;
 		refreshPartyView();
 	}
@@ -220,14 +231,53 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * @param index
 	 *            (the actual index, not the roll value index)
 	 */
-	public void launchPartyMemberEditor(int index) {
-		Intent intent = new Intent(getActivity(), PTEncounterMemberEditorActivity.class);
-		// putting values to intent
-		intent.putExtra(getString(R.string.party_member_index_key), index);
-		startActivity(intent);
+	private void showPartyMemberEditor(PTPartyMember member) {
+		Intent intent = new Intent(getActivity(),
+				PTPartyMemberEditorActivity.class);
+		intent.putExtra(
+				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);
+		startActivityForResult(intent, 0);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case Activity.RESULT_OK:
+			PTPartyMember member = data.getExtras().getParcelable(
+					PTPartyMemberEditorActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
+			Log.v(TAG, "Add/edit member OK: " + member.getName());
+			if(m_partyMemberSelectedForEdit < 0) {
+				Log.v(TAG, "Adding a member");
+				if(member != null) {
+					mParty.addPartyMember(member);
+					refreshPartyView(); 
+				}
+			} else {
+				Log.v(TAG, "Editing a member");
+				mParty.setPartyMember(m_partyMemberSelectedForEdit, member);
+				refreshPartyView();
+			}
+			
+			break;
+		
+		case PTPartyMemberEditorActivity.RESULT_DELETE:
+			Log.v(TAG, "Deleting a member");
+			mParty.deletePartyMember(m_partyMemberSelectedForEdit);
+			refreshPartyView();
+			break;
+		
+		case Activity.RESULT_CANCELED:
+			break;
+		
+		default:
+			break;
+		}
+		updateDatabase();
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	// When roll initiative button is clicked
+	@Override
 	public void onClick(View view) {
 		PTDiceSet diceSet = new PTDiceSet();
 		int initiativeMod;
@@ -237,28 +287,22 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 			mParty.getPartyMember(i).setRolledValue(
 					diceSet.singleRoll(20) + initiativeMod);
 		}
-		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
+		updateDatabase();
 		mHasRolled = true;
 		loadEncounterParty();
 	}
 
 	// Party member in list was clicked
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		launchPartyMemberEditor(mParty
-				.getPartyMemberIndexByRollValueIndex(position));
+		m_partyMemberSelectedForEdit = mParty
+				.getPartyMemberIndexByRollValueIndex(position);
+		showPartyMemberEditor(mParty.getPartyMember(m_partyMemberSelectedForEdit));
 
 	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		loadEncounterParty();
-	}
-
-	@Override
-	public void onPause() {
+	
+	private void updateDatabase() {
 		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
-		super.onPause();
 	}
 }

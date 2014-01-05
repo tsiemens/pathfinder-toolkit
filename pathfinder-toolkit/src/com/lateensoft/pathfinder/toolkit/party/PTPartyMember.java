@@ -8,7 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class PTPartyMember implements Parcelable{
+public class PTPartyMember implements Parcelable {
 	
 	private String mName;
 	private int mInitiative;

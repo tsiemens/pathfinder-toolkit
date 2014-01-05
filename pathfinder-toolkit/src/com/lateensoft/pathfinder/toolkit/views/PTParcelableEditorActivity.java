@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.views.character;
+package com.lateensoft.pathfinder.toolkit.views;
 
 import com.lateensoft.pathfinder.toolkit.R;
 
@@ -29,7 +29,7 @@ import android.widget.Spinner;
  * @author trevsiemens
  *
  */
-public abstract class PTParcelableEditorActivity extends Activity{
+public abstract class PTParcelableEditorActivity extends Activity {
 	
 	private static final String TAG = PTParcelableEditorActivity.class.getSimpleName();
 	

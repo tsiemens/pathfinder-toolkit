@@ -1,55 +1,120 @@
 package com.lateensoft.pathfinder.toolkit.party;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.os.Parcelable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
-
-import android.os.Bundle;
-import android.util.Log;
-
-
-/**
- * requires an intent with extras: R.string.party_member_index_key (int) and R.string.party_id_key (int)
- * @author trevsiemens
- *
- */
-public class PTPartyMemberEditorActivity extends PTBasePartyMemberEditorActivity{
-	private final String TAG = "PTPartyMemberEditorActivity";
+public class PTPartyMemberEditorActivity extends PTParcelableEditorActivity {
+	@SuppressWarnings("unused")
+	private static final String TAG = PTPartyMemberEditorActivity.class.getSimpleName();
 	
-	private PTDatabaseManager mSQLManager;
+	private PTPartyMember m_partyMember;
+	private boolean m_memberIsNew = false;
+	
+	private EditText m_partyMemberNameET;
+	private ListView m_statList;
+	
+	private int m_statSelectedForEdit;
+	private EditText m_dialogStatValueET;
+	private OnItemClickListener m_listItemClickListener;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void setupContentView() {
+		setContentView(R.layout.activity_party_member_editor);	
 		
-		mSQLManager = new PTDatabaseManager(this.getApplicationContext());
-		getDataFromExtras();
-	}
-	
-	protected void getDataFromExtras(){
-		Bundle extras = getIntent().getExtras();
-		if(extras != null){
-			mPartyMemberIndex = extras.getInt(getString(R.string.party_member_index_key));
-			int partyID = extras.getInt(getString(R.string.party_id_key));
-			mParty = mSQLManager.getParty(partyID);
-			mPartyMember = mParty.getPartyMember(mPartyMemberIndex);
-			updateStatsViews();
-		}
-		else finish();
-	}
-	
-	
-	
-	@Override
-	protected void onPause() {
-			if(mParty != null){
-			if(mDialogMode != DIALOG_MODE_DELETE_MEMBER){
-				mPartyMember.setName(mPartyMemberNameEditText.getText().toString());
-				mPartyMemberIndex = mParty.setPartyMember(mPartyMemberIndex, mPartyMember);
+		m_partyMemberNameET = (EditText) findViewById(R.id.editTextPartyMemberName);
+		m_partyMemberNameET.setText(m_partyMember.getName());
+		
+		m_statList = (ListView) findViewById(R.id.listViewPartyMemberStats);		
+		PTPartyMemberStatAdapter adapter = new PTPartyMemberStatAdapter(this, R.layout.party_member_stat_row, 
+				m_partyMember.getStatFields(this), m_partyMember.getStatsArray());
+		m_statList.setAdapter(adapter);
+		
+		m_listItemClickListener = new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				m_statSelectedForEdit = position;
+				showStatEditDialog(position);
 			}
-			mSQLManager.updateParty(mParty);
+		};
+		m_statList.setOnItemClickListener(m_listItemClickListener);
+		
+		((PTPartyMemberStatAdapter)m_statList.getAdapter()).updateValues(m_partyMember.getStatsArray());
+		m_partyMemberNameET.setText(m_partyMember.getName());
+	}
+
+	@Override
+	protected void updateEditedParcelableValues() throws InvalidValueException {
+		String name = m_partyMemberNameET.getText().toString();
+		if (name == null || name.isEmpty()) {
+			throw new InvalidValueException(getString(R.string.editor_name_required_alert));
 		}
-		super.onPause();
+		
+		m_partyMember.setName(name);
+		// Stats are already updated when closing dialog
+	}
+
+	@Override
+	protected Parcelable getEditedParcelable() {
+		return m_partyMember;
+	}
+
+	@Override
+	protected void setParcelableToEdit(Parcelable p) {
+		if (p == null) {
+			m_memberIsNew = true;
+			m_partyMember = new PTPartyMember("");
+		} else {
+			m_partyMember = (PTPartyMember) p;
+		}
+	}
+
+	@Override
+	protected boolean isParcelableDeletable() {
+		return !m_memberIsNew;
+	}
+	
+	private void showStatEditDialog(int position){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		//Set up dialog layout
+		LayoutInflater inflater = getLayoutInflater();
+
+		View dialogView = inflater.inflate(R.layout.party_member_stat_dialog, null);
+		m_dialogStatValueET = (EditText) dialogView.findViewById(R.id.dialogStatText);
+		
+		builder.setTitle(m_partyMember.getStatFields(this)[position]);
+		m_dialogStatValueET.setText(Integer.toString(m_partyMember.getValueByIndex(position)));
+
+		OnClickListener ocl = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					try{
+						m_partyMember.setStatByIndex(m_statSelectedForEdit, Integer.parseInt(m_dialogStatValueET.getText().toString()));
+						((PTPartyMemberStatAdapter)m_statList.getAdapter()).updateValues(m_partyMember.getStatsArray());
+					}catch (NumberFormatException e){
+						//Do nothing
+					}
+				}
+			}
+		};
+
+		builder.setView(dialogView)
+				.setPositiveButton(R.string.ok_button_text, ocl)
+				.setNegativeButton(R.string.cancel_button_text, ocl);
+		
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }
