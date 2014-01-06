@@ -13,8 +13,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class PTDatabase extends SQLiteOpenHelper {
 	
 	private final String TAG = PTDatabase.class.getSimpleName();
-	static final String DB_NAME = "pathfinderToolkitDB";
-	static int dbVersion = 1;
+	public static final String DB_NAME = "pathfinder_toolkit.db";
+	public static int dbVersion = 1;
 	private SQLiteDatabase mDatabase;
 	
 	private static PTDatabase s_sharedInstance;

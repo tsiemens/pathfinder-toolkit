@@ -17,7 +17,7 @@ import android.util.Log;
 public class PTDatabaseManager extends SQLiteOpenHelper {
 	private final String TAG = "PTDatabaseManager";
 	
-	static final String dbName = "pathfinderToolkitDB";
+	public static final String dbName = "pathfinderToolkitDB";
 	static final String characterTable = "Characters";
 	static final String colChtrID = "CharacterID";
 	static final String colChtrName = "CharacterName";

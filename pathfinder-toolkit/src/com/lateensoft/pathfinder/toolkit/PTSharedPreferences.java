@@ -126,7 +126,7 @@ public class PTSharedPreferences {
 	 * @return The ID of the currently selected character. Returns -1 if no character is selected
 	 */
 	public long getSelectedCharacter(){
-		return this.getInt(KEY_LONG_SELECTED_CHARACTER_ID, -1);
+		return this.getLong(KEY_LONG_SELECTED_CHARACTER_ID, -1);
 	}
 	
 	/**
