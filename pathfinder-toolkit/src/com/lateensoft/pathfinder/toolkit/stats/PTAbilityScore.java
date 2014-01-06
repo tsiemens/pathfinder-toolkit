@@ -2,11 +2,14 @@ package com.lateensoft.pathfinder.toolkit.stats;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class PTAbilityScore implements PTStorable {
+
+public class PTAbilityScore implements Parcelable, PTStorable {
 	private String mAbility;
 	private int mScore;
-	private static final String TAG = "PTAbilityScore";
+
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
 	private long mId;
@@ -21,6 +24,17 @@ public class PTAbilityScore implements PTStorable {
 	public PTAbilityScore(String ability, int score) {
 		mAbility = ability;
 		mScore = score;
+	}
+	
+	public PTAbilityScore(Parcel in) {
+		mAbility = in.readString();
+		mScore = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mAbility);
+		out.writeInt(mScore);
 	}
 	
 	public int getScore() {
@@ -86,4 +100,19 @@ public class PTAbilityScore implements PTStorable {
 	public Long getCharacterID() {
 		return mCharacterId;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTAbilityScore> CREATOR = new Parcelable.Creator<PTAbilityScore>() {
+		public PTAbilityScore createFromParcel(Parcel in) {
+			return new PTAbilityScore(in);
+		}
+		
+		public PTAbilityScore[] newArray(int size) {
+			return new PTAbilityScore[size];
+		}
+	};
 }

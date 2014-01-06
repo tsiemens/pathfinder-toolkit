@@ -2,16 +2,29 @@ package com.lateensoft.pathfinder.toolkit.character;
 
 import java.util.ArrayList;
 
-import android.util.Log;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class PTFeatList {
+public class PTFeatList implements Parcelable {
+	private static final String PARCEL_BUNDLE_KEY_FEATS = "feats";
+	
 	private ArrayList<PTFeat> mFeats;
 	
 	public PTFeatList(){
 		mFeats = new ArrayList<PTFeat>();
-		
-		//addFeat(new PTFeat("Sample Feat/Special Ability", "Add useful information here."));
-		
+	}
+	
+	public PTFeatList(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mFeats = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS, mFeats);
+		out.writeBundle(objectBundle);
 	}
 	
 	/**
@@ -118,4 +131,19 @@ public class PTFeatList {
 	public int getNumberOfFeats(){
 		return mFeats.size();
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTFeatList> CREATOR = new Parcelable.Creator<PTFeatList>() {
+		public PTFeatList createFromParcel(Parcel in) {
+			return new PTFeatList(in);
+		}
+		
+		public PTFeatList[] newArray(int size) {
+			return new PTFeatList[size];
+		}
+	};
 }

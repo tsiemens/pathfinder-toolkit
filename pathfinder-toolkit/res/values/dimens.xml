@@ -1,4 +1,6 @@
 <resources>    
+    <dimen name="std_text_size">14dp</dimen>
+    
     <dimen name="dice_roller_button_text_larger">14sp</dimen>
     <dimen name="dice_roller_button_text_smaller">12sp</dimen>
     <dimen name="dice_roller_result_text_size">100sp</dimen>

@@ -2,7 +2,11 @@ package com.lateensoft.pathfinder.toolkit.stats;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTSkill implements PTStorable {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTSkill implements Parcelable, PTStorable {
+	
 	String mName;
 	boolean mClassSkill;
 	String mKeyAbility;
@@ -58,6 +62,33 @@ public class PTSkill implements PTStorable {
 		mKeyAbility = keyAbility;
 		mId = id;
 		mCharacterId = characterId;
+	}
+
+	public PTSkill(Parcel in) {
+		mName = in.readString();
+		boolean[] classSkill = new boolean[1];
+		in.readBooleanArray(classSkill);
+		mClassSkill = classSkill[0];
+		mKeyAbility = in.readString();
+		mAbilityMod = in.readInt();
+		mRank = in.readInt();
+		mMiscMod = in.readInt();
+		mArmorCheckPenalty = in.readInt();
+		mKeyAbilityKey = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		boolean[] classSkill = new boolean[1];
+		classSkill[0] = mClassSkill;
+		out.writeBooleanArray(classSkill);
+		out.writeString(mKeyAbility);
+		out.writeInt(mAbilityMod);
+		out.writeInt(mRank);
+		out.writeInt(mMiscMod);
+		out.writeInt(mArmorCheckPenalty);
+		out.writeInt(mKeyAbilityKey);
 	}
 	
 	/**
@@ -171,7 +202,23 @@ public class PTSkill implements PTStorable {
 		return mId;
 	}
 	
+	@Override
 	public Long getCharacterID() {
 		return mCharacterId;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSkill> CREATOR = new Parcelable.Creator<PTSkill>() {
+		public PTSkill createFromParcel(Parcel in) {
+			return new PTSkill(in);
+		}
+		
+		public PTSkill[] newArray(int size) {
+			return new PTSkill[size];
+		}
+	};
 }

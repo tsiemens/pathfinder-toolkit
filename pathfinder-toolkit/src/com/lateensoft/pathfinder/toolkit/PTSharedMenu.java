@@ -1,13 +1,12 @@
 package com.lateensoft.pathfinder.toolkit;
 
-
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.settings.PTSettingsActivity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class PTSharedMenu {
 
@@ -18,7 +17,6 @@ public class PTSharedMenu {
 	public static void onCreateOptionsMenu(Menu menu, Context context) {
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, context.getResources()
 				.getString(R.string.shared_menu_settings));
-
 	}
 
 	public static boolean onOptionsItemSelected(MenuItem item, Activity caller) {

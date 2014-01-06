@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.functional.PTDiceSet;
@@ -11,6 +9,8 @@ import com.lateensoft.pathfinder.toolkit.party.PTPartyRollAdapter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -45,30 +45,32 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mParentView = inflater.inflate(R.layout.fragment_skill_checker, container, false);
+
+		setRootView(inflater.inflate(R.layout.fragment_skill_checker, container, false));
 		setTitle(R.string.title_activity_skill_checker);
+		setSubtitle(null);
 		
 		mSkillSelectedForRoll = 0;
 		
 		mSQLManager = new PTDatabaseManager(getActivity());
 		
-		mRollButton = (Button) mParentView.findViewById(R.id.buttonRoll);
+		mRollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
 		mRollButton.setOnClickListener(this);
 	
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				R.array.checkable_skills_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		mSkillSpinner = (Spinner) mParentView.findViewById(R.id.spinnerSkillToRoll);
+		mSkillSpinner = (Spinner) getRootView().findViewById(R.id.spinnerSkillToRoll);
 		mSkillSpinner.setAdapter(adapter);
 		mSkillSpinner.setOnItemSelectedListener(this);
 		mSkillSpinner.setSelection(mSkillSelectedForRoll);
 		
-		mPartyMemberList = (ListView) mParentView.findViewById(R.id.listViewPartyMembers);
+		mPartyMemberList = (ListView) getRootView().findViewById(R.id.listViewPartyMembers);
 		
 		loadEncounterParty();
 		resetPartyRolls();
 		
-		return mParentView;
+		return getRootView();
     }
 	
 	
@@ -98,7 +100,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    		}
    		else{
    			mParty = currentEncounterParty;
-   					
+   			mParty.setName(mParty.getName() + " (in encounter)");
    			refreshPartyView();	
    		}
    	}
@@ -136,6 +138,8 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		}
 		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
 		mPartyMemberList.setAdapter(adapter);
+		setTitle(R.string.title_activity_skill_checker);
+		setSubtitle(mParty.getName());
 	}
 	
 	public void resetPartyRolls(){

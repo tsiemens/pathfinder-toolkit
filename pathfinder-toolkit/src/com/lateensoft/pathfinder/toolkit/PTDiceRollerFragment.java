@@ -45,13 +45,16 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mParentView = inflater.inflate(R.layout.fragment_dice_roller, container, false);
+
+		setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
 		setTitle(R.string.title_activity_ptdice_roller);
+		setSubtitle(null);
+		
 		setupContent();
 		mRollMode = ROLLMODE_SINGLE;
 		setRollTypeView(R.id.radiotoggleSingleRoll);
 	
-		return mParentView;
+		return getRootView();
 	}
 
 
@@ -241,38 +244,38 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 	}
 
 	private void setupContent() {
-		mRollTypeRadioGroup = (RadioGroup) mParentView.findViewById(R.id.toggleGroupRollType);
+		mRollTypeRadioGroup = (RadioGroup) getRootView().findViewById(R.id.toggleGroupRollType);
 		mRollTypeRadioGroup.setOnCheckedChangeListener(this);
 		
 		for (int i = 0; i < mRollTypeRadioGroup.getChildCount(); i++) {
 			mRollTypeRadioGroup.getChildAt(i).setOnClickListener(this);
 		}
 
-		mDieTypeRadioGroup = (RadioGroup) mParentView.findViewById(R.id.toggleGroupDieType);
+		mDieTypeRadioGroup = (RadioGroup) getRootView().findViewById(R.id.toggleGroupDieType);
 		mDieTypeRadioGroup.setOnCheckedChangeListener(this);
 		
 		for (int i = 0; i < mDieTypeRadioGroup.getChildCount(); i++) {
 			mDieTypeRadioGroup.getChildAt(i).setOnClickListener(this);
 		}
 
-		mDieQuantityUpButton = (Button) mParentView.findViewById(R.id.buttonPlusDiceNumber);
+		mDieQuantityUpButton = (Button) getRootView().findViewById(R.id.buttonPlusDiceNumber);
 		mDieQuantityUpButton.setOnClickListener(this);
-		mDieQuantityDownButton = (Button) mParentView.findViewById(R.id.buttonMinusDiceNumber);
+		mDieQuantityDownButton = (Button) getRootView().findViewById(R.id.buttonMinusDiceNumber);
 		mDieQuantityDownButton.setOnClickListener(this);
 
-		mRollButton = (Button) mParentView.findViewById(R.id.buttonRoll);
+		mRollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
 		mRollButton.setOnClickListener(this);
-		mResetButton = (Button) mParentView.findViewById(R.id.buttonReset);
+		mResetButton = (Button) getRootView().findViewById(R.id.buttonReset);
 		mResetButton.setOnClickListener(this);
 
-		mDieQuantityLabel = (TextView) mParentView.findViewById(R.id.textViewDiceNumberPicker);
+		mDieQuantityLabel = (TextView) getRootView().findViewById(R.id.textViewDiceNumberPicker);
 		mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
 
-		mRollResultLabel = (TextView) mParentView.findViewById(R.id.textViewRollResult);
+		mRollResultLabel = (TextView) getRootView().findViewById(R.id.textViewRollResult);
 
-		mRollSumLabel = (TextView) mParentView.findViewById(R.id.textViewRollSum);
+		mRollSumLabel = (TextView) getRootView().findViewById(R.id.textViewRollSum);
 		
-		mRollResultList = (ListView) mParentView.findViewById(R.id.rollResultListView);
+		mRollResultList = (ListView) getRootView().findViewById(R.id.rollResultListView);
 		
 		resetRolls();
 	}

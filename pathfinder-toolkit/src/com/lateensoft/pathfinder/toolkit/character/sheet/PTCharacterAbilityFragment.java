@@ -44,15 +44,15 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		
 		mContext = container.getContext();
 		
-		mParentView = inflater.inflate(R.layout.character_abilities_fragment,
-				container, false);
+		setRootView(inflater.inflate(R.layout.character_abilities_fragment,
+				container, false));
 		
 		mAbilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
 		mTempAbilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
 		
 		updateFragmentUI();
 		
-		return mParentView;
+		return getRootView();
 	}
 	
 	public void updateInterfaceAbilities() {
@@ -65,17 +65,17 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
     	Spinner s = new Spinner(mContext);
     	TextView tv = new TextView(mContext);
     	
-		tv = (TextView) mParentView.findViewById(modIds[key]);
+		tv = (TextView) getRootView().findViewById(modIds[key]);
 		tv.setText(mCharacter.getAbilitySet().getAbilityScore(key).getModifier());
 		
-		s = (Spinner) mParentView.findViewById(baseScoreIds[key]);
+		s = (Spinner) getRootView().findViewById(baseScoreIds[key]);
 		s.setSelection((mCharacter.getAbilitySet().getAbilityScore(key).getScore()));
 		
-		s = (Spinner) mParentView.findViewById(tempScoreIds[key]);
+		s = (Spinner) getRootView().findViewById(tempScoreIds[key]);
 		s.setSelection((mCharacter.getTempAbilitySet()
 				.getAbilityScore(key).getScore()));
 		
-		tv = (TextView) mParentView.findViewById(tempModIds[key]);
+		tv = (TextView) getRootView().findViewById(tempModIds[key]);
 		tv.setText((mCharacter.getTempAbilitySet()
 				.getAbilityScore(key).getModifier()));
     }
@@ -90,7 +90,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		
 		for(int i = 0; i < viewIds.length; i++) {
 			listeners[i] = new AbilityItemSelectedListener(isTemp, i);
-			spinners[i] = (Spinner) mParentView.findViewById(viewIds[i]); 
+			spinners[i] = (Spinner) getRootView().findViewById(viewIds[i]); 
 			
 			spinners[i].setAdapter(adapter);
 
@@ -109,7 +109,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		TextView tv;
 		
 		for(int i = 0; i < viewIds.length; i++) {
-			tv = (TextView) mParentView.findViewById(viewIds[i]); 
+			tv = (TextView) getRootView().findViewById(viewIds[i]); 
 			if(isTemp) {
 				tv.setText(Integer.toString(mCharacter.getTempAbilitySet().getAbilityScore(i)
 					.getModifier()));

@@ -4,9 +4,11 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
-public class PTPartyMember {
+public class PTPartyMember implements Parcelable {
 	
 	private String mName;
 	private int mInitiative;
@@ -73,6 +75,47 @@ public class PTPartyMember {
 		mSenseMotiveSkillBonus = memberToCopy.getSenseMotiveSkillBonus();
 		mStealthSkillBonus = memberToCopy.getStealthSkillBonus();
 		mRolledValue = memberToCopy.getRolledValue();
+	}
+	
+	public PTPartyMember(Parcel in) {
+		mName = in.readString();
+		mInitiative = in.readInt();
+		mAC = in.readInt();
+		mTouch = in.readInt();
+		mFlatFooted = in.readInt();
+		mSpellResist = in.readInt();
+		mDamageReduction = in.readInt();
+		mCMD = in.readInt();
+		mFortSave = in.readInt();
+		mReflexSave = in.readInt();
+		mWillSave = in.readInt();
+		mBluffSkillBonus = in.readInt();
+		mDisguiseSkillBonus = in.readInt();
+		mPerceptionSkillBonus = in.readInt();
+		mSenseMotiveSkillBonus = in.readInt();
+		mStealthSkillBonus = in.readInt();
+		mRolledValue = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeInt(mInitiative);
+		out.writeInt(mAC);
+		out.writeInt(mTouch);
+		out.writeInt(mFlatFooted);
+		out.writeInt(mSpellResist);
+		out.writeInt(mDamageReduction);
+		out.writeInt(mCMD);
+		out.writeInt(mFortSave);
+		out.writeInt(mReflexSave);
+		out.writeInt(mWillSave);
+		out.writeInt(mBluffSkillBonus);
+		out.writeInt(mDisguiseSkillBonus);
+		out.writeInt(mPerceptionSkillBonus);
+		out.writeInt(mSenseMotiveSkillBonus);
+		out.writeInt(mStealthSkillBonus);
+		out.writeInt(mRolledValue);
 	}
 
 
@@ -375,5 +418,20 @@ public class PTPartyMember {
 	public void setRolledValue(int rolledVal) {
 		this.mRolledValue = rolledVal;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTPartyMember> CREATOR = new Parcelable.Creator<PTPartyMember>() {
+		public PTPartyMember createFromParcel(Parcel in) {
+			return new PTPartyMember(in);
+		}
+		
+		public PTPartyMember[] newArray(int size) {
+			return new PTPartyMember[size];
+		}
+	};
 	
 }

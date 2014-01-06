@@ -1,37 +1,29 @@
 package com.lateensoft.pathfinder.toolkit.character.sheet;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.character.PTFeat;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterFeatEditActivity;
 
 public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
-		implements OnClickListener, OnItemClickListener,
-		android.content.DialogInterface.OnClickListener {
+		implements OnClickListener, OnItemClickListener {
 
 	private static final String TAG = PTCharacterFeatsFragment.class.getSimpleName();
 	private ListView mFeatsListView;
 	private Button mAddButton;
-
-	private EditText mDialogFeatNameEditText;
-	private EditText mDialogFeatDescEditText;
-
-	private ViewGroup mContainer;
 
 	private int mFeatSelectedForEdit;
 
@@ -45,26 +37,24 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		mContainer = container;
+		setRootView(inflater.inflate(R.layout.character_feats_fragment,
+				container, false));
 
-		mParentView = inflater.inflate(R.layout.character_feats_fragment,
-				container, false);
-
-		mAddButton = (Button) mParentView.findViewById(R.id.buttonAddFeat);
+		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
 		mAddButton.setOnClickListener(this);
 
-		mFeatsListView = (ListView) mParentView
+		mFeatsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewFeats);
 		refreshFeatsListView();
 		mFeatsListView.setOnItemClickListener(this);
 
-		return mParentView;
+		return getRootView();
 	}
 
 	private void refreshFeatsListView() {
 		String[] featNames = mCharacter.getFeatList().getFeatNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				mContainer.getContext(), android.R.layout.simple_list_item_1,
+				getActivity(), android.R.layout.simple_list_item_1,
 				featNames);
 		mFeatsListView.setAdapter(adapter);
 
@@ -73,112 +63,65 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	// Add Feat button was tapped
 	public void onClick(View button) {
 		mFeatSelectedForEdit = -1;
-		showFeatDialog(null);
+		showFeatEditor(null);
 
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		mFeatSelectedForEdit = position;
-		showFeatDialog(mCharacter.getFeatList().getFeat(position));
+		showFeatEditor(mCharacter.getFeatList().getFeat(position));
 
 	}
-
-	/**
-	 * Shows a dialog to add or edit a feat.
-	 * 
-	 * @param item
-	 */
-	private void showFeatDialog(PTFeat feat) {
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		// Set up dialog layout
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-
-		View dialogView = inflater.inflate(R.layout.character_feats_dialog,
-				null);
-		mDialogFeatNameEditText = (EditText) dialogView
-				.findViewById(R.id.etDialogFeatName);
-		mDialogFeatDescEditText = (EditText) dialogView
-				.findViewById(R.id.etDialogFeatDescription);
-
-		// Determine if add or edit
-		if (mFeatSelectedForEdit < 0) {
-			builder.setTitle("Add New Feat");
-		} else {
-			builder.setTitle("Edit/View Feat").setNeutralButton(
-					R.string.delete_button_text, this);
-			mDialogFeatNameEditText.setText(feat.getName());
-			mDialogFeatDescEditText.setText(feat.getDescription());
-
-		}
-
-		builder.setView(dialogView)
-				.setPositiveButton(R.string.ok_button_text, this)
-				.setNegativeButton(R.string.cancel_button_text, this);
-
-		AlertDialog alert = builder.create();
-		alert.show();
+	
+	private void showFeatEditor(PTFeat feat) {
+		Intent featEditIntent = new Intent(getActivity(),
+				PTCharacterFeatEditActivity.class);
+		featEditIntent.putExtra(
+				PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);
+		startActivityForResult(featEditIntent, 0);
 	}
 
-	public void onClick(DialogInterface dialogInterface, int selection) {
-		switch (selection) {
-		// OK button tapped
-		case DialogInterface.BUTTON_POSITIVE:
-
-			if (mFeatSelectedForEdit < 0) {
-				PTFeat newFeat = getFeatFromDialog();
-				if (newFeat != null) {
-					mCharacter.getFeatList().addFeat(newFeat);
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case Activity.RESULT_OK:
+			PTFeat item = data.getExtras().getParcelable(
+					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
+			Log.v(TAG, "Add/edit feat OK: " + item.getName());
+			if(mFeatSelectedForEdit < 0) {
+				Log.v(TAG, "Adding a feat");
+				if(item != null) {
+					mCharacter.getFeatList().addFeat(item);
 					refreshFeatsListView();
 				}
 			} else {
-				PTFeat editedFeat = getFeatFromDialog();
-				mCharacter.getFeatList().setFeat(editedFeat,
-						mFeatSelectedForEdit);
+				Log.v(TAG, "Editing a feat");
+				mCharacter.getFeatList().setFeat(item, mFeatSelectedForEdit);
 				refreshFeatsListView();
 			}
-
+			
 			break;
-		// Cancel Button tapped
-		case DialogInterface.BUTTON_NEGATIVE:
-			break;
-		// Delete Button tapped
-		case DialogInterface.BUTTON_NEUTRAL:
+		
+		case PTCharacterFeatEditActivity.RESULT_DELETE:
+			Log.v(TAG, "Deleting an item");
 			mCharacter.getFeatList().deleteFeat(mFeatSelectedForEdit);
 			refreshFeatsListView();
+			break;
+		
+		case Activity.RESULT_CANCELED:
+			break;
+		
 		default:
 			break;
 		}
-
-		// Close keyboard
-		InputMethodManager iMM = (InputMethodManager) getActivity()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		if (mDialogFeatNameEditText.hasFocus())
-			iMM.hideSoftInputFromInputMethod(
-					mDialogFeatNameEditText.getWindowToken(), 0);
-		else if (mDialogFeatDescEditText.hasFocus())
-			iMM.hideSoftInputFromInputMethod(
-					mDialogFeatDescEditText.getWindowToken(), 0);
-
-	}
-
-	private PTFeat getFeatFromDialog() {
-		String name = new String(mDialogFeatNameEditText.getText().toString());
-		if (name == null || name.contentEquals("")) {
-			return null;
-		}
-
-		String description = new String(mDialogFeatDescEditText.getText()
-				.toString());
-
-		return new PTFeat(name, description);
+		updateCharacterDatabase();
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	public void updateFragmentUI() {
 		refreshFeatsListView();
-
 	}
 	
 	@Override

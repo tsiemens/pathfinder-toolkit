@@ -21,7 +21,7 @@ public class PTItem implements Parcelable {
 	 * @param name
 	 * @param weight
 	 */
-	public PTItem(String name, int weight) {
+	public PTItem(String name, double weight) {
 		mName = name;
 		mWeight = weight;
 		mQuantity = 1;
@@ -65,7 +65,7 @@ public class PTItem implements Parcelable {
 		return mWeight;
 	}
 	
-	public void setWeight(int weight) {
+	public void setWeight(double weight) {
 		mWeight = weight;
 	}
 	

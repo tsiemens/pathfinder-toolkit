@@ -4,8 +4,10 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class PTWeapon extends PTItem {
+public class PTWeapon extends PTItem implements Parcelable{
 	int mTotalAttackBonus;
 	String mDamage;
 	String mCritical;
@@ -30,6 +32,31 @@ public class PTWeapon extends PTItem {
 	public PTWeapon(String name) {
 		this();
 		mName = name;
+	}
+	
+	public PTWeapon(Parcel in) {
+		super(in);
+		mTotalAttackBonus = in.readInt();
+		mDamage = in.readString();
+		mCritical = in.readString();
+		mRange = in.readInt();
+		mSpecialProperties = in.readString();
+		mAmmunition = in.readInt();
+		mType = in.readString();
+		mSize = in.readString();
+	}
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		out.writeInt(mTotalAttackBonus);
+		out.writeString(mDamage);
+		out.writeString(mCritical);
+		out.writeInt(mRange);
+		out.writeString(mSpecialProperties);
+		out.writeInt(mAmmunition);
+		out.writeString(mType);
+		out.writeString(mSize);
 	}
 
 	/**
@@ -163,5 +190,13 @@ public class PTWeapon extends PTItem {
 		return 0;
 	}
 	
-	
+	public static final Parcelable.Creator<PTWeapon> CREATOR = new Parcelable.Creator<PTWeapon>() {
+		public PTWeapon createFromParcel(Parcel in) {
+			return new PTWeapon(in);
+		}
+		
+		public PTWeapon[] newArray(int size) {
+			return new PTWeapon[size];
+		}
+	};
 }

@@ -14,6 +14,8 @@
     <string name="empty_string">""</string>
     <string name="auto_fill">Autofill</string>
     
+    <string name="autofill_toast_text">Character stats autofilled</string>
+    
     <string name="main_menu_icons_description">Icon for main menu item</string>
 
     <!-- Global menu item strings -->
@@ -29,12 +31,12 @@
 
     <!-- Main Menu Strings -->
     <string-array name="main_menu_array">
-        <item>Dice Roller</item>
         <item>Characters</item>
         <item>Initiative Tracker</item>
         <item>Party Skill Checker</item>
         <item>Party Manager</item>
         <item>Pointbuy Calculator</item>
+        <item>Dice Roller</item>
     </string-array>
     <string name="rate_dialog_title">Please rate our app!</string>
     <string name="rate_dialog_message">You rolled a 1 on your Rate Popup saving throw! Rate now to get a +5 cloak of ad avoidance. You can keep it until it slips back into the astral plane on the next update.</string>
@@ -45,6 +47,12 @@
     <string name="pref_about_screen_title">About Pathfinder Toolkit</string> 
     <string name="title_activity_about">About</string>
 
+    <!-- General Alerts -->
+    <string name="delete_button_text">Delete</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="error_alert_title">Error</string>
+    
     <!-- Character Sheet Tab Headers -->
     <string name="tab_character_inventory">Inventory</string>
     <string name="tab_character_weapons">Weapons</string>
@@ -243,6 +251,8 @@
     <string name="skills_filter_label">Filter:</string>
     <string name="skills_trained_filter">Trained</string>
     <string name="skills_all_filter">All</string>
+    
+    <string name="edit_skill_title">Edit Skill</string>
 
     <!-- Inventory -->
     <string name="inventory_add_item_button">+</string>
@@ -256,6 +266,13 @@
     <string name="inventory_total_weight_header">Total Wt:</string>
     <string name="inventory_gold_header">gp:</string>
     <string name="inventory_gold_hint">Gold</string>
+    <string name="new_item_title">New Item</string>
+    <string name="edit_item_title">Edit Item</string>
+    <string name="delete_item_alert_message">Are you sure you want to delete this item?</string>
+    
+    <string name="delete_alert_title">Delete</string>
+    <string name="delete_alert_message">Are you sure you want to delete this?</string>
+    <string name="editor_name_required_alert">You must enter a name.</string>
     
     <!-- Armor -->
     <string name="add_armor_button">Add Armor</string>
@@ -270,6 +287,8 @@
     <string name="armor_speed">Speed: \u0020</string>
     <string name="armor_max_dex">Max Dex: \u0020</string>
     <string name="new_armor_title">New Armor</string>
+    <string name="edit_armor_title">Edit Armor</string>
+    
     <string-array name="ac_spinner_options">
         <item>-20</item>
         <item>-19</item>
@@ -396,8 +415,8 @@
     <string name="weapon_total_attack_header">Attack:\u0020</string>
     <string name="weapon_highest_atk">Attack:\u0020</string>
     <string name="weapon_type_header">Type:\u0020</string>
-    <string name="new_weapon_title">New Weapon\u0020</string>
-    <string name="weapon_crit_hint">""</string>
+    <string name="new_weapon_title">New Weapon</string>
+    <string name="edit_weapon_title">Edit Weapon</string>
     
     <string-array name="weapon_attack_bonus_options">
         <item>-10</item>
@@ -514,7 +533,9 @@
     <string name="feats_add_button">Add Feat or Special Ability</string>
     <string name="feats_description_hint">Description</string>
     <string name="feats_name_hint">Name</string>
-
+    <string name="new_feat_title">New Feat</string>
+    <string name="edit_feat_title">Edit Feat</string>
+    
     <string-array name="fluff_fields">
         <item>Name</item>
         <item>Alignment</item>
@@ -577,6 +598,21 @@
         <item>39</item>
         <item>40</item>
     </string-array>
+    
+    <string-array name="spell_level_selectable_values_string">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+  	</string-array>
+    
     <string-array name="skills_selectable_values_string">
         <item>-10</item>
         <item>-9</item>
@@ -638,17 +674,14 @@
     <string name="temp_score">Temp\nScore</string>
 
     <!-- Spellbook Strings -->
-    <string name="Lv">Level</string>
+    <string name="spellbook_level">Level</string>
     <string name="spellbook_add_spell_button">+</string>
     <string name="spellbook_name">Name</string>
     <string name="spellbook_prepared">Prepared</string>
     <string name="spellbook_description">Description</string>
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
-    <string name="delete_button_text">Delete</string>
-    <string name="ok_button_text">OK</string>
-    <string name="cancel_button_text">Cancel</string>
-   
+   	<string name="edit_spell_title">Edit Spell</string>
     
     <!-- Initiative Tracker Strings -->
     <string name="menu_item_reset_encounter">Reset</string>
@@ -702,6 +735,11 @@
         <item>Sense Motive Skill Bonus</item>
         <item>Stealth Skill Bonus</item>
     </string-array>
+    
+    <!-- Base Editor -->
+    <string name="editor_menu_item_done">Done</string>
+    <string name="editor_menu_item_cancel">Cancel</string>
+    <string name="editor_menu_item_delete">Delete</string>
 
     <string name="menu_item_done">Done</string>
     <string name="menu_item_delete_member">Delete Party Member</string>

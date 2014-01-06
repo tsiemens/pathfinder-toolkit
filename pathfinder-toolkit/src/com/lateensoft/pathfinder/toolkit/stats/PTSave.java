@@ -2,10 +2,12 @@ package com.lateensoft.pathfinder.toolkit.stats;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTSave extends PTStat implements PTStorable {
-	private long mSaveId;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTSave extends PTStat implements Parcelable, PTStorable {
 	private long mCharacterId;
-	int mTotal;
+
 	int mAbilityMod;
 	int mMagicMod;
 	int mMiscMod;
@@ -17,7 +19,7 @@ public class PTSave extends PTStat implements PTStorable {
 		mMagicMod = 0;
 		mMiscMod = 0;
 		mTempMod = 0;
-		calculateTotal();
+		mCharacterId = 0;
 	}
 	
 	public PTSave(String name) {
@@ -26,13 +28,12 @@ public class PTSave extends PTStat implements PTStorable {
 		mMagicMod = 0;
 		mMiscMod = 0;
 		mTempMod = 0;
-		calculateTotal();
+		mCharacterId = 0;
 	}
 	
 	public PTSave(int id, long characterId, String name, int baseValue, int abilityMod, int magicMod,
 			int miscMod, int tempMod) {
-		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod);
-		mSaveId = id;
+		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod, id);
 		mCharacterId = characterId;
 	}
 	
@@ -49,6 +50,17 @@ public class PTSave extends PTStat implements PTStorable {
 		mMagicMod = magicMod;
 		mMiscMod = miscMod;
 		mTempMod = tempMod;
+		mCharacterId = 0;
+	}
+	
+	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
+			int miscMod, int tempMod, int id) {
+		super(id, name, baseValue);
+		mAbilityMod = abilityMod;
+		mMagicMod = magicMod;
+		mMiscMod = miscMod;
+		mTempMod = tempMod;
+		mCharacterId = 0;
 	}
 	
 	public PTSave(String name, int baseValue, int[] modArray) {
@@ -60,6 +72,7 @@ public class PTSave extends PTStat implements PTStorable {
 			mMiscMod = modArray[2];
 			mTempMod = modArray[3];
 		}
+		mCharacterId = 0;
 	}
 	
 	public PTSave(PTSave other) {
@@ -68,9 +81,30 @@ public class PTSave extends PTStat implements PTStorable {
 		mMagicMod = other.getMagicMod();
 		mMiscMod = other.getMiscMod();
 		mTempMod = other.getTempMod();
-		calculateTotal();
+		mCharacterId = other.getCharacterID();
+	}
+	
+	public PTSave(Parcel in) {
+		super(in.readLong(), in.readString(), in.readInt());
+		mAbilityMod = in.readInt();
+		mMagicMod = in.readInt();
+		mMiscMod = in.readInt();
+		mTempMod = in.readInt();
+		mCharacterId = in.readLong();
 	}
 
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeLong(getID());
+		out.writeString(getName());
+		out.writeInt(getBase());
+		out.writeInt(mAbilityMod);
+		out.writeInt(mMagicMod);
+		out.writeInt(mMiscMod);
+		out.writeInt(mTempMod);
+		out.writeLong(mCharacterId);
+	}
+	
 	public int getAbilityMod() {
 		return mAbilityMod;
 	}
@@ -92,8 +126,13 @@ public class PTSave extends PTStat implements PTStorable {
 	}
 	
 	public int getTotal() {
-		calculateTotal();
-		return mTotal;
+		int total = 0;
+		total += super.getBaseValue();
+		total += mAbilityMod;
+		total += mMagicMod;
+		total += mMiscMod;
+		total += mTempMod;
+		return total;
 	}
 	
 	public void setAbilityMod(int abilityMod) {
@@ -116,20 +155,23 @@ public class PTSave extends PTStat implements PTStorable {
 		mTempMod = tempMod;
 	}
 	
-	private void calculateTotal() {
-		mTotal = 0;
-		mTotal += super.getBaseValue();
-		mTotal += mAbilityMod;
-		mTotal += mMagicMod;
-		mTotal += mMiscMod;
-		mTotal += mTempMod;
-	}
-	
-	public Long getID() {
-		return mSaveId;
-	}
-	
+	@Override
 	public Long getCharacterID() {
 		return mCharacterId;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSave> CREATOR = new Parcelable.Creator<PTSave>() {
+		public PTSave createFromParcel(Parcel in) {
+			return new PTSave(in);
+		}
+		
+		public PTSave[] newArray(int size) {
+			return new PTSave[size];
+		}
+	};
 }

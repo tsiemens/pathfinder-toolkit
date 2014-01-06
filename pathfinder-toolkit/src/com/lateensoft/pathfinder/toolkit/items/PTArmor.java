@@ -39,6 +39,7 @@ public class PTArmor extends PTItem {
 		mSize = in.readString();
 	}
 	
+	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		super.writeToParcel(out, flags);
 		boolean[] worn = new boolean[1];

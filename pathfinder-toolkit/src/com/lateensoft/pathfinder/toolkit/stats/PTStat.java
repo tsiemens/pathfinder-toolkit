@@ -1,8 +1,10 @@
 package com.lateensoft.pathfinder.toolkit.stats;
 
+
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
 public abstract class PTStat implements PTStorable {
+
 	private String mName;
 	private int mBaseValue;
 	private long mId;
@@ -10,19 +12,22 @@ public abstract class PTStat implements PTStorable {
 	public PTStat() {
 		mName = "";
 		mBaseValue = 0;
+		mId = 0;
 	}
 	
 	public PTStat(String name) {
 		mName = name;
 		mBaseValue = 0;
+		mId = 0;
 	}
 	
 	public PTStat(String name, int baseValue) {
 		mName = name;
 		mBaseValue = baseValue;
+		mId = 0;
 	}
 	
-	public PTStat(int id, String name, int baseValue) {
+	public PTStat(long id, String name, int baseValue) {
 		mName = name;
 		mBaseValue = baseValue;
 		mId = id;

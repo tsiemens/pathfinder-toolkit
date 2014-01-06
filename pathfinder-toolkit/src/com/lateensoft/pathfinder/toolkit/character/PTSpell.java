@@ -1,7 +1,10 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
-public class PTSpell {
-	static final String TAG = "PTSpell";
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTSpell implements Parcelable{
+	static final String TAG = PTSpell.class.getSimpleName();
 	String mName;
 	int mPrepared;
 	int mLevel;
@@ -40,7 +43,22 @@ public class PTSpell {
 	public PTSpell(PTSpell spell) {
 		this(spell.getName(), spell.getLevel(), spell.getPrepared(), spell.getDescription());
 	}
+	
+	public PTSpell(Parcel in) {
+		mName = in.readString();
+		mLevel = in.readInt();
+		mPrepared = in.readInt();
+		mDescription = in.readString();
+	}
 
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeInt(mLevel);
+		out.writeInt(mPrepared);
+		out.writeString(mDescription);	
+	}
+	
 	public String getName() {
 		return mName;
 	}
@@ -131,5 +149,19 @@ public class PTSpell {
 		return true;
 	}
 
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTSpell> CREATOR = new Parcelable.Creator<PTSpell>() {
+		public PTSpell createFromParcel(Parcel in) {
+			return new PTSpell(in);
+		}
+		
+		public PTSpell[] newArray(int size) {
+			return new PTSpell[size];
+		}
+	};
 	
 }

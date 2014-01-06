@@ -4,14 +4,25 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 
-public class PTAbilityModSet extends PTAbilitySet{
-	private static final String TAG = "PTAbilitySet";
+public class PTAbilityModSet extends PTAbilitySet implements Parcelable{
+	private static final String TAG = PTAbilitySet.class.getSimpleName();
 	
 	public PTAbilityModSet() {
 		super();
+	}
+	
+	public PTAbilityModSet(Parcel in) {
+		super(in);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
 	}
 	
 	public void setMod(String ability, int score) {
@@ -75,4 +86,19 @@ public class PTAbilityModSet extends PTAbilitySet{
 		super.setScores(r.getIntArray(R.array.HumanMods));
 		setScore(index, 2);
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTAbilityModSet> CREATOR = new Parcelable.Creator<PTAbilityModSet>() {
+		public PTAbilityModSet createFromParcel(Parcel in) {
+			return new PTAbilityModSet(in);
+		}
+		
+		public PTAbilityModSet[] newArray(int size) {
+			return new PTAbilityModSet[size];
+		}
+	};
 }

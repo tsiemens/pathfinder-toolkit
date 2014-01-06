@@ -2,11 +2,19 @@ package com.lateensoft.pathfinder.toolkit.character;
 
 import java.util.ArrayList;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.items.PTWeapon;
 
-public class PTInventory {
+public class PTInventory implements Parcelable {
+	private static final String PARCEL_BUNDLE_KEY_ITEMS = "items";
+	private static final String PARCEL_BUNDLE_KEY_ARMOR = "armor";
+	private static final String PARCEL_BUNDLE_KEY_WEAPONS = "weapons";
+	
 	private ArrayList<PTItem> mItems;
 	private ArrayList<PTArmor> mArmor;
 	private ArrayList<PTWeapon> mWeapons;
@@ -20,6 +28,22 @@ public class PTInventory {
 		addItem(new PTItem("Sample Item", 10, 1, false));
 		addItem(new PTItem("Contained Item (ex. In bag of holding)", 30, 1, true));
 	
+	}
+	
+	public PTInventory(Parcel in) {
+		Bundle objectBundle = in.readBundle();
+		mItems = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS);
+		mArmor = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR);
+		mWeapons = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		Bundle objectBundle = new Bundle();
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS, mItems);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR, mArmor);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, mWeapons);
+		out.writeBundle(objectBundle);
 	}
 	
 	/**
@@ -235,4 +259,18 @@ public class PTInventory {
 		return totalWeight;
 	}
 	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTInventory> CREATOR = new Parcelable.Creator<PTInventory>() {
+		public PTInventory createFromParcel(Parcel in) {
+			return new PTInventory(in);
+		}
+		
+		public PTInventory[] newArray(int size) {
+			return new PTInventory[size];
+		}
+	};
 }

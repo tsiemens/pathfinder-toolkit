@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.character;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 
 /**
  * Representation for both Feats and Special  abilities
  * @author trevsiemens
  *
  */
-public class PTFeat {
+public class PTFeat implements Parcelable{
 	private String mName;
 	private String mDescription;
 	
@@ -24,6 +27,17 @@ public class PTFeat {
 		mName = new String(otherFeat.getName());
 		mDescription = new String (otherFeat.getDescription());
 		
+	}
+	
+	public PTFeat(Parcel in) {
+		mName = in.readString();
+		mDescription = in.readString();
+	}
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mName);
+		out.writeString(mDescription);
 	}
 	
 	public void setName(String name){
@@ -45,4 +59,20 @@ public class PTFeat {
 	public String getDescription(){
 		return mDescription;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTFeat> CREATOR = new Parcelable.Creator<PTFeat>() {
+		public PTFeat createFromParcel(Parcel in) {
+			return new PTFeat(in);
+		}
+		
+		public PTFeat[] newArray(int size) {
+			return new PTFeat[size];
+		}
+	};
+
 }

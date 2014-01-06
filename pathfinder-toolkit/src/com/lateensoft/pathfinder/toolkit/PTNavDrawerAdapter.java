@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +12,21 @@ import android.widget.TextView;
 
 public class PTNavDrawerAdapter implements ExpandableListAdapter{
 
-	public static long DICE_ROLLER_ID = 1;
-	public static long CHARACTER_SHEET_ID = 2;
-	public static long FLUFF_ID = 20; 
-	public static long COMBAT_STATS_ID = 21; 
-	public static long ABILITIES_ID = 22;
-	public static long SKILLS_ID = 23; 
-	public static long INVENTORY_ID = 24;
-	public static long ARMOR_ID = 25; 
-	public static long WEAPONS_ID = 26;
-	public static long FEATS_ID = 27;
-	public static long SPELLS_ID = 28;
-	public static long INITIATIVE_TRACKER_ID = 3;
-	public static long SKILL_CHECKER_ID = 4;
-	public static long PARTY_MANAGER_ID = 5;
-	public static long POINTBUY_ID = 6;
+	public static long CHARACTER_SHEET_ID = 1;
+	public static long FLUFF_ID = 10; 
+	public static long COMBAT_STATS_ID = 11; 
+	public static long ABILITIES_ID = 12;
+	public static long SKILLS_ID = 13; 
+	public static long INVENTORY_ID = 14;
+	public static long ARMOR_ID = 15; 
+	public static long WEAPONS_ID = 16;
+	public static long FEATS_ID = 17;
+	public static long SPELLS_ID = 18;
+	public static long INITIATIVE_TRACKER_ID = 2;
+	public static long SKILL_CHECKER_ID = 3;
+	public static long PARTY_MANAGER_ID = 4;
+	public static long POINTBUY_ID = 5;
+	public static long DICE_ROLLER_ID = 6;
 	
 	private Context mContext;
 	
@@ -42,12 +41,12 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		
 		mGroupNames = mContext.getResources().getStringArray(R.array.main_menu_array);
 		mGroupIconRes = new int[]{
-				R.drawable.dice_roller_icon,
 				R.drawable.character_sheet_icon,
 				R.drawable.initiative_icon,
 				R.drawable.skill_checker_icon,
 				R.drawable.party_icon,
-				R.drawable.stat_calc_icon
+				R.drawable.stat_calc_icon,
+				R.drawable.dice_roller_icon
 		};
 		mCharacterSheetPages = new String[]{
 				mContext.getString(R.string.tab_character_fluff),
@@ -124,11 +123,9 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
-			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
-			holder.divider = (View)row.findViewById(R.id.divider_view);
 			
 			row.setTag(holder);
 		}
@@ -143,18 +140,10 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		holder.groupState.setImageResource(R.drawable.expander_open_holo_dark);
 		holder.groupState.setVisibility(View.INVISIBLE);
 		
-		if (isLastChild) {
-			holder.divider.setVisibility(View.VISIBLE);
-		} else {
-			holder.divider.setVisibility(View.INVISIBLE);
-		}
-		
 		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == mSelectedItem) {
-			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holo_dialog_lighter_grey));
 		}
 		
 		return row;
@@ -172,11 +161,9 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
-			holder.selectionBar = (View)row.findViewById(R.id.selection_highlight_bar);
 			holder.name = (TextView)row.findViewById(R.id.tv_item_label);
 			holder.icon = (ImageView)row.findViewById(R.id.iv_item_icon);
 			holder.groupState = (ImageView)row.findViewById(R.id.iv_group_state);
-			holder.divider = (View)row.findViewById(R.id.divider_view);
 			
 			row.setTag(holder);
 		}
@@ -194,24 +181,16 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		
 		if (getGroupId(groupPosition) != CHARACTER_SHEET_ID) {
 			holder.groupState.setVisibility(View.INVISIBLE);
-			holder.divider.setVisibility(View.VISIBLE);
 		} else {
 			holder.groupState.setVisibility(View.VISIBLE);
-			if (isExpanded) {
-				holder.divider.setVisibility(View.INVISIBLE);
-			} else {
-				holder.divider.setVisibility(View.VISIBLE);
-			}
 		}
 		
 		// Show the selection indicator on the group, or on the character group is collapsed while a child is selected
 		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem || 
 				(getCombinedGroupId(getGroupId(groupPosition)) == CHARACTER_SHEET_ID &&
 				mSelectedItem >= FLUFF_ID && !isExpanded)) {
-			holder.selectionBar.setBackgroundColor(mContext.getResources().getColor(R.color.holoBlue));
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogDarkGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			holder.selectionBar.setBackgroundColor(Color.TRANSPARENT);
 			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
 		}
 		
@@ -262,11 +241,9 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	}
 	
 	static class ItemHolder {
-		View selectionBar;
 		TextView name;
 		ImageView icon;
 		ImageView groupState;
-		View divider;
 	}
 
 }

@@ -2,7 +2,10 @@ package com.lateensoft.pathfinder.toolkit.stats;
 
 import com.lateensoft.pathfinder.toolkit.repository.PTStorable;
 
-public class PTCombatStatSet implements PTStorable {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PTCombatStatSet implements Parcelable, PTStorable {
 	private int mTotalHP;
 	private int mWounds;
 	private int mNonLethalDamage;
@@ -67,6 +70,62 @@ public class PTCombatStatSet implements PTStorable {
 		mSpellResist = 0;
 	}
 	
+	public PTCombatStatSet(Parcel in) {
+		mTotalHP = in.readInt();
+		mWounds = in.readInt();
+		mNonLethalDamage = in.readInt();
+		mDamageReduction = in.readInt();
+		mBaseSpeedFt = in.readInt();
+		
+		mInitDexMod = in.readInt();
+		mInitMiscMod = in.readInt();
+		
+		mACArmour = in.readInt();
+		mACShield = in.readInt();
+		mACDexMod = in.readInt();
+		mSizeMod = in.readInt();
+		mACNaturalArmour = in.readInt();
+		mDeflectionMod = in.readInt();
+		mACMiscMod = in.readInt();
+		
+		mBABPrimary = in.readInt();
+		mBABSecondary = in.readString();
+		mStrengthMod = in.readInt();
+		mACDexMod = in.readInt();
+		
+		mCMDMiscMod = in.readInt();
+		
+		mSpellResist = in.readInt();
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeInt(mTotalHP);
+		out.writeInt(mWounds);
+		out.writeInt(mNonLethalDamage);
+		out.writeInt(mDamageReduction);
+		out.writeInt(mBaseSpeedFt);
+		
+		out.writeInt(mInitDexMod);
+		out.writeInt(mInitMiscMod);
+		
+		out.writeInt(mACArmour);
+		out.writeInt(mACShield);
+		out.writeInt(mACDexMod);
+		out.writeInt(mSizeMod);
+		out.writeInt(mACNaturalArmour);
+		out.writeInt(mDeflectionMod);
+		out.writeInt(mACMiscMod);
+		
+		out.writeInt(mBABPrimary);
+		out.writeString(mBABSecondary);
+		out.writeInt(mStrengthMod);
+		out.writeInt(mACDexMod);
+		
+		out.writeInt(mCMDMiscMod);
+		
+		out.writeInt(mSpellResist);
+	}
 	
 	public void setTotalHP(int totalHP){
 		mTotalHP = totalHP;
@@ -296,4 +355,19 @@ public class PTCombatStatSet implements PTStorable {
 	public Long getCharacterID() {
 		return mCharacterId;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	public static final Parcelable.Creator<PTCombatStatSet> CREATOR = new Parcelable.Creator<PTCombatStatSet>() {
+		public PTCombatStatSet createFromParcel(Parcel in) {
+			return new PTCombatStatSet(in);
+		}
+		
+		public PTCombatStatSet[] newArray(int size) {
+			return new PTCombatStatSet[size];
+		}
+	};
 }

@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.character.sheet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,10 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.items.PTArmor;
 
 public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
-	
-	Context mContext;
-	int mLayoutResourceId;
-	PTArmor[] mArmor = null;
-	static final String TAG = "PTArmorAdapter";
+	private static final String TAG = PTArmorAdapter.class.getSimpleName();
+	private Context mContext;
+	private int mLayoutResourceId;
+	private PTArmor[] mArmor = null;
 	
 	public PTArmorAdapter(Context context, int textViewResourceId,
 			PTArmor[] objects) {
