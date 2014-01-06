@@ -21,7 +21,6 @@ public class PTTableCreator {
 		db.execSQL(createPartyMember());
 		db.execSQL(createParty());
 		db.execSQL(createSpell());
-		db.execSQL(createSpellBook());
 		db.execSQL(createFeat());
 		db.execSQL(createFluffInfo());
 	}
@@ -196,17 +195,6 @@ public class PTTableCreator {
 				"Prepared INTEGER," +
 				"Level INTEGER," +
 				"Description TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
-					"ON DELETE CASCADE " +
-				");";
-	}
-	
-	public String createSpellBook() {
-		Log.d(TAG, "Creating spellbook table");
-		return "CREATE TABLE SpellBook (" +
-				"spell_book_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"character_id INTEGER, " +
-				"SpellCount TEXT, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

@@ -4,7 +4,6 @@ import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class PTDatabase extends SQLiteOpenHelper {
 	
+	@SuppressWarnings("unused")
 	private final String TAG = PTDatabase.class.getSimpleName();
 	public static final String DB_NAME = "pathfinder_toolkit.db";
 	public static int dbVersion = 1;
@@ -51,7 +51,7 @@ public class PTDatabase extends SQLiteOpenHelper {
 		if (!mDatabase.isOpen()) {
 			mDatabase = getWritableDatabase();
 			if (!mDatabase.isReadOnly()) {
-		        // Enable foreign key constraints
+		        // Enable foreign key constraints, as they are disabled by default in sqlite 3.7
 		        mDatabase.execSQL("PRAGMA foreign_keys=ON;");
 		    }
 		}

@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.test;
+package com.lateensoft.pathfinder.toolkit.test.model.character.stats;
 
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityScore;
 

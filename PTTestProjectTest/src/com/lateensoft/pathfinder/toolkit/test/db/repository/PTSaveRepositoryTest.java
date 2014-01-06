@@ -1,7 +1,9 @@
-package com.lateensoft.pathfinder.toolkit.repository.test;
+package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
-import com.lateensoft.pathfinder.toolkit.repository.PTSaveRepository;
-import com.lateensoft.pathfinder.toolkit.stats.PTSave;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTSaveRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
+
+
 
 public class PTSaveRepositoryTest extends PTBaseRepositoryTest {
 	static final int ID = 4;

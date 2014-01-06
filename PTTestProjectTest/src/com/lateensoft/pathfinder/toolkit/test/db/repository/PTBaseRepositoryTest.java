@@ -1,9 +1,9 @@
-package com.lateensoft.pathfinder.toolkit.repository.test;
+package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacter;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
-import com.lateensoft.pathfinder.toolkit.repository.PTCharacterRepository;
+import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 
 import android.test.AndroidTestCase;
 
