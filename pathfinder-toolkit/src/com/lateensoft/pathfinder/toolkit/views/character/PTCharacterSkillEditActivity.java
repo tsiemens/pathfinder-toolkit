@@ -6,7 +6,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.stats.PTSkill;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {

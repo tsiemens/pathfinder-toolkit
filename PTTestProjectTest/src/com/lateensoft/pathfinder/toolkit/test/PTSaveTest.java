@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test;
 
-import com.lateensoft.pathfinder.toolkit.stats.PTSave;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 
 import junit.framework.TestCase;
 

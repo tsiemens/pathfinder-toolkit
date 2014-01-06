@@ -25,19 +25,25 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterAbilityFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterArmorFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterCombatStatsFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterFeatsFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterFluffFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterInventoryFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSheetFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSkillsFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterSpellBookFragment;
-import com.lateensoft.pathfinder.toolkit.character.sheet.PTCharacterWeaponsFragment;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabase;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTDatabaseManager;
-import com.lateensoft.pathfinder.toolkit.datahelpers.PTSharedPreferences;
+import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
+import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
+import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
+import com.lateensoft.pathfinder.toolkit.views.PTDiceRollerFragment;
+import com.lateensoft.pathfinder.toolkit.views.PTPointbuyCalculatorFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterAbilityFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterArmorFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterCombatStatsFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterFeatsFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterFluffFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterInventoryFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSheetFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSkillsFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSpellBookFragment;
+import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterWeaponsFragment;
+import com.lateensoft.pathfinder.toolkit.views.party.PTInitiativeTrackerFragment;
+import com.lateensoft.pathfinder.toolkit.views.party.PTPartyManagerFragment;
+import com.lateensoft.pathfinder.toolkit.views.party.PTPartySkillCheckerFragment;
 
 public class PTMainActivity extends Activity implements
 		OnClickListener, OnChildClickListener, OnGroupClickListener,

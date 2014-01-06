@@ -5,7 +5,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.items.PTItem;
+import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterInventoryEditActivity extends PTParcelableEditorActivity {

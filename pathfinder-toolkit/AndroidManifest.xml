@@ -61,19 +61,19 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".party.PTPartyMemberEditorActivity"
+            android:name="com.lateensoft.pathfinder.toolkit.views.party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
 		<activity
-            android:name=".settings.PTSettingsActivity"
+            android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".settings.PTAboutActivity"
+      		android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTAboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >

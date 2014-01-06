@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test;
 
-import com.lateensoft.pathfinder.toolkit.stats.PTAbilityScore;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityScore;
 
 import junit.framework.TestCase;
 

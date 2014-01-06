@@ -1,7 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 import android.os.Parcelable;
