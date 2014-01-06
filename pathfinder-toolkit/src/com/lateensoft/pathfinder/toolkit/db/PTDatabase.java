@@ -50,6 +50,10 @@ public class PTDatabase extends SQLiteOpenHelper {
 	public void open() throws SQLException {
 		if (!mDatabase.isOpen()) {
 			mDatabase = getWritableDatabase();
+			if (!mDatabase.isReadOnly()) {
+		        // Enable foreign key constraints
+		        mDatabase.execSQL("PRAGMA foreign_keys=ON;");
+		    }
 		}
 	}
 	

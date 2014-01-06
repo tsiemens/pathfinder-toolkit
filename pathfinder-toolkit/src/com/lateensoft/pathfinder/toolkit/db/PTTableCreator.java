@@ -39,7 +39,8 @@ public class PTTableCreator {
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
 				"KeyAbilityKey INTEGER, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -55,7 +56,8 @@ public class PTTableCreator {
 				"MagicMod INTEGER, " +
 				"MiscMod INTEGER, " +
 				"TempMod INTEGER, " +
-				"FOREIGN KEY(character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY(character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -84,7 +86,8 @@ public class PTTableCreator {
 				"CMDDexMod INTEGER, " +
 				"CMDMiscMod INTEGER, " +
 				"SpellResist INTEGER, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -96,7 +99,8 @@ public class PTTableCreator {
 				"character_id INTEGER,  " +
 				"Ability TEXT, " +
 				"Score INTEGER, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -109,19 +113,15 @@ public class PTTableCreator {
 				"Weight REAL, " +
 				"Quantity INTEGER, " +
 				"IsContained INTEGER, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
 	public String createArmor() {
 		Log.d(TAG, "Creating armor table");
 		return "CREATE TABLE Armor (" +
-				"armor_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"character_id INTEGER, " +
-				"Name TEXT, " +
-				"Weight REAL, " +
-				"Quantity INTEGER, " +
-				"IsContained INTEGER, " +
+				"item_id INTEGER PRIMARY KEY, " +
 				"Worn INTEGER," +
 				"ACBonus INTEGER, " +
 				"CheckPen INTEGER, " +
@@ -130,19 +130,15 @@ public class PTTableCreator {
 				"Speed INTEGER, " +
 				"SpecialProperties TEXT," +
 				"Size TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (item_id) REFERENCES Item(item_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
 	public String createWeapon() {
 		Log.d(TAG, "Creating weapon table");
 		return "CREATE TABLE Weapon (" +
-				"weapon_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"character_id INTEGER, " +
-				"Name TEXT, " +
-				"Weight REAL, " +
-				"Quantity INTEGER, " +
-				"IsContained INTEGER, " +
+				"item_id INTEGER PRIMARY KEY, " +
 				"TotalAttackBonus INTEGER, " +
 				"Attack TEXT, " +
 				"Damage TEXT, " +
@@ -152,7 +148,8 @@ public class PTTableCreator {
 				"Ammunition INTEGER, " +
 				"Type TEXT, " +
 				"Size Text, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (item_id) REFERENCES Item(item_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -177,7 +174,8 @@ public class PTTableCreator {
 				"SenseMotiveSkillBonus INTEGER, " +
 				"StealthSkillBonus INTEGER, " +
 				"RolledValue INTEGER, " +
-				"FOREIGN KEY (party_id) REFERENCES Party(party_id)" +
+				"FOREIGN KEY (party_id) REFERENCES Party(party_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -198,7 +196,8 @@ public class PTTableCreator {
 				"Prepared INTEGER," +
 				"Level INTEGER," +
 				"Description TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -208,7 +207,8 @@ public class PTTableCreator {
 				"spell_book_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"character_id INTEGER, " +
 				"SpellCount TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -219,7 +219,8 @@ public class PTTableCreator {
 				"character_id INTEGER, " +
 				"Name TEXT, " +
 				"Description TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");";
 	}
 	
@@ -246,7 +247,8 @@ public class PTTableCreator {
 				"Languages TEXT, " +
 				"Description TEXT, " +
 				"Other TEXT, " +
-				"FOREIGN KEY (character_id) REFERENCES Character(character_id)" +
+				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+					"ON DELETE CASCADE " +
 				");"; 
 	}
 	
