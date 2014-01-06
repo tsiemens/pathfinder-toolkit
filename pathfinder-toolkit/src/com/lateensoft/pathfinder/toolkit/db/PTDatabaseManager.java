@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.db;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
