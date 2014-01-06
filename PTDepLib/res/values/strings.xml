@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PTDepLib</string>
+
+    <string-array name="party_member_stats">
+        <item>Initiative</item>
+        <item>AC</item>
+        <item>Touch</item>
+        <item>Flat Footed</item>
+        <item>Spell Resistance</item>
+        <item>Damage Reduction</item>
+        <item>CMD</item>
+        <item>Fortitude Save</item>
+        <item>Reflex Save</item>
+        <item>Will Save</item>
+        <item>Bluff Skill Bonus</item>
+        <item>Disguise Skill Bonus</item>
+        <item>Perception Skill Bonus</item>
+        <item>Sense Motive Skill Bonus</item>
+        <item>Stealth Skill Bonus</item>
+    </string-array>
+    <string-array name="save_names">
+        <item>Fortitude</item>
+        <item>Reflex</item>
+        <item>Will</item>
+    </string-array>
+    <string-array name="abilities_short">
+        <item>STR</item>
+        <item>DEX</item>
+        <item>CON</item>
+        <item>INT</item>
+        <item>WIS</item>
+        <item>CHA</item>
+    </string-array>
+    <string-array name="skills">
+        <item>Acrobatics</item>
+        <item>Appraise</item>
+        <item>Bluff</item>
+        <item>Climb</item>
+        <item>Craft</item>
+        <item>Diplomacy</item>
+        <item>Disable Device</item>
+        <item>Disguise</item>
+        <item>Escape Artist</item>
+        <item>Fly</item>
+        <item>Handle Animal</item>
+        <item>Heal</item>
+        <item>Intimidate</item>
+        <item>Knowledge (Arcana)</item>
+        <item>Knowledge (Dungeoneering)</item>
+        <item>Knowledge (Engineering)</item>
+        <item>Knowledge (Geography)</item>
+        <item>Knowledge (History)</item>
+        <item>Knowledge (Local)</item>
+        <item>Knowledge (Nature)</item>
+        <item>Knowledge (Nobility)</item>
+        <item>Knowledge (Planes)</item>
+        <item>Knowledge (Religion)</item>
+        <item>Linguistics</item>
+        <item>Perception</item>
+        <item>Perform</item>
+        <item>Profession</item>
+        <item>Ride</item>
+        <item>Sense Motive</item>
+        <item>Sleight of Hand</item>
+        <item>Spellcraft</item>
+        <item>Stealth</item>
+        <item>Survival</item>
+        <item>Swim</item>
+        <item>Use Magic Device</item>
+    </string-array>
+    <string-array name="weapon_type_options">
+        <item>S</item>
+        <item>P</item>
+        <item>B</item>
+        <item>P\/B</item>
+        <item>S\/B</item>
+        <item>S\/P</item>
+        <item>S\/P\/B</item>
+    </string-array>
+    <string-array name="fluff_fields">
+        <item>Name</item>
+        <item>Alignment</item>
+        <item>XP</item>
+        <item>Next Level XP</item>
+        <item>Class</item>
+        <item>Race</item>
+        <item>Deity</item>
+        <item>Level</item>
+        <item>Size</item>
+        <item>Gender</item>
+        <item>Height</item>
+        <item>Weight</item>
+        <item>Eyes</item>
+        <item>Hair</item>
+        <item>Languages</item>
+        <item>Description</item>
+    </string-array>
+
+</resources>
