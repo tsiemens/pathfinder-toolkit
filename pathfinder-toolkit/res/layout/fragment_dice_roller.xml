@@ -202,13 +202,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="5"
-        android:layout_weight="12" >
+        android:layout_weight="12"
+        style="?android:attr/buttonBarStyle" >
 
         <Button
             android:id="@+id/buttonRoll"
             android:layout_width="@dimen/dice_roller_roll_button_width"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/roller_roll_button" />
 
         <Button
@@ -216,6 +218,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/roller_reset_button" />
     </LinearLayout>
 

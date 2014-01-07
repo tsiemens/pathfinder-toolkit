@@ -14,6 +14,7 @@ public class PTBaseRepositoryTest extends AndroidTestCase {
 	protected final int INSERT_FAIL = -1;
 	
 	protected void setUp() {
+		// TODO move this into it's own test case, not setup
 		mDatabase = PTDatabase.getSharedInstance();
 		PTCharacter joe = new PTCharacter(CHARACTER_TAG, PTBaseApplication.getAppContext());
 		PTCharacterRepository repo = new PTCharacterRepository();

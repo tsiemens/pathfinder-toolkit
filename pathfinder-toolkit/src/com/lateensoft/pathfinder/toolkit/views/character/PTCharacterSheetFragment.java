@@ -305,7 +305,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 
 		case MENU_ITEM_NEW_CHARACTER:
 			builder.setTitle(getString(R.string.menu_item_new_character));
-			builder.setMessage("Create new character?")
+			builder.setMessage(getString(R.string.new_character_dialog_message))
 					.setPositiveButton(R.string.ok_button_text, mCharacterClickListener)
 					.setNegativeButton(R.string.cancel_button_text, mCharacterClickListener);
 			break;

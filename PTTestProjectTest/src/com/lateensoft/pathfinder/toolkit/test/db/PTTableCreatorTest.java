@@ -29,6 +29,7 @@ public class PTTableCreatorTest extends AndroidTestCase {
 		boolean found;
 		for (int i=0; i < tables.length; i++) {
 			found = false;
+			c.moveToFirst();
 			while(!c.isAfterLast()) {
 				if (tables[i].contentEquals(c.getString(0))) {
 					found = true;

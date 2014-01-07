@@ -2,16 +2,13 @@
 
     <!-- General Strings -->
     <string name="app_name">Pathfinder Toolkit</string>
-    <string name="menu_settings">Settings</string>
     <string name="title_activity_main_menu">Pathfinder Toolkit</string>
     <string name="title_activity_ability_calc">Pointbuy Calculator</string>
-    <string name="title_activity_character_sheet">Character Sheet</string>
     <string name="title_activity_initiative_tracker">Initiative Tracker</string>
     <string name="title_activity_skill_checker">Party Skill Checker</string>
     <string name="title_activity_party_manager">Party Manager</string>
     <string name="title_activity_party_member_editor">Party Member Editor</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="empty_string">""</string>
     <string name="auto_fill">Autofill</string>
     
     <string name="autofill_toast_text">Character stats autofilled</string>
@@ -117,7 +114,6 @@
     <string name="score">Score</string>
     <string name="modifier">Mod.</string>
     <string name="points">Points:</string>
-    <string name="three_spaces">   </string>
 
     <string-array name="skills">
         <item>Acrobatics</item>
@@ -268,7 +264,6 @@
     <string name="inventory_gold_hint">Gold</string>
     <string name="new_item_title">New Item</string>
     <string name="edit_item_title">Edit Item</string>
-    <string name="delete_item_alert_message">Are you sure you want to delete this item?</string>
     
     <string name="delete_alert_title">Delete</string>
     <string name="delete_alert_message">Are you sure you want to delete this?</string>
@@ -470,28 +465,6 @@
         <item>+38</item>
         <item>+39</item>
         <item>+40</item>
-	</string-array>
-	
-    <string-array name="weapon_crit_mult_options">
-        <item>0x</item>
-        <item>1x</item>
-        <item>2x</item>
-        <item>3x</item>
-        <item>4x</item>
-	</string-array>
-	
-    <string-array name="weapon_crit_range_options">
-        <item>10&#8211;20</item>
-        <item>11&#8211;20</item>
-        <item>12&#8211;20</item>
-        <item>13&#8211;20</item>
-        <item>14&#8211;20</item>
-        <item>15&#8211;20</item>
-        <item>16&#8211;20</item>
-        <item>17&#8211;20</item>
-        <item>18&#8211;20</item>
-        <item>19&#8211;20</item>
-        <item>20</item>
 	</string-array>
 	
     <string-array name="weapon_type_options">
@@ -740,10 +713,5 @@
     <string name="editor_menu_item_done">Done</string>
     <string name="editor_menu_item_cancel">Cancel</string>
     <string name="editor_menu_item_delete">Delete</string>
-
-    <string name="menu_item_done">Done</string>
-    <string name="menu_item_delete_member">Delete Party Member</string>
-    <string name="party_member_index_key">PM_INDEX</string>
-    <string name="party_id_key">PARTY_ID</string>
 
 </resources>
