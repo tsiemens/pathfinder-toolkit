@@ -6,245 +6,253 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PTCombatStatSet implements Parcelable, PTStorable {
-	private int mTotalHP;
-	private int mWounds;
-	private int mNonLethalDamage;
-	private int mDamageReduction;
-	private int mBaseSpeedFt;
+	private int m_totalHP;
+	private int m_wounds;
+	private int m_nonLethalDamage;
+	private int m_damageReduction;
+	private int m_baseSpeedFt;
 	//may need other for speed
 	
-	private int mInitDexMod;
-	private int mInitMiscMod;
+	private int m_initDexMod;
+	private int m_initMiscMod;
 	
-	private int mACArmour;
-	private int mACShield;
-	private int mACDexMod;
-	private int mSizeMod;
-	private int mACNaturalArmour;
-	private int mDeflectionMod;
-	private int mACMiscMod;
+	private int m_ACArmour;
+	private int m_ACShield;
+	private int m_ACDexMod;
+	private int m_sizeMod;
+	private int m_ACNaturalArmour;
+	private int m_deflectionMod;
+	private int m_ACMiscMod;
 	
-	private int mBABPrimary;
-	private String mBABSecondary;
-	private int mStrengthMod;
-	private int mCMDDexMod;
+	private int m_BABPrimary;
+	private String m_BABSecondary;
+	private int m_strengthMod;
+	private int m_CMDDexMod;
 	
-	private int mCMDMiscMod;
+	private int m_CMDMiscMod;
 	
-	private int mSpellResist;
+	private int m_spellResist;
 	
-	private long mId;
-	private long mCharacterId;
+	private long m_id;
+	private long m_characterId;
 	
 	public PTCombatStatSet(long id, long characterId) {
 		this();
-		mId = id;
-		mCharacterId = characterId;
+		m_id = id;
+		m_characterId = characterId;
+	}
+	
+	public PTCombatStatSet(long characterId) {
+		this();
+		m_characterId = characterId;
 	}
 	
 	public PTCombatStatSet(){
-		mTotalHP = 0;
-		mWounds = 0;
-		mNonLethalDamage = 0;
-		mDamageReduction = 0;
-		mBaseSpeedFt = 0;
+		m_totalHP = 0;
+		m_wounds = 0;
+		m_nonLethalDamage = 0;
+		m_damageReduction = 0;
+		m_baseSpeedFt = 0;
 		
-		mInitDexMod = 0;
-		mInitMiscMod = 0;
+		m_initDexMod = 0;
+		m_initMiscMod = 0;
 		
-		mACArmour = 0;
-		mACShield = 0;
-		mACDexMod = 0;
-		mSizeMod = 0;
-		mACNaturalArmour = 0;
-		mDeflectionMod = 0;
-		mACMiscMod = 0;
+		m_ACArmour = 0;
+		m_ACShield = 0;
+		m_ACDexMod = 0;
+		m_sizeMod = 0;
+		m_ACNaturalArmour = 0;
+		m_deflectionMod = 0;
+		m_ACMiscMod = 0;
 		
-		mBABPrimary = 0;
-		mBABSecondary = "";
-		mStrengthMod = 0;
-		mACDexMod = 0;
+		m_BABPrimary = 0;
+		m_BABSecondary = "";
+		m_strengthMod = 0;
+		m_ACDexMod = 0;
 		
-		mCMDMiscMod = 0;
+		m_CMDMiscMod = 0;
 		
-		mSpellResist = 0;
+		m_spellResist = 0;
+		
+		m_id = 0;
+		m_characterId = 0;
 	}
 	
 	public PTCombatStatSet(Parcel in) {
-		mTotalHP = in.readInt();
-		mWounds = in.readInt();
-		mNonLethalDamage = in.readInt();
-		mDamageReduction = in.readInt();
-		mBaseSpeedFt = in.readInt();
+		m_totalHP = in.readInt();
+		m_wounds = in.readInt();
+		m_nonLethalDamage = in.readInt();
+		m_damageReduction = in.readInt();
+		m_baseSpeedFt = in.readInt();
 		
-		mInitDexMod = in.readInt();
-		mInitMiscMod = in.readInt();
+		m_initDexMod = in.readInt();
+		m_initMiscMod = in.readInt();
 		
-		mACArmour = in.readInt();
-		mACShield = in.readInt();
-		mACDexMod = in.readInt();
-		mSizeMod = in.readInt();
-		mACNaturalArmour = in.readInt();
-		mDeflectionMod = in.readInt();
-		mACMiscMod = in.readInt();
+		m_ACArmour = in.readInt();
+		m_ACShield = in.readInt();
+		m_ACDexMod = in.readInt();
+		m_sizeMod = in.readInt();
+		m_ACNaturalArmour = in.readInt();
+		m_deflectionMod = in.readInt();
+		m_ACMiscMod = in.readInt();
 		
-		mBABPrimary = in.readInt();
-		mBABSecondary = in.readString();
-		mStrengthMod = in.readInt();
-		mACDexMod = in.readInt();
+		m_BABPrimary = in.readInt();
+		m_BABSecondary = in.readString();
+		m_strengthMod = in.readInt();
+		m_ACDexMod = in.readInt();
 		
-		mCMDMiscMod = in.readInt();
+		m_CMDMiscMod = in.readInt();
 		
-		mSpellResist = in.readInt();
+		m_spellResist = in.readInt();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(mTotalHP);
-		out.writeInt(mWounds);
-		out.writeInt(mNonLethalDamage);
-		out.writeInt(mDamageReduction);
-		out.writeInt(mBaseSpeedFt);
+		out.writeInt(m_totalHP);
+		out.writeInt(m_wounds);
+		out.writeInt(m_nonLethalDamage);
+		out.writeInt(m_damageReduction);
+		out.writeInt(m_baseSpeedFt);
 		
-		out.writeInt(mInitDexMod);
-		out.writeInt(mInitMiscMod);
+		out.writeInt(m_initDexMod);
+		out.writeInt(m_initMiscMod);
 		
-		out.writeInt(mACArmour);
-		out.writeInt(mACShield);
-		out.writeInt(mACDexMod);
-		out.writeInt(mSizeMod);
-		out.writeInt(mACNaturalArmour);
-		out.writeInt(mDeflectionMod);
-		out.writeInt(mACMiscMod);
+		out.writeInt(m_ACArmour);
+		out.writeInt(m_ACShield);
+		out.writeInt(m_ACDexMod);
+		out.writeInt(m_sizeMod);
+		out.writeInt(m_ACNaturalArmour);
+		out.writeInt(m_deflectionMod);
+		out.writeInt(m_ACMiscMod);
 		
-		out.writeInt(mBABPrimary);
-		out.writeString(mBABSecondary);
-		out.writeInt(mStrengthMod);
-		out.writeInt(mACDexMod);
+		out.writeInt(m_BABPrimary);
+		out.writeString(m_BABSecondary);
+		out.writeInt(m_strengthMod);
+		out.writeInt(m_ACDexMod);
 		
-		out.writeInt(mCMDMiscMod);
+		out.writeInt(m_CMDMiscMod);
 		
-		out.writeInt(mSpellResist);
+		out.writeInt(m_spellResist);
 	}
 	
 	public void setTotalHP(int totalHP){
-		mTotalHP = totalHP;
+		m_totalHP = totalHP;
 	}
 	
 	public int getTotalHP(){
-		return mTotalHP;
+		return m_totalHP;
 	}
 	
 	public void setWounds(int wounds){
-		mWounds = wounds;
+		m_wounds = wounds;
 	}
 	
 	public int getWounds(){
-		return mWounds;
+		return m_wounds;
 	}
 	
 	public void setNonLethalDamage(int nonlethalDamage){
-		mNonLethalDamage = nonlethalDamage;
+		m_nonLethalDamage = nonlethalDamage;
 	}
 	
 	public int getNonLethalDamage(){
-		return mNonLethalDamage;
+		return m_nonLethalDamage;
 	}
 	
 	public int getCurrentHP(){
-		return mTotalHP - mWounds - mNonLethalDamage;
+		return m_totalHP - m_wounds - m_nonLethalDamage;
 	}
 	
 	public void setDamageReduction(int damageReduction){
-		mDamageReduction = damageReduction;
+		m_damageReduction = damageReduction;
 	}
 	
 	public int getDamageReduction(){
-		return mDamageReduction;
+		return m_damageReduction;
 	}
 	
 	public void setBaseSpeed(int baseSpeedInFeet){
-		mBaseSpeedFt = baseSpeedInFeet;
+		m_baseSpeedFt = baseSpeedInFeet;
 	}
 	
 	public int getBaseSpeed(){
-		return mBaseSpeedFt;
+		return m_baseSpeedFt;
 	}
 	
 	public void setInitDexMod(int dexMod){
-		mInitDexMod = dexMod;
+		m_initDexMod = dexMod;
 	}
 	
 	public int getInitDexMod(){
-		return mInitDexMod;
+		return m_initDexMod;
 	}
 	
 	public void setInitiativeMiscMod(int initMiscMod){
-		mInitMiscMod = initMiscMod;
+		m_initMiscMod = initMiscMod;
 	}
 	
 	public int getInitiativeMiscMod(){
-		return mInitMiscMod;
+		return m_initMiscMod;
 	}
 	
 	public int getInitiativeMod(){
-		return mInitDexMod + mInitMiscMod;
+		return m_initDexMod + m_initMiscMod;
 	}
 	
 	public void setACArmourBonus(int armourBonus){
-		mACArmour = armourBonus;
+		m_ACArmour = armourBonus;
 	}
 	
 	public int getACArmourBonus(){
-		return mACArmour;
+		return m_ACArmour;
 	}
 	
 	public void setACShieldBonus(int shieldBonus){
-		mACShield = shieldBonus;
+		m_ACShield = shieldBonus;
 	}
 	
 	public int getACShieldBonus(){
-		return mACShield;
+		return m_ACShield;
 	}
 	
 	public void setACDexMod(int dexMod){
-		mACDexMod = dexMod;
+		m_ACDexMod = dexMod;
 	}
 	
 	public int getACDexMod(){
-		return mACDexMod;
+		return m_ACDexMod;
 	}
 	
 	public void setSizeModifier(int sizeMod){
-		mSizeMod = sizeMod;
+		m_sizeMod = sizeMod;
 	}
 	
 	public int getSizeModifier(){
-		return mSizeMod;
+		return m_sizeMod;
 	}
 	
 	public void setNaturalArmour(int naturalArmour){
-		mACNaturalArmour = naturalArmour;
+		m_ACNaturalArmour = naturalArmour;
 	}
 	
 	public int getNaturalArmour(){
-		return mACNaturalArmour;
+		return m_ACNaturalArmour;
 	}
 	
 	public void setDeflectionMod(int deflectionMod){
-		mDeflectionMod = deflectionMod;
+		m_deflectionMod = deflectionMod;
 	}
 	
 	public int getDeflectionMod(){
-		return mDeflectionMod;
+		return m_deflectionMod;
 	}
 	
 	public void setACMiscMod(int miscMod){
-		mACMiscMod = miscMod;
+		m_ACMiscMod = miscMod;
 	}
 	
 	public int getACMiscMod(){
-		return mACMiscMod;
+		return m_ACMiscMod;
 	}
 	
 	/**
@@ -252,7 +260,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @return the net AC of the character. This is 10 + armour + shield + dexmod + sizemod + natural + defect + misc
 	 */
 	public int getTotalAC(){
-		return 10 + mACArmour + mACShield + mACDexMod + mSizeMod + mACNaturalArmour + mDeflectionMod + mACMiscMod;
+		return 10 + m_ACArmour + m_ACShield + m_ACDexMod + m_sizeMod + m_ACNaturalArmour + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	/**
@@ -260,7 +268,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @return the touch AC of the character. This is 10 + dexmod + sizemod + defect + misc
 	 */
 	public int getTouchAC(){
-		return 10 + mACDexMod + mSizeMod + mDeflectionMod + mACMiscMod;
+		return 10 + m_ACDexMod + m_sizeMod + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	/**
@@ -268,7 +276,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @return the touch AC of the character. This is normal AC - dexmod
 	 */
 	public int getFlatFootedAC(){
-		return getTotalAC() - mACDexMod;
+		return getTotalAC() - m_ACDexMod;
 	}
 	
 	
@@ -277,11 +285,11 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @param BABPrimary
 	 */
 	public void setBABPrimary(int BABPrimary){
-		mBABPrimary = BABPrimary;
+		m_BABPrimary = BABPrimary;
 	}
 	
 	public int getBABPrimary(){
-		return mBABPrimary;
+		return m_BABPrimary;
 	}
 	
 	/**
@@ -291,43 +299,43 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 */
 	public void setBABSecondary(String BABSecondary){
 		if(BABSecondary != null)
-			mBABSecondary = BABSecondary;
+			m_BABSecondary = BABSecondary;
 	}
 	
 	public String getBABSecondary(){
-		return mBABSecondary;
+		return m_BABSecondary;
 	}
 	
 	public void setStrengthMod(int strengthMod){
-		mStrengthMod = strengthMod;
+		m_strengthMod = strengthMod;
 	}
 	
 	public int getStrengthMod(){
-		return mStrengthMod;
+		return m_strengthMod;
 	}
 	
 	public void setCMDDexMod(int dexMod){
-		mCMDDexMod = dexMod;
+		m_CMDDexMod = dexMod;
 	}
 	
 	public int getCMDDexMod(){
-		return mCMDDexMod;
+		return m_CMDDexMod;
 	}
 	
 	public void setSpellResistance(int spellResist){
-		mSpellResist = spellResist;
+		m_spellResist = spellResist;
 	}
 	
 	public int getSpellResist(){
-		return mSpellResist;
+		return m_spellResist;
 	}
 	
 	public int getCMDMiscMod(){
-		return mCMDMiscMod;
+		return m_CMDMiscMod;
 	}
 	
 	public void setCMDMiscMod(int miscMod){
-		mCMDMiscMod = miscMod;
+		m_CMDMiscMod = miscMod;
 	}
 	
 	/**
@@ -335,7 +343,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @return CMB = BAB + Strength mod - size mod
 	 */
 	public int getCombatManeuverBonus(){
-		return mBABPrimary + mStrengthMod - mSizeMod;
+		return m_BABPrimary + m_strengthMod - m_sizeMod;
 	}
 	
 	/**
@@ -343,17 +351,22 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * @return CMD = BAB + Strength mod - size mod + dex mod + 10 + misc mod
 	 */
 	public int getCombatManeuverDefense(){
-		return getCombatManeuverBonus() + mCMDDexMod + mCMDMiscMod + 10;
+		return getCombatManeuverBonus() + m_CMDDexMod + m_CMDMiscMod + 10;
 	}
 
 	@Override
-	public Long getID() {
-		return mId;
+	public void setID(long id) {
+		m_id = id;
+	}
+	
+	@Override
+	public long getID() {
+		return m_id;
 	}
 
 	@Override
-	public Long getCharacterID() {
-		return mCharacterId;
+	public long getCharacterID() {
+		return m_characterId;
 	}
 	
 	@Override

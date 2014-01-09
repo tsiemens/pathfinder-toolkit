@@ -6,16 +6,11 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 
 public class PTTableCreatorTest extends AndroidTestCase {
-	PTDatabase m_db;
+	protected PTDatabase m_db;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		m_db = PTDatabase.getSharedInstance();
-	}
-
-	protected void tearDown() throws Exception {
-		getContext().deleteDatabase(PTDatabase.DB_NAME);
-		super.tearDown();
 	}
 	
 	public void testDatabaseCreation() {

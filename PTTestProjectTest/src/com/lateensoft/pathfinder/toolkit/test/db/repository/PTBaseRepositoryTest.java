@@ -8,17 +8,22 @@ import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import android.test.AndroidTestCase;
 
 public class PTBaseRepositoryTest extends AndroidTestCase {
-	protected PTDatabase mDatabase;
+	protected PTDatabase m_db;
 	protected final String CHARACTER_TAG = "Joe";
-	protected long mCharacterId;
+	protected long m_characterId;
 	protected final int INSERT_FAIL = -1;
 	
 	protected void setUp() {
-		// TODO move this into it's own test case, not setup
-		mDatabase = PTDatabase.getSharedInstance();
+		m_db = PTDatabase.getSharedInstance();
 		PTCharacter joe = new PTCharacter(CHARACTER_TAG, PTBaseApplication.getAppContext());
 		PTCharacterRepository repo = new PTCharacterRepository();
-		mCharacterId = repo.insert(joe);
-		assertTrue(mCharacterId != INSERT_FAIL);
+		m_characterId = repo.insert(joe);
+		assertTrue(m_characterId != INSERT_FAIL);
+	}
+	
+	protected void tearDown() throws Exception {
+		PTCharacterRepository repo = new PTCharacterRepository();
+		repo.delete(m_characterId);
+		super.tearDown();
 	}
 }

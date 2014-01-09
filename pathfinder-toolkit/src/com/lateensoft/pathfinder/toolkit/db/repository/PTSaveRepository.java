@@ -32,19 +32,19 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		PTTableAttribute tempMod = new PTTableAttribute(TEMP_MOD, SQLDataType.INTEGER);
 		PTTableAttribute[] attributes = {id, characterId, name, baseValue, total, abilityMod,
 				magicMod, miscMod, tempMod};
-		mTableInfo = new PTTableInfo(TABLE, attributes);
+		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 
 	@Override
 	protected PTSave buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int id = (Integer) hashTable.get(ID);
-		int characterId = (Integer) hashTable.get(CHARACTER_ID);
+		int id = ((Long) hashTable.get(ID)).intValue();
+		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
 		String name = (String) hashTable.get(NAME);
-		int baseValue = (Integer) hashTable.get(BASE_VALUE);
-		int abilityMod = (Integer) hashTable.get(ABILITY_MOD);
-		int magicMod = (Integer) hashTable.get(MAGIC_MOD);
-		int miscMod = (Integer) hashTable.get(MISC_MOD);
-		int tempMod = (Integer) hashTable.get(TEMP_MOD);
+		int baseValue = ((Long) hashTable.get(BASE_VALUE)).intValue();
+		int abilityMod = ((Long) hashTable.get(ABILITY_MOD)).intValue();
+		int magicMod = ((Long) hashTable.get(MAGIC_MOD)).intValue();
+		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
+		int tempMod = ((Long) hashTable.get(TEMP_MOD)).intValue();
 		
 		PTSave save = new PTSave(id, characterId, name, baseValue, abilityMod, magicMod, 
 				miscMod, tempMod);
@@ -54,7 +54,7 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	@Override
 	protected ContentValues getContentValues(PTSave object) {
 		ContentValues values = new ContentValues();
-		if(!isIDSet(object)) { 
+		if(isIDSet(object)) { 
 			values.put(ID, object.getID());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());

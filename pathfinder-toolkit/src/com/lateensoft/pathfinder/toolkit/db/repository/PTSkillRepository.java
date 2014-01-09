@@ -31,21 +31,21 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		PTTableAttribute keyAbilityKey = new PTTableAttribute(KEY_ABILITY_KEY, SQLDataType.INTEGER);
 		PTTableAttribute[] attributes = {id, characterId, name, classSkill, keyAbility, abilityMod,
 				miscMod, keyAbilityKey};
-		mTableInfo = new PTTableInfo(TABLE, attributes);
+		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 	
 	@Override
 	protected PTSkill buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int id = (Integer) hashTable.get(ID);
-		int characterId = (Integer) hashTable.get(CHARACTER_ID);
+		int id = ((Long) hashTable.get(ID)).intValue();
+		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
 		String name = (String) hashTable.get(NAME);
-		boolean classSkill = ((Integer) hashTable.get(CLASS_SKILL)) == 1;
+		boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
 		String keyAbility = (String) hashTable.get(KEY_ABILITY);
-		int abilityMod = (Integer) hashTable.get(ABILITY_MOD);
-		int rank = (Integer) hashTable.get(RANK);
-		int miscMod = (Integer) hashTable.get(MISC_MOD);
-		int armorCheckPenalty = (Integer) hashTable.get(ARMOR_CHECK_PENALTY);
-		int keyAbilityKey = (Integer) hashTable.get(KEY_ABILITY_KEY);
+		int abilityMod = ((Long) hashTable.get(ABILITY_MOD)).intValue();
+		int rank = ((Long) hashTable.get(RANK)).intValue();
+		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
+		int armorCheckPenalty = ((Long) hashTable.get(ARMOR_CHECK_PENALTY)).intValue();
+		int keyAbilityKey = ((Long) hashTable.get(KEY_ABILITY_KEY)).intValue();
 		PTSkill skill = new PTSkill(id, characterId, name, classSkill, abilityMod, rank, 
 				miscMod, armorCheckPenalty, keyAbilityKey, keyAbility);
 		return skill;
@@ -54,7 +54,7 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	@Override
 	protected ContentValues getContentValues(PTSkill object) {
 		ContentValues values = new ContentValues();
-		if (!isIDSet(object)) {
+		if (isIDSet(object)) {
 			values.put(ID, object.getID());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());

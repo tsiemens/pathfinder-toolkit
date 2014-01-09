@@ -18,12 +18,24 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTTableAttribute id = new PTTableAttribute(ID, SQLDataType.INTEGER, true);
 		PTTableAttribute tag = new PTTableAttribute(TAG, SQLDataType.TEXT);
 		PTTableAttribute[] columns = {id, tag};
-		mTableInfo = new PTTableInfo(TABLE, columns);
+		m_tableInfo = new PTTableInfo(TABLE, columns);
 	}
 	
+	
+	/**
+	 * Inserts the character, and all subcomponents into database
+	 * 
+	 * @return the id of the character inserted, or -1 if failure occurred.
+	 */
+	@Override
+	public long insert(PTCharacter object) {
+		// TODO Auto-generated method stub
+		return super.insert(object);
+	}
+
 	@Override
 	protected PTCharacter buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int id = (Integer) hashTable.get(ID);
+		long id = (Long) hashTable.get(ID);
 		String tag = (String) hashTable.get(TAG);
 		PTCharacter character = new PTCharacter(id, tag, PTBaseApplication.getAppContext());
 		return character;
@@ -32,7 +44,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	@Override
 	protected ContentValues getContentValues(PTCharacter object) {
 		ContentValues values = new ContentValues();
-		if (!isIDSet(object)) { 
+		if (isIDSet(object)) { 
 			values.put(ID, object.getID());
 		}
 		values.put(TAG, object.getTag());

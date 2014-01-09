@@ -198,12 +198,17 @@ public class PTSkill implements Parcelable, PTStorable {
 	}
 
 	@Override
-	public Long getID() {
+	public void setID(long id) {
+		mId = id;
+	}
+	
+	@Override
+	public long getID() {
 		return mId;
 	}
 	
 	@Override
-	public Long getCharacterID() {
+	public long getCharacterID() {
 		return mCharacterId;
 	}
 	

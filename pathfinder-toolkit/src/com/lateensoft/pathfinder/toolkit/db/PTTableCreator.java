@@ -38,6 +38,7 @@ public class PTTableCreator {
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
 				"KeyAbilityKey INTEGER, " +
+				"UNIQUE (character_id, Name), " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";
@@ -67,8 +68,8 @@ public class PTTableCreator {
 				"character_id INTEGER, " +
 				"TotalHP INTEGER, " +
 				"Wounds INTEGER, " +
-				"NonLethalDamange INTEGER, " +
-				"DmageReduction INTEGER, " +
+				"NonLethalDamage INTEGER, " +
+				"DamageReduction INTEGER, " +
 				"BaseSpeedFt INTEGER, " +
 				"InitDexMod INTEGER, " +
 				"InitMiscMod INTEGER, " +
@@ -80,7 +81,7 @@ public class PTTableCreator {
 				"DeflectionMod INTEGER, " +
 				"ACMiscMod INTEGER, " +
 				"BABPrimary INTEGER, " +
-				"BABSecondary INTEGER, " +
+				"BABSecondary TEXT, " +
 				"StrengthMod INTEGER, " +
 				"CMDDexMod INTEGER, " +
 				"CMDMiscMod INTEGER, " +

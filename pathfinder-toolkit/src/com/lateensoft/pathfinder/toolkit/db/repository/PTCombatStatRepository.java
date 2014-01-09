@@ -14,7 +14,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	private static final String WOUNDS = "Wounds";
 	private static final String NON_LETHAL_DAMAGE = "NonLethalDamage";
 	private static final String DAMAGE_REDUCTION = "DamageReduction";
-	private static final String BASE_SPEED_FT = "BaseSpeeedFt";
+	private static final String BASE_SPEED_FT = "BaseSpeedFt";
 	private static final String INIT_DEX_MOD = "InitDexMod";
 	private static final String INIT_MISC_MOD = "InitMiscMod";
 	private static final String AC_ARMOR = "ACArmor";
@@ -59,7 +59,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 				damageReduction, baseSpeedFt, initDexMod, initMiscMod, acArmor, acShield, 
 				acDexMod, sizeMod, acNaturalArmor, deflectionMod, acMiscMod, babPrimary,
 				babSecondary, strengthMod, cmdDexMod, cmdMiscMod, spellResist};
-		mTableInfo = new PTTableInfo(TABLE, columns);
+		m_tableInfo = new PTTableInfo(TABLE, columns);
 	}
 	
 	@Override
@@ -67,26 +67,26 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 			Hashtable<String, Object> hashTable) {
 		long id = (Long) hashTable.get(ID);
 		long characterId = (Long) hashTable.get(CHARACTER_ID);
-		int totalHP = (Integer) hashTable.get(TOTAL_HP);
-		int wounds = (Integer) hashTable.get(WOUNDS);
-		int nonLethalDamage = (Integer) hashTable.get(NON_LETHAL_DAMAGE);
-		int damageReduction = (Integer) hashTable.get(DAMAGE_REDUCTION);
-		int baseSpeedFt = (Integer) hashTable.get(BASE_SPEED_FT);
-		int initDexMod = (Integer) hashTable.get(INIT_DEX_MOD);
-		int initMiscMod = (Integer) hashTable.get(INIT_MISC_MOD);
-		int acArmor = (Integer) hashTable.get(AC_ARMOR);
-		int acShield = (Integer) hashTable.get(AC_SHIELD);
-		int acDexMod = (Integer) hashTable.get(AC_DEX_MOD);
-		int sizeMod = (Integer) hashTable.get(SIZE_MOD);
-		int acNaturalArmor = (Integer) hashTable.get(AC_NATURAL_ARMOR);
-		int deflectionMod = (Integer) hashTable.get(DEFLECTION_MOD);
-		int acMiscMod = (Integer) hashTable.get(AC_MISC_MOD);
-		int babPrimary = (Integer) hashTable.get(BAB_PRIMARY);
+		int totalHP = ((Long) hashTable.get(TOTAL_HP)).intValue();
+		int wounds = ((Long) hashTable.get(WOUNDS)).intValue();
+		int nonLethalDamage = ((Long) hashTable.get(NON_LETHAL_DAMAGE)).intValue();
+		int damageReduction = ((Long) hashTable.get(DAMAGE_REDUCTION)).intValue();
+		int baseSpeedFt = ((Long) hashTable.get(BASE_SPEED_FT)).intValue();
+		int initDexMod = ((Long) hashTable.get(INIT_DEX_MOD)).intValue();
+		int initMiscMod = ((Long) hashTable.get(INIT_MISC_MOD)).intValue();
+		int acArmor = ((Long) hashTable.get(AC_ARMOR)).intValue();
+		int acShield = ((Long) hashTable.get(AC_SHIELD)).intValue();
+		int acDexMod = ((Long) hashTable.get(AC_DEX_MOD)).intValue();
+		int sizeMod = ((Long) hashTable.get(SIZE_MOD)).intValue();
+		int acNaturalArmor = ((Long) hashTable.get(AC_NATURAL_ARMOR)).intValue();
+		int deflectionMod = ((Long) hashTable.get(DEFLECTION_MOD)).intValue();
+		int acMiscMod = ((Long) hashTable.get(AC_MISC_MOD)).intValue();
+		int babPrimary = ((Long) hashTable.get(BAB_PRIMARY)).intValue();
 		String babSecondary = (String) hashTable.get(BAB_SECONDARY);
-		int strengthMod = (Integer) hashTable.get(STRENGTH_MOD);
-		int cmdDexMod = (Integer) hashTable.get(CMD_DEX_MOD);
-		int cmdMiscMod = (Integer) hashTable.get(CMD_MISC_MOD);
-		int spellResist = (Integer) hashTable.get(SPELL_RESIST);
+		int strengthMod = ((Long) hashTable.get(STRENGTH_MOD)).intValue();
+		int cmdDexMod = ((Long) hashTable.get(CMD_DEX_MOD)).intValue();
+		int cmdMiscMod = ((Long) hashTable.get(CMD_MISC_MOD)).intValue();
+		int spellResist = ((Long) hashTable.get(SPELL_RESIST)).intValue();
 		
 		PTCombatStatSet statSet = new PTCombatStatSet(id, characterId);
 		statSet.setTotalHP(totalHP);
@@ -114,7 +114,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	@Override
 	protected ContentValues getContentValues(PTCombatStatSet object) {
 		ContentValues values = new ContentValues();
-		if (!isIDSet(object)) {
+		if (isIDSet(object)) {
 			values.put(ID, object.getID());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());

@@ -151,7 +151,7 @@ public class PTCharacter implements Parcelable, PTStorable {
 	}
 
 	@Override
-	public Long getID() {
+	public long getID() {
 		return mID;
 	}
 	
@@ -160,7 +160,7 @@ public class PTCharacter implements Parcelable, PTStorable {
 	}
 
 	@Override
-	public Long getCharacterID() {
+	public long getCharacterID() {
 		return mID;
 	}
 	

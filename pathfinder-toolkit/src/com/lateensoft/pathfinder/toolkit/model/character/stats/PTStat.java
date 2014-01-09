@@ -5,56 +5,62 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 
 public abstract class PTStat implements PTStorable {
 
-	private String mName;
-	private int mBaseValue;
-	private long mId;
+	private String m_name;
+	private int m_baseValue;
+	private long m_id;
 
 	public PTStat() {
-		mName = "";
-		mBaseValue = 0;
-		mId = 0;
+		m_name = "";
+		m_baseValue = 0;
+		m_id = 0;
 	}
 	
 	public PTStat(String name) {
-		mName = name;
-		mBaseValue = 0;
-		mId = 0;
+		m_name = name;
+		m_baseValue = 0;
+		m_id = 0;
 	}
 	
 	public PTStat(String name, int baseValue) {
-		mName = name;
-		mBaseValue = baseValue;
-		mId = 0;
+		m_name = name;
+		m_baseValue = baseValue;
+		m_id = 0;
 	}
 	
 	public PTStat(long id, String name, int baseValue) {
-		mName = name;
-		mBaseValue = baseValue;
-		mId = id;
+		m_name = name;
+		m_baseValue = baseValue;
+		m_id = id;
 	}
 	
 	public PTStat(PTStat other) {
-		mName = other.getName();
-		mBaseValue = other.getBaseValue();
+		m_name = other.getName();
+		m_baseValue = other.getBaseValue();
 	}
 	
 	public String getName() {
-		return mName;
+		return m_name;
 	}
 	
 	public int getBaseValue() {
-		return mBaseValue;
+		return m_baseValue;
 	}
 	
 	public void setName(String name) {
-		mName = name;
+		m_name = name;
 	}
 	
 	public void setBaseValue(int baseValue) {
-		mBaseValue = baseValue;
+		m_baseValue = baseValue;
 	}
 	
-	public Long getID() {
-		return mId;
+	@Override
+	public void setID(long id) {
+		m_id = id;
+	}
+	
+	@Override
+	public long getID() {
+		return m_id;
 	}
 }

@@ -21,7 +21,7 @@ public class PTAbilityScoreRepository extends PTBaseRepository<PTAbilityScore> {
 		PTTableAttribute ability = new PTTableAttribute(ABILITY, SQLDataType.TEXT);
 		PTTableAttribute score = new PTTableAttribute(SCORE, SQLDataType.INTEGER);
 		PTTableAttribute[] columns = {id, character_id, ability, score};
-		mTableInfo = new PTTableInfo(TABLE, columns);
+		m_tableInfo = new PTTableInfo(TABLE, columns);
 	}
 	
 	@Override
