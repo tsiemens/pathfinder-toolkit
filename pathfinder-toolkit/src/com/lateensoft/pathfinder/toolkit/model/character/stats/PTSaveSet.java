@@ -10,44 +10,64 @@ import android.os.Parcelable;
 
 public class PTSaveSet implements Parcelable{
 	private static final String PARCEL_BUNDLE_KEY_SAVES = "saves";
+	public static final int SIZE = 3;
 	
-	PTSave[] mSaves;
+	PTSave[] m_saves;
 	
 	public PTSaveSet(Context context) {
 		Resources r = context.getResources();
 		String[] names = r.getStringArray(R.array.save_names);
 		
-		mSaves = new PTSave[3];
-		for(int i = 0; i < mSaves.length; i++) {
-			mSaves[i] = new PTSave(names[i]);
+		m_saves = new PTSave[SIZE];
+		for(int i = 0; i < m_saves.length; i++) {
+			m_saves[i] = new PTSave(names[i]);
 		}
 	}
 	
 	public PTSaveSet(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mSaves = (PTSave[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SAVES);
+		m_saves = (PTSave[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SAVES);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SAVES, mSaves);
+		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SAVES, m_saves);
 		out.writeBundle(objectBundle);
 	}
 	
+	/**
+	 * Sets the saves in the set.
+	 * Dangerous; should only be used by database
+	 * @param saves
+	 */
+	public void setSaves(PTSave[] saves) {
+		m_saves = saves;
+	}
+	
+	public PTSave[] getSaves(){
+		return m_saves;
+	}
+	
 	public PTSave getSave(int index) {
-		return mSaves[index];
+		return m_saves[index];
 	}
 	
 	public void setAbilityMods(PTAbilitySet abilities, Context context) {
 		Resources r = context.getResources();
 		
-		mSaves[r.getInteger(R.integer.key_fort_save)].setAbilityMod(
+		m_saves[r.getInteger(R.integer.key_fort_save)].setAbilityMod(
 				abilities.getAbilityScore(R.integer.key_constitution).getModifier());
-		mSaves[r.getInteger(R.integer.key_ref_save)].setAbilityMod(
+		m_saves[r.getInteger(R.integer.key_ref_save)].setAbilityMod(
 				abilities.getAbilityScore(R.integer.key_dexterity).getModifier());
-		mSaves[r.getInteger(R.integer.key_will_save)].setAbilityMod(
+		m_saves[r.getInteger(R.integer.key_will_save)].setAbilityMod(
 				abilities.getAbilityScore(R.integer.key_wisdom).getModifier());
+	}
+	
+	public void setCharacterID(long id) {
+		for (PTSave save : m_saves) {
+			save.setCharacterID(id);
+		}
 	}
 	
 	@Override

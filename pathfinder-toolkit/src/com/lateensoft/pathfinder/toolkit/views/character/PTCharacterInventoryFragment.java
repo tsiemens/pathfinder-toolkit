@@ -71,7 +71,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 
 	@Override
 	public void onPause() {
-		mCharacter.mGold = Double.parseDouble(mGoldEditText.getText().toString());
+		mCharacter.setGold(Double.parseDouble(mGoldEditText.getText().toString()));
 		/*InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		iMM.hideSoftInputFromInputMethod(mGoldEditText.getWindowToken(), 0);*/
 		super.onPause();
@@ -155,12 +155,12 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	//Gold Edit text
 	public void onFocusChange(View view, boolean isInFocus) {
 		if(!isInFocus)
-			mCharacter.mGold = Double.parseDouble(mGoldEditText.getText().toString());
+			mCharacter.setGold(Double.parseDouble(mGoldEditText.getText().toString()));
 	}
 
 	@Override
 	public void updateFragmentUI() {
-		mGoldEditText.setText(Double.toString(mCharacter.mGold));
+		mGoldEditText.setText(Double.toString(mCharacter.getGold()));
 		updateTotalWeight();
 		refreshItemsListView();	
 	}

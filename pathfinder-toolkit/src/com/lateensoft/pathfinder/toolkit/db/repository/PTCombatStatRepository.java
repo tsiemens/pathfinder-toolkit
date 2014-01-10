@@ -9,7 +9,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 
 public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	private static final String TABLE = "CombatStatSet";
-	private static final String ID = "combat_stat_set_id"; 
 	private static final String TOTAL_HP = "TotalHP";
 	private static final String WOUNDS = "Wounds";
 	private static final String NON_LETHAL_DAMAGE = "NonLethalDamage";
@@ -33,8 +32,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	
 	public PTCombatStatRepository() {
 		super();
-		PTTableAttribute id = new PTTableAttribute(ID, SQLDataType.INTEGER, true);
-		PTTableAttribute characterId = new PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
+		PTTableAttribute characterId = new PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
 		PTTableAttribute totalHP = new PTTableAttribute(TOTAL_HP, SQLDataType.INTEGER);
 		PTTableAttribute wounds = new PTTableAttribute(WOUNDS, SQLDataType.INTEGER);
 		PTTableAttribute nonLethalDamage = new PTTableAttribute(NON_LETHAL_DAMAGE, SQLDataType.INTEGER);
@@ -55,7 +53,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 		PTTableAttribute cmdDexMod = new PTTableAttribute(CMD_DEX_MOD, SQLDataType.INTEGER);
 		PTTableAttribute cmdMiscMod = new PTTableAttribute(CMD_MISC_MOD, SQLDataType.INTEGER);
 		PTTableAttribute spellResist = new PTTableAttribute(SPELL_RESIST, SQLDataType.INTEGER);
-		PTTableAttribute[] columns = {id, characterId, totalHP, wounds, nonLethalDamage, 
+		PTTableAttribute[] columns = {characterId, totalHP, wounds, nonLethalDamage, 
 				damageReduction, baseSpeedFt, initDexMod, initMiscMod, acArmor, acShield, 
 				acDexMod, sizeMod, acNaturalArmor, deflectionMod, acMiscMod, babPrimary,
 				babSecondary, strengthMod, cmdDexMod, cmdMiscMod, spellResist};
@@ -65,7 +63,6 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	@Override
 	protected PTCombatStatSet buildFromHashTable(
 			Hashtable<String, Object> hashTable) {
-		long id = (Long) hashTable.get(ID);
 		long characterId = (Long) hashTable.get(CHARACTER_ID);
 		int totalHP = ((Long) hashTable.get(TOTAL_HP)).intValue();
 		int wounds = ((Long) hashTable.get(WOUNDS)).intValue();
@@ -88,7 +85,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 		int cmdMiscMod = ((Long) hashTable.get(CMD_MISC_MOD)).intValue();
 		int spellResist = ((Long) hashTable.get(SPELL_RESIST)).intValue();
 		
-		PTCombatStatSet statSet = new PTCombatStatSet(id, characterId);
+		PTCombatStatSet statSet = new PTCombatStatSet(characterId);
 		statSet.setTotalHP(totalHP);
 		statSet.setWounds(wounds);
 		statSet.setNonLethalDamage(nonLethalDamage);
@@ -114,10 +111,7 @@ public class PTCombatStatRepository extends PTBaseRepository<PTCombatStatSet> {
 	@Override
 	protected ContentValues getContentValues(PTCombatStatSet object) {
 		ContentValues values = new ContentValues();
-		if (isIDSet(object)) {
-			values.put(ID, object.getID());
-		}
-		values.put(CHARACTER_ID, object.getCharacterID());
+		values.put(CHARACTER_ID, object.getID());
 		values.put(TOTAL_HP, object.getTotalHP());
 		values.put(WOUNDS, object.getWounds());
 		values.put(NON_LETHAL_DAMAGE, object.getNonLethalDamage());

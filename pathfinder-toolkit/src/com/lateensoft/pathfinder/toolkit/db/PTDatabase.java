@@ -17,13 +17,13 @@ public class PTDatabase extends SQLiteOpenHelper {
 	public static int dbVersion = 1;
 	private SQLiteDatabase mDatabase;
 	
-	private static PTDatabase s_sharedInstance;
+	private static PTDatabase s_instance;
 	
-	public static PTDatabase getSharedInstance() {
-		if (s_sharedInstance == null) {
-			s_sharedInstance = new PTDatabase();
+	public static PTDatabase getInstance() {
+		if (s_instance == null) {
+			s_instance = new PTDatabase();
 		}
-		return s_sharedInstance;
+		return s_instance;
 	}
 	
 	protected PTDatabase() {

@@ -100,8 +100,11 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 	public long getID() {
 		return m_id;
 	}
+	
+	public void setCharacterID(long id) {
+		m_characterId = id;
+	}
 
-	@Override
 	public long getCharacterID() {
 		return m_characterId;
 	}

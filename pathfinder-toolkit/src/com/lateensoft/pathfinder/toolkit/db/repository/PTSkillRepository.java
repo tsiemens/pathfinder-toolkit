@@ -6,6 +6,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataT
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	static final String TABLE = "Skill";
@@ -27,10 +28,12 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		PTTableAttribute classSkill = new PTTableAttribute(CLASS_SKILL, SQLDataType.INTEGER);
 		PTTableAttribute keyAbility = new PTTableAttribute(KEY_ABILITY, SQLDataType.TEXT);
 		PTTableAttribute abilityMod = new PTTableAttribute(ABILITY_MOD, SQLDataType.INTEGER);
+		PTTableAttribute rank = new PTTableAttribute(RANK, SQLDataType.INTEGER);
 		PTTableAttribute miscMod = new PTTableAttribute(MISC_MOD, SQLDataType.INTEGER);
 		PTTableAttribute keyAbilityKey = new PTTableAttribute(KEY_ABILITY_KEY, SQLDataType.INTEGER);
+		PTTableAttribute armorChk = new PTTableAttribute(ARMOR_CHECK_PENALTY, SQLDataType.INTEGER);
 		PTTableAttribute[] attributes = {id, characterId, name, classSkill, keyAbility, abilityMod,
-				miscMod, keyAbilityKey};
+				rank, miscMod, armorChk, keyAbilityKey};
 		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 	
@@ -62,9 +65,34 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		values.put(CLASS_SKILL, object.isClassSkill());
 		values.put(KEY_ABILITY, object.getKeyAbility());
 		values.put(ABILITY_MOD, object.getAbilityMod());
+		values.put(RANK, object.getRank());
 		values.put(MISC_MOD, object.getMiscMod());
 		values.put(ARMOR_CHECK_PENALTY, object.getArmorCheckPenalty());
 		values.put(KEY_ABILITY_KEY, object.getKeyAbilityKey());
 		return values;
+	}
+	
+	/**
+	 * Returns all skills for the character with characterId
+	 * @param characterId
+	 * @return Array of PTSkill, ordered alphabetically by name
+	 */
+	public PTSkill[] querySet(long characterId) {
+		String selector = CHARACTER_ID + "=" + characterId + 
+				" ORDER BY " + NAME + " ASC";
+		String table = m_tableInfo.getTable();
+		String[] columns = m_tableInfo.getColumns();
+		Cursor cursor = getDatabase().query(table, columns, selector);
+		
+		PTSkill[] skills = new PTSkill[cursor.getCount()];
+		cursor.moveToFirst();
+		int i = 0;
+		while (!cursor.isAfterLast()) {
+			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+			skills[i] = buildFromHashTable(hashTable);
+			cursor.moveToNext();
+			i++;
+		}
+		return skills;
 	}
 }

@@ -10,7 +10,7 @@ public class PTTableCreatorTest extends AndroidTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		m_db = PTDatabase.getSharedInstance();
+		m_db = PTDatabase.getInstance();
 	}
 	
 	public void testDatabaseCreation() {

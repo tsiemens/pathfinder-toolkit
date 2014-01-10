@@ -33,14 +33,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	
 	private int m_spellResist;
 	
-	private long m_id;
 	private long m_characterId;
-	
-	public PTCombatStatSet(long id, long characterId) {
-		this();
-		m_id = id;
-		m_characterId = characterId;
-	}
 	
 	public PTCombatStatSet(long characterId) {
 		this();
@@ -74,7 +67,6 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		
 		m_spellResist = 0;
 		
-		m_id = 0;
 		m_characterId = 0;
 	}
 	
@@ -354,18 +346,19 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		return getCombatManeuverBonus() + m_CMDDexMod + m_CMDMiscMod + 10;
 	}
 
+	/**
+	 * Sets the character ID
+	 */
 	@Override
 	public void setID(long id) {
-		m_id = id;
+		m_characterId = id;
 	}
 	
+	/**
+	 * @return the character ID
+	 */
 	@Override
 	public long getID() {
-		return m_id;
-	}
-
-	@Override
-	public long getCharacterID() {
 		return m_characterId;
 	}
 	

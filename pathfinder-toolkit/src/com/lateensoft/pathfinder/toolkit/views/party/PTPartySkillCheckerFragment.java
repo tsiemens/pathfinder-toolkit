@@ -97,7 +97,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	 */
    	public void loadEncounterParty(){
    		
-   		PTParty currentEncounterParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
+   		PTParty currentEncounterParty = PTSharedPreferences.getInstance().getEncounterParty();
    		//If there is no saved encounter party, get from party manager
    		//Also, if the encounter party was saved, but previously was empty, get from party manager.
    		//Thirdly, if the party in encounter is not rolled (not in an encounter) use default party
@@ -112,7 +112,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	}
    	
 	public void loadDefaultParty(){
-		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
 		if(currentPartyID >= 0)
 			mParty = mSQLManager.getParty(currentPartyID);
 		else

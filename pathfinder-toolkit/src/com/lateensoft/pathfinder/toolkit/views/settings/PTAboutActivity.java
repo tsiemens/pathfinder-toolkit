@@ -24,7 +24,7 @@ public class PTAboutActivity extends Activity{
 		TextView versionText = (TextView)findViewById(R.id.tv_version);
 		
 		versionText.setText(getString(R.string.about_app_version) + " " + 
-				PTSharedPreferences.getSharedInstance().getAppVersionName());
+				PTSharedPreferences.getInstance().getAppVersionName());
 
 		// Makes the html <a> tags clickable 
 		TextView oglText = (TextView)findViewById(R.id.tv_ogl_link);

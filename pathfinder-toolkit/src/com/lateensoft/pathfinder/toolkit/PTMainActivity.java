@@ -69,7 +69,7 @@ public class PTMainActivity extends Activity implements
 			mCurrentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
 		}
 
-		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
 		PTDatabaseManager SQLManager = new PTDatabaseManager(
 				this.getApplicationContext());
 
@@ -144,7 +144,7 @@ public class PTMainActivity extends Activity implements
 	}
 
 	private void showRateDialogIfRequired() {
-		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
 		if (sharedPrefs.isLastRateTimeLongEnough()
 				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
@@ -207,7 +207,7 @@ public class PTMainActivity extends Activity implements
 
 	// For dialog
 	public void onClick(DialogInterface dialogInterface, int selection) {
-		PTSharedPreferences sharedPrefs = PTSharedPreferences.getSharedInstance();
+		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
 		
 		switch (selection) {
 		case DialogInterface.BUTTON_POSITIVE:

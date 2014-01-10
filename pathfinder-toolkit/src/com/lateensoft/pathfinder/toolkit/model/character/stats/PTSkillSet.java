@@ -13,7 +13,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 public class PTSkillSet implements Parcelable{
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
 	
-	PTSkill[] mSkills;
+	PTSkill[] m_skills;
 	
 	public PTSkillSet(Context context) {
 		Resources r = context.getResources();
@@ -21,30 +21,45 @@ public class PTSkillSet implements Parcelable{
 		int[] skillAbilityKeys = r.getIntArray(R.array.skill_ability_keys);
 		String[] skillAbilityShortStrings = r.getStringArray(R.array.abilities_short);
 		
-		mSkills = new PTSkill[skills.length];
+		m_skills = new PTSkill[skills.length];
 		
 		for(int i = 0; i < skills.length; i++) {
-			mSkills[i] = new PTSkill(skills[i], skillAbilityKeys[i], skillAbilityShortStrings[skillAbilityKeys[i]]);
+			m_skills[i] = new PTSkill(skills[i], skillAbilityKeys[i], skillAbilityShortStrings[skillAbilityKeys[i]]);
 		}
+	}
+	
+	/**
+	 * Sets the skills in the set to skills
+	 * Dangerous; should only be used by database
+	 * @param skills
+	 */
+	public PTSkillSet(PTSkill[] skills) {
+		m_skills = skills;
 	}
 	
 	public PTSkillSet(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mSkills = (PTSkill[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SKILLS);
+		m_skills = (PTSkill[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SKILLS);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SKILLS, mSkills);
+		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SKILLS, m_skills);
 		out.writeBundle(objectBundle);
 	}
 	
 	public PTSkill getSkill(int index) {
-		if( index >= 0 && index < mSkills.length )
-			return mSkills[index];
+		if( index >= 0 && index < m_skills.length )
+			return m_skills[index];
 		else
 			return null;
+	}
+	
+	public void setCharacterId(long id) {
+		for (PTSkill skill : m_skills) {
+			skill.setCharacterID(id);
+		}
 	}
 	
 	/**
@@ -52,10 +67,10 @@ public class PTSkillSet implements Parcelable{
 	 */
 	public PTSkill getTrainedSkill(int index){
 		int trainedSkillIndex = 0;
-		for (int i = 0; i < mSkills.length; i++) {
-			if (mSkills[i].getRank() > 0) {
+		for (int i = 0; i < m_skills.length; i++) {
+			if (m_skills[i].getRank() > 0) {
 				if (trainedSkillIndex == index){
-					return mSkills[i];
+					return m_skills[i];
 				} else {
 					trainedSkillIndex++;
 				}
@@ -65,14 +80,14 @@ public class PTSkillSet implements Parcelable{
 	}
 	
 	public PTSkill[] getSkills(){
-		return mSkills;
+		return m_skills;
 	}
 	
 	public PTSkill[] getTrainedSkills(){
 		ArrayList<PTSkill> trainedSkills = new ArrayList<PTSkill>();
-		for (int i = 0; i < mSkills.length; i++) {
-			if (mSkills[i].getRank() > 0) {
-				trainedSkills.add(mSkills[i]);
+		for (int i = 0; i < m_skills.length; i++) {
+			if (m_skills[i].getRank() > 0) {
+				trainedSkills.add(m_skills[i]);
 			}
 		}
 		PTSkill[] returnArray = new PTSkill[trainedSkills.size()];

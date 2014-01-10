@@ -105,7 +105,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * set in user prefs, it automatically generates a new one.
 	 */
 	public void loadCurrentCharacter() {
-		long currentCharacterID = PTSharedPreferences.getSharedInstance().getSelectedCharacter();
+		long currentCharacterID = PTSharedPreferences.getInstance().getSelectedCharacter();
 
 		if (currentCharacterID == -1) { // There was no current character set in
 										// shared prefs
@@ -129,7 +129,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public void addNewCharacter() {
 		mCharacter = mSQLManager.addNewCharacter("New Adventurer",
 				getActivity().getApplicationContext());
-		PTSharedPreferences.getSharedInstance().setSelectedCharacter(mCharacter.getID());
+		PTSharedPreferences.getInstance().setSelectedCharacter(mCharacter.getID());
 		performUpdateReset();
 		Log.v(TAG, "Added new character");
 	}
@@ -151,10 +151,10 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		if (characterIDs.length == 1) {
 			addNewCharacter();
 		} else if (currentCharacterIndex == 0) {
-			PTSharedPreferences.getSharedInstance().setSelectedCharacter(characterIDs[1]);
+			PTSharedPreferences.getInstance().setSelectedCharacter(characterIDs[1]);
 			loadCurrentCharacter();
 		} else {
-			PTSharedPreferences.getSharedInstance().setSelectedCharacter(characterIDs[0]);
+			PTSharedPreferences.getInstance().setSelectedCharacter(characterIDs[0]);
 			loadCurrentCharacter();
 		}
 
@@ -356,7 +356,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			if (mCharacterSelectedInDialog != mCharacter.getID()) {
 				performUpdateReset();
 
-				PTSharedPreferences.getSharedInstance()
+				PTSharedPreferences.getInstance()
 						.setSelectedCharacter(mCharacterSelectedInDialog);
 				loadCurrentCharacter();
 			}

@@ -9,6 +9,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 public class PTCharacter implements Parcelable, PTStorable {
@@ -22,150 +23,167 @@ public class PTCharacter implements Parcelable, PTStorable {
 	private static final String PARCEL_BUNDLE_KEY_FEATS = "feats";
 	private static final String PARCEL_BUNDLE_KEY_SPELLS = "spells";
 	
-	PTAbilitySet mAbilitySet;
-	PTAbilitySet mTempAbilitySet;
-	PTCombatStatSet mCombatStatSet;
-	PTSkillSet mSkillSet;
-	PTSaveSet mSaveSet;
-	PTFluffInfo mFluffInfo;
-	PTInventory mInventory;
-	public double mGold;
-	PTFeatList mFeats;
-	PTSpellBook mSpellBook;
+	private PTAbilitySet m_abilitySet;
+	private PTAbilitySet m_tempAbilitySet;
+	private PTCombatStatSet m_combatStatSet;
+	private PTSkillSet m_skillSet;
+	private PTSaveSet m_saveSet;
+	private PTFluffInfo m_fluffInfo;
+	private PTInventory m_inventory;
+	private double m_gold;
+	private PTFeatList m_feats;
+	private PTSpellBook m_spellBook;
 	
-	private long mID;
-	private String mTag;
+	private long m_id;
 	
-	public PTCharacter(long mCharacterId, String name, Context context) {
+	public PTCharacter(long characterId, String name, Context context) {
 		this(name, context);
-		mID = mCharacterId;
+		m_id = characterId;
+	}
+	
+	// TODO change this to take all parts, for database instantiation
+	public PTCharacter(long characterId, double gold) {
+		m_id = characterId;
+		m_gold = gold;
 	}
 	
 	public PTCharacter(String name, Context context) {
-		mAbilitySet = new PTAbilitySet();
-		mTempAbilitySet = new PTAbilitySet();
-		mCombatStatSet = new PTCombatStatSet();
-		mSkillSet = new PTSkillSet(context);
-		mSaveSet = new PTSaveSet(context);
-		mFluffInfo = new PTFluffInfo();
-		mInventory = new PTInventory();
-		mFeats = new PTFeatList();
-		mSpellBook = new PTSpellBook();
-		mGold = 0;
+		m_abilitySet = new PTAbilitySet();
+		m_tempAbilitySet = new PTAbilitySet();
+		m_combatStatSet = new PTCombatStatSet();
+		m_skillSet = new PTSkillSet(context);
+		m_saveSet = new PTSaveSet(context);
+		m_fluffInfo = new PTFluffInfo();
+		m_inventory = new PTInventory();
+		m_feats = new PTFeatList();
+		m_spellBook = new PTSpellBook();
+		m_gold = 0;
 		setName(name);
-		mTag = name;
-		mID = 0;
+		m_id = 0;
 	}
 	
 	public PTCharacter(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mAbilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
-		mTempAbilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES);
-		mCombatStatSet = (PTCombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
-		mSkillSet = (PTSkillSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SKILLS);
-		mSaveSet = (PTSaveSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SAVES);
-		mFluffInfo = (PTFluffInfo) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FLUFF);
-		mInventory = (PTInventory) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_INVENTORY);
-		mFeats = (PTFeatList) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FEATS);
-		mSpellBook = (PTSpellBook) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SPELLS);
-		mGold = in.readDouble();
-		mID = in.readLong();
+		m_abilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
+		m_tempAbilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES);
+		m_combatStatSet = (PTCombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
+		m_skillSet = (PTSkillSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SKILLS);
+		m_saveSet = (PTSaveSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SAVES);
+		m_fluffInfo = (PTFluffInfo) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FLUFF);
+		m_inventory = (PTInventory) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_INVENTORY);
+		m_feats = (PTFeatList) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FEATS);
+		m_spellBook = (PTSpellBook) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SPELLS);
+		m_gold = in.readDouble();
+		m_id = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_ABILITIES, mAbilitySet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES, mTempAbilitySet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS, mCombatStatSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SKILLS, mSkillSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SAVES, mSaveSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FLUFF, mFluffInfo);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_INVENTORY, mInventory);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FEATS, mFeats);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SPELLS, mSpellBook);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_ABILITIES, m_abilitySet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES, m_tempAbilitySet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS, m_combatStatSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SKILLS, m_skillSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SAVES, m_saveSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FLUFF, m_fluffInfo);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_INVENTORY, m_inventory);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FEATS, m_feats);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SPELLS, m_spellBook);
 		out.writeBundle(objectBundle);
-		out.writeDouble(mGold);
-		out.writeLong(mID);
+		out.writeDouble(m_gold);
+		out.writeLong(m_id);
 	}
 	
 	public void setAbilitySet(PTAbilitySet abilitySet) {
-		mAbilitySet = abilitySet;
+		m_abilitySet = abilitySet;
 	}
 	
 	public PTAbilitySet getAbilitySet() {
-		return mAbilitySet;
+		return m_abilitySet;
 	}
 	
 	public PTAbilitySet getTempAbilitySet() {
-		return mTempAbilitySet;
+		return m_tempAbilitySet;
 	}
 	
 	public PTCombatStatSet getCombatStatSet(){
-		return mCombatStatSet;
+		return m_combatStatSet;
 	}
 	
 	public PTSkillSet getSkillSet() {
-		return mSkillSet;
+		return m_skillSet;
 	}
 	
 	public PTInventory getInventory(){
-		return mInventory;
+		return m_inventory;
 	}
 	
 	public void setInventory(PTInventory newInventory){
-		mInventory = newInventory;
+		m_inventory = newInventory;
 	}
 	
 	public PTFeatList getFeatList(){
-		return mFeats;
+		return m_feats;
 	}
 	
 	public void setFeatList(PTFeatList newFeats){
-		mFeats = newFeats;
+		m_feats = newFeats;
 	}
 
 	public PTFluffInfo getFluff() {
-		return mFluffInfo;
+		return m_fluffInfo;
 	}
 	
 	public PTSaveSet getSaveSet(){
-		return mSaveSet;
+		return m_saveSet;
 	}
 	
 	public String getName(){
-		return mFluffInfo.getName();
+		return m_fluffInfo.getName();
 	}
 	
 	public void setName(String name){
 		if(name != null && name != "")
-			mFluffInfo.setName(name);
+			m_fluffInfo.setName(name);
 	}
 
 	public PTSpellBook getSpellBook() {
-		return mSpellBook;
+		return m_spellBook;
 	}
 	
 	public void setSpellBook(PTSpellBook spellBook) {
-		mSpellBook = spellBook;
+		m_spellBook = spellBook;
+	}
+
+	public double getGold() {
+		return m_gold;
+	}
+
+	public void setGold(double gold) {
+		m_gold = gold;
 	}
 
 	@Override
 	public long getID() {
-		return mID;
+		return m_id;
 	}
 	
-	public void setID(long id) {
-		mID = id;
-	}
-
+	/**
+	 * Sets the character ID, and all character IDs of components
+	 */
 	@Override
-	public long getCharacterID() {
-		return mID;
-	}
-	
-	public String getTag() {
-		return mTag;
+	public void setID(long id) {
+		m_id = id;
+		m_abilitySet.setCharacterID(id);
+		m_tempAbilitySet.setCharacterID(id);
+		m_combatStatSet.setID(id);
+		m_skillSet.setCharacterId(id);
+		m_saveSet.setCharacterID(id);
+		// TODO set these character ids
+//		m_fluffInfo;
+//		m_inventory;
+//		m_feats;
+//		m_spellBook;
 	}
 	
 	@Override

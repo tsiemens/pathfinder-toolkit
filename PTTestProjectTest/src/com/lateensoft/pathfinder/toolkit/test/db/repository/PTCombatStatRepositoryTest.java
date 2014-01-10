@@ -4,72 +4,67 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTCombatStatRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 
 public class PTCombatStatRepositoryTest extends PTBaseRepositoryTest {	
-	private PTCombatStatSet m_insertCombatStatSet;
+	private PTCombatStatSet m_combatStatSet;
 	private PTCombatStatRepository m_repo;
 	
 	public void setUp() {
 		super.setUp();
-		m_insertCombatStatSet = new PTCombatStatSet(m_characterId);
-		m_insertCombatStatSet.setTotalHP(50);
-		m_insertCombatStatSet.setWounds(3);
-		m_insertCombatStatSet.setNonLethalDamage(5);
-		m_insertCombatStatSet.setDamageReduction(8);
-		m_insertCombatStatSet.setBaseSpeed(30);
-		m_insertCombatStatSet.setInitDexMod(1);
-		m_insertCombatStatSet.setInitiativeMiscMod(2);
-		m_insertCombatStatSet.setACArmourBonus(10);
-		m_insertCombatStatSet.setACShieldBonus(11);
-		m_insertCombatStatSet.setACDexMod(12);
-		m_insertCombatStatSet.setSizeModifier(13);
-		m_insertCombatStatSet.setNaturalArmour(14);
-		m_insertCombatStatSet.setDeflectionMod(15);
-		m_insertCombatStatSet.setACMiscMod(16);
-		m_insertCombatStatSet.setBABPrimary(17);
-		m_insertCombatStatSet.setBABSecondary("2/6/7");
-		m_insertCombatStatSet.setStrengthMod(18);
-		m_insertCombatStatSet.setCMDDexMod(46);
-		m_insertCombatStatSet.setCMDMiscMod(56);
-		m_insertCombatStatSet.setSpellResistance(67);
-		
 		m_repo = new PTCombatStatRepository();
-	}
-	
-	public void testInsert() {
-		long id = m_repo.insert(m_insertCombatStatSet);
-		assertTrue(id != INSERT_FAIL);
+		
+		m_combatStatSet = m_repo.query(m_characterId);
+		m_combatStatSet.setTotalHP(50);
+		m_combatStatSet.setWounds(3);
+		m_combatStatSet.setNonLethalDamage(5);
+		m_combatStatSet.setDamageReduction(8);
+		m_combatStatSet.setBaseSpeed(30);
+		m_combatStatSet.setInitDexMod(1);
+		m_combatStatSet.setInitiativeMiscMod(2);
+		m_combatStatSet.setACArmourBonus(10);
+		m_combatStatSet.setACShieldBonus(11);
+		m_combatStatSet.setACDexMod(12);
+		m_combatStatSet.setSizeModifier(13);
+		m_combatStatSet.setNaturalArmour(14);
+		m_combatStatSet.setDeflectionMod(15);
+		m_combatStatSet.setACMiscMod(16);
+		m_combatStatSet.setBABPrimary(17);
+		m_combatStatSet.setBABSecondary("2/6/7");
+		m_combatStatSet.setStrengthMod(18);
+		m_combatStatSet.setCMDDexMod(46);
+		m_combatStatSet.setCMDMiscMod(56);
+		m_combatStatSet.setSpellResistance(67);
+		
+		m_repo.update(m_combatStatSet);
 	}
 	
 	public void testQuery() {
-		long id = m_repo.insert(m_insertCombatStatSet);
-		PTCombatStatSet queried = m_repo.query(id);
-		assertEquals("id", m_insertCombatStatSet.getID(), queried.getID());
-		assertEquals("char id", m_insertCombatStatSet.getCharacterID(), queried.getCharacterID());
-		assertEquals("total hp", m_insertCombatStatSet.getTotalHP(), queried.getTotalHP());
-		assertEquals("wounds", m_insertCombatStatSet.getWounds(), queried.getWounds());
-		assertEquals("non leth dmg", m_insertCombatStatSet.getNonLethalDamage(), queried.getNonLethalDamage());
-		assertEquals("dmg red", m_insertCombatStatSet.getDamageReduction(), queried.getDamageReduction());
-		assertEquals("base speed", m_insertCombatStatSet.getBaseSpeed(), queried.getBaseSpeed());
-		assertEquals("init dex", m_insertCombatStatSet.getInitDexMod(), queried.getInitDexMod());
-		assertEquals("init misc", m_insertCombatStatSet.getInitiativeMiscMod(), queried.getInitiativeMiscMod());
-		assertEquals("ac armor", m_insertCombatStatSet.getACArmourBonus(), queried.getACArmourBonus());
-		assertEquals("ac shield", m_insertCombatStatSet.getACShieldBonus(), queried.getACShieldBonus());
-		assertEquals("ac dex", m_insertCombatStatSet.getACDexMod(), queried.getACDexMod());
-		assertEquals("size", m_insertCombatStatSet.getSizeModifier(), queried.getSizeModifier());
-		assertEquals("natural armor", m_insertCombatStatSet.getNaturalArmour(), queried.getNaturalArmour());
-		assertEquals("deflect mod", m_insertCombatStatSet.getDeflectionMod(), queried.getDeflectionMod());
-		assertEquals("ac misc", m_insertCombatStatSet.getACMiscMod(), queried.getACMiscMod());
-		assertEquals("bab 1", m_insertCombatStatSet.getBABPrimary(), queried.getBABPrimary());
-		assertEquals("bab 2", m_insertCombatStatSet.getBABSecondary(), queried.getBABSecondary());
-		assertEquals("strength", m_insertCombatStatSet.getStrengthMod(), queried.getStrengthMod());
-		assertEquals("cmd dex", m_insertCombatStatSet.getCMDDexMod(), queried.getCMDDexMod());
-		assertEquals("cmd misc", m_insertCombatStatSet.getCMDMiscMod(), queried.getCMDMiscMod());
-		assertEquals("spell resist", m_insertCombatStatSet.getSpellResist(), queried.getSpellResist());
-
+		PTCombatStatSet queried = m_repo.query(m_characterId);
+		
+		assertEquals("id", m_combatStatSet.getID(), queried.getID());
+		assertEquals("total hp", m_combatStatSet.getTotalHP(), queried.getTotalHP());
+		assertEquals("wounds", m_combatStatSet.getWounds(), queried.getWounds());
+		assertEquals("non leth dmg", m_combatStatSet.getNonLethalDamage(), queried.getNonLethalDamage());
+		assertEquals("dmg red", m_combatStatSet.getDamageReduction(), queried.getDamageReduction());
+		assertEquals("base speed", m_combatStatSet.getBaseSpeed(), queried.getBaseSpeed());
+		assertEquals("init dex", m_combatStatSet.getInitDexMod(), queried.getInitDexMod());
+		assertEquals("init misc", m_combatStatSet.getInitiativeMiscMod(), queried.getInitiativeMiscMod());
+		assertEquals("ac armor", m_combatStatSet.getACArmourBonus(), queried.getACArmourBonus());
+		assertEquals("ac shield", m_combatStatSet.getACShieldBonus(), queried.getACShieldBonus());
+		assertEquals("ac dex", m_combatStatSet.getACDexMod(), queried.getACDexMod());
+		assertEquals("size", m_combatStatSet.getSizeModifier(), queried.getSizeModifier());
+		assertEquals("natural armor", m_combatStatSet.getNaturalArmour(), queried.getNaturalArmour());
+		assertEquals("deflect mod", m_combatStatSet.getDeflectionMod(), queried.getDeflectionMod());
+		assertEquals("ac misc", m_combatStatSet.getACMiscMod(), queried.getACMiscMod());
+		assertEquals("bab 1", m_combatStatSet.getBABPrimary(), queried.getBABPrimary());
+		assertEquals("bab 2", m_combatStatSet.getBABSecondary(), queried.getBABSecondary());
+		assertEquals("strength", m_combatStatSet.getStrengthMod(), queried.getStrengthMod());
+		assertEquals("cmd dex", m_combatStatSet.getCMDDexMod(), queried.getCMDDexMod());
+		assertEquals("cmd misc", m_combatStatSet.getCMDMiscMod(), queried.getCMDMiscMod());
+		assertEquals("spell resist", m_combatStatSet.getSpellResist(), queried.getSpellResist());
 	}
 	
 	public void testUpdate() {
-		long id = m_repo.insert(m_insertCombatStatSet);
-		PTCombatStatSet toUpdate = new PTCombatStatSet(id, m_characterId);
+		PTCombatStatSet toUpdate = new PTCombatStatSet(m_characterId);
+		
 		toUpdate.setTotalHP(51);
 		toUpdate.setWounds(4);
 		toUpdate.setNonLethalDamage(6);
@@ -92,9 +87,8 @@ public class PTCombatStatRepositoryTest extends PTBaseRepositoryTest {
 		toUpdate.setSpellResistance(68);
 		
 		m_repo.update(toUpdate);
-		PTCombatStatSet updated = m_repo.query(id);
+		PTCombatStatSet updated = m_repo.query(m_characterId);
 		assertEquals("id", toUpdate.getID(), updated.getID());
-		assertEquals("char id", toUpdate.getCharacterID(), updated.getCharacterID());
 		assertEquals("total hp", toUpdate.getTotalHP(), updated.getTotalHP());
 		assertEquals("wounds", toUpdate.getWounds(), updated.getWounds());
 		assertEquals("non leth dmg", toUpdate.getNonLethalDamage(), updated.getNonLethalDamage());
@@ -115,22 +109,6 @@ public class PTCombatStatRepositoryTest extends PTBaseRepositoryTest {
 		assertEquals("cmd dex", toUpdate.getCMDDexMod(), updated.getCMDDexMod());
 		assertEquals("cmd misc", toUpdate.getCMDMiscMod(), updated.getCMDMiscMod());
 		assertEquals("spell resist", toUpdate.getSpellResist(), updated.getSpellResist());
-	}
-	
-	public void testDelete() {
-		long id = m_repo.insert(m_insertCombatStatSet);
-		m_repo.delete(id);
-		boolean exception = false;
-		try {
-			@SuppressWarnings("unused")
-			PTCombatStatSet queried = m_repo.query(id);
-		}
-		catch(Exception e) {
-			exception = true;
-		}
-		finally {
-			assertTrue(exception);
-		}
 	}
 
 }

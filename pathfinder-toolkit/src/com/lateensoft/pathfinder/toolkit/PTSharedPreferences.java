@@ -4,7 +4,6 @@ import java.util.GregorianCalendar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 
 import android.content.Context;
@@ -28,87 +27,87 @@ public class PTSharedPreferences {
 	public static String KEY_INT_SELECTED_PARTY_ID = "selectedParty";
 	public static String KEY_STRING_ENCOUNTER_PARTY_JSON = "encounterParty";
 	
-	private static PTSharedPreferences s_sharedInstance;
+	private static PTSharedPreferences s_instance;
 
-	private SharedPreferences mSharedPreferences;
-	Editor mEditor;
+	private SharedPreferences m_sharedPreferences;
+	Editor m_editor;
 		
 	/**
 	 * Manages the shared preferences for the Pathfinder Toolkit application 
 	 * @return The singleton instance of the manager. 
 	 */
-	public static PTSharedPreferences getSharedInstance() {
-		if (s_sharedInstance == null) {
-			s_sharedInstance = new PTSharedPreferences();
+	public static PTSharedPreferences getInstance() {
+		if (s_instance == null) {
+			s_instance = new PTSharedPreferences();
 		}
-		return s_sharedInstance;
+		return s_instance;
 	}
 	
 	protected PTSharedPreferences(){
 		Context appContext = PTBaseApplication.getAppContext();
-		mSharedPreferences = appContext.getSharedPreferences(
+		m_sharedPreferences = appContext.getSharedPreferences(
 				KEY_APP_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-		mEditor = mSharedPreferences.edit();
+		m_editor = m_sharedPreferences.edit();
 	}
 	
 	/**
 	 * Put an int into the shared preferences
 	 */
 	public boolean putInt(String key, int value) {
-		mEditor.putInt(key, value);
-		return mEditor.commit();
+		m_editor.putInt(key, value);
+		return m_editor.commit();
 	}
 	
 	/**
 	 * Put a long into the shared preferences
 	 */
 	public boolean putLong(String key, long value) {
-		mEditor.putLong(key, value);
-		return mEditor.commit();
+		m_editor.putLong(key, value);
+		return m_editor.commit();
 	}
 	
 	/**
 	 * Put a boolean into the shared preferences
 	 */
 	public boolean putBoolean(String key, boolean value) {
-		mEditor.putBoolean(key, value);
-		return mEditor.commit();
+		m_editor.putBoolean(key, value);
+		return m_editor.commit();
 	}
 	
 	/**
 	 * Put a string into the shared preferences
 	 */
 	public boolean putString(String key, String value) {
-		mEditor.putString(key, value);
-		return mEditor.commit();
+		m_editor.putString(key, value);
+		return m_editor.commit();
 	}
 	
 	/**
 	 * Get an int from the shared preferences	
 	 */
 	public int getInt(String key, int defValue) {
-		return mSharedPreferences.getInt(key, defValue);
+		return m_sharedPreferences.getInt(key, defValue);
 	}
 	
 	/**
 	 * Get a long from the shared preferences	
 	 */
 	public long getLong(String key, long defValue) {
-		return mSharedPreferences.getLong(key, defValue);
+		return m_sharedPreferences.getLong(key, defValue);
 	}
 	
 	/**
 	 * Get a boolean from the shared preferences	
 	 */
 	public boolean getBoolean(String key, boolean defValue) {
-		return mSharedPreferences.getBoolean(key, defValue);
+		return m_sharedPreferences.getBoolean(key, defValue);
 	}
 	
 	/**
 	 * Get a string from the shared preferences	
 	 */
 	public String getString(String key, String defValue) {
-		return mSharedPreferences.getString(key, defValue);
+		return m_sharedPreferences.getString(key, defValue);
 	}
 	
 	
@@ -143,7 +142,7 @@ public class PTSharedPreferences {
 	 * @return The ID of the currently selected party. Returns -1 if no character is selected
 	 */
 	public int getSelectedParty(){
-		return mSharedPreferences.getInt(KEY_INT_SELECTED_PARTY_ID, -1);
+		return m_sharedPreferences.getInt(KEY_INT_SELECTED_PARTY_ID, -1);
 	}
 	
 	/**
@@ -165,7 +164,7 @@ public class PTSharedPreferences {
 	 */
 	public PTParty getEncounterParty(){
 		Gson gson = new Gson();
-		String partyJson = mSharedPreferences.getString(KEY_STRING_ENCOUNTER_PARTY_JSON, "");
+		String partyJson = m_sharedPreferences.getString(KEY_STRING_ENCOUNTER_PARTY_JSON, "");
 		PTParty encounterParty;
 		try{
 			encounterParty = gson.fromJson(partyJson, PTParty.class);

@@ -18,7 +18,7 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	 * Must setup mTableAttributeSet here
 	 */
 	public PTBaseRepository() {
-		m_database = PTDatabase.getSharedInstance();
+		m_database = PTDatabase.getInstance();
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 			data = cursor.getLong(index);
 			break;
 		case REAL:
-			data = cursor.getFloat(index);
+			data = cursor.getDouble(index);
 			break;
 		default:
 			data = null;
@@ -117,4 +117,8 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	 * Needs to package up the object so it can be stored in the database
 	 */
 	protected abstract ContentValues getContentValues(T object);
+	
+	protected PTDatabase getDatabase() {
+		return m_database;
+	}
 }

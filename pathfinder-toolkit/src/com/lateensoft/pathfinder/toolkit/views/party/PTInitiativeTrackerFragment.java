@@ -182,7 +182,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * there is not current party, an empty party is set
 	 */
 	private void loadEncounterParty() {
-		PTParty currentEncounterParty = PTSharedPreferences.getSharedInstance().getEncounterParty();
+		PTParty currentEncounterParty = PTSharedPreferences.getInstance().getEncounterParty();
 		// If there is no saved encounter party, get from party manager
 		// Also, if the encounter party was saved, but previously was empty, get
 		// from party manager.
@@ -200,7 +200,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	}
 
 	private void loadDefaultParty() {
-		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
 		if (currentPartyID >= 0)
 			mParty = mSQLManager.getParty(currentPartyID);
 		else
@@ -308,6 +308,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	}
 	
 	private void updateDatabase() {
-		PTSharedPreferences.getSharedInstance().setEncounterParty(mParty);
+		PTSharedPreferences.getInstance().setEncounterParty(mParty);
 	}
 }

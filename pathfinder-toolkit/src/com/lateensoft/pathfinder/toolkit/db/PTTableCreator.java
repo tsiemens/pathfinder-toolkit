@@ -64,8 +64,7 @@ public class PTTableCreator {
 	public String createCombatStatSet() {
 		Log.d(TAG, "Creating combat skill set table");
 		return "CREATE TABLE CombatStatSet (" +
-				"combat_stat_set_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"character_id INTEGER, " +
+				"character_id INTEGER PRIMARY KEY, " +
 				"TotalHP INTEGER, " +
 				"Wounds INTEGER, " +
 				"NonLethalDamage INTEGER, " +
@@ -92,6 +91,8 @@ public class PTTableCreator {
 	}
 	
 	// TODO: add something for set calc? Do we store that?
+	// TODO this will need to be rows of all abilities. change to abilitySet table
+	// especially since we need to store the temp ability scores somewhere, and doing them with this
 	public String createAbilityScore() {
 		Log.d(TAG, "Creating ability score table");
 		return "CREATE TABLE AbilityScore (" +
@@ -245,7 +246,7 @@ public class PTTableCreator {
 		Log.d(TAG, "Creating character table");
 		return "CREATE TABLE Character (" +
 				"character_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Tag TEXT " +
+				"Gold REAL " +
 				");";
 	}
 }

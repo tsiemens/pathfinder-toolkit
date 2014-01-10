@@ -31,7 +31,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_characterId = 0;
 	}
 	
-	public PTSave(int id, long characterId, String name, int baseValue, int abilityMod, int magicMod,
+	public PTSave(long id, long characterId, String name, int baseValue, int abilityMod, int magicMod,
 			int miscMod, int tempMod) {
 		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod, id);
 		m_characterId = characterId;
@@ -54,7 +54,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 	}
 	
 	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
-			int miscMod, int tempMod, int id) {
+			int miscMod, int tempMod, long id) {
 		super(id, name, baseValue);
 		m_abilityMod = abilityMod;
 		m_magicMod = magicMod;
@@ -155,7 +155,10 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_tempMod = tempMod;
 	}
 	
-	@Override
+	public void setCharacterID(long id) {
+		m_characterId = id;
+	}
+	
 	public long getCharacterID() {
 		return m_characterId;
 	}

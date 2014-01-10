@@ -90,7 +90,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 * user prefs, it automatically generates a new one.
 	 */
 	private void loadCurrentParty() {
-		int currentPartyID = PTSharedPreferences.getSharedInstance().getSelectedParty();
+		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
 
 		if (currentPartyID == -1) { // There was no current party set in shared
 									// prefs
@@ -107,7 +107,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	private void addNewParty() {
 		mParty = mSQLManager.addNewParty("New Party");
-		PTSharedPreferences.getSharedInstance().setSelectedParty(mParty.mID);
+		PTSharedPreferences.getInstance().setSelectedParty(mParty.mID);
 		refreshPartyView();
 	}
 
@@ -128,10 +128,10 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		if (partyIDs.length == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
-			PTSharedPreferences.getSharedInstance().setSelectedParty(partyIDs[1]);
+			PTSharedPreferences.getInstance().setSelectedParty(partyIDs[1]);
 			loadCurrentParty();
 		} else {
-			PTSharedPreferences.getSharedInstance().setSelectedParty(partyIDs[0]);
+			PTSharedPreferences.getInstance().setSelectedParty(partyIDs[0]);
 			loadCurrentParty();
 		}
 
@@ -285,7 +285,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			if (mPartySelectedInDialog != mParty.mID) {
 				updateDatabase(); // Ensures any data changed on the party
 										// in the current fragment is saved
-				PTSharedPreferences.getSharedInstance().setSelectedParty(mPartySelectedInDialog);
+				PTSharedPreferences.getInstance().setSelectedParty(mPartySelectedInDialog);
 				loadCurrentParty();
 			}
 			break;

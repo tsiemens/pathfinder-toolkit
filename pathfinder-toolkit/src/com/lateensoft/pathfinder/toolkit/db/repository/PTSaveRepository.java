@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import java.util.Hashtable;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
@@ -66,5 +67,29 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 		values.put(MISC_MOD, object.getMiscMod());
 		values.put(TEMP_MOD, object.getTempMod());
 		return values;
+	}
+	
+	/**
+	 * Returns all skills for the character with characterId
+	 * @param characterId
+	 * @return Array of PTSkill, ordered alphabetically by name
+	 */
+	public PTSave[] querySet(long characterId) {
+		String selector = CHARACTER_ID + "=" + characterId + 
+				" ORDER BY " + NAME + " ASC";
+		String table = m_tableInfo.getTable();
+		String[] columns = m_tableInfo.getColumns();
+		Cursor cursor = getDatabase().query(table, columns, selector);
+		
+		PTSave[] saves = new PTSave[cursor.getCount()];
+		cursor.moveToFirst();
+		int i = 0;
+		while (!cursor.isAfterLast()) {
+			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+			saves[i] = buildFromHashTable(hashTable);
+			cursor.moveToNext();
+			i++;
+		}
+		return saves;
 	}
 }

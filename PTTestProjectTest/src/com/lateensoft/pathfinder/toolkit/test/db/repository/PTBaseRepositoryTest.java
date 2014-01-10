@@ -9,13 +9,15 @@ import android.test.AndroidTestCase;
 
 public class PTBaseRepositoryTest extends AndroidTestCase {
 	protected PTDatabase m_db;
-	protected final String CHARACTER_TAG = "Joe";
+	protected final String CHARACTER_NAME = "Joe";
+	protected final double CHARACTER_GOLD = 40.0;
 	protected long m_characterId;
 	protected final int INSERT_FAIL = -1;
 	
 	protected void setUp() {
-		m_db = PTDatabase.getSharedInstance();
-		PTCharacter joe = new PTCharacter(CHARACTER_TAG, PTBaseApplication.getAppContext());
+		m_db = PTDatabase.getInstance();
+		PTCharacter joe = new PTCharacter(CHARACTER_NAME, PTBaseApplication.getAppContext());
+		joe.setGold(CHARACTER_GOLD);
 		PTCharacterRepository repo = new PTCharacterRepository();
 		m_characterId = repo.insert(joe);
 		assertTrue(m_characterId != INSERT_FAIL);

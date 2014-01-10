@@ -8,6 +8,7 @@ public class PTCharacterRepositoryTest extends PTBaseRepositoryTest {
 	public void testCharacterQuery() {
 		PTCharacterRepository repo = new PTCharacterRepository();
 		PTCharacter joe = repo.query(m_characterId);
-		assertEquals(CHARACTER_TAG, joe.getTag());
+		assertEquals(CHARACTER_GOLD, joe.getGold());
+		assertEquals(CHARACTER_NAME, joe.getFluff().getName());
 	}
 }
