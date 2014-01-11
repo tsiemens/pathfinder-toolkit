@@ -24,6 +24,15 @@ public class PTSaveSet implements Parcelable{
 		}
 	}
 	
+	/**
+	 * Creates new save set with saves
+	 * Dangerous; should only be used by database
+	 * @param saves
+	 */
+	public PTSaveSet(PTSave[] saves) {
+		m_saves = saves;
+	}
+	
 	public PTSaveSet(Parcel in) {
 		Bundle objectBundle = in.readBundle();
 		m_saves = (PTSave[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SAVES);

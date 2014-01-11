@@ -14,6 +14,7 @@ public class PTBaseRepositoryTest extends AndroidTestCase {
 	protected long m_characterId;
 	protected final int INSERT_FAIL = -1;
 	
+	@Override
 	protected void setUp() {
 		m_db = PTDatabase.getInstance();
 		PTCharacter joe = new PTCharacter(CHARACTER_NAME, PTBaseApplication.getAppContext());
@@ -23,6 +24,7 @@ public class PTBaseRepositoryTest extends AndroidTestCase {
 		assertTrue(m_characterId != INSERT_FAIL);
 	}
 	
+	@Override
 	protected void tearDown() throws Exception {
 		PTCharacterRepository repo = new PTCharacterRepository();
 		repo.delete(m_characterId);

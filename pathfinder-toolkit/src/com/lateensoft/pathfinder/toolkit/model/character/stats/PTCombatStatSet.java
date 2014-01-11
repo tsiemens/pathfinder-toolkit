@@ -96,6 +96,8 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		m_CMDMiscMod = in.readInt();
 		
 		m_spellResist = in.readInt();
+		
+		m_characterId = in.readLong();
 	}
 
 	@Override
@@ -125,6 +127,8 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		out.writeInt(m_CMDMiscMod);
 		
 		out.writeInt(m_spellResist);
+		
+		out.writeLong(m_characterId);
 	}
 	
 	public void setTotalHP(int totalHP){

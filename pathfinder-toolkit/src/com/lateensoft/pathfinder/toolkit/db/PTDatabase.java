@@ -13,9 +13,11 @@ public class PTDatabase extends SQLiteOpenHelper {
 	
 	@SuppressWarnings("unused")
 	private final String TAG = PTDatabase.class.getSimpleName();
+	
 	public static final String DB_NAME = "pathfinder_toolkit.db";
+	
 	public static int dbVersion = 1;
-	private SQLiteDatabase mDatabase;
+	private SQLiteDatabase m_database;
 	
 	private static PTDatabase s_instance;
 	
@@ -28,12 +30,12 @@ public class PTDatabase extends SQLiteOpenHelper {
 	
 	protected PTDatabase() {
 		super(PTBaseApplication.getAppContext(), DB_NAME, null, dbVersion);
-		mDatabase = getWritableDatabase();
+		open();
 	}
 	
 	public void forceCreate() {
 		PTTableCreator tableCreator = new PTTableCreator();
-		tableCreator.createTables(mDatabase);
+		tableCreator.createTables(m_database);
 	}
 
 	@Override
@@ -48,47 +50,47 @@ public class PTDatabase extends SQLiteOpenHelper {
 	}
 	
 	public void open() throws SQLException {
-		if (!mDatabase.isOpen()) {
-			mDatabase = getWritableDatabase();
-			if (!mDatabase.isReadOnly()) {
+		if (m_database == null || !m_database.isOpen()) {
+			m_database = getWritableDatabase();
+			if (!m_database.isReadOnly()) {
 		        // Enable foreign key constraints, as they are disabled by default in sqlite 3.7
-		        mDatabase.execSQL("PRAGMA foreign_keys=ON;");
+		        m_database.execSQL("PRAGMA foreign_keys=ON;");
 		    }
 		}
 	}
 	
 	public void close() {
-		mDatabase.close();
+		m_database.close();
 	}
 	
 	public Cursor query(Boolean distinct, String table, String[] columns, String selection, 
 			String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
-		return mDatabase.query(distinct, table, columns, selection, selectionArgs, 
+		return m_database.query(distinct, table, columns, selection, selectionArgs, 
 				groupBy, having, orderBy, limit);
 	}
 	
 	public Cursor query(String table, String[] columns, String selection) {
 		open();
-		Cursor result = mDatabase.query(true, table, columns, selection, null, 
+		Cursor result = m_database.query(true, table, columns, selection, null, 
 				null, null, null, null);
 		return result;
 	}
 
 	public int update(String table, ContentValues values, String whereClause) {
 		open();
-		int result = mDatabase.update(table, values, whereClause, null);
+		int result = m_database.update(table, values, whereClause, null);
 		return result;
 	}
 	
 	public long insert(String table, ContentValues values) {
 		open();
-		long result = mDatabase.insert(table, null, values);
+		long result = m_database.insert(table, null, values);
 		return result;
 	}
 	
 	public int delete(String table, String selector) {
 		open();
-		int result = mDatabase.delete(table, selector, null);
+		int result = m_database.delete(table, selector, null);
 		return result;
 	}
 	

@@ -29,12 +29,16 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 	public PTAbilityScore(Parcel in) {
 		m_ability = in.readString();
 		m_score = in.readInt();
+		m_id = in.readLong();
+		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		out.writeString(m_ability);
 		out.writeInt(m_score);
+		out.writeLong(m_id);
+		out.writeLong(m_characterId);
 	}
 	
 	public int getScore() {

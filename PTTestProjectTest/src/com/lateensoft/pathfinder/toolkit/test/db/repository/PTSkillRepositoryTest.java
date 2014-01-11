@@ -4,9 +4,7 @@ import android.content.res.Resources;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 public class PTSkillRepositoryTest extends PTBaseRepositoryTest {	
 	private PTSkill m_skill;

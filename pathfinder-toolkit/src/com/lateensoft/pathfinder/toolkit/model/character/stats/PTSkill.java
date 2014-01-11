@@ -75,6 +75,8 @@ public class PTSkill implements Parcelable, PTStorable {
 		m_miscMod = in.readInt();
 		m_armorCheckPenalty = in.readInt();
 		m_keyAbilityKey = in.readInt();
+		m_id = in.readLong();
+		m_characterId = in.readLong();
 	}
 
 	@Override
@@ -89,6 +91,8 @@ public class PTSkill implements Parcelable, PTStorable {
 		out.writeInt(m_miscMod);
 		out.writeInt(m_armorCheckPenalty);
 		out.writeInt(m_keyAbilityKey);
+		out.writeLong(m_id);
+		out.writeLong(m_characterId);
 	}
 	
 	/**

@@ -1,147 +1,152 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTFluffInfo implements Parcelable {
-	String mName;
-	String mAlignment;
-	String mXP;
-	String mNextLevelXP;
-	String mXPChange;
-	String mPlayerClass;
-	String mRace;
-	String mDeity;
-	String mLevel;
-	String mSize;
-	String mGender;
-	String mHeight;
-	String mWeight;
-	String mEyes;
-	String mHair;
-	String mLanguages;
-	String mDescription;
+public class PTFluffInfo implements Parcelable, PTStorable {
+	private String m_name;
+	private String m_alignment;
+	private String m_XP;
+	private String m_nextLevelXP;
+	private String m_playerClass;
+	private String m_race;
+	private String m_deity;
+	private String m_level;
+	private String m_size;
+	private String m_gender;
+	private String m_height;
+	private String m_weight;
+	private String m_eyes;
+	private String m_hair;
+	private String m_languages;
+	private String m_description;
+	
+	private long m_characterId;
 	
 	public PTFluffInfo() {
-		mName = "";
-		mAlignment = "";
-		mXP = "";
-		mNextLevelXP = "";
-		mXPChange = "";
-		mPlayerClass = "";
-		mRace = "";
-		mDeity = "";
-		mLevel = "";
-		mSize = "";
-		mGender = "";
-		mHeight = "";
-		mWeight = new String("");
-		mEyes = new String("");
-		mHair = new String("");
-		mLanguages = new String("");
-		mDescription = new String("");
+		m_name = "";
+		m_alignment = "";
+		m_XP = "";
+		m_nextLevelXP = "";
+		m_playerClass = "";
+		m_race = "";
+		m_deity = "";
+		m_level = "";
+		m_size = "";
+		m_gender = "";
+		m_height = "";
+		m_weight = new String("");
+		m_eyes = new String("");
+		m_hair = new String("");
+		m_languages = new String("");
+		m_description = new String("");
+		
+		m_characterId = 0;
 	}
 	
 	public PTFluffInfo(Parcel in) {
-		mName = in.readString();
-		mAlignment = in.readString();
-		mXP = in.readString();
-		mNextLevelXP = in.readString();
-		mXPChange = in.readString();
-		mPlayerClass = in.readString();
-		mRace = in.readString();
-		mDeity = in.readString();
-		mLevel = in.readString();
-		mSize = in.readString();
-		mGender = in.readString();
-		mHeight = in.readString();
-		mWeight = in.readString();
-		mEyes = in.readString();
-		mHair = in.readString();
-		mLanguages = in.readString();
-		mDescription = in.readString();
+		m_name = in.readString();
+		m_alignment = in.readString();
+		m_XP = in.readString();
+		m_nextLevelXP = in.readString();
+		m_playerClass = in.readString();
+		m_race = in.readString();
+		m_deity = in.readString();
+		m_level = in.readString();
+		m_size = in.readString();
+		m_gender = in.readString();
+		m_height = in.readString();
+		m_weight = in.readString();
+		m_eyes = in.readString();
+		m_hair = in.readString();
+		m_languages = in.readString();
+		m_description = in.readString();
+		
+		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(mName);
-		out.writeString(mAlignment);
-		out.writeString(mXP);
-		out.writeString(mNextLevelXP);
-		out.writeString(mXPChange);
-		out.writeString(mPlayerClass);
-		out.writeString(mRace);
-		out.writeString(mDeity);
-		out.writeString(mLevel);
-		out.writeString(mSize);
-		out.writeString(mGender);
-		out.writeString(mHeight);
-		out.writeString(mWeight);
-		out.writeString(mEyes);
-		out.writeString(mHair);
-		out.writeString(mLanguages);
-		out.writeString(mDescription);
+		out.writeString(m_name);
+		out.writeString(m_alignment);
+		out.writeString(m_XP);
+		out.writeString(m_nextLevelXP);
+		out.writeString(m_playerClass);
+		out.writeString(m_race);
+		out.writeString(m_deity);
+		out.writeString(m_level);
+		out.writeString(m_size);
+		out.writeString(m_gender);
+		out.writeString(m_height);
+		out.writeString(m_weight);
+		out.writeString(m_eyes);
+		out.writeString(m_hair);
+		out.writeString(m_languages);
+		out.writeString(m_description);
+		
+		out.writeLong(m_characterId);
 	}
 	
 	public String[] getFluffArray() {
-		String[] fluffArray = {mName, mAlignment, mXP, mNextLevelXP, mPlayerClass, mRace, mDeity,
-			mLevel, mSize, mGender, mHeight, mWeight, mEyes, mHair, mLanguages, mDescription};
+		String[] fluffArray = {m_name, m_alignment, m_XP, m_nextLevelXP, m_playerClass, m_race, m_deity,
+			m_level, m_size, m_gender, m_height, m_weight, m_eyes, m_hair, m_languages, m_description};
 		return fluffArray;
 	}
 	
 	public void setFluffByIndex(int index, String fluffValue) {
 		switch (index) {
 		case 0:
-			mName = fluffValue;
+			m_name = fluffValue;
 			break;
 		case 1:
-			mAlignment = fluffValue;
+			m_alignment = fluffValue;
 			break;
 		case 2:
-			mXP = fluffValue;
+			m_XP = fluffValue;
 			break;
 		case 3:
-			mNextLevelXP = fluffValue;
+			m_nextLevelXP = fluffValue;
 			break;
 		case 4:
-			mPlayerClass = fluffValue;
+			m_playerClass = fluffValue;
 			break;
 		case 5:
-			mRace = fluffValue;
+			m_race = fluffValue;
 			break;
 		case 6:
-			mDeity = fluffValue;
+			m_deity = fluffValue;
 			break;
 		case 7:
-			mLevel = fluffValue;
+			m_level = fluffValue;
 			break;
 		case 8:
-			mSize = fluffValue;
+			m_size = fluffValue;
 			break;
 		case 9:
-			mGender = fluffValue;
+			m_gender = fluffValue;
 			break;
 		case 10:
-			mHeight = fluffValue;
+			m_height = fluffValue;
 			break;
 		case 11:
-			mWeight = fluffValue;
+			m_weight = fluffValue;
 			break;
 		case 12:
-			mEyes = fluffValue;
+			m_eyes = fluffValue;
 			break;
 		case 13:
-			mHair = fluffValue;
+			m_hair = fluffValue;
 			break;
 		case 14:
-			mLanguages = fluffValue;
+			m_languages = fluffValue;
 			break;
 		case 15:
-			mDescription = fluffValue;
+			m_description = fluffValue;
 			break;
 		}
 	}
@@ -154,112 +159,146 @@ public class PTFluffInfo implements Parcelable {
 	
 
 	public String getName() {
-		return mName;
+		return m_name;
 	}
 	
 	public void setName(String name) {
-		mName = name;
+		m_name = name;
 	}
 	
 	public String getAlignment() {
-		return mAlignment;
+		return m_alignment;
 	}
 	
 	public void setAlignment(String alignment) {
-		mAlignment = alignment;
+		m_alignment = alignment;
 	}
 	
 	public String getXP() {
-		return mXP;
+		return m_XP;
 	}
 	
-	public void setXp(String XP) {
-		mXP = XP;
+	public void setXP(String XP) {
+		m_XP = XP;
 	}
 	
-	public String getXPChange() {
-		return mXPChange;
+	public String getNextLevelXP() {
+		return m_nextLevelXP;
 	}
-	
-	public void setXPChange(String XPChange) {
-		mXPChange = XPChange;
+
+	public void setNextLevelXP(String nextLevelXP) {
+		m_nextLevelXP = nextLevelXP;
 	}
-	
+
 	public String getPlayerClass() {
-		return mPlayerClass;
+		return m_playerClass;
 	}
 	
 	public void setPlayerClass(String playerClass) {
-		mPlayerClass = playerClass;
+		m_playerClass = playerClass;
 	}
 	
 	public String getRace() {
-		return mRace;
+		return m_race;
 	}
 	
 	public String getDeity() {
-		return mDeity;
+		return m_deity;
 	}
 	
 	public void setDeity(String deity) {
-		mDeity = deity;
+		m_deity = deity;
 	}
 	
 	public String getLevel() {
-		return mLevel;
+		return m_level;
 	}
 	
 	public void setLevel(String level) {
-		mLevel = level;
+		m_level = level;
 	}
 	
+	public String getSize() {
+		return m_size;
+	}
+
+	public void setSize(String size) {
+		m_size = size;
+	}
+
 	public String getGender() {
-		return mGender;
+		return m_gender;
 	}
 	
 	public void setGender(String gender) {
-		mGender = gender;
+		m_gender = gender;
 	}
 	
 	public String getHeight() {
-		return mHeight;
+		return m_height;
 	}
 	
 	public void setHeight(String height) {
-		mHeight = height;
+		m_height = height;
 	}
 	
 	public String getWeight() {
-		return mWeight;
+		return m_weight;
 	}
 	
 	public void setWeight(String weight) {
-		mWeight = weight;
+		m_weight = weight;
 	}
 	
 	public String getEyes() {
-		return mEyes;
+		return m_eyes;
 	}
 	
 	public void setEyes(String eyes) {
-		mEyes = eyes;
+		m_eyes = eyes;
 	}
 	
 	public String getHair() {
-		return mHair;
+		return m_hair;
 	}
 	
 	public void setHair(String hair) {
-		mHair = hair;
+		m_hair = hair;
 	}
 	
 	public void setRace(String race) {
-		mRace = race;
+		m_race = race;
 	}
 	
+	public String getLanguages() {
+		return m_languages;
+	}
+
+	public void setLanguages(String languages) {
+		m_languages = languages;
+	}
+
+	public String getDescription() {
+		return m_description;
+	}
+
+	public void setDescription(String description) {
+		m_description = description;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
+	}
+	
+	@Override
+	public void setID(long id) {
+		m_characterId = id;
+	}
+
+	@Override
+	public long getID() {
+		return m_characterId;
 	}
 	
 	public static final Parcelable.Creator<PTFluffInfo> CREATOR = new Parcelable.Creator<PTFluffInfo>() {

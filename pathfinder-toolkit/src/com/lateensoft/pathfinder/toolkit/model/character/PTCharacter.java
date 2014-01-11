@@ -9,7 +9,6 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 public class PTCharacter implements Parcelable, PTStorable {
@@ -42,9 +41,17 @@ public class PTCharacter implements Parcelable, PTStorable {
 	}
 	
 	// TODO change this to take all parts, for database instantiation
-	public PTCharacter(long characterId, double gold) {
+	/**
+	 * Only use for instantiation from database
+	 */
+	public PTCharacter(long characterId, double gold, PTFluffInfo fluff, PTCombatStatSet combatStats,
+			PTSaveSet saves, PTSkillSet skills) {
 		m_id = characterId;
 		m_gold = gold;
+		m_fluffInfo = fluff;
+		m_combatStatSet = combatStats;
+		m_saveSet = saves;
+		m_skillSet = skills;
 	}
 	
 	public PTCharacter(String name, Context context) {
@@ -179,8 +186,8 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_combatStatSet.setID(id);
 		m_skillSet.setCharacterId(id);
 		m_saveSet.setCharacterID(id);
+		m_fluffInfo.setID(id);
 		// TODO set these character ids
-//		m_fluffInfo;
 //		m_inventory;
 //		m_feats;
 //		m_spellBook;

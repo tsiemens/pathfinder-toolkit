@@ -217,13 +217,11 @@ public class PTTableCreator {
 	public String createFluffInfo() {
 		Log.d(TAG, "Creating fluff info table");
 		return "CREATE TABLE FluffInfo (" +
-				"fluff_info_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"character_id INTEGER, " +
+				"character_id INTEGER PRIMARY KEY, " +
 				"Name TEXT, " +
 				"Alignment TEXT, " +
 				"XP TEXT, " +
 				"NextLevelXP TEXT, " +
-				"XPChange TEXT, " +
 				"PlayerClass TEXT, " +
 				"Race TEXT, " +
 				"Deity TEXT, " +
@@ -236,7 +234,6 @@ public class PTTableCreator {
 				"Hair TEXT, " +
 				"Languages TEXT, " +
 				"Description TEXT, " +
-				"Other TEXT, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");"; 

@@ -43,8 +43,12 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 		String[] columns = m_tableInfo.getColumns();
 		Cursor cursor = m_database.query(table, columns, selector);
 		cursor.moveToFirst();
-		Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-		return buildFromHashTable(hashTable);
+		if (!cursor.isAfterLast()) {
+			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+			return buildFromHashTable(hashTable);
+		} else {
+			return null;
+		}
 	}
 	
 	protected abstract T buildFromHashTable(Hashtable<String, Object> hashTable);

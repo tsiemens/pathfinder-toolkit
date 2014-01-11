@@ -10,7 +10,7 @@ import android.os.Parcelable;
 
 import com.lateensoft.pathfinder.toolkit.R;
 
-public class PTSkillSet implements Parcelable{
+public class PTSkillSet implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
 	
 	PTSkill[] m_skills;
