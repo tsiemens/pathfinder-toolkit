@@ -4,155 +4,130 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PTArmor extends PTItem {
-	boolean mWorn;
-	int mACBonus;
-	int mCheckPen;
-	int mMaxDex;
-	int mSpellFail;
-	int mSpeed;
-	String mSpecialProperties;
-	String mSize;
+	boolean m_worn;
+	int m_ACBonus;
+	int m_checkPen;
+	int m_maxDex;
+	int m_spellFail;
+	int m_speed;
+	String m_specialProperties;
+	String m_size;
 	
 	public PTArmor() {
 		super();
-		mWorn =  true;
-		mACBonus = 0;
-		mCheckPen = 0;
-		mMaxDex = 10;
-		mSpellFail = 0;
-		mSpeed = 30;
-		mSpecialProperties = new String("");
-		mSize = "M";
+		m_worn =  true;
+		m_ACBonus = 0;
+		m_checkPen = 0;
+		m_maxDex = 10;
+		m_spellFail = 0;
+		m_speed = 30;
+		m_specialProperties = new String("");
+		m_size = "M";
 	}
 	
 	public PTArmor(Parcel in) {
 		super(in);
 		boolean[] worn = new boolean[1];
 		in.readBooleanArray(worn);
-		mWorn = worn[0];
-		mACBonus = in.readInt();
-		mCheckPen = in.readInt();
-		mMaxDex = in.readInt();
-		mSpellFail = in.readInt();
-		mSpeed = in.readInt();
-		mSpecialProperties = in.readString();
-		mSize = in.readString();
+		m_worn = worn[0];
+		m_ACBonus = in.readInt();
+		m_checkPen = in.readInt();
+		m_maxDex = in.readInt();
+		m_spellFail = in.readInt();
+		m_speed = in.readInt();
+		m_specialProperties = in.readString();
+		m_size = in.readString();
 	}
 	
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		super.writeToParcel(out, flags);
 		boolean[] worn = new boolean[1];
-		worn[0] = mWorn;
+		worn[0] = m_worn;
 		out.writeBooleanArray(worn);
-		out.writeInt(mACBonus);
-		out.writeInt(mCheckPen);
-		out.writeInt(mMaxDex);
-		out.writeInt(mSpellFail);
-		out.writeInt(mSpeed);
-		out.writeString(mSpecialProperties);
-		out.writeString(mSize);
+		out.writeInt(m_ACBonus);
+		out.writeInt(m_checkPen);
+		out.writeInt(m_maxDex);
+		out.writeInt(m_spellFail);
+		out.writeInt(m_speed);
+		out.writeString(m_specialProperties);
+		out.writeString(m_size);
 	}
 	
 	public void setSize(String size) {
-		mSize = size;
+		m_size = size;
 	}
 	
 	public String getSize() {
-		return mSize;
+		return m_size;
 	}
 	
 	public void setSpecialProperties(String properties) {
-		mSpecialProperties = properties;
+		m_specialProperties = properties;
 	}
 	
 	public String getSpecialProperties() {
-		return mSpecialProperties;
+		return m_specialProperties;
 	}
 		
-	/**
-	 * @return the mWorn
-	 */
 	public boolean isWorn() {
-		return mWorn;
+		return m_worn;
 	}
-	/**
-	 * @param mWorn the mWorn to set
-	 */
-	public void setWorn(boolean mWorn) {
-		this.mWorn = mWorn;
+
+	public void setWorn(boolean worn) {
+		this.m_worn = worn;
 	}
-	/**
-	 * @return the mACBonus
-	 */
+
 	public int getACBonus() {
-		return mACBonus;
+		return m_ACBonus;
 	}
-	/**
-	 * @param mACBonus the mACBonus to set
-	 */
-	public void setACBonus(int mACBonus) {
-		this.mACBonus = mACBonus;
+
+	public void setACBonus(int ACBonus) {
+		this.m_ACBonus = ACBonus;
 	}
-	/**
-	 * @return the mCheckPen
-	 */
+	
 	public int getCheckPen() {
-		return mCheckPen;
+		return m_checkPen;
 	}
-	/**
-	 * @param mCheckPen the mCheckPen to set
-	 */
-	public void setCheckPen(int mCheckPen) {
-		this.mCheckPen = mCheckPen;
+	
+	public void setCheckPen(int checkPen) {
+		this.m_checkPen = checkPen;
 	}
-	/**
-	 * @return the mMaxDex
-	 */
+	
 	public int getMaxDex() {
-		return mMaxDex;
+		return m_maxDex;
 	}
-	/**
-	 * @param mMaxDex the mMaxDex to set
-	 */
-	public void setMaxDex(int mMaxDex) {
-		this.mMaxDex = mMaxDex;
+	
+	public void setMaxDex(int maxDex) {
+		this.m_maxDex = maxDex;
 	}
-	/**
-	 * @return the mSpellFail
-	 */
+	
 	public int getSpellFail() {
-		return mSpellFail;
+		return m_spellFail;
 	}
-	/**
-	 * @param mSpellFail the mSpellFail to set
-	 */
-	public void setSpellFail(int mSpellFail) {
-		this.mSpellFail = mSpellFail;
+	
+	public void setSpellFail(int spellFail) {
+		this.m_spellFail = spellFail;
 	}
-	/**
-	 * @return the mSpeed
-	 */
+	
 	public int getSpeed() {
-		return mSpeed;
+		return m_speed;
 	}
-	/**
-	 * @param mSpeed the mSpeed to set
-	 */
-	public void setSpeed(int mSpeed) {
-		this.mSpeed = mSpeed;
+	
+	public void setSpeed(int speed) {
+		this.m_speed = speed;
 	}
 	
 	public String getSpeedString() {
 		String speedString = new String();
-		speedString = Integer.toString(mSpeed) + " ft.";
+		speedString = Integer.toString(m_speed) + " ft.";
 		return speedString;
 	}
 
 	public int getSizeInt() {
 		String[] sizeArray = {"S", "M", "L"};
 		for(int i = 0; i < sizeArray.length; i++) {
-			if(mSize.equals(sizeArray[i]))
+			if(m_size.equals(sizeArray[i]))
 				return i;
 		}
 		return 1;
@@ -160,7 +135,7 @@ public class PTArmor extends PTItem {
 
 	public void setSize(int size) {
 		String[] sizeArray = {"S", "M", "L"};
-		mSize = sizeArray[size];
+		m_size = sizeArray[size];
 	}
 	
 	public static final Parcelable.Creator<PTArmor> CREATOR = new Parcelable.Creator<PTArmor>() {

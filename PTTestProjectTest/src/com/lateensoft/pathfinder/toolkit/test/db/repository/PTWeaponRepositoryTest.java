@@ -1,12 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.PTItemRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTWeaponRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 
 public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {	
-	private PTWeapon m_item1;
-	private PTWeapon m_item2;
+	private PTWeapon m_weapon1;
+	private PTWeapon m_weapon2;
 	private PTWeaponRepository m_repo;
 	
 	@Override
@@ -14,16 +13,16 @@ public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {
 		super.setUp();
 		m_repo = new PTWeaponRepository();
 		
-		m_item1 = new PTWeapon();
-		setValues(m_item1, m_item1.getID(), m_characterId, "Great Sword",
+		m_weapon1 = new PTWeapon();
+		setValues(m_weapon1, m_weapon1.getID(), m_characterId, "Great Sword",
 				7.5, 5, "4/2", "x2", 5, "It's on fire!", 0, "Sword", "L");
 		
-		m_item2 = new PTWeapon();
-		setValues(m_item2, m_item2.getID(), m_characterId, "Long Bow",
+		m_weapon2 = new PTWeapon();
+		setValues(m_weapon2, m_weapon2.getID(), m_characterId, "Long Bow",
 				4.0, 3, "5", "x3", 100, "None", 20, "Bow", "M");
 		
-		m_repo.insert(m_item1);
-		m_repo.insert(m_item2);
+		m_repo.insert(m_weapon1);
+		m_repo.insert(m_weapon2);
 	}
 	
 	public void testInsert() {
@@ -36,14 +35,14 @@ public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {
 	
 	
 	public void testQuery() {
-		PTWeapon queried = m_repo.query(m_item1.getID());
+		PTWeapon queried = m_repo.query(m_weapon1.getID());
 		
-		assertEquals(queried, m_item1);
+		assertEquals(queried, m_weapon1);
 	}
 	
 	public void testUpdate() {
-		PTWeapon toUpdate = m_item2;
-		setValues(toUpdate, m_item2.getID(), m_item2.getCharacterID(), "Longer Bow",
+		PTWeapon toUpdate = m_weapon2;
+		setValues(toUpdate, m_weapon2.getID(), m_weapon2.getCharacterID(), "Longer Bow",
 				5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
 		
 		m_repo.update(toUpdate);
@@ -52,14 +51,14 @@ public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_item1.getID());
-		assertTrue(m_repo.query(m_item1.getID()) == null);
+		m_repo.delete(m_weapon1.getID());
+		assertTrue(m_repo.query(m_weapon1.getID()) == null);
 	}
 	
 	public void testQuerySet() {
 		PTWeapon[] queriedItems = m_repo.querySet(m_characterId);
-		assertEquals(queriedItems[0], m_item1);
-		assertEquals(queriedItems[1], m_item2);
+		assertEquals(queriedItems[0], m_weapon1);
+		assertEquals(queriedItems[1], m_weapon2);
 	}
 
 	public static void setValues(PTWeapon toUpdate, long id, long characterId, String name,

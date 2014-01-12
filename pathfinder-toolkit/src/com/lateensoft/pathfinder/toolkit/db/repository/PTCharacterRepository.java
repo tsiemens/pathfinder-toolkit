@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import android.content.ContentValues;
@@ -7,6 +9,8 @@ import android.content.ContentValues;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
+import com.lateensoft.pathfinder.toolkit.model.character.PTInventory;
+import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
@@ -77,6 +81,13 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 				weaponRepo.insert(weapon);
 			}
 			
+			// Armor
+			PTArmorRepository armorRepo = new PTArmorRepository();
+			PTArmor[] armors = object.getInventory().getArmorArray();
+			for (PTArmor armor : armors) {
+				armorRepo.insert(armor);
+			}
+			
 			// TODO add other components
 		}
 		return id;
@@ -102,7 +113,23 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		// Skills
 		PTSkillRepository skillRepo = new PTSkillRepository();
 		PTSkillSet skills = new PTSkillSet(skillRepo.querySet(id));
-
+		
+		PTInventory inventory = new PTInventory();
+		// Items
+		PTItemRepository itemRepo = new PTItemRepository();
+		ArrayList<PTItem> items = new ArrayList<PTItem>(Arrays.asList(itemRepo.querySet(id)));
+		inventory.setItems(items);
+		
+		// Weapons
+		PTWeaponRepository weaponRepo = new PTWeaponRepository();
+		ArrayList<PTWeapon> weapons = new ArrayList<PTWeapon>(Arrays.asList(weaponRepo.querySet(id)));
+		inventory.setWeapons(weapons);
+		
+		// Armor
+		PTArmorRepository armorRepo = new PTArmorRepository();
+		ArrayList<PTArmor> armor = new ArrayList<PTArmor>(Arrays.asList(armorRepo.querySet(id)));
+		inventory.setArmor(armor);
+		
 		// TODO add other components
 
 		PTCharacter character = new PTCharacter(id, gold, fluff, csSet, saves,

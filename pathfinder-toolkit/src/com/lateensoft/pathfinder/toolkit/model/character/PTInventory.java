@@ -104,7 +104,7 @@ public class PTInventory implements Parcelable {
 	 * For use of database for population
 	 * @param armors
 	 */
-	public void setArmors(ArrayList<PTArmor> armors) {
+	public void setArmor(ArrayList<PTArmor> armors) {
 		m_armor = armors;
 	}
 		
