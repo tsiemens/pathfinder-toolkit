@@ -91,8 +91,6 @@ public class PTTableCreator {
 	}
 	
 	// TODO: add something for set calc? Do we store that?
-	// TODO this will need to be rows of all abilities. change to abilitySet table
-	// especially since we need to store the temp ability scores somewhere, and doing them with this
 	public String createAbilityScore() {
 		Log.d(TAG, "Creating ability score table");
 		return "CREATE TABLE AbilityScore (" +
@@ -100,6 +98,7 @@ public class PTTableCreator {
 				"character_id INTEGER,  " +
 				"Ability TEXT, " +
 				"Score INTEGER, " +
+				"IsTemp INTEGER, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

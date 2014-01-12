@@ -1,108 +1,115 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
+import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTSpell implements Parcelable{
-	static final String TAG = PTSpell.class.getSimpleName();
-	String mName;
-	int mPrepared;
-	int mLevel;
-	String mDescription;
+public class PTSpell implements Parcelable, PTStorable {
+	@SuppressWarnings("unused")
+	private static final String TAG = PTSpell.class.getSimpleName();
+	
+	private String m_name;
+	private int m_prepared;
+	private int m_level;
+	private String m_description;
+	
+	private long m_id;
+	private long m_characterId;
 	
 	public PTSpell() {
-		mName = new String("");
-		mLevel = 0;
-		mPrepared = 0;
-		mDescription = new String("");
+		this("");
 	}
 	
 	public PTSpell(String name) {
-		this();
-		mName = name;
+		this(name, 0);
 	}
 	
 	public PTSpell(String name, int level) {
-		this(name);
-		mLevel = level;
+		this(UNSET_ID, name, level, 0, "");
 	}
 	
-	/**
-	 * 
-	 * @param name
-	 * @param level
-	 * @param prepared
-	 * @param description
-	 */
-	public PTSpell(String name, int level, int prepared, String description) {
-		this(name, level);
-		mPrepared = prepared;
-		mDescription = description;
+	public PTSpell(long characterId, String name, int level, int prepared, String description) {
+		this(UNSET_ID, characterId, name, level, prepared, description);
+	}
+	
+	public PTSpell(long id, long characterId, String name, int level, int prepared, String description) {
+		m_id = id;
+		m_characterId = characterId;
+		m_name = name;
+		m_level = level;
+		m_prepared = prepared;
+		m_description = description;
 	}
 	
 	public PTSpell(PTSpell spell) {
-		this(spell.getName(), spell.getLevel(), spell.getPrepared(), spell.getDescription());
+		this(spell.getID(), spell.getCharacterID(), spell.getName(),
+				spell.getLevel(), spell.getPrepared(), spell.getDescription());
 	}
 	
 	public PTSpell(Parcel in) {
-		mName = in.readString();
-		mLevel = in.readInt();
-		mPrepared = in.readInt();
-		mDescription = in.readString();
+		m_name = in.readString();
+		m_level = in.readInt();
+		m_prepared = in.readInt();
+		m_description = in.readString();
+		m_id = in.readLong();
+		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(mName);
-		out.writeInt(mLevel);
-		out.writeInt(mPrepared);
-		out.writeString(mDescription);	
+		out.writeString(m_name);
+		out.writeInt(m_level);
+		out.writeInt(m_prepared);
+		out.writeString(m_description);
+		out.writeLong(m_id);
+		out.writeLong(m_characterId);
 	}
 	
 	public String getName() {
-		return mName;
+		return m_name;
 	}
 	
 	public void setName(String name) {
-		mName = name;
+		m_name = name;
 	}
 	
 	public String getDescription() {
-		return mDescription;
+		return m_description;
 	}
 	
 	public void setDescription(String description) {
-		mDescription = description;
+		m_description = description;
 	}
 	
 	public int getLevel() {
-		return mLevel;
+		return m_level;
 	}
 	
 	public void setLevel(int level) {
-		mLevel = level;
+		m_level = level;
 	}
 	
 	public int getPrepared() {
-		return mPrepared;
+		return m_prepared;
 	}
 	
 	public boolean isPrepared() {
-		if(mPrepared >= 1)
+		if(m_prepared >= 1)
 			return true;
 		else
 			return false;
 	}
 	
 	public void setPrepared(int prepared) {
-		mPrepared = prepared;
+		m_prepared = prepared;
 	}
 	
 	public void setAsOtherSpell(PTSpell spell) {
-		mName = spell.getName();
-		mLevel = spell.getLevel();
-		mPrepared = spell.getPrepared();
-		mDescription = spell.getDescription();
+		m_name = spell.getName();
+		m_level = spell.getLevel();
+		m_prepared = spell.getPrepared();
+		m_description = spell.getDescription();
 	}
 
 	/* (non-Javadoc)
@@ -113,10 +120,10 @@ public class PTSpell implements Parcelable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((mDescription == null) ? 0 : mDescription.hashCode());
-		result = prime * result + mLevel;
-		result = prime * result + ((mName == null) ? 0 : mName.hashCode());
-		result = prime * result + mPrepared;
+				+ ((m_description == null) ? 0 : m_description.hashCode());
+		result = prime * result + m_level;
+		result = prime * result + ((m_name == null) ? 0 : m_name.hashCode());
+		result = prime * result + m_prepared;
 		return result;
 	}
 
@@ -132,21 +139,39 @@ public class PTSpell implements Parcelable{
 		if (getClass() != obj.getClass())
 			return false;
 		PTSpell other = (PTSpell) obj;
-		if (mDescription == null) {
-			if (other.mDescription != null)
+		if (m_description == null) {
+			if (other.m_description != null)
 				return false;
-		} else if (!mDescription.equals(other.mDescription))
+		} else if (!m_description.equals(other.m_description))
 			return false;
-		if (mLevel != other.mLevel)
+		if (m_level != other.m_level)
 			return false;
-		if (mName == null) {
-			if (other.mName != null)
+		if (m_name == null) {
+			if (other.m_name != null)
 				return false;
-		} else if (!mName.equals(other.mName))
+		} else if (!m_name.equals(other.m_name))
 			return false;
-		if (mPrepared != other.mPrepared)
+		if (m_prepared != other.m_prepared)
 			return false;
 		return true;
+	}
+	
+	public void setCharacterID(long characterId) {
+		m_characterId = characterId;
+	}
+	
+	public long getCharacterID() {
+		return m_characterId;
+	}
+	
+	@Override
+	public void setID(long id) {
+		m_id = id;
+	}
+
+	@Override
+	public long getID() {
+		return m_id;
 	}
 
 	@Override

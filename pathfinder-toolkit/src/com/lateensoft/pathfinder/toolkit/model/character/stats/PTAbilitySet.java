@@ -1,5 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,18 +17,30 @@ public class PTAbilitySet implements Parcelable{
 	
 	public static final String[] ABILITY_NAMES = {"Strength", "Dexterity", "Constitution",
 		"Intelligence", "Wisdom", "Charisma"};
-	static final int BASE_ABILITY_SCORE = 10;
+	public static final int BASE_ABILITY_SCORE = 10;
 	
 	private PTAbilityScore[] m_abilities;
 	
 	public PTAbilitySet() {
-		//Resources res = android.content.res.Resources.getSystem();
-		//String[] names = res.getStringArray(R.array.abilities);
-		//int base_ability = res.getInteger(R.integer.base_ability_score);
 		m_abilities = new PTAbilityScore[ABILITY_NAMES.length];
 		
 		for(int i = 0; i < ABILITY_NAMES.length; i++) {
 			m_abilities[i] = new PTAbilityScore(ABILITY_NAMES[i], BASE_ABILITY_SCORE);
+		}
+	}
+	
+	public PTAbilitySet(PTAbilityScore[] scores) {
+		m_abilities = new PTAbilityScore[ABILITY_NAMES.length];
+		List<PTAbilityScore> scoresList = new ArrayList<PTAbilityScore>(Arrays.asList(scores));
+		
+		for(int i = 0; i < ABILITY_NAMES.length; i++) {
+			for (PTAbilityScore score : scoresList) {
+				if(score.getAbility().contentEquals(ABILITY_NAMES[i])) {
+					scoresList.remove(score);
+					m_abilities[i] = score;
+					break;
+				}
+			}
 		}
 	}
 	

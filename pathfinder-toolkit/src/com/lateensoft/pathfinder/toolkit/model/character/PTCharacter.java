@@ -40,18 +40,23 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_id = characterId;
 	}
 	
-	// TODO change this to take all parts, for database instantiation
 	/**
 	 * Only use for instantiation from database
 	 */
-	public PTCharacter(long characterId, double gold, PTFluffInfo fluff, PTCombatStatSet combatStats,
-			PTSaveSet saves, PTSkillSet skills) {
+	public PTCharacter(long characterId, double gold, PTAbilitySet abilitySet, PTAbilitySet tempAbilitySet, 
+			PTFluffInfo fluff, PTCombatStatSet combatStats, PTSaveSet saves, PTSkillSet skills,
+			PTInventory inventory, PTFeatList feats, PTSpellBook spells) {
 		m_id = characterId;
 		m_gold = gold;
+		m_abilitySet = abilitySet;
+		m_tempAbilitySet = tempAbilitySet;
 		m_fluffInfo = fluff;
 		m_combatStatSet = combatStats;
 		m_saveSet = saves;
 		m_skillSet = skills;
+		m_inventory = inventory;
+		m_feats = feats;
+		m_spellBook = spells;
 	}
 	
 	public PTCharacter(String name, Context context) {
@@ -188,9 +193,8 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_saveSet.setCharacterID(id);
 		m_fluffInfo.setID(id);
 		m_inventory.setCharacterID(id);
-		// TODO set these character ids
-//		m_feats;
-//		m_spellBook;
+		m_feats.setCharacterID(id);
+		m_spellBook.setCharacterID(id);
 	}
 	
 	@Override

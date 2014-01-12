@@ -11,7 +11,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	static final String TABLE = "Save";
 	static final String ID = "save_id";
-	static final String CHARACTER_ID = "character_id";
 	static final String NAME = "Name";
 	static final String BASE_VALUE = "BaseValue";
 	static final String TOTAL = "Total";
@@ -70,9 +69,9 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	}
 	
 	/**
-	 * Returns all skills for the character with characterId
+	 * Returns all saves for the character with characterId
 	 * @param characterId
-	 * @return Array of PTSkill, ordered alphabetically by name
+	 * @return Array of PTSave, ordered alphabetically by name
 	 */
 	public PTSave[] querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 

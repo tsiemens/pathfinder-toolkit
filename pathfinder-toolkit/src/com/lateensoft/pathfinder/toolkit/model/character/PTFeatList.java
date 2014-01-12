@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.os.Bundle;
 import android.os.Parcel;
@@ -9,22 +10,32 @@ import android.os.Parcelable;
 public class PTFeatList implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_FEATS = "feats";
 	
-	private ArrayList<PTFeat> mFeats;
+	private ArrayList<PTFeat> m_feats;
 	
 	public PTFeatList(){
-		mFeats = new ArrayList<PTFeat>();
+		m_feats = new ArrayList<PTFeat>();
+	}
+	
+	public PTFeatList(PTFeat[] feats) {
+		m_feats = new ArrayList<PTFeat>(Arrays.asList(feats));
 	}
 	
 	public PTFeatList(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mFeats = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS);
+		m_feats = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS, mFeats);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_FEATS, m_feats);
 		out.writeBundle(objectBundle);
+	}
+	
+	public void setCharacterID(long id) {
+		for (PTFeat feat : m_feats) {
+			feat.setCharacterID(id);
+		}
 	}
 	
 	/**
@@ -39,15 +50,15 @@ public class PTFeatList implements Parcelable {
 				return;
 			}
 			
-			for(i = 0; i < mFeats.size(); i++){
+			for(i = 0; i < m_feats.size(); i++){
 				//Places in alphabetical position
 				if(newFeat.getName().compareToIgnoreCase(getFeat(i).getName()) < 0 ){
-					mFeats.add(i, newFeat);
+					m_feats.add(i, newFeat);
 					return;
 				}
 			}
 			//If item is to go at the end of the list
-			mFeats.add(newFeat);
+			m_feats.add(newFeat);
 		}
 	}
 	
@@ -56,8 +67,8 @@ public class PTFeatList implements Parcelable {
 	 * @param index
 	 */
 	public void deleteFeat(int index){
-		if(index >= 0 && index < mFeats.size())
-			mFeats.remove(index);
+		if(index >= 0 && index < m_feats.size())
+			m_feats.remove(index);
 	}
 	
 	/**
@@ -66,8 +77,8 @@ public class PTFeatList implements Parcelable {
 	 * @return the feat at index
 	 */
 	public PTFeat getFeat(int index){
-		if(index >= 0 && index < mFeats.size())
-			return mFeats.get(index);
+		if(index >= 0 && index < m_feats.size())
+			return m_feats.get(index);
 		else return null; 
 	}
 	
@@ -77,7 +88,7 @@ public class PTFeatList implements Parcelable {
 	 * @param index
 	 */
 	public void setFeat(PTFeat newFeat, int index){
-		if(index >= 0 && index < mFeats.size() && newFeat != null){
+		if(index >= 0 && index < m_feats.size() && newFeat != null){
 			deleteFeat(index);
 			addFeat(newFeat);
 		}
@@ -88,7 +99,7 @@ public class PTFeatList implements Parcelable {
 	 * @return an array of PTFeat objects
 	 */
 	public PTFeat[] getFeats(){
-		return mFeats.toArray(new PTFeat[mFeats.size()]);		
+		return m_feats.toArray(new PTFeat[m_feats.size()]);		
 	}
 	
 	/**
@@ -96,9 +107,9 @@ public class PTFeatList implements Parcelable {
 	 * @return an array of PTFeat objects
 	 */
 	public String[] getFeatNames(){
-		String[] featNames = new String[mFeats.size()];
-		for(int i = 0; i < mFeats.size(); i++){
-			featNames[i] = new String(mFeats.get(i).getName());
+		String[] featNames = new String[m_feats.size()];
+		for(int i = 0; i < m_feats.size(); i++){
+			featNames[i] = new String(m_feats.get(i).getName());
 		}
 		return featNames;		
 	}
@@ -109,8 +120,8 @@ public class PTFeatList implements Parcelable {
 	 * @param quantity
 	 */
 	public void setDescription(int index, String description){
-		if(index >= 0 && index < mFeats.size() && description != null)
-			mFeats.get(index).setDescription(description);
+		if(index >= 0 && index < m_feats.size() && description != null)
+			m_feats.get(index).setDescription(description);
 	}
 
 	
@@ -120,8 +131,8 @@ public class PTFeatList implements Parcelable {
 	 * @return the index of the object with itemName. returns -1 if the item is not in the inventory.
 	 */
 	public int getIndexOf(String featName){
-		for(int i = 0; i < mFeats.size(); i++){
-			if(featName.contentEquals(mFeats.get(i).getName())){
+		for(int i = 0; i < m_feats.size(); i++){
+			if(featName.contentEquals(m_feats.get(i).getName())){
 				return i;
 			}
 		}
@@ -129,7 +140,7 @@ public class PTFeatList implements Parcelable {
 	}
 	
 	public int getNumberOfFeats(){
-		return mFeats.size();
+		return m_feats.size();
 	}
 	
 	@Override

@@ -26,7 +26,6 @@ public class PTItemRepositoryTest extends PTBaseRepositoryTest {
 		assertTrue(id != INSERT_FAIL);
 	}
 	
-	
 	public void testQuery() {
 		PTItem queried = m_repo.query(m_item1.getID());
 		

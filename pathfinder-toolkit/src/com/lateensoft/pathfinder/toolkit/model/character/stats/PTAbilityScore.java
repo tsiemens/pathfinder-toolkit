@@ -15,15 +15,15 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 	private long m_id;
 	private long m_characterId;
 	
-	public PTAbilityScore(int id, int characterId, String ability, int score) {
-		this(ability, score);
+	public PTAbilityScore(long id, long characterId, String ability, int score) {
 		m_id = id;
 		m_characterId = characterId;
+		m_ability = ability;
+		m_score = score;
 	}
 	
 	public PTAbilityScore(String ability, int score) {
-		m_ability = ability;
-		m_score = score;
+		this(UNSET_ID, UNSET_ID, ability, score);
 	}
 	
 	public PTAbilityScore(Parcel in) {

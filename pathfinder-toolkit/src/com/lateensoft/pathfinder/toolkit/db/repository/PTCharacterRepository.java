@@ -8,11 +8,16 @@ import android.content.ContentValues;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PTInventory;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
@@ -31,7 +36,6 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		m_tableInfo = new PTTableInfo(TABLE, columns);
 	}
 	
-	
 	/**
 	 * Inserts the character, and all subcomponents into database
 	 * 
@@ -40,6 +44,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	@Override
 	public long insert(PTCharacter object) {
 		long id = super.insert(object);
+		long subCompId = 0;
 		
 		if (id != -1) {
 			// Sets all character ids of components
@@ -47,48 +52,117 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Fluff
 			PTFluffInfoRepository fluffRepo = new PTFluffInfoRepository();
-			fluffRepo.insert(object.getFluff());
+			subCompId = fluffRepo.insert(object.getFluff());
+			if (subCompId == -1) {
+				delete(id);
+				return subCompId;
+			}
+			
+			// AbilityScores
+			PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
+			PTAbilitySet abilitySet = object.getAbilitySet();
+			for (int i = 0; i < abilitySet.getLength(); i++) {
+				subCompId = abScoreRepo.insert(abilitySet.getAbilityScore(i), false);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
+			}
+			
+			// Temp AbilityScores
+			PTAbilitySet tempAbilitySet = object.getTempAbilitySet();
+			for (int i = 0; i < tempAbilitySet.getLength(); i++) {
+				subCompId = abScoreRepo.insert(tempAbilitySet.getAbilityScore(i), true);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
+			}
 			
 			// Combat Stats
 			PTCombatStatRepository csRepo = new PTCombatStatRepository();
-			csRepo.insert(object.getCombatStatSet());
+			subCompId = csRepo.insert(object.getCombatStatSet());
+			if (subCompId == -1) {
+				delete(id);
+				return subCompId;
+			}
 			
 			// Saves
 			PTSaveRepository saveRepo = new PTSaveRepository();
 			PTSave[] saves = object.getSaveSet().getSaves();
 			for (PTSave save : saves) {
-				saveRepo.insert(save);
+				subCompId = saveRepo.insert(save);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
 			}
 			
 			// Skills
 			PTSkillRepository skillRepo = new PTSkillRepository();
 			PTSkill[] skills = object.getSkillSet().getSkills();
 			for (PTSkill skill : skills) {
-				skillRepo.insert(skill);
+				subCompId = skillRepo.insert(skill);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
 			}
 
 			// Items
 			PTItemRepository itemRepo = new PTItemRepository();
 			PTItem[] items = object.getInventory().getItems();
 			for (PTItem item : items) {
-				itemRepo.insert(item);
+				subCompId = itemRepo.insert(item);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
 			}
 			
 			// Weapons
 			PTWeaponRepository weaponRepo = new PTWeaponRepository();
 			PTWeapon[] weapons = object.getInventory().getWeaponArray();
 			for (PTWeapon weapon : weapons) {
-				weaponRepo.insert(weapon);
+				subCompId = weaponRepo.insert(weapon);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
 			}
 			
 			// Armor
 			PTArmorRepository armorRepo = new PTArmorRepository();
 			PTArmor[] armors = object.getInventory().getArmorArray();
 			for (PTArmor armor : armors) {
-				armorRepo.insert(armor);
+				subCompId = armorRepo.insert(armor);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
 			}
 			
-			// TODO add other components
+			// Feats
+			PTFeatRepository featRepo = new PTFeatRepository();
+			PTFeat[] feats = object.getFeatList().getFeats();
+			for (PTFeat feat : feats) {
+				subCompId = featRepo.insert(feat);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
+			}
+			
+			// Spells
+			PTSpellRepository spellRepo = new PTSpellRepository();
+			PTSpell[] spells = object.getSpellBook().getSpells();
+			for (PTSpell spell : spells) {
+				subCompId = spellRepo.insert(spell);
+				if (subCompId == -1) {
+					delete(id);
+					return subCompId;
+				}
+			}
 		}
 		return id;
 	}
@@ -101,6 +175,11 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		// Fluff
 		PTFluffInfoRepository fluffRepo = new PTFluffInfoRepository();
 		PTFluffInfo fluff = fluffRepo.query(id);
+		
+		// Ability Scores
+		PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
+		PTAbilitySet abilityScores = new PTAbilitySet(abScoreRepo.querySet(id, false));
+		PTAbilitySet tempAbilityScores = new PTAbilitySet(abScoreRepo.querySet(id, true));
 
 		// Combat Stats
 		PTCombatStatRepository csRepo = new PTCombatStatRepository();
@@ -130,10 +209,16 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		ArrayList<PTArmor> armor = new ArrayList<PTArmor>(Arrays.asList(armorRepo.querySet(id)));
 		inventory.setArmor(armor);
 		
-		// TODO add other components
+		// Feats
+		PTFeatRepository featRepo = new PTFeatRepository();
+		PTFeatList feats = new PTFeatList(featRepo.querySet(id));
+					
+		// Spells
+		PTSpellRepository spellRepo = new PTSpellRepository();
+		PTSpellBook spells = new PTSpellBook(spellRepo.querySet(id));
 
-		PTCharacter character = new PTCharacter(id, gold, fluff, csSet, saves,
-				skills);
+		PTCharacter character = new PTCharacter(id, gold, abilityScores, tempAbilityScores,
+				fluff, csSet, saves, skills, inventory, feats, spells);
 		return character;
 	}
 
