@@ -2,13 +2,13 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
 
-import android.app.DownloadManager.Query;
 import android.content.ContentValues;
 
-import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
+import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
+import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
@@ -63,6 +63,20 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 				skillRepo.insert(skill);
 			}
 
+			// Items
+			PTItemRepository itemRepo = new PTItemRepository();
+			PTItem[] items = object.getInventory().getItems();
+			for (PTItem item : items) {
+				itemRepo.insert(item);
+			}
+			
+			// Weapons
+			PTWeaponRepository weaponRepo = new PTWeaponRepository();
+			PTWeapon[] weapons = object.getInventory().getWeaponArray();
+			for (PTWeapon weapon : weapons) {
+				weaponRepo.insert(weapon);
+			}
+			
 			// TODO add other components
 		}
 		return id;

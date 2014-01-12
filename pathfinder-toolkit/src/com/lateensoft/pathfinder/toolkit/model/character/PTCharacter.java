@@ -55,6 +55,7 @@ public class PTCharacter implements Parcelable, PTStorable {
 	}
 	
 	public PTCharacter(String name, Context context) {
+		m_id = UNSET_ID;
 		m_abilitySet = new PTAbilitySet();
 		m_tempAbilitySet = new PTAbilitySet();
 		m_combatStatSet = new PTCombatStatSet();
@@ -66,7 +67,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_spellBook = new PTSpellBook();
 		m_gold = 0;
 		setName(name);
-		m_id = 0;
 	}
 	
 	public PTCharacter(Parcel in) {
@@ -184,11 +184,11 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_abilitySet.setCharacterID(id);
 		m_tempAbilitySet.setCharacterID(id);
 		m_combatStatSet.setID(id);
-		m_skillSet.setCharacterId(id);
+		m_skillSet.setCharacterID(id);
 		m_saveSet.setCharacterID(id);
 		m_fluffInfo.setID(id);
+		m_inventory.setCharacterID(id);
 		// TODO set these character ids
-//		m_inventory;
 //		m_feats;
 //		m_spellBook;
 	}

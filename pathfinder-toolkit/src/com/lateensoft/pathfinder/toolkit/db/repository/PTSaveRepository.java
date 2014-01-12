@@ -75,11 +75,12 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	 * @return Array of PTSkill, ordered alphabetically by name
 	 */
 	public PTSave[] querySet(long characterId) {
-		String selector = CHARACTER_ID + "=" + characterId + 
-				" ORDER BY " + NAME + " ASC";
+		String selector = CHARACTER_ID + "=" + characterId; 
+		String orderBy = NAME + " ASC";
 		String table = m_tableInfo.getTable();
 		String[] columns = m_tableInfo.getColumns();
-		Cursor cursor = getDatabase().query(table, columns, selector);
+		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+				null, null, null, orderBy, null);
 		
 		PTSave[] saves = new PTSave[cursor.getCount()];
 		cursor.moveToFirst();

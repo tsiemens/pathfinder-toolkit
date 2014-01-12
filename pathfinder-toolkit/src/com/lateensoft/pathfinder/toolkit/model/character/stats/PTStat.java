@@ -10,21 +10,15 @@ public abstract class PTStat implements PTStorable {
 	private long m_id;
 
 	public PTStat() {
-		m_name = "";
-		m_baseValue = 0;
-		m_id = 0;
+		this("");
 	}
 	
 	public PTStat(String name) {
-		m_name = name;
-		m_baseValue = 0;
-		m_id = 0;
+		this(name, 0);
 	}
 	
 	public PTStat(String name, int baseValue) {
-		m_name = name;
-		m_baseValue = baseValue;
-		m_id = 0;
+		this(UNSET_ID, name, baseValue);
 	}
 	
 	public PTStat(long id, String name, int baseValue) {

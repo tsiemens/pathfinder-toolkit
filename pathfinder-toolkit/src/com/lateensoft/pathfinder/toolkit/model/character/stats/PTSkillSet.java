@@ -56,7 +56,7 @@ public class PTSkillSet implements Parcelable {
 			return null;
 	}
 	
-	public void setCharacterId(long id) {
+	public void setCharacterID(long id) {
 		for (PTSkill skill : m_skills) {
 			skill.setCharacterID(id);
 		}

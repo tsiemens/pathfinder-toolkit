@@ -67,7 +67,7 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		
 		m_spellResist = 0;
 		
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTCombatStatSet(Parcel in) {

@@ -31,7 +31,7 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 		ContentValues values = getContentValues(object);
 		String table = m_tableInfo.getTable();
 		long id = m_database.insert(table, values);
-		if (id != -1 && object.getID() == 0) {
+		if (id != -1 && !isIDSet(object)) {
 			object.setID(id);
 		}
 		return id;
@@ -114,7 +114,7 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	 * @return true if the object has a set ID (one which is not 0), false otherwise
 	 */
 	protected boolean isIDSet(PTStorable object) {
-		return object.getID() != 0;
+		return object.getID() != PTStorable.UNSET_ID;
 	}
 	
 	/**

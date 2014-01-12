@@ -19,7 +19,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_magicMod = 0;
 		m_miscMod = 0;
 		m_tempMod = 0;
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(String name) {
@@ -28,7 +28,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_magicMod = 0;
 		m_miscMod = 0;
 		m_tempMod = 0;
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(long id, long characterId, String name, int baseValue, int abilityMod, int magicMod,
@@ -50,7 +50,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_magicMod = magicMod;
 		m_miscMod = miscMod;
 		m_tempMod = tempMod;
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
@@ -60,7 +60,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		m_magicMod = magicMod;
 		m_miscMod = miscMod;
 		m_tempMod = tempMod;
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(String name, int baseValue, int[] modArray) {
@@ -72,7 +72,7 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 			m_miscMod = modArray[2];
 			m_tempMod = modArray[3];
 		}
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(PTSave other) {

@@ -7,76 +7,75 @@ import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTWeapon extends PTItem implements Parcelable{
-	int mTotalAttackBonus;
-	String mDamage;
-	String mCritical;
-	int mRange;
-	String mSpecialProperties;
-	int mAmmunition;
-	String mType;
-	String mSize;
+public class PTWeapon extends PTItem implements Parcelable {
+	int m_totalAttackBonus;
+	String m_damage;
+	String m_critical;
+	int m_range;
+	String m_specialProperties;
+	int m_ammunition;
+	String m_type;
+	String m_size;
 	
 	public PTWeapon() {
 		super();
-		mTotalAttackBonus = 0;
-		mDamage = new String("");
-		mCritical = new String("x2");
-		mRange = 5;
-		mSpecialProperties = new String("");
-		mAmmunition = 0;
-		mType = new String("");
-		mSize = "M";
+		m_totalAttackBonus = 0;
+		m_damage = new String("");
+		m_critical = new String("x2");
+		m_range = 5;
+		m_specialProperties = new String("");
+		m_ammunition = 0;
+		m_type = new String("");
+		m_size = "M";
 	}
 	
-	public PTWeapon(String name) {
-		this();
-		mName = name;
+	public PTWeapon(long characterId, String name) {
+		super(characterId, name);
 	}
 	
 	public PTWeapon(Parcel in) {
 		super(in);
-		mTotalAttackBonus = in.readInt();
-		mDamage = in.readString();
-		mCritical = in.readString();
-		mRange = in.readInt();
-		mSpecialProperties = in.readString();
-		mAmmunition = in.readInt();
-		mType = in.readString();
-		mSize = in.readString();
+		m_totalAttackBonus = in.readInt();
+		m_damage = in.readString();
+		m_critical = in.readString();
+		m_range = in.readInt();
+		m_specialProperties = in.readString();
+		m_ammunition = in.readInt();
+		m_type = in.readString();
+		m_size = in.readString();
 	}
 	
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		super.writeToParcel(out, flags);
-		out.writeInt(mTotalAttackBonus);
-		out.writeString(mDamage);
-		out.writeString(mCritical);
-		out.writeInt(mRange);
-		out.writeString(mSpecialProperties);
-		out.writeInt(mAmmunition);
-		out.writeString(mType);
-		out.writeString(mSize);
+		out.writeInt(m_totalAttackBonus);
+		out.writeString(m_damage);
+		out.writeString(m_critical);
+		out.writeInt(m_range);
+		out.writeString(m_specialProperties);
+		out.writeInt(m_ammunition);
+		out.writeString(m_type);
+		out.writeString(m_size);
 	}
 
 	/**
 	 * @return the mTotalAttackBonus
 	 */
 	public int getTotalAttackBonus() {
-		return mTotalAttackBonus;
+		return m_totalAttackBonus;
 	}
 
 	/**
-	 * @param mTotalAttackBonus the mTotalAttackBonus to set
+	 * @param totalAttackBonus
 	 */
-	public void setTotalAttackBonus(int mTotalAttackBonus) {
-		this.mTotalAttackBonus = mTotalAttackBonus;
+	public void setTotalAttackBonus(int totalAttackBonus) {
+		this.m_totalAttackBonus = totalAttackBonus;
 	}
 	
 	public int getSizeInt() {
 		String[] sizeArray = {"S", "M", "L"};
 		for(int i = 0; i < sizeArray.length; i++) {
-			if(mSize.equals(sizeArray[i]))
+			if(m_size.equals(sizeArray[i]))
 				return i;
 		}
 		return 1;
@@ -86,105 +85,105 @@ public class PTWeapon extends PTItem implements Parcelable{
 	 * @return the mDamage
 	 */
 	public String getDamage() {
-		return mDamage;
+		return m_damage;
 	}
 
 	/**
-	 * @param mDamage the mDamage to set
+	 * @param damage
 	 */
-	public void setDamage(String mDamage) {
-		this.mDamage = mDamage;
+	public void setDamage(String damage) {
+		this.m_damage = damage;
 	}
 
 	/**
 	 * @return the mCritical
 	 */
 	public String getCritical() {
-		return mCritical;
+		return m_critical;
 	}
 
 	/**
-	 * @param mCritical the mCritical to set
+	 * @param critical
 	 */
-	public void setCritical(String mCritical) {
-		this.mCritical = mCritical;
+	public void setCritical(String critical) {
+		this.m_critical = critical;
 	}
 
 	/**
 	 * @return the mRange
 	 */
 	public int getRange() {
-		return mRange;
+		return m_range;
 	}
 
 	/**
-	 * @param mRange the mRange to set
+	 * @param range
 	 */
-	public void setRange(int mRange) {
-		this.mRange = mRange;
+	public void setRange(int range) {
+		this.m_range = range;
 	}
 
 	/**
 	 * @return the mSpecialProperties
 	 */
 	public String getSpecialProperties() {
-		return mSpecialProperties;
+		return m_specialProperties;
 	}
 
 	/**
-	 * @param mSpecialProperties the mSpecialProperties to set
+	 * @param specialProperties
 	 */
-	public void setSpecialProperties(String mSpecialProperties) {
-		this.mSpecialProperties = mSpecialProperties;
+	public void setSpecialProperties(String specialProperties) {
+		this.m_specialProperties = specialProperties;
 	}
 
 	/**
 	 * @return the mAmmunition
 	 */
 	public int getAmmunition() {
-		return mAmmunition;
+		return m_ammunition;
 	}
 
 	/**
-	 * @param mAmmunition the mAmmunition to set
+	 * @param ammunition
 	 */
-	public void setAmmunition(int mAmmunition) {
-		this.mAmmunition = mAmmunition;
+	public void setAmmunition(int ammunition) {
+		this.m_ammunition = ammunition;
 	}
 
 	/**
 	 * @return the mType
 	 */
 	public String getType() {
-		return mType;
+		return m_type;
 	}
 
 	/**
-	 * @param mType the mType to set
+	 * @param type
 	 */
-	public void setType(String mType) {
-		this.mType = mType;
+	public void setType(String type) {
+		this.m_type = type;
 	}
 
 	/**
 	 * @return the mSize
 	 */
 	public String getSize() {
-		return mSize;
+		return m_size;
 	}
 
 	/**
-	 * @param mSize the mSize to set
+	 * @param size
 	 */
-	public void setSize(String mSize) {
-		this.mSize = mSize;
+	public void setSize(String size) {
+		this.m_size = size;
 	}
 
 	public int getTypeInt(Context context) {
 		Resources r = context.getResources();
 		String[] options = r.getStringArray(R.array.weapon_type_options);
 		for(int i = 0; i < options.length; i++) {
-			if(mType.equals(options[i]))
+			if(m_type.equals(options[i]))
 				return i;
 		}
 		return 0;

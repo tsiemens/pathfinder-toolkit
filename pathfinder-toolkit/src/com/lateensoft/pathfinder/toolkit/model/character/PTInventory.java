@@ -15,34 +15,29 @@ public class PTInventory implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_ARMOR = "armor";
 	private static final String PARCEL_BUNDLE_KEY_WEAPONS = "weapons";
 	
-	private ArrayList<PTItem> mItems;
-	private ArrayList<PTArmor> mArmor;
-	private ArrayList<PTWeapon> mWeapons;
+	private ArrayList<PTItem> m_items;
+	private ArrayList<PTArmor> m_armor;
+	private ArrayList<PTWeapon> m_weapons;
 	
 	public PTInventory(){
-		mItems = new ArrayList<PTItem>();
-		mArmor = new ArrayList<PTArmor>();
-		mWeapons = new ArrayList<PTWeapon>();
-		
-		//For new inventory, give user sample items
-		addItem(new PTItem("Sample Item", 10, 1, false));
-		addItem(new PTItem("Contained Item (ex. In bag of holding)", 30, 1, true));
-	
+		m_items = new ArrayList<PTItem>();
+		m_armor = new ArrayList<PTArmor>();
+		m_weapons = new ArrayList<PTWeapon>();
 	}
 	
 	public PTInventory(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mItems = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS);
-		mArmor = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR);
-		mWeapons = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS);
+		m_items = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS);
+		m_armor = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR);
+		m_weapons = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS, mItems);
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR, mArmor);
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, mWeapons);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS, m_items);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR, m_armor);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, m_weapons);
 		out.writeBundle(objectBundle);
 	}
 	
@@ -60,30 +55,57 @@ public class PTInventory implements Parcelable {
 				return;
 			}
 			
-			for(i = 0; i < mItems.size(); i++){
+			for(i = 0; i < m_items.size(); i++){
 				//Places in alphabetical position
 				if(newItem.getName().compareToIgnoreCase(getItem(i).getName()) < 0 ){
-					mItems.add(i, newItem);
+					m_items.add(i, newItem);
 					return;
 				}
 			}
 			//If item is to go at the end of the list
-			mItems.add(newItem);
+			m_items.add(newItem);
 		}
 	}
 	
 	public void addArmor(PTArmor newArmor) {
 		if( newArmor != null ){
 
-			mArmor.add(newArmor);
+			m_armor.add(newArmor);
 		}
 	}
 	
 	public void addWeapon(PTWeapon newWeapon) {
 		if( newWeapon != null ){
 
-			mWeapons.add(newWeapon);
+			m_weapons.add(newWeapon);
 		}
+	}
+	
+	/**
+	 * Add an alphabetically sorted list of PTItems
+	 * For use of database for population
+	 * @param items
+	 */
+	public void setItems(ArrayList<PTItem> items) {
+		m_items = items;
+	}
+	
+	/**
+	 * Add an alphabetically sorted list of PTWeapons
+	 * For use of database for population
+	 * @param weapons
+	 */
+	public void setWeapons(ArrayList<PTWeapon> weapons) {
+		m_weapons = weapons;
+	}
+	
+	/**
+	 * Add an alphabetically sorted list of PTArmors
+	 * For use of database for population
+	 * @param armors
+	 */
+	public void setArmors(ArrayList<PTArmor> armors) {
+		m_armor = armors;
 	}
 		
 	/**
@@ -91,18 +113,18 @@ public class PTInventory implements Parcelable {
 	 * @param index
 	 */
 	public void deleteItem(int index){
-		if(index >= 0 && index < mItems.size())
-			mItems.remove(index);
+		if(index >= 0 && index < m_items.size())
+			m_items.remove(index);
 	}
 	
 	public void deleteArmor(int index) {
-		if(index >=0 && index < mArmor.size())
-			mArmor.remove(index);
+		if(index >=0 && index < m_armor.size())
+			m_armor.remove(index);
 	}
 	
 	public void deleteWeapon(int index) {
-		if(index >= 0 && index < mWeapons.size())
-			mWeapons.remove(index);
+		if(index >= 0 && index < m_weapons.size())
+			m_weapons.remove(index);
 	}
 	
 	/**
@@ -111,20 +133,20 @@ public class PTInventory implements Parcelable {
 	 * @return the item at index
 	 */
 	public PTItem getItem(int index){
-		if(index >= 0 && index < mItems.size())
-			return mItems.get(index);
+		if(index >= 0 && index < m_items.size())
+			return m_items.get(index);
 		else return null; 
 	}
 	
 	public PTArmor getArmor(int index) {
-		if(index>= 0 && index < mArmor.size())
-			return mArmor.get(index);
+		if(index>= 0 && index < m_armor.size())
+			return m_armor.get(index);
 		else return null;
 	}
 	
 	public PTWeapon getWeapon(int index) {
-		if(index >= 0 && index < mWeapons.size())
-			return mWeapons.get(index);
+		if(index >= 0 && index < m_weapons.size())
+			return m_weapons.get(index);
 		else return null;
 	}	
 	
@@ -133,13 +155,13 @@ public class PTInventory implements Parcelable {
 	 * @return new array of armor
 	 */
 	public PTArmor[] getArmorArray() {
-		PTArmor[] armorArray = new PTArmor[mArmor.size()];
-		return (PTArmor[]) mArmor.toArray(armorArray);
+		PTArmor[] armorArray = new PTArmor[m_armor.size()];
+		return (PTArmor[]) m_armor.toArray(armorArray);
 	}
 	
 	public PTWeapon[] getWeaponArray() {
-		PTWeapon[] weaponArray = new PTWeapon[mWeapons.size()];
-		return (PTWeapon[]) mWeapons.toArray(weaponArray);
+		PTWeapon[] weaponArray = new PTWeapon[m_weapons.size()];
+		return (PTWeapon[]) m_weapons.toArray(weaponArray);
 	}
 	
 	/**
@@ -148,21 +170,21 @@ public class PTInventory implements Parcelable {
 	 * @param index
 	 */
 	public void setItem(PTItem newItem, int index){
-		if(index >= 0 && index < mItems.size() && newItem != null){
+		if(index >= 0 && index < m_items.size() && newItem != null){
 			deleteItem(index);
 			addItem(newItem);
 		}
 	}
 	
 	public void setArmor(PTArmor newArmor, int index) {
-		if(index >= 0 && index < mArmor.size() && newArmor != null) {
+		if(index >= 0 && index < m_armor.size() && newArmor != null) {
 			deleteArmor(index);
 			addArmor(newArmor);
 		}
 	}
 	
 	public void setWeapon(PTWeapon newWeapon, int index) {
-		if(index >= 0 && index < mWeapons.size() && newWeapon != null) {
+		if(index >= 0 && index < m_weapons.size() && newWeapon != null) {
 			deleteWeapon(index);
 			addWeapon(newWeapon);
 		}
@@ -173,7 +195,7 @@ public class PTInventory implements Parcelable {
 	 * @return an array of PTItem objects
 	 */
 	public PTItem[] getItems(){
-		return mItems.toArray(new PTItem[mItems.size()]);		
+		return m_items.toArray(new PTItem[m_items.size()]);		
 	}
 	
 	/**
@@ -182,8 +204,8 @@ public class PTInventory implements Parcelable {
 	 * @param weight
 	 */
 	public void setWeight(int index, int weight){
-		if(index >= 0 && index < mItems.size())
-			mItems.get(index).setWeight(weight);
+		if(index >= 0 && index < m_items.size())
+			m_items.get(index).setWeight(weight);
 	}
 	
 	/**
@@ -192,8 +214,8 @@ public class PTInventory implements Parcelable {
 	 * @param quantity
 	 */
 	public void setQuantity(int index, int quantity){
-		if(index >= 0 && index < mItems.size())
-			mItems.get(index).setQuantity(quantity);
+		if(index >= 0 && index < m_items.size())
+			m_items.get(index).setQuantity(quantity);
 	}
 	
 	/**
@@ -202,8 +224,8 @@ public class PTInventory implements Parcelable {
 	 * @param isContained
 	 */
 	public void setContained(int index, boolean isContained){
-		if(index >= 0 && index < mItems.size())
-			mItems.get(index).setIsContained(isContained);
+		if(index >= 0 && index < m_items.size())
+			m_items.get(index).setIsContained(isContained);
 	}
 	
 	/**
@@ -212,8 +234,8 @@ public class PTInventory implements Parcelable {
 	 * @return the index of the object with itemName. returns -1 if the item is not in the inventory.
 	 */
 	public int getIndexOf(String itemName){
-		for(int i = 0; i < mItems.size(); i++){
-			if(itemName.contentEquals(mItems.get(i).getName())){
+		for(int i = 0; i < m_items.size(); i++){
+			if(itemName.contentEquals(m_items.get(i).getName())){
 				return i;
 			}
 		}
@@ -221,8 +243,8 @@ public class PTInventory implements Parcelable {
 	}
 	
 	public int getIndexOfArmor(String itemName){
-		for(int i = 0; i < mArmor.size(); i++){
-			if(itemName.contentEquals(mArmor.get(i).getName())){
+		for(int i = 0; i < m_armor.size(); i++){
+			if(itemName.contentEquals(m_armor.get(i).getName())){
 				return i;
 			}
 		}
@@ -230,33 +252,49 @@ public class PTInventory implements Parcelable {
 	}
 	
 	public int getNumberOfItems(){
-		return mItems.size();
+		return m_items.size();
 	}
 	
 	public int getNumberOfArmor() {
-		return mArmor.size();
+		return m_armor.size();
 	}
 	
 	public int getNumberofWeapons() {
-		return mWeapons.size();
+		return m_weapons.size();
 	}
 	
 	public double getTotalWeight() {
 		double totalWeight = 0;
-		for(int i = 0; i < mItems.size(); i++) {
-			if(!mItems.get(i).isContained())
-				totalWeight += (mItems.get(i).getWeight())*(mItems.get(i).getQuantity());
+		for(int i = 0; i < m_items.size(); i++) {
+			if(!m_items.get(i).isContained())
+				totalWeight += (m_items.get(i).getWeight())*(m_items.get(i).getQuantity());
 		}
-		for(int i = 0; i < mWeapons.size(); i++) {
-			if(!mWeapons.get(i).isContained())
-				totalWeight += (mWeapons.get(i).getWeight())*(mWeapons.get(i).getQuantity());
+		for(int i = 0; i < m_weapons.size(); i++) {
+			if(!m_weapons.get(i).isContained())
+				totalWeight += (m_weapons.get(i).getWeight())*(m_weapons.get(i).getQuantity());
 		}
-		for(int i = 0; i < mArmor.size(); i++) {
-			if(!mArmor.get(i).isContained())
-				totalWeight += (mArmor.get(i).getWeight())*(mArmor.get(i).getQuantity());
+		for(int i = 0; i < m_armor.size(); i++) {
+			if(!m_armor.get(i).isContained())
+				totalWeight += (m_armor.get(i).getWeight())*(m_armor.get(i).getQuantity());
 		}
 		
 		return totalWeight;
+	}
+	
+	/**
+	 * Sets character id of all items in inventory
+	 * @param id
+	 */
+	public void setCharacterID(long id) {
+		for(PTItem item : m_items) {
+			item.setCharacterID(id);
+		}
+		for(PTItem item : m_weapons) {
+			item.setCharacterID(id);
+		}
+		for(PTItem item : m_armor) {
+			item.setCharacterID(id);
+		}
 	}
 	
 	@Override

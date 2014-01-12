@@ -17,12 +17,6 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 		m_skill = m_repo.querySet(m_characterId)[0];
 	}
 	
-	// TODO remove
-//	public void testInsert() {
-//		long id = m_repo.insert(m_insertSkill);
-//		assertTrue(id != INSERT_FAIL);
-//	}
-//	
 	public void testQuery() {
 		PTSkill queried = m_repo.query(m_skill.getID());
 		assertEquals(m_skill.getID(), queried.getID());
@@ -50,24 +44,6 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 		assertEquals(toUpdate.getArmorCheckPenalty(), queried.getArmorCheckPenalty());
 		assertEquals(toUpdate.getAbilityMod(), queried.getAbilityMod());
 	}
-	
-	// TODO remove, because we never manually delete skills
-//	public void testDelete() {
-//		assertTrue(false);
-//		long id = m_repo.insert(m_insertSkill);
-//		m_repo.delete(id);
-//		boolean exception = false;
-//		try {
-//			@SuppressWarnings("unused")
-//			PTSkill queried = m_repo.query(id);
-//		}
-//		catch(Exception e) {
-//			exception = true;
-//		}
-//		finally {
-//			assertTrue(exception);
-//		}
-//	}
 
 	public void testQuerySet() {
 		PTSkill[] queriedSkills = m_repo.querySet(m_characterId);

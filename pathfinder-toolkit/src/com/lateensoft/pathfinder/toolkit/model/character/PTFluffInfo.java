@@ -46,7 +46,7 @@ public class PTFluffInfo implements Parcelable, PTStorable {
 		m_languages = new String("");
 		m_description = new String("");
 		
-		m_characterId = 0;
+		m_characterId = UNSET_ID;
 	}
 	
 	public PTFluffInfo(Parcel in) {

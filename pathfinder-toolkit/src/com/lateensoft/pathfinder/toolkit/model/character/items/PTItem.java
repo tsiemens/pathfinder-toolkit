@@ -1,19 +1,31 @@
 package com.lateensoft.pathfinder.toolkit.model.character.items;
 
+import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTItem implements Parcelable {
-	String mName;
-	double mWeight;
-	int mQuantity;
-	boolean mIsContained; //set if in a container such as a bag of holding (will be used to set effective weight to 0)
+public class PTItem implements Parcelable, PTStorable {
+	String m_name;
+	double m_weight;
+	int m_quantity;
+	//set if in a container such as a bag of holding (will be used to set effective weight to 0)
+	boolean m_isContained;
 	
-	public PTItem(String name, double weight, int quantity, boolean contained) {
-		mName = name;
-		mWeight = weight;
-		mQuantity = quantity;
-		mIsContained = contained;
+	long m_id;
+	long m_characterId;
+	
+	public PTItem(long id, long characterId, String name, double weight, int quantity, boolean contained) {
+		m_id = id;
+		m_characterId = characterId;
+		m_name = name;
+		m_weight = weight;
+		m_quantity = quantity;
+		m_isContained = contained;
+	}
+	
+	public PTItem(long characterId, String name, double weight, int quantity, boolean contained) {
+		this(UNSET_ID, characterId, name, weight, quantity, contained);
 	}
 	
 	/**
@@ -21,68 +33,93 @@ public class PTItem implements Parcelable {
 	 * @param name
 	 * @param weight
 	 */
-	public PTItem(String name, double weight) {
-		mName = name;
-		mWeight = weight;
-		mQuantity = 1;
-		mIsContained = false;
+	public PTItem(long characterId, String name, double weight) {
+		this(characterId, name, weight, 1, false);
+	}
+	
+	public PTItem(long characterId, String name) {
+		this(characterId, name, 1);
+	}
+	
+	public PTItem(long characterId) {
+		this(characterId, "");
 	}
 	
 	public PTItem() {
-		mName = "";
-		mWeight = 1;
-		mQuantity = 1;
+		this(UNSET_ID);
 	}
 	
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(mName);
-		out.writeDouble(mWeight);
-		out.writeInt(mQuantity);
+		out.writeString(m_name);
+		out.writeDouble(m_weight);
+		out.writeInt(m_quantity);
 		boolean[] contained = new boolean[1];
-		contained[0] = mIsContained;
+		contained[0] = m_isContained;
 		out.writeBooleanArray(contained);
+		out.writeLong(m_id);
+		out.writeLong(m_characterId);
 	}
 	
 	public PTItem(Parcel in) {
-		mName = in.readString();
-		mWeight = in.readDouble();
-		mQuantity = in.readInt();
+		m_name = in.readString();
+		m_weight = in.readDouble();
+		m_quantity = in.readInt();
 		boolean[] contained = new boolean[1];
 		in.readBooleanArray(contained);
-		mIsContained = contained[0];
+		m_isContained = contained[0];
+		m_id = in.readLong();
+		m_characterId = in.readLong();
 	}
 	
 	public String getName() {
-		return mName;
+		return m_name;
 	}
 	
 	public void setName(String name) {
-		mName = name;
+		m_name = name;
 	}
 	
 	public double getWeight() {
-		return mWeight;
+		return m_weight;
 	}
 	
 	public void setWeight(double weight) {
-		mWeight = weight;
+		m_weight = weight;
 	}
 	
 	public int getQuantity() {
-		return mQuantity;
+		return m_quantity;
 	}
 	
 	public void setQuantity(int quantity) {
-		mQuantity = quantity;
+		m_quantity = quantity;
 	}
 	
 	public boolean isContained(){
-		return mIsContained;
+		return m_isContained;
 	}
 	
 	public void setIsContained(boolean isContained){
-		mIsContained = isContained;
+		m_isContained = isContained;
+	}
+	
+	@Override
+	public void setID(long id) {
+		m_id = id;
+	}
+
+	@Override
+	public long getID() {
+		return m_id;
+	}
+	
+	public void setCharacterID (long id) {
+		m_characterId = id;
+	}
+	
+	public long getCharacterID() {
+		return m_characterId;
 	}
 
 	@Override

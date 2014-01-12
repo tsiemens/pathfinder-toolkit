@@ -141,7 +141,6 @@ public class PTTableCreator {
 		return "CREATE TABLE Weapon (" +
 				"item_id INTEGER PRIMARY KEY, " +
 				"TotalAttackBonus INTEGER, " +
-				"Attack TEXT, " +
 				"Damage TEXT, " +
 				"Critical TEXT, " +
 				"Range INTEGER, " +
