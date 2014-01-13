@@ -9,8 +9,8 @@ import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
 
 public class PTFluffInfoRepository extends PTBaseRepository<PTFluffInfo>{
 	
-	static final String TABLE = "FluffInfo";
-	private static final String NAME = "Name";
+	public static final String TABLE = "FluffInfo";
+	public static final String NAME = "Name";
 	private static final String ALIGNMENT = "Alignment";
 	private static final String XP = "XP";
 	private static final String NEXT_LEVEL_XP = "NextLevelXP";

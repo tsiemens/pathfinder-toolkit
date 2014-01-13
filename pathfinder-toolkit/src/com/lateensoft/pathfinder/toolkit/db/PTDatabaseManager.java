@@ -221,7 +221,7 @@ public class PTDatabaseManager extends SQLiteOpenHelper {
 		int partyID = cursor.getInt(cursor.getColumnIndex(colPrtyID));
 		close();
 		
-		newParty.mID = partyID;
+		newParty.setID(partyID);
 		updateParty(newParty);
 		Log.v(TAG, "New party added to database: " + partyID); 
 		
@@ -238,7 +238,7 @@ public class PTDatabaseManager extends SQLiteOpenHelper {
 		editCon.put(colPrtyGSON, mGson.toJson(party));
 
 		open();
-		mDatabase.update(partyTable, editCon, colPrtyID+"="+party.mID, null);
+		mDatabase.update(partyTable, editCon, colPrtyID+"="+party.getID(), null);
 		close();
 		Log.v(TAG, "Party saved in database");
 	}

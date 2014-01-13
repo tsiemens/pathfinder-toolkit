@@ -112,9 +112,10 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	}
    	
 	public void loadDefaultParty(){
-		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
+		long currentPartyID = PTSharedPreferences.getInstance().getLong(
+				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		if(currentPartyID >= 0)
-			mParty = mSQLManager.getParty(currentPartyID);
+			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
 		else
 			mParty = new PTParty("Empty Party");
 		refreshPartyView();
@@ -150,7 +151,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	
 	public void resetPartyRolls(){
 		for(int i = 0; i < mParty.size(); i++){
-			mParty.getPartyMember(i).setRolledValue(0);
+			mParty.getPartyMember(i).setLastRolledValue(0);
 		}
 	}
 	
@@ -161,7 +162,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	 */
 	private boolean partyIsInEncounter(PTParty party){
 		for(int i = 0; i < party.size(); i++)
-			if(party.getPartyMember(i).getRolledValue() != 0)
+			if(party.getPartyMember(i).getLastRolledValue() != 0)
 				return true;
 		return false;
 	}
@@ -173,7 +174,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		
 		for(int i = 0; i < mParty.size(); i++){
 			skillMod = getSkillModForMember(i);
-			mParty.getPartyMember(i).setRolledValue(diceSet.singleRoll(20)+skillMod);
+			mParty.getPartyMember(i).setLastRolledValue(diceSet.singleRoll(20)+skillMod);
 		}
 		refreshPartyView();
 	}

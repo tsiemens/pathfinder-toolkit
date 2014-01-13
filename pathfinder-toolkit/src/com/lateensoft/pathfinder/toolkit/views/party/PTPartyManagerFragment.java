@@ -45,7 +45,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	private PTDatabaseManager mSQLManager;
 
 	private int mDialogMode;
-	private int mPartySelectedInDialog;
+	private long mPartySelectedInDialog;
 
 	private EditText mPartyNameEditText;
 	private ListView mPartyMemberList;
@@ -90,13 +90,14 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 * user prefs, it automatically generates a new one.
 	 */
 	private void loadCurrentParty() {
-		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
+		long currentPartyID = PTSharedPreferences.getInstance().getLong(
+				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 
 		if (currentPartyID == -1) { // There was no current party set in shared
 									// prefs
 			addNewParty();
 		} else {
-			mParty = mSQLManager.getParty(currentPartyID);
+			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
 			refreshPartyView();
 
 		}
@@ -107,7 +108,8 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	private void addNewParty() {
 		mParty = mSQLManager.addNewParty("New Party");
-		PTSharedPreferences.getInstance().setSelectedParty(mParty.mID);
+		PTSharedPreferences.getInstance().putLong(
+				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, mParty.getID());
 		refreshPartyView();
 	}
 
@@ -117,7 +119,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
-		int currentPartyID = mParty.mID;
+		long currentPartyID = mParty.getID();
 		int partyIDs[] = mSQLManager.getPartyIDs();
 
 		for (int i = 0; i < partyIDs.length; i++) {
@@ -128,14 +130,16 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		if (partyIDs.length == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
-			PTSharedPreferences.getInstance().setSelectedParty(partyIDs[1]);
+			PTSharedPreferences.getInstance().putLong(
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[1]);
 			loadCurrentParty();
 		} else {
-			PTSharedPreferences.getInstance().setSelectedParty(partyIDs[0]);
+			PTSharedPreferences.getInstance().putLong(
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[0]);
 			loadCurrentParty();
 		}
 
-		mSQLManager.deleteParty(currentPartyID);
+		mSQLManager.deleteParty(Long.valueOf(currentPartyID).intValue());
 	}
 
 	private void updateDatabase() {
@@ -207,7 +211,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	}
 
 	private void showPartyDialog() {
-		mPartySelectedInDialog = mParty.mID; // actual current party
+		mPartySelectedInDialog = mParty.getID(); // actual current party
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -282,10 +286,11 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		switch (mDialogMode) {
 		case MENU_ITEM_PARTY_LIST:
 			// Check if "currently selected" party is the same as saved one
-			if (mPartySelectedInDialog != mParty.mID) {
+			if (mPartySelectedInDialog != mParty.getID()) {
 				updateDatabase(); // Ensures any data changed on the party
 										// in the current fragment is saved
-				PTSharedPreferences.getInstance().setSelectedParty(mPartySelectedInDialog);
+				PTSharedPreferences.getInstance().putLong(
+						PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, mPartySelectedInDialog);
 				loadCurrentParty();
 			}
 			break;

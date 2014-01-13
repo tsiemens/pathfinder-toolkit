@@ -3,9 +3,12 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
+import com.lateensoft.pathfinder.toolkit.db.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
@@ -232,4 +235,32 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		return values;
 	}
 
+	/**
+	 * Returns all characters
+	 * @return Array of IdNamePair, ordered alphabetically by name
+	 */
+	public IdNamePair[] queryList() {
+		Locale l = null;
+		String selector = String.format(l, "%s.%s=%s.%s", 
+				TABLE, CHARACTER_ID,
+				 PTFluffInfoRepository.TABLE,  CHARACTER_ID);
+		String orderBy = PTFluffInfoRepository.NAME + " ASC";
+		String table = m_tableInfo.getTable()+", "+PTFluffInfoRepository.TABLE;
+		String[] columns = {m_tableInfo.getTable()+"."+CHARACTER_ID+" "+CHARACTER_ID, 
+				PTFluffInfoRepository.NAME};
+		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+				null, null, null, orderBy, null);
+		
+		IdNamePair[] characters = new IdNamePair[cursor.getCount()];
+		cursor.moveToFirst();
+		int i = 0;
+		while (!cursor.isAfterLast()) {
+			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+			characters[i] = new IdNamePair((Long)hashTable.get(CHARACTER_ID), 
+					(String)hashTable.get(PTFluffInfoRepository.NAME));
+			cursor.moveToNext();
+			i++;
+		}
+		return characters;
+	}
 }

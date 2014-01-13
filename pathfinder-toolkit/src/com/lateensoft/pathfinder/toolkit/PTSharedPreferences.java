@@ -24,7 +24,7 @@ public class PTSharedPreferences {
 	public static String KEY_INT_LAST_RATED_VERSION = "lastRateVersion";
 	public static String KEY_INT_LAST_USED_VERSION = "lastUsedVersion";
 	public static String KEY_LONG_SELECTED_CHARACTER_ID = "selectedCharacter";
-	public static String KEY_INT_SELECTED_PARTY_ID = "selectedParty";
+	public static String KEY_LONG_SELECTED_PARTY_ID = "selectedParty";
 	public static String KEY_STRING_ENCOUNTER_PARTY_JSON = "encounterParty";
 	
 	private static PTSharedPreferences s_instance;
@@ -126,23 +126,6 @@ public class PTSharedPreferences {
 	 */
 	public long getSelectedCharacter(){
 		return this.getLong(KEY_LONG_SELECTED_CHARACTER_ID, -1);
-	}
-	
-	/**
-	 * Saves the ID of the currently selected party to SharedPreferences
-	 * @param characterID
-	 * @return true if the save was successful, false otherwise
-	 */
-	public boolean setSelectedParty(int partyID){
-		Log.i(TAG, "Selected party set to "+partyID);
-		return this.putInt(KEY_INT_SELECTED_PARTY_ID, partyID);
-	}
-	
-	/**
-	 * @return The ID of the currently selected party. Returns -1 if no character is selected
-	 */
-	public int getSelectedParty(){
-		return m_sharedPreferences.getInt(KEY_INT_SELECTED_PARTY_ID, -1);
 	}
 	
 	/**

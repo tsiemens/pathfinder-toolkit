@@ -192,7 +192,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 			mParty = currentEncounterParty;
 			mHasRolled = false;
 			for (int i = 0; i < mParty.size(); i++)
-				if (mParty.getPartyMember(i).getRolledValue() != 0)
+				if (mParty.getPartyMember(i).getLastRolledValue() != 0)
 					mHasRolled = true;
 
 			refreshPartyView();
@@ -200,9 +200,10 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	}
 
 	private void loadDefaultParty() {
-		int currentPartyID = PTSharedPreferences.getInstance().getSelectedParty();
+		long currentPartyID = PTSharedPreferences.getInstance().getLong(
+				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		if (currentPartyID >= 0)
-			mParty = mSQLManager.getParty(currentPartyID);
+			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
 		else
 			mParty = new PTParty("Empty Party");
 		updateDatabase();
@@ -212,7 +213,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	private void resetPartyRolls() {
 		for (int i = 0; i < mParty.size(); i++) {
-			mParty.getPartyMember(i).setRolledValue(0);
+			mParty.getPartyMember(i).setLastRolledValue(0);
 		}
 		updateDatabase();
 		mHasRolled = false;
@@ -289,7 +290,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 		for (int i = 0; i < mParty.size(); i++) {
 			initiativeMod = mParty.getPartyMember(i).getInitiative();
-			mParty.getPartyMember(i).setRolledValue(
+			mParty.getPartyMember(i).setLastRolledValue(
 					diceSet.singleRoll(20) + initiativeMod);
 		}
 		updateDatabase();

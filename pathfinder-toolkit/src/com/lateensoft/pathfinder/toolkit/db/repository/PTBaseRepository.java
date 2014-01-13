@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
-import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 
 public abstract class PTBaseRepository<T extends PTStorable> {
 	private PTDatabase m_database;
@@ -79,7 +78,7 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	
 	protected Hashtable<String, Object> getTableOfValues(Cursor cursor) {
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
-		String[] columns = m_tableInfo.getColumns();
+		String[] columns = cursor.getColumnNames();
 		for(int i = 0; i < columns.length; i++) {
 			Object datum = getDatum(cursor, columns[i]);
 			table.put(columns[i], datum);
@@ -89,17 +88,17 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	
 	protected Object getDatum(Cursor cursor, String column) {
 		int index = cursor.getColumnIndex(column);
-		SQLDataType type = m_tableInfo.getDataType(column);
+		int type = cursor.getType(index);
 		Object data;
 		switch (type) {
-		case TEXT:
+		case Cursor.FIELD_TYPE_STRING:
 			data = cursor.getString(index);
 			break;
-		case INTEGER:
+		case Cursor.FIELD_TYPE_INTEGER:
 			// Because INTEGER can store Long and Integer, we need to use Long, and cast later
 			data = cursor.getLong(index);
 			break;
-		case REAL:
+		case Cursor.FIELD_TYPE_FLOAT:
 			data = cursor.getDouble(index);
 			break;
 		default:

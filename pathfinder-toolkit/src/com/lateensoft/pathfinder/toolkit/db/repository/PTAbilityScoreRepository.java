@@ -11,7 +11,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityScore;
 public class PTAbilityScoreRepository extends PTBaseRepository<PTAbilityScore> {
 	private static final String TABLE = "AbilityScore";
 	private static final String ID = "ability_score_id";
-	private static final String CHARACTER_ID = "character_id";
 	private static final String ABILITY = "Ability";
 	private static final String SCORE = "Score";
 	private static final String IS_TEMP = "IsTemp";

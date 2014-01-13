@@ -169,6 +169,7 @@ public class PTTableCreator {
 				"ReflexSave INTEGER, " +
 				"WillSave INTEGER, " +
 				"BluffSkillBonus INTEGER, " +
+				"DisguiseSkillBonus INTEGER, " +
 				"PerceptionSkillBonus INTEGER, " +
 				"SenseMotiveSkillBonus INTEGER, " +
 				"StealthSkillBonus INTEGER, " +
@@ -182,7 +183,8 @@ public class PTTableCreator {
 		Log.d(TAG, "Creating party table");
 		return "CREATE TABLE Party (" +
 				"party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Name TEXT" +
+				"Name TEXT, " +
+				"InEncounter INTEGER" +
 				");";
 	}
 	

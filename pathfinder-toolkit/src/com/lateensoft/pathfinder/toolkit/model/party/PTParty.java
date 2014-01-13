@@ -1,44 +1,56 @@
 package com.lateensoft.pathfinder.toolkit.model.party;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
-public class PTParty implements Parcelable{	
+public class PTParty implements Parcelable, PTStorable {	
+	@SuppressWarnings("unused")
 	private final String TAG = PTParty.class.getSimpleName();
 	private static final String PARCEL_BUNDLE_KEY_MEMBERS = "party_members";
 	
-	private ArrayList<PTPartyMember> mPartyMembers;
-	private String mPartyName;
-	public int mID; //Used in SQL
+	private ArrayList<PTPartyMember> m_partyMembers;
+	private String m_partyName;
+	
+	private long m_id;
 	
 	public PTParty(String name){
-		mPartyMembers = new ArrayList<PTPartyMember>();
+		this(UNSET_ID, name);
+	}
+	
+	public PTParty(long id, String name) {
+		this(id, name, new PTPartyMember[0]);
+	}
+	
+	public PTParty(long id, String name, PTPartyMember[] partyMembers) {
+		m_id = id;
 		
 		if(name != null)
-			mPartyName = name;
-		else mPartyName = "";
+			m_partyName = name;
+		else m_partyName = "";
 		
-		mID = 0;
+		m_partyMembers = new ArrayList<PTPartyMember>(Arrays.asList(partyMembers));
 	}
 	
 	public PTParty(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		mPartyMembers = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS);
-		mPartyName = in.readString();
-		mID = in.readInt();
+		m_partyMembers = objectBundle.getParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS);
+		m_partyName = in.readString();
+		m_id = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS, mPartyMembers);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_MEMBERS, m_partyMembers);
 		out.writeBundle(objectBundle);
-		out.writeString(mPartyName);
-		out.writeInt(mID);
+		out.writeString(m_partyName);
+		out.writeLong(m_id);
 	}
 	
 	/**
@@ -49,16 +61,16 @@ public class PTParty implements Parcelable{
 	public int addPartyMember(PTPartyMember newPartyMember){
 		if( newPartyMember != null ){
 			
-			for(int i = 0; i < mPartyMembers.size(); i++){
+			for(int i = 0; i < m_partyMembers.size(); i++){
 				//Places in alphabetical position
 				if(newPartyMember.getName().compareToIgnoreCase(getPartyMember(i).getName()) < 0 ){
-					mPartyMembers.add(i, newPartyMember);
+					m_partyMembers.add(i, newPartyMember);
 					return i;
 				}
 			}
 			//If party member is to go at the end of the list
-			mPartyMembers.add(newPartyMember);
-			return mPartyMembers.size() - 1;
+			m_partyMembers.add(newPartyMember);
+			return m_partyMembers.size() - 1;
 		}
 		else return -1;
 	}
@@ -69,8 +81,8 @@ public class PTParty implements Parcelable{
 	 * @return returns the party member at index, in an alphabetical list of all party members
 	 */
 	public PTPartyMember getPartyMember(int index){
-		if(index >= 0 && index < mPartyMembers.size())
-			return mPartyMembers.get(index);
+		if(index >= 0 && index < m_partyMembers.size())
+			return m_partyMembers.get(index);
 		else return null;
 	}
 	
@@ -82,8 +94,8 @@ public class PTParty implements Parcelable{
 	 * @return the new index of the character in the list. -1 if the set failed
 	 */
 	public int setPartyMember(int index, PTPartyMember partyMember){
-		if(index >= 0 && index < mPartyMembers.size() && partyMember != null){
-			mPartyMembers.remove(index);
+		if(index >= 0 && index < m_partyMembers.size() && partyMember != null){
+			m_partyMembers.remove(index);
 			return addPartyMember(partyMember);
 		}
 		else return -1;
@@ -94,8 +106,8 @@ public class PTParty implements Parcelable{
 	 * @param index
 	 */
 	public void deletePartyMember(int index){
-		if(index >= 0 && index < mPartyMembers.size())
-			mPartyMembers.remove(index);
+		if(index >= 0 && index < m_partyMembers.size())
+			m_partyMembers.remove(index);
 	}
 	
 	/**
@@ -103,9 +115,9 @@ public class PTParty implements Parcelable{
 	 * @return an array of all the party members' names
 	 */
 	public String[] getPartyMemberNames(){
-		String names[] = new String[mPartyMembers.size()];
-		for(int i = 0; i < mPartyMembers.size(); i++){
-			names[i] = mPartyMembers.get(i).getName();
+		String names[] = new String[m_partyMembers.size()];
+		for(int i = 0; i < m_partyMembers.size(); i++){
+			names[i] = m_partyMembers.get(i).getName();
 		}
 		
 		return names;
@@ -113,11 +125,11 @@ public class PTParty implements Parcelable{
 	
 	public void setName(String name){
 		if(name != null)
-			mPartyName = name;
+			m_partyName = name;
 	}
 	
 	public String getName(){
-		return mPartyName;
+		return m_partyName;
 	}
 	
 	/**
@@ -127,10 +139,10 @@ public class PTParty implements Parcelable{
 	 */
 	public String[] getNamesByRollValue(){
 		PTPartyMember[] orderedMembers = getPartyMembersByRollValue();
-		String[] names = new String[mPartyMembers.size()];
+		String[] names = new String[m_partyMembers.size()];
 		
 		//Set each value in the array
-		for(int i = 0; i < mPartyMembers.size(); i++){
+		for(int i = 0; i < m_partyMembers.size(); i++){
 			names[i] = orderedMembers[i].getName();
 		}	
 		return names;
@@ -143,11 +155,11 @@ public class PTParty implements Parcelable{
 	 */
 	public int[] getRollValuesByRollValue(){
 		PTPartyMember[] orderedMembers = getPartyMembersByRollValue();
-		int[] rollValues = new int[mPartyMembers.size()];
+		int[] rollValues = new int[m_partyMembers.size()];
 		
 		//Set each value in the array
-		for(int i = 0; i < mPartyMembers.size(); i++){
-			rollValues[i] = orderedMembers[i].getRolledValue();	
+		for(int i = 0; i < m_partyMembers.size(); i++){
+			rollValues[i] = orderedMembers[i].getLastRolledValue();	
 		}	
 		return rollValues;
 	}
@@ -159,7 +171,7 @@ public class PTParty implements Parcelable{
 	 * @return the "actual" index of the party, based on its index in the list sorted by roll
 	 */
 	public int getPartyMemberIndexByRollValueIndex(int index){
-		if(index < mPartyMembers.size()){
+		if(index < m_partyMembers.size()){
 			int[] indexes = getIndexesByRollValue();
 			return indexes[index];	
 		}
@@ -172,21 +184,21 @@ public class PTParty implements Parcelable{
 	 */
 	private PTPartyMember[] getPartyMembersByRollValue(){
 		ArrayList<PTPartyMember> tempMembers = cloneMemberList();
-		PTPartyMember[] sortedMembers = new PTPartyMember[mPartyMembers.size()];
+		PTPartyMember[] sortedMembers = new PTPartyMember[m_partyMembers.size()];
 		
 		int currentLargestRoll;
 		int indexWithLargestRoll;
 		
 		//Set each value in the array
-		for(int currentNamesIndex = 0; currentNamesIndex < mPartyMembers.size(); currentNamesIndex++){
+		for(int currentNamesIndex = 0; currentNamesIndex < m_partyMembers.size(); currentNamesIndex++){
 			currentLargestRoll = Integer.MIN_VALUE;
 			indexWithLargestRoll = 0;
 			
 			//Find the largest value still in arraylist
 			for(int i = 0; i < tempMembers.size(); i++){
-				if(tempMembers.get(i).getRolledValue() > currentLargestRoll){
+				if(tempMembers.get(i).getLastRolledValue() > currentLargestRoll){
 					indexWithLargestRoll = i;
-					currentLargestRoll = tempMembers.get(i).getRolledValue();
+					currentLargestRoll = tempMembers.get(i).getLastRolledValue();
 				}		
 			}
 			sortedMembers[currentNamesIndex] = new PTPartyMember(tempMembers.get(indexWithLargestRoll));	
@@ -201,8 +213,8 @@ public class PTParty implements Parcelable{
 	public int[] getIndexesByRollValue(){
 		ArrayList<PTPartyMember> tempMembers = cloneMemberList();
 		ArrayList<Integer> tempIndexes = new ArrayList<Integer>();
-		int[] sortedIndexes = new int[mPartyMembers.size()];
-		for(int j = 0; j < mPartyMembers.size(); j++){
+		int[] sortedIndexes = new int[m_partyMembers.size()];
+		for(int j = 0; j < m_partyMembers.size(); j++){
 			tempIndexes.add(Integer.valueOf(j));
 		}
 		
@@ -210,15 +222,15 @@ public class PTParty implements Parcelable{
 		int indexWithLargestRoll;
 		
 		//Set each value in the array
-		for(int currentNamesIndex = 0; currentNamesIndex < mPartyMembers.size(); currentNamesIndex++){
+		for(int currentNamesIndex = 0; currentNamesIndex < m_partyMembers.size(); currentNamesIndex++){
 			currentLargestRoll = Integer.MIN_VALUE;
 			indexWithLargestRoll = 0;
 			
 			//Find the largest value still in arraylist
 			for(int i = 0; i < tempMembers.size(); i++){
-				if(tempMembers.get(i).getRolledValue() > currentLargestRoll){
+				if(tempMembers.get(i).getLastRolledValue() > currentLargestRoll){
 					indexWithLargestRoll = i;
-					currentLargestRoll = tempMembers.get(i).getRolledValue();
+					currentLargestRoll = tempMembers.get(i).getLastRolledValue();
 				}		
 			}
 			sortedIndexes[currentNamesIndex] = tempIndexes.get(indexWithLargestRoll).intValue();	
@@ -233,11 +245,11 @@ public class PTParty implements Parcelable{
 	 * @return a deep copy of the member array list
 	 */
 	private ArrayList<PTPartyMember> cloneMemberList(){
-		int numberOfMembers = mPartyMembers.size();
+		int numberOfMembers = m_partyMembers.size();
 		ArrayList<PTPartyMember> membersListClone = new ArrayList<PTPartyMember>();
 		
 		for(int i = 0; i < numberOfMembers; i++){
-			PTPartyMember tempMember = new PTPartyMember(mPartyMembers.get(i));
+			PTPartyMember tempMember = new PTPartyMember(m_partyMembers.get(i));
 			membersListClone.add(tempMember);
 		}
 		return membersListClone;
@@ -248,7 +260,17 @@ public class PTParty implements Parcelable{
 	 * @return the number of party members in the party
 	 */
 	public int size(){
-		return mPartyMembers.size();
+		return m_partyMembers.size();
+	}
+	
+	@Override
+	public void setID(long id) {
+		m_id = id;
+	}
+
+	@Override
+	public long getID() {
+		return m_id;
 	}
 	
 	@Override
@@ -265,4 +287,5 @@ public class PTParty implements Parcelable{
 			return new PTParty[size];
 		}
 	};
+
 }
