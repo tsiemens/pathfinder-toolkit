@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.lateensoft.pathfinder.toolkit.db.IdNamePair;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PTPartyMember;
@@ -94,7 +94,7 @@ public class PTPartyRepository extends PTBaseRepository<PTParty> {
 	 * Returns all parties
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
-	public IdNamePair[] queryList() {
+	public IDNamePair[] queryList() {
 		String selector = IN_ENCOUNTER + "=0";
 		String orderBy = NAME + " ASC";
 		String table = m_tableInfo.getTable();
@@ -102,12 +102,12 @@ public class PTPartyRepository extends PTBaseRepository<PTParty> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		IdNamePair[] members = new IdNamePair[cursor.getCount()];
+		IDNamePair[] members = new IDNamePair[cursor.getCount()];
 		cursor.moveToFirst();
 		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			members[i] = new IdNamePair((Long)hashTable.get(PARTY_ID), 
+			members[i] = new IDNamePair((Long)hashTable.get(PARTY_ID), 
 					(String)hashTable.get(NAME));
 			cursor.moveToNext();
 			i++;

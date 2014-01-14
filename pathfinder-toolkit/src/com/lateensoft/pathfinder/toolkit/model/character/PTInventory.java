@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.os.Bundle;
 import android.os.Parcel;
@@ -82,30 +83,30 @@ public class PTInventory implements Parcelable {
 	}
 	
 	/**
-	 * Add an alphabetically sorted list of PTItems
+	 * Add an alphabetically sorted array of PTItems
 	 * For use of database for population
 	 * @param items
 	 */
-	public void setItems(ArrayList<PTItem> items) {
-		m_items = items;
+	public void setItems(PTItem[] items) {
+		m_items =  new ArrayList<PTItem>(Arrays.asList(items));
 	}
 	
 	/**
-	 * Add an alphabetically sorted list of PTWeapons
+	 * Add an alphabetically sorted array of PTWeapons
 	 * For use of database for population
 	 * @param weapons
 	 */
-	public void setWeapons(ArrayList<PTWeapon> weapons) {
-		m_weapons = weapons;
+	public void setWeapons(PTWeapon[] weapons) {
+		m_weapons =  new ArrayList<PTWeapon>(Arrays.asList(weapons));
 	}
 	
 	/**
-	 * Add an alphabetically sorted list of PTArmors
+	 * Add an alphabetically sorted array of PTArmors
 	 * For use of database for population
 	 * @param armors
 	 */
-	public void setArmor(ArrayList<PTArmor> armors) {
-		m_armor = armors;
+	public void setArmor(PTArmor[] armors) {
+		m_armor = new ArrayList<PTArmor>(Arrays.asList(armors));
 	}
 		
 	/**

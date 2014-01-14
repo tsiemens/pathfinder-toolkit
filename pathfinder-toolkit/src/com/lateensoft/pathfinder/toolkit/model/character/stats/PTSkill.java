@@ -29,35 +29,18 @@ public class PTSkill implements Parcelable, PTStorable {
 		m_keyAbilityKey = 0;
 	}
 	
-	public PTSkill(int id, int characterId, String name, int abilityKey, String abilityString) {
-		this(id, name, abilityKey, abilityString);
-		m_characterId = characterId;
-	}
-	
-	public PTSkill(int id, String name, int abilityKey, String abilityString) {
-		this(name, abilityKey, abilityString);
-		m_id = id;
-	}
-	
 	public PTSkill(String name, int abilityKey, String abilityString) {
-		m_name = name;
-		m_classSkill = false;
-		m_abilityMod = 0;
-		m_rank = 0;
-		m_miscMod = 0;
-		m_armorCheckPenalty = 0;
-		m_keyAbilityKey = abilityKey;
-		m_keyAbility = abilityString;
+		this(UNSET_ID, UNSET_ID, name, false, 0, 0, 0, 0, abilityKey, abilityString);
 	}
 	
 	public PTSkill(long id, long characterId, String name, Boolean classSkill, int abilityMod, int rank,
 			int miscMod, int armorCheckPenalty, int abilityKey, String keyAbility) {
 		m_name = name;
-		m_classSkill = false;
-		m_abilityMod = 0;
-		m_rank = 0;
-		m_miscMod = 0;
-		m_armorCheckPenalty = 0;
+		m_classSkill = classSkill;
+		m_abilityMod = abilityMod;
+		m_rank = rank;
+		m_miscMod = miscMod;
+		m_armorCheckPenalty = armorCheckPenalty;
 		m_keyAbilityKey = abilityKey;
 		m_keyAbility = keyAbility;
 		m_id = id;

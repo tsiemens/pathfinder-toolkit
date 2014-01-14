@@ -4,7 +4,8 @@ import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 
@@ -44,25 +45,23 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	public static final int TAB_INDEX_FLUFF = 0;
 	public static final int TAB_INDEX_ABILITIES = 2;
 	
-	public PTCharacter mCharacter;
+	public long m_currentCharacterID;
 
-	private PTDatabaseManager mSQLManager;
-
-	private int mDialogMode;
-	private long mCharacterSelectedInDialog;
+	private PTCharacterRepository m_characterRepo;
 	
-	private OnClickListener mCharacterClickListener;
+	private int m_dialogMode;
+	private long m_characterSelectedInDialog;
 	
-	private boolean mIsWaitingForResult = false;
+	private OnClickListener m_characterClickListener;
+	
+	private boolean m_isWaitingForResult = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mSQLManager = new PTDatabaseManager(getActivity());
-		loadCurrentCharacter();
-		mCharacterSelectedInDialog = mCharacter.getID();
+		m_characterRepo = new PTCharacterRepository();
 		
-		setupCharacterClickListener();
+		setupCharacterSelectionDialogClickListener();
 	}
 
 	@Override
@@ -72,32 +71,31 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 	
 	public void updateTitle() {
-		setTitle(mCharacter.getName());
+		setTitle(m_characterRepo.queryName(m_currentCharacterID));
 		setSubtitle(getFragmentTitle());
 	}
 
 	@Override
 	public void onPause() {
-		updateCharacterDatabase();
+		updateDatabase();
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (!mIsWaitingForResult) {
+		if (!m_isWaitingForResult) {
 			loadCurrentCharacter();
-			updateFragmentUI();
 			updateTitle();
 		}
-		mIsWaitingForResult = false;
+		m_isWaitingForResult = false;
 		Log.d(TAG, "resume");
 	}
 	
 	@Override
 	public void startActivityForResult(Intent intent, int requestCode) {
 		super.startActivityForResult(intent, requestCode);
-		mIsWaitingForResult = true;
+		m_isWaitingForResult = true;
 	}
 
 	/**
@@ -105,21 +103,24 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * set in user prefs, it automatically generates a new one.
 	 */
 	public void loadCurrentCharacter() {
-		long currentCharacterID = PTSharedPreferences.getInstance().getSelectedCharacter();
+		long currentCharacterID = PTSharedPreferences.getInstance()
+				.getLong(PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, -1);
 
-		if (currentCharacterID == -1) { // There was no current character set in
-										// shared prefs
+		if (currentCharacterID == -1) { 
+			// There was no current character set in shared prefs
 			Log.v(TAG, "Default character add");
 			addNewCharacter();
 		} else {
 			Log.v(TAG, "Loading character");
-			mCharacter = mSQLManager.getCharacter((int)currentCharacterID);
+			m_currentCharacterID = currentCharacterID;
+			loadFromDatabase();
 			if (getRootView() != null) {
 				updateFragmentUI();
 			}
 
 		}
-		Log.v(TAG, "Loaded character: " + mCharacter.getID());
+		
+		Log.v(TAG, "Loaded character: " + m_currentCharacterID);
 	}
 
 	/**
@@ -127,11 +128,17 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * the fragments.
 	 */
 	public void addNewCharacter() {
-		mCharacter = mSQLManager.addNewCharacter("New Adventurer",
-				getActivity().getApplicationContext());
-		PTSharedPreferences.getInstance().setSelectedCharacter(mCharacter.getID());
+		PTCharacter newChar = new PTCharacter("New Adventurer", getActivity());
+		long id = m_characterRepo.insert(newChar);
+		if (id != -1) {
+			PTSharedPreferences.getInstance().putLong(
+					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, id);
+			Log.i(TAG, "Added new character");
+		} else {
+			Log.e(TAG, "Error occurred creating new character");
+			Toast.makeText(getActivity(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
+		}
 		performUpdateReset();
-		Log.v(TAG, "Added new character");
 	}
 
 	/**
@@ -140,31 +147,27 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public void deleteCurrentCharacter() {
 		int currentCharacterIndex = 0;
-		long currentCharacterID = mCharacter.getID();
-		int characterIDs[] = mSQLManager.getCharacterIDs();
+		IDNamePair[] characters = m_characterRepo.queryList();
+		long characterForDeletion = m_currentCharacterID;
 
-		for (int i = 0; i < characterIDs.length; i++) {
-			if (currentCharacterID == characterIDs[i])
+		for (int i = 0; i < characters.length; i++) {
+			if (characterForDeletion == characters[i].getID()){
 				currentCharacterIndex = i;
+				break;
+			}
 		}
 
-		if (characterIDs.length == 1) {
+		if (characters.length == 1) {
 			addNewCharacter();
-		} else if (currentCharacterIndex == 0) {
-			PTSharedPreferences.getInstance().setSelectedCharacter(characterIDs[1]);
-			loadCurrentCharacter();
 		} else {
-			PTSharedPreferences.getInstance().setSelectedCharacter(characterIDs[0]);
+			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
+			PTSharedPreferences.getInstance().putLong(
+					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characters[charToSelect].getID());
 			loadCurrentCharacter();
 		}
 
-		mSQLManager.deleteCharacter((int)currentCharacterID);
-		Log.v(TAG, "Deleted current character: " + currentCharacterID);
-	}
-
-	public void updateCharacterDatabase() {
-		mSQLManager.updateCharacter(mCharacter);
-		updateTitle();
+		m_characterRepo.delete(characterForDeletion);
+		Log.i(TAG, "Deleted current character: " + characterForDeletion);
 	}
 
 	@Override
@@ -172,17 +175,17 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			switch (item.getItemId()) {
 
 			case MENU_ITEM_CHARACTER_LIST: // Tapped character list button
-				mDialogMode = MENU_ITEM_CHARACTER_LIST;
+				m_dialogMode = MENU_ITEM_CHARACTER_LIST;
 				showCharacterDialog();
 				break;
 			case MENU_ITEM_NEW_CHARACTER:
 				// Add new character
-				mDialogMode = MENU_ITEM_NEW_CHARACTER;
+				m_dialogMode = MENU_ITEM_NEW_CHARACTER;
 				showCharacterDialog();
 				break;
 			case MENU_ITEM_DELETE_CHARACTER:
 				// Delete character
-				mDialogMode = MENU_ITEM_DELETE_CHARACTER;
+				m_dialogMode = MENU_ITEM_DELETE_CHARACTER;
 				showCharacterDialog();
 				break;
 
@@ -197,51 +200,52 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 
 	private void autoFill() {
-		mCharacter.getCombatStatSet().setACDexMod(
-				mCharacter.getAbilitySet().getAbilityScore(DEX_KEY)
-						.getModifier());
-		mCharacter.getCombatStatSet().setInitDexMod(
-				mCharacter.getAbilitySet().getAbilityScore(DEX_KEY)
-						.getModifier());
-		mCharacter.getCombatStatSet().setCMDDexMod(
-				mCharacter.getAbilitySet().getAbilityScore(DEX_KEY)
-						.getModifier());
-		mCharacter
-				.getSaveSet()
-				.getSave(REF_KEY)
-				.setAbilityMod(
-						mCharacter.getAbilitySet().getAbilityScore(DEX_KEY)
-								.getModifier());
-
-		mCharacter.getCombatStatSet().setStrengthMod(
-				mCharacter.getAbilitySet().getAbilityScore(STR_KEY)
-						.getModifier());
-
-		mCharacter
-				.getSaveSet()
-				.getSave(FORT_KEY)
-				.setAbilityMod(
-						mCharacter.getAbilitySet().getAbilityScore(CON_KEY)
-								.getModifier());
-
-		mCharacter
-				.getSaveSet()
-				.getSave(WILL_KEY)
-				.setAbilityMod(
-						mCharacter.getAbilitySet().getAbilityScore(WIS_KEY)
-								.getModifier());
-
-		int key;
-
-		for (int i = 0; i < mCharacter.getSkillSet().getSkills().length; i++) {
-			key = mCharacter.getSkillSet().getSkill(i).getKeyAbilityKey();
-			mCharacter
-					.getSkillSet()
-					.getSkill(i)
-					.setAbilityMod(
-							mCharacter.getAbilitySet().getAbilityScore(key)
-									.getModifier());
-		}
+		// TODO this may become obsolete
+//		m_character.getCombatStatSet().setACDexMod(
+//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
+//						.getModifier());
+//		m_character.getCombatStatSet().setInitDexMod(
+//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
+//						.getModifier());
+//		m_character.getCombatStatSet().setCMDDexMod(
+//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
+//						.getModifier());
+//		m_character
+//				.getSaveSet()
+//				.getSave(REF_KEY)
+//				.setAbilityMod(
+//						m_character.getAbilitySet().getAbilityScore(DEX_KEY)
+//								.getModifier());
+//
+//		m_character.getCombatStatSet().setStrengthMod(
+//				m_character.getAbilitySet().getAbilityScore(STR_KEY)
+//						.getModifier());
+//
+//		m_character
+//				.getSaveSet()
+//				.getSave(FORT_KEY)
+//				.setAbilityMod(
+//						m_character.getAbilitySet().getAbilityScore(CON_KEY)
+//								.getModifier());
+//
+//		m_character
+//				.getSaveSet()
+//				.getSave(WILL_KEY)
+//				.setAbilityMod(
+//						m_character.getAbilitySet().getAbilityScore(WIS_KEY)
+//								.getModifier());
+//
+//		int key;
+//
+//		for (int i = 0; i < m_character.getSkillSet().getSkills().length; i++) {
+//			key = m_character.getSkillSet().getSkill(i).getKeyAbilityKey();
+//			m_character
+//					.getSkillSet()
+//					.getSkill(i)
+//					.setAbilityMod(
+//							m_character.getAbilitySet().getAbilityScore(key)
+//									.getModifier());
+//		}
 		
 		Toast.makeText(getActivity(), 
 				getString(R.string.autofill_toast_text),
@@ -279,45 +283,45 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 
 	private void showCharacterDialog() {
-		mCharacterSelectedInDialog = mCharacter.getID(); // actual current character
+		m_characterSelectedInDialog = m_currentCharacterID; // current character
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		
 
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_CHARACTER_LIST:
 			builder.setTitle(getString(R.string.select_character_dialog_header));
 
-			String[] characterList = mSQLManager.getCharacterNames();
-			int characterIDs[] = mSQLManager.getCharacterIDs();
+			IDNamePair[] characters = m_characterRepo.queryList();
+			String[] characterList = IDNamePair.toNameArray(characters);
 			int currentCharacterIndex = 0;
 
-			for (int i = 0; i < characterIDs.length; i++) {
-				if (mCharacterSelectedInDialog == characterIDs[i])
+			for (int i = 0; i < characters.length; i++) {
+				if (m_characterSelectedInDialog == characters[i].getID())
 					currentCharacterIndex = i;
 			}
 
 			builder.setSingleChoiceItems(characterList, currentCharacterIndex,
-					mCharacterClickListener)
-					.setPositiveButton(R.string.ok_button_text, mCharacterClickListener)
-					.setNegativeButton(R.string.cancel_button_text, mCharacterClickListener);
+					m_characterClickListener)
+					.setPositiveButton(R.string.ok_button_text, m_characterClickListener)
+					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
 			break;
 
 		case MENU_ITEM_NEW_CHARACTER:
 			builder.setTitle(getString(R.string.menu_item_new_character));
 			builder.setMessage(getString(R.string.new_character_dialog_message))
-					.setPositiveButton(R.string.ok_button_text, mCharacterClickListener)
-					.setNegativeButton(R.string.cancel_button_text, mCharacterClickListener);
+					.setPositiveButton(R.string.ok_button_text, m_characterClickListener)
+					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
 			break;
 
 		case MENU_ITEM_DELETE_CHARACTER:
 			builder.setTitle(getString(R.string.menu_item_delete_character));
 			builder.setMessage(
 					getString(R.string.delete_character_dialog_message_1)
-							+ mCharacter.getName()
+							+ m_characterRepo.queryName(m_currentCharacterID)
 							+ getString(R.string.delete_character_dialog_message_2))
-					.setPositiveButton(R.string.delete_button_text, mCharacterClickListener)
-					.setNegativeButton(R.string.cancel_button_text, mCharacterClickListener);
+					.setPositiveButton(R.string.delete_button_text, m_characterClickListener)
+					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
 			break;
 
 		}
@@ -325,8 +329,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		alert.show();
 	}
 
-	private void setupCharacterClickListener() {
-		mCharacterClickListener = new OnClickListener() {
+	private void setupCharacterSelectionDialogClickListener() {
+		m_characterClickListener = new OnClickListener() {
 			// Click method for the character selection dialog
 			public void onClick(DialogInterface dialogInterface, int selection) {
 				switch (selection) {
@@ -337,8 +341,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 					break;
 				default:
 					// Set the currently selected character in the dialog
-					mCharacterSelectedInDialog = mSQLManager.getCharacterIDs()[selection];
-					Log.v(TAG, "Selected character " + mCharacterSelectedInDialog);
+					m_characterSelectedInDialog = m_characterRepo.queryList()[selection].getID();
+					Log.v(TAG, "Selected character " + m_characterSelectedInDialog);
 					break;
 
 				}
@@ -350,14 +354,14 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * Called when dialog positive button is tapped
 	 */
 	public void performPositiveDialogAction() {
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_CHARACTER_LIST:
 			// Check if "currently selected" character is the same as saved one
-			if (mCharacterSelectedInDialog != mCharacter.getID()) {
+			if (m_characterSelectedInDialog != m_currentCharacterID) {
 				performUpdateReset();
 
-				PTSharedPreferences.getInstance()
-						.setSelectedCharacter(mCharacterSelectedInDialog);
+				PTSharedPreferences.getInstance().putLong(
+						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, m_characterSelectedInDialog);
 				loadCurrentCharacter();
 			}
 			break;
@@ -380,17 +384,15 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * mCharacter, and updates them. Ends with current tab set to Fluff.
 	 */
 	public void performUpdateReset() {
-		updateCharacterDatabase();
 		((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.FLUFF_ID);
 	}
 
-	public PTCharacter getCurrentCharacter() {
-		return mCharacter;
+	public long getCurrentCharacterID() {
+		return m_currentCharacterID;
 	}
-
-	public void setCurrentCharacter(PTCharacter character) {
-		if (character != null)
-			mCharacter = character;
+	
+	public PTCharacterRepository getCharacterRepo() {
+		return m_characterRepo;
 	}
 
 	/**
@@ -398,6 +400,21 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public abstract void updateFragmentUI();
 	
+	/**
+	 * @return The title of the fragment instance
+	 */
 	public abstract String getFragmentTitle();
+	
+	/**
+	 * Called to have the subclass update any relevant parts of the database.
+	 * Called onPause, among other areas.
+	 */
+	public abstract void updateDatabase();
+	
+	/**
+	 * Called to notify the base class that it should load its data from the database.
+	 * Called onResume
+	 */
+	public abstract void loadFromDatabase();
 
 }

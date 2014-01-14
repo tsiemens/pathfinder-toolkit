@@ -16,18 +16,25 @@ import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTFluffAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTFluffInfoRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
 
 public class PTCharacterFluffFragment extends PTCharacterSheetFragment implements 
 OnItemClickListener, android.content.DialogInterface.OnClickListener{
-	final String TAG = "PTCharacterFluffFragment";
-	private ListView lv;
-	int mFluffSelectedForEdit;
+	@SuppressWarnings("unused")
+	private static final String TAG = PTCharacterFluffFragment.class.getSimpleName();
+	private ListView m_fluffList;
+	private int m_fluffSelectedForEdit;
 	
-	private EditText mDialogFluff;
+	private PTFluffInfoRepository m_fluffRepo;
+	private PTFluffInfo m_fluffModel;
+	
+	private EditText m_dialogET;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_fluffRepo = new PTFluffInfoRepository();
 	}
 
 	@Override
@@ -38,16 +45,15 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		setRootView(inflater.inflate(R.layout.character_fluff_fragment, 
 				container, false));
 		
-		lv = (ListView) getRootView().findViewById(R.id.fluff_list);
-		refreshFluffListView();
-		lv.setOnItemClickListener(this);
+		m_fluffList = (ListView) getRootView().findViewById(R.id.fluff_list);
+		m_fluffList.setOnItemClickListener(this);
 		
 		return getRootView();		
 	}
 	
 	//An items has been clicked in the list
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		mFluffSelectedForEdit = position;
+		m_fluffSelectedForEdit = position;
 		showItemDialog(position);
 	}
 	
@@ -62,10 +68,10 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
 		View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
-		mDialogFluff = (EditText) dialogView.findViewById(R.id.dialogFluffText);
+		m_dialogET = (EditText) dialogView.findViewById(R.id.dialogFluffText);
 		
-		builder.setTitle(mCharacter.getFluff().getFluffFields(getActivity())[fluffIndex]);
-		mDialogFluff.setText(mCharacter.getFluff().getFluffArray()[fluffIndex]);
+		builder.setTitle(m_fluffModel.getFluffFields(getActivity())[fluffIndex]);
+		m_dialogET.setText(m_fluffModel.getFluffArray()[fluffIndex]);
 		
 		builder.setView(dialogView)
 				.setPositiveButton(R.string.ok_button_text, this)
@@ -75,11 +81,13 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		alert.show();
 	}
 	
-	private void refreshFluffListView() {		
-		PTFluffAdapter adapter = new PTFluffAdapter(getActivity(),
-				R.layout.character_fluff_row, 
-				mCharacter.getFluff().getFluffArray());
-		lv.setAdapter(adapter);
+	private void refreshFluffListView() {
+		if (m_fluffModel != null) {
+			PTFluffAdapter adapter = new PTFluffAdapter(getActivity(),
+					R.layout.character_fluff_row, 
+					m_fluffModel.getFluffArray());
+			m_fluffList.setAdapter(adapter);
+		}
 	}
 	
 	public void onClick(DialogInterface dialogInterface, int selection) {
@@ -87,9 +95,9 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		//OK button tapped
 		case DialogInterface.BUTTON_POSITIVE:
 			
-			mCharacter.getFluff().setFluffByIndex(mFluffSelectedForEdit, 
+			m_fluffModel.setFluffByIndex(m_fluffSelectedForEdit, 
 					getFluffValueFromDialog());
-			updateCharacterDatabase();
+			updateDatabase();
 			refreshFluffListView();
 
 			
@@ -104,12 +112,12 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		//Close keyboard
 		InputMethodManager iMM = (InputMethodManager)getActivity().
 				getSystemService(Context.INPUT_METHOD_SERVICE);
-		if(mDialogFluff.hasFocus())
-			iMM.hideSoftInputFromInputMethod(mDialogFluff.getWindowToken(), 0);
+		if(m_dialogET.hasFocus())
+			iMM.hideSoftInputFromInputMethod(m_dialogET.getWindowToken(), 0);
 	}
 	
 	private String getFluffValueFromDialog() {
-		String fluffValue = new String(mDialogFluff.getText().toString());
+		String fluffValue = new String(m_dialogET.getText().toString());
 		return fluffValue;
 	}
 
@@ -121,6 +129,16 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_fluff);
+	}
+
+	@Override
+	public void updateDatabase() {
+		m_fluffRepo.update(m_fluffModel);
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_fluffModel = m_fluffRepo.query(getCurrentCharacterID());
 	}
 	
 }

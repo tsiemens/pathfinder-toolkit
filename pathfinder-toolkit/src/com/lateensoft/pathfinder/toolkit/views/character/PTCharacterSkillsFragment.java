@@ -2,7 +2,9 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTSkillsAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,16 +23,20 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		android.view.View.OnClickListener {
 	private static final String TAG = PTCharacterSkillsFragment.class.getSimpleName();
 
-	private ListView mSkillsListView;
+	private ListView m_skillsListView;
 
-	private Button mFilterButton;
-	private boolean mIsFiltered = true;
+	private Button m_filterButton;
+	private boolean m_isFiltered = true;
 
-	private PTSkill mSkillSelectedForEdit;
+	private PTSkill m_skillSelectedForEdit;
+	
+	private PTSkillRepository m_skillRepo;
+	private PTSkillSet m_skillSet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_skillRepo = new PTSkillRepository();
 	}
 
 	@Override
@@ -40,26 +46,25 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		setRootView(inflater.inflate(
 				R.layout.character_skills_fragment, container, false));
 
-		mFilterButton = (Button) getRootView().findViewById(R.id.buttonFilter);
-		mFilterButton.setOnClickListener(this);
+		m_filterButton = (Button) getRootView().findViewById(R.id.buttonFilter);
+		m_filterButton.setOnClickListener(this);
 
-		mSkillsListView = (ListView) getRootView()
+		m_skillsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewCharacterSkills);
-		mSkillsListView.setOnItemClickListener(this);
-		updateFragmentUI();
+		m_skillsListView.setOnItemClickListener(this);
 
 		return getRootView();
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		if (mIsFiltered) {
-			mSkillSelectedForEdit = mCharacter.getSkillSet().getTrainedSkill(
+		if (m_isFiltered) {
+			m_skillSelectedForEdit = m_skillSet.getTrainedSkill(
 					position);
 		} else {
-			mSkillSelectedForEdit = mCharacter.getSkillSet().getSkill(position);
+			m_skillSelectedForEdit = m_skillSet.getSkill(position);
 		}
-		showSkillEditor(mSkillSelectedForEdit);
+		showSkillEditor(m_skillSelectedForEdit);
 	}
 	
 	private void showSkillEditor(PTSkill skill) {
@@ -77,14 +82,14 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 			PTSkill skill = data.getExtras().getParcelable(
 					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Edit skill OK: " + skill.getName());
-			if (mSkillSelectedForEdit != null) {
-				mSkillSelectedForEdit.setAbilityMod(skill.getAbilityMod());
-				mSkillSelectedForEdit.setRank(skill.getRank());
-				mSkillSelectedForEdit.setMiscMod(skill.getMiscMod());
-				mSkillSelectedForEdit.setArmorCheckPenalty(skill.getArmorCheckPenalty());
-				mSkillSelectedForEdit.setClassSkill(skill.isClassSkill());
+			if (m_skillSelectedForEdit != null) {
+				m_skillSelectedForEdit.setAbilityMod(skill.getAbilityMod());
+				m_skillSelectedForEdit.setRank(skill.getRank());
+				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
+				m_skillSelectedForEdit.setArmorCheckPenalty(skill.getArmorCheckPenalty());
+				m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
 				
-				if (mSkillSelectedForEdit.getRank() <= 0) {
+				if (m_skillSelectedForEdit.getRank() <= 0) {
 					// Prevent out of bounds exception from removing views
 					// Not terribly costly since very few times will a player save a
 					// skill with no rank
@@ -93,7 +98,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 					updateSkillsList();
 				}
 				
-				mSkillSelectedForEdit = null;
+				m_skillSelectedForEdit = null;
 			}		
 			break;
 		case Activity.RESULT_CANCELED:
@@ -106,40 +111,38 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	}
 
 	private void updateSkillsList() {
-		if (mIsFiltered) {
-			((PTSkillsAdapter) mSkillsListView.getAdapter())
-					.updateList(mCharacter.getSkillSet().getTrainedSkills());
+		if (m_isFiltered) {
+			((PTSkillsAdapter) m_skillsListView.getAdapter())
+					.updateList(m_skillSet.getTrainedSkills());
 		} else {
-			((PTSkillsAdapter) mSkillsListView.getAdapter())
-					.updateList(mCharacter.getSkillSet().getSkills());
+			((PTSkillsAdapter) m_skillsListView.getAdapter())
+					.updateList(m_skillSet.getSkills());
 		}
 	}
 
 	private void setSkillsAdapter() {
 		PTSkillsAdapter adapter = null;
-		if (mIsFiltered) {
+		if (m_isFiltered) {
 			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, mCharacter.getSkillSet()
-							.getTrainedSkills());
+					R.layout.character_skill_row, m_skillSet.getTrainedSkills());
 		} else {
 			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, mCharacter.getSkillSet()
-							.getSkills());
+					R.layout.character_skill_row, m_skillSet.getSkills());
 		}
-		mSkillsListView.setAdapter(adapter);
+		m_skillsListView.setAdapter(adapter);
 	}
 
 	private void setFilterButtonText() {
-		if (mIsFiltered) {
-			mFilterButton.setText(R.string.skills_trained_filter);
+		if (m_isFiltered) {
+			m_filterButton.setText(R.string.skills_trained_filter);
 		} else {
-			mFilterButton.setText(R.string.skills_all_filter);
+			m_filterButton.setText(R.string.skills_all_filter);
 		}
 	}
 
 	@Override
 	public void onClick(View arg0) {
-		mIsFiltered = !mIsFiltered;
+		m_isFiltered = !m_isFiltered;
 		updateFragmentUI();
 
 	}
@@ -148,11 +151,24 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	public void updateFragmentUI() {
 		setFilterButtonText();
 		setSkillsAdapter();
-
 	}
 
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_skills);
+	}
+
+	@Override
+	public void updateDatabase() {
+		// TODO optimize to update as needed
+		PTSkill[] skills = m_skillSet.getSkills();
+		for (PTSkill skill : skills) {
+			m_skillRepo.update(skill);
+		}
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_skillSet = new PTSkillSet(m_skillRepo.querySet(getCurrentCharacterID()));
 	}
 }

@@ -27,7 +27,6 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.PTDiceRollerFragment;
 import com.lateensoft.pathfinder.toolkit.views.PTPointbuyCalculatorFragment;
@@ -52,34 +51,33 @@ public class PTMainActivity extends Activity implements
 
 	private static final String KEY_CURRENT_FRAGMENT = "fragment_id";
 	
-	private DrawerLayout mDrawerLayout;
-	private ActionBarDrawerToggle mDrawerToggle;
-	private ExpandableListView mDrawerList;
+	private DrawerLayout m_drawerLayout;
+	private ActionBarDrawerToggle m_drawerToggle;
+	private ExpandableListView m_drawerList;
 	
-	private PTBasePageFragment mCurrentFragment;
-	private long mCurrentFragmentId = 0;
-
-	String mListLabels[];
+	private PTBasePageFragment m_currentFragment;
+	private long m_currentFragmentId = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		if (savedInstanceState != null) {
-			mCurrentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
+			m_currentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
 		}
 
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
-		PTDatabaseManager SQLManager = new PTDatabaseManager(
-				this.getApplicationContext());
+		
+		// TODO show loading dialog for db creation, and patching
+		PTDatabase.getInstance();
 
 		// Needs to update the database after upgrading
 		if (sharedPrefs.isNewVersion()) {
-			SQLManager.performUpdates(this);
+			
+			// TODO move this to patcher
+			//SQLManager.performUpdates(this);
 			sharedPrefs.updateLastUsedVersion();
 		}
-
-		mListLabels = getResources().getStringArray(R.array.main_menu_array);
 
 		setContentView(R.layout.activity_drawer_main);
 		
@@ -88,8 +86,8 @@ public class PTMainActivity extends Activity implements
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		if (mCurrentFragmentId != 0) {
-			showView(mCurrentFragmentId);
+		if (m_currentFragmentId != 0) {
+			showView(m_currentFragmentId);
 		} else {
 			showView(PTNavDrawerAdapter.FLUFF_ID);
 		}
@@ -100,16 +98,16 @@ public class PTMainActivity extends Activity implements
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putLong(KEY_CURRENT_FRAGMENT, mCurrentFragmentId);
+		outState.putLong(KEY_CURRENT_FRAGMENT, m_currentFragmentId);
 		super.onSaveInstanceState(outState);
 	}
 
 	private void setupNavDrawer() {
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		m_drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-				mDrawerLayout, /* DrawerLayout object */
+		m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+				m_drawerLayout, /* DrawerLayout object */
 				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
 				R.string.app_name, /* "open drawer" description */
 				R.string.app_name /* "close drawer" description */
@@ -125,22 +123,22 @@ public class PTMainActivity extends Activity implements
 				invalidateOptionsMenu();
 			}
 		};
-		mDrawerToggle.syncState();
+		m_drawerToggle.syncState();
 
 		// Set the drawer toggle as the DrawerListener
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		m_drawerLayout.setDrawerListener(m_drawerToggle);
 
-		mDrawerList = (ExpandableListView) findViewById(R.id.left_drawer);
+		m_drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
 
 		// Set the adapter for the list view
-		mDrawerList.setAdapter(new PTNavDrawerAdapter(this));
-		mDrawerList.setGroupIndicator(getResources().getDrawable(R.drawable.nav_item_expand_icon));
+		m_drawerList.setAdapter(new PTNavDrawerAdapter(this));
+		m_drawerList.setGroupIndicator(getResources().getDrawable(R.drawable.nav_item_expand_icon));
 		// Set the list's click listener
 		// mDrawerList.setOnItemClickListener(this);
-		mDrawerList.setOnChildClickListener(this);
-		mDrawerList.setOnGroupClickListener(this);
-		mDrawerList.setOnGroupExpandListener(this);
-		mDrawerList.setOnGroupCollapseListener(this);
+		m_drawerList.setOnChildClickListener(this);
+		m_drawerList.setOnGroupClickListener(this);
+		m_drawerList.setOnGroupExpandListener(this);
+		m_drawerList.setOnGroupCollapseListener(this);
 	}
 
 	private void showRateDialogIfRequired() {
@@ -167,8 +165,8 @@ public class PTMainActivity extends Activity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Initialize the global menu items
-		if (mCurrentFragment != null) {
-			mCurrentFragment.onCreateOptionsMenu(menu);
+		if (m_currentFragment != null) {
+			m_currentFragment.onCreateOptionsMenu(menu);
 		}
 		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
 
@@ -178,7 +176,7 @@ public class PTMainActivity extends Activity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		for (int i = 0; i < menu.size(); i++) {
 			menu.getItem(i).setVisible(!drawerOpen);
 
@@ -189,16 +187,16 @@ public class PTMainActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-				mDrawerLayout.closeDrawer(mDrawerList);
+			if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
+				m_drawerLayout.closeDrawer(m_drawerList);
 			} else {
-				mDrawerLayout.openDrawer(mDrawerList);
+				m_drawerLayout.openDrawer(m_drawerList);
 			}
 		}
 
 		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			if (mCurrentFragment != null) {
-				mCurrentFragment.onOptionsItemSelected(item);
+			if (m_currentFragment != null) {
+				m_currentFragment.onOptionsItemSelected(item);
 			}
 		}
 
@@ -284,16 +282,16 @@ public class PTMainActivity extends Activity implements
 		} 
 		
 		if (newFragment != null) {
-			((PTNavDrawerAdapter)mDrawerList.getExpandableListAdapter()).setSelectedItem(id);
-			mDrawerList.invalidateViews();
+			((PTNavDrawerAdapter)m_drawerList.getExpandableListAdapter()).setSelectedItem(id);
+			m_drawerList.invalidateViews();
 			if (newFragment instanceof PTCharacterSheetFragment) {
-				mDrawerList.expandGroup(0);
+				m_drawerList.expandGroup(0);
 			}
 			
 			fragmentTransaction.replace(R.id.content_frame, newFragment);
 			fragmentTransaction.commit();
-			mCurrentFragment = newFragment;
-			mCurrentFragmentId = id;
+			m_currentFragment = newFragment;
+			m_currentFragmentId = id;
 			invalidateOptionsMenu();
 		}
 	}
@@ -316,7 +314,7 @@ public class PTMainActivity extends Activity implements
 			if (id != ((PTNavDrawerAdapter)list.getExpandableListAdapter()).getSelectedItem()) {
 				showView(id);		
 			}
-			mDrawerLayout.closeDrawer(mDrawerList);
+			m_drawerLayout.closeDrawer(m_drawerList);
 		}
 		return false;
 	}
@@ -330,7 +328,7 @@ public class PTMainActivity extends Activity implements
 			list.invalidateViews();
 			showView(id);
 		}
-		mDrawerLayout.closeDrawer(mDrawerList);	
+		m_drawerLayout.closeDrawer(m_drawerList);	
 		return false;
 	}
 }

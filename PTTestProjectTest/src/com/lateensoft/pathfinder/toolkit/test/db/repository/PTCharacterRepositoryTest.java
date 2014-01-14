@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
-import com.lateensoft.pathfinder.toolkit.db.IdNamePair;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 
@@ -33,7 +33,7 @@ public class PTCharacterRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQueryList() {
-		IdNamePair[] names = m_repo.queryList();
+		IDNamePair[] names = m_repo.queryList();
 		assertEquals(names[0].getName(), m_char1.getName());
 		assertEquals(names[1].getName(), CHARACTER_NAME);
 	}

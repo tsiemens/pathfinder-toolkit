@@ -2,7 +2,9 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTSpellBookAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTSpellRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,12 +24,16 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	
 	private static final String TAG = PTCharacterSpellBookFragment.class.getSimpleName();
 	
-	private ListView mListView;
-	int mSpellSelectedForEdit;
-	private Button mAddButton;
+	private ListView m_listView;
+	private int m_spellSelectedForEdit;
+	private Button m_addButton;
+	
+	private PTSpellRepository m_spellRepo;
+	private PTSpellBook m_spellBook;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_spellRepo = new PTSpellRepository();
 	}
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,10 +43,10 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		setRootView(inflater.inflate(R.layout.character_spellbook_fragment,
 				container, false));
 		
-		mAddButton = (Button) getRootView().findViewById(R.id.addSpell);
-		mAddButton.setOnClickListener(this);
+		m_addButton = (Button) getRootView().findViewById(R.id.addSpell);
+		m_addButton.setOnClickListener(this);
 		
-		mListView = new ListView(container.getContext());
+		m_listView = new ListView(container.getContext());
 		setListViews(getRootView());
 		refreshSpellListView();
 		setonItemClickListeners();
@@ -49,11 +55,11 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	}
 
 	private void setListViews(View fragmentView) {
-		mListView = (ListView) fragmentView.findViewById(R.id.spells);
+		m_listView = (ListView) fragmentView.findViewById(R.id.spells);
 	}
 
 	private void setonItemClickListeners() {
-		mListView.setOnItemClickListener(this);
+		m_listView.setOnItemClickListener(this);
 	}
 
 
@@ -61,17 +67,17 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		
 		PTSpellBookAdapter adapter = new PTSpellBookAdapter(getActivity(),
 				R.layout.character_spellbook_row,
-				mCharacter.getSpellBook().getSpells());
+				m_spellBook.getSpells());
 		
 		Log.v(TAG, "Called refreshSpellListView");
 		
-		mListView.setAdapter(adapter);
+		m_listView.setAdapter(adapter);
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.v(TAG, "Item clicked: " + position);
-		mSpellSelectedForEdit = position;
-		showSpellEditor(mCharacter.getSpellBook().getSpell(position));
+		m_spellSelectedForEdit = position;
+		showSpellEditor(m_spellBook.getSpell(position));
 	}
 	
 	/**
@@ -79,7 +85,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	 */
 	public void onClick(View v) {
 		Log.v(TAG, "Add button clicked");
-		mSpellSelectedForEdit = -1;
+		m_spellSelectedForEdit = -1;
 		showSpellEditor(null);
 	}
 	
@@ -98,15 +104,15 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 			PTSpell spell = data.getExtras().getParcelable(
 					PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add/edit spell OK: " + spell.getName());
-			if(mSpellSelectedForEdit < 0) {
+			if(m_spellSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a spell");
 				if(spell != null) {
-					mCharacter.getSpellBook().addSpell(spell);
+					m_spellBook.addSpell(spell);
 					refreshSpellListView(); 
 				}
 			} else {
 				Log.v(TAG, "Editing a spell");
-				mCharacter.getSpellBook().setSpell(mSpellSelectedForEdit, spell);
+				m_spellBook.setSpell(m_spellSelectedForEdit, spell);
 				refreshSpellListView();
 			}
 			
@@ -114,7 +120,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		
 		case PTCharacterSpellEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a spell");
-			mCharacter.getSpellBook().deleteSpell(mSpellSelectedForEdit);
+			m_spellBook.deleteSpell(m_spellSelectedForEdit);
 			refreshSpellListView();
 			break;
 		
@@ -124,7 +130,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		default:
 			break;
 		}
-		updateCharacterDatabase();
+		updateDatabase();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -137,6 +143,19 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_spells);
+	}
+
+	@Override
+	public void updateDatabase() {
+		PTSpell[] spells = m_spellBook.getSpells();
+		for(PTSpell spell : spells) {
+			m_spellRepo.update(spell);
+		}
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_spellBook = new PTSpellBook(m_spellRepo.querySet(getCurrentCharacterID()));
 	}
 
 }

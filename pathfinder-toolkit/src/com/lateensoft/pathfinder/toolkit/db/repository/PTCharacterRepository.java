@@ -8,7 +8,7 @@ import java.util.Locale;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.lateensoft.pathfinder.toolkit.db.IdNamePair;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
@@ -199,18 +199,15 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTInventory inventory = new PTInventory();
 		// Items
 		PTItemRepository itemRepo = new PTItemRepository();
-		ArrayList<PTItem> items = new ArrayList<PTItem>(Arrays.asList(itemRepo.querySet(id)));
-		inventory.setItems(items);
+		inventory.setItems(itemRepo.querySet(id));
 		
 		// Weapons
 		PTWeaponRepository weaponRepo = new PTWeaponRepository();
-		ArrayList<PTWeapon> weapons = new ArrayList<PTWeapon>(Arrays.asList(weaponRepo.querySet(id)));
-		inventory.setWeapons(weapons);
+		inventory.setWeapons(weaponRepo.querySet(id));
 		
 		// Armor
 		PTArmorRepository armorRepo = new PTArmorRepository();
-		ArrayList<PTArmor> armor = new ArrayList<PTArmor>(Arrays.asList(armorRepo.querySet(id)));
-		inventory.setArmor(armor);
+		inventory.setArmor(armorRepo.querySet(id));
 		
 		// Feats
 		PTFeatRepository featRepo = new PTFeatRepository();
@@ -236,10 +233,32 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	}
 
 	/**
+	 * @return name of character with id
+	 */
+	public String queryName(long id) {
+		Locale l = null;
+		String selector = String.format(l, "%s.%s=%s.%s AND %s.%s=%d", 
+				TABLE, CHARACTER_ID,
+				 PTFluffInfoRepository.TABLE,  CHARACTER_ID,
+				 TABLE, CHARACTER_ID, id);
+		String table = m_tableInfo.getTable()+", "+PTFluffInfoRepository.TABLE;
+		String[] columns = {PTFluffInfoRepository.NAME};
+		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+				null, null, null, null, null);
+		
+		cursor.moveToFirst();
+		if (!cursor.isAfterLast()) {
+			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+			return (String)hashTable.get(PTFluffInfoRepository.NAME); 
+		}
+		return null;
+	}
+	
+	/**
 	 * Returns all characters
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
-	public IdNamePair[] queryList() {
+	public IDNamePair[] queryList() {
 		Locale l = null;
 		String selector = String.format(l, "%s.%s=%s.%s", 
 				TABLE, CHARACTER_ID,
@@ -251,12 +270,12 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		IdNamePair[] characters = new IdNamePair[cursor.getCount()];
+		IDNamePair[] characters = new IDNamePair[cursor.getCount()];
 		cursor.moveToFirst();
 		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			characters[i] = new IdNamePair((Long)hashTable.get(CHARACTER_ID), 
+			characters[i] = new IDNamePair((Long)hashTable.get(CHARACTER_ID), 
 					(String)hashTable.get(PTFluffInfoRepository.NAME));
 			cursor.moveToNext();
 			i++;

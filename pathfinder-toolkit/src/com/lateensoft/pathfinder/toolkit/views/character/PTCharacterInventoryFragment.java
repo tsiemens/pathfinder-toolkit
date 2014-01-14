@@ -2,6 +2,8 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTInventoryAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTItemRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 
 import android.app.Activity;
@@ -22,19 +24,23 @@ import android.widget.TextView;
 
 public class PTCharacterInventoryFragment extends PTCharacterSheetFragment implements 
 	OnItemClickListener, OnClickListener, OnFocusChangeListener{
-	
 	private static final String TAG = PTCharacterInventoryFragment.class.getSimpleName();
-	private ListView mItemsListView;
-	private Button mAddButton;
-	private EditText mGoldEditText;
-	private TextView mTotalWeightText;
 	
-	private int mItemSelectedForEdit;
-	private View mDummyView;
+	private ListView m_itemsListView;
+	private Button m_addButton;
+	private EditText m_goldEditText;
+	private TextView m_totalWeightText;
+	
+	private int m_itemSelectedForEdit;
+	private View m_dummyView;
+	
+	private PTCharacter m_character;
+	private PTItemRepository m_itemRepo;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_itemRepo = new PTItemRepository();
 	}
 
 	@Override
@@ -45,18 +51,18 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		setRootView(inflater.inflate(R.layout.character_inventory_fragment, 
 				container, false));
 		
-		mDummyView = (View) getRootView().findViewById(R.id.dummyView);
+		m_dummyView = (View) getRootView().findViewById(R.id.dummyView);
 		
-		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddItem);
-		mAddButton.setOnClickListener(this);
+		m_addButton = (Button) getRootView().findViewById(R.id.buttonAddItem);
+		m_addButton.setOnClickListener(this);
 		
-		mGoldEditText = (EditText) getRootView().findViewById(R.id.editTextGold);
-		mGoldEditText.setOnFocusChangeListener(this);
+		m_goldEditText = (EditText) getRootView().findViewById(R.id.editTextGold);
+		m_goldEditText.setOnFocusChangeListener(this);
 		
-		mTotalWeightText = (TextView)  getRootView().findViewById(R.id.tvWeightTotal);
+		m_totalWeightText = (TextView)  getRootView().findViewById(R.id.tvWeightTotal);
 		
-		mItemsListView = (ListView) getRootView().findViewById(R.id.listViewInventory);
-		mItemsListView.setOnItemClickListener(this);
+		m_itemsListView = (ListView) getRootView().findViewById(R.id.listViewInventory);
+		m_itemsListView.setOnItemClickListener(this);
 		
 		updateFragmentUI();
 		
@@ -66,41 +72,41 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	@Override
 	public void onResume() {
 		super.onResume();
-		mDummyView.requestFocus();
+		m_dummyView.requestFocus();
 	}
 
 	@Override
 	public void onPause() {
-		mCharacter.setGold(Double.parseDouble(mGoldEditText.getText().toString()));
+		m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
 		/*InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		iMM.hideSoftInputFromInputMethod(mGoldEditText.getWindowToken(), 0);*/
 		super.onPause();
 	}
 
 	private void refreshItemsListView(){
-		PTItem[] items = mCharacter.getInventory().getItems();	
+		PTItem[] items = m_character.getInventory().getItems();	
 	
 		PTInventoryAdapter adapter = new PTInventoryAdapter(getActivity(), R.layout.character_inventory_row, items);
-		mItemsListView.setAdapter(adapter);
+		m_itemsListView.setAdapter(adapter);
 	
 	}
 	
 	private void updateTotalWeight(){
-		double totalWeight = mCharacter.getInventory().getTotalWeight();
+		double totalWeight = m_character.getInventory().getTotalWeight();
 		
-		mTotalWeightText.setText(getActivity().getString(R.string.inventory_total_weight_header)
+		m_totalWeightText.setText(getActivity().getString(R.string.inventory_total_weight_header)
 				+" "+ totalWeight);
 	}
 
 	//An items has been clicked in the list
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		mItemSelectedForEdit = position;
-		showItemEditor(mCharacter.getInventory().getItem(position));
+		m_itemSelectedForEdit = position;
+		showItemEditor(m_character.getInventory().getItem(position));
 	}
 
 	//The add button was clicked
 	public void onClick(View view) {
-		mItemSelectedForEdit = -1;
+		m_itemSelectedForEdit = -1;
 		showItemEditor(null);
 	}
 	
@@ -119,16 +125,16 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			PTItem item = data.getExtras().getParcelable(
 					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add/edit item OK: " + item.getName());
-			if(mItemSelectedForEdit < 0) {
+			if(m_itemSelectedForEdit < 0) {
 				Log.v(TAG, "Adding an item");
 				if(item != null) {
-					mCharacter.getInventory().addItem(item);
+					m_character.getInventory().addItem(item);
 					refreshItemsListView();
 					updateTotalWeight();
 				}
 			} else {
 				Log.v(TAG, "Editing an item");
-				mCharacter.getInventory().setItem(item, mItemSelectedForEdit);
+				m_character.getInventory().setItem(item, m_itemSelectedForEdit);
 				refreshItemsListView();
 				updateTotalWeight();
 			}
@@ -137,7 +143,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		
 		case PTCharacterInventoryEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
-			mCharacter.getInventory().deleteItem(mItemSelectedForEdit);
+			m_character.getInventory().deleteItem(m_itemSelectedForEdit);
 			refreshItemsListView();
 			updateTotalWeight();
 			break;
@@ -148,19 +154,19 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		default:
 			break;
 		}
-		updateCharacterDatabase();
+		updateDatabase();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	//Gold Edit text
 	public void onFocusChange(View view, boolean isInFocus) {
 		if(!isInFocus)
-			mCharacter.setGold(Double.parseDouble(mGoldEditText.getText().toString()));
+			m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
 	}
 
 	@Override
 	public void updateFragmentUI() {
-		mGoldEditText.setText(Double.toString(mCharacter.getGold()));
+		m_goldEditText.setText(Double.toString(m_character.getGold()));
 		updateTotalWeight();
 		refreshItemsListView();	
 	}
@@ -168,6 +174,21 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_inventory);
+	}
+
+	@Override
+	public void updateDatabase() {
+		// TODO optimize by doing dynamically
+		PTItem[] items = m_character.getInventory().getItems();
+		for (PTItem item : items) {
+			m_itemRepo.update(item);
+			getCharacterRepo().update(m_character);
+		}
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_character = getCharacterRepo().query(getCurrentCharacterID());
 	}
 	
 }

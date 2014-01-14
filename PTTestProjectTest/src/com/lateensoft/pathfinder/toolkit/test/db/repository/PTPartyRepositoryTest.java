@@ -2,7 +2,7 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
 import android.test.AndroidTestCase;
 
-import com.lateensoft.pathfinder.toolkit.db.IdNamePair;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 
@@ -42,7 +42,7 @@ public class PTPartyRepositoryTest extends AndroidTestCase {
 	}
 	
 	public void testQueryList() {
-		IdNamePair[] names = m_repo.queryList();
+		IDNamePair[] names = m_repo.queryList();
 		assertEquals(m_party1.getName(), names[0].getName());
 		assertEquals(m_party2.getName(), names[1].getName());
 		assertEquals(2, names.length);

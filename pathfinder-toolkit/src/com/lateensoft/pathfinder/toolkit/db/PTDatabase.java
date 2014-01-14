@@ -16,7 +16,7 @@ public class PTDatabase extends SQLiteOpenHelper {
 	
 	public static final String DB_NAME = "pathfinder_toolkit.db";
 	
-	public static int dbVersion = 1;
+	public static final int DB_VERSION = 1;
 	private SQLiteDatabase m_database;
 	
 	private static PTDatabase s_instance;
@@ -29,7 +29,7 @@ public class PTDatabase extends SQLiteOpenHelper {
 	}
 	
 	protected PTDatabase() {
-		super(PTBaseApplication.getAppContext(), DB_NAME, null, dbVersion);
+		super(PTBaseApplication.getAppContext(), DB_NAME, null, DB_VERSION);
 		open();
 	}
 	

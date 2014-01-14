@@ -15,20 +15,26 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTFeatRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
 
 public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		implements OnClickListener, OnItemClickListener {
 
 	private static final String TAG = PTCharacterFeatsFragment.class.getSimpleName();
-	private ListView mFeatsListView;
-	private Button mAddButton;
+	private ListView m_featsListView;
+	private Button m_addButton;
 
-	private int mFeatSelectedForEdit;
+	private int m_featSelectedForEdit;
+	
+	private PTFeatRepository m_featRepo;
+	private PTFeatList m_featList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_featRepo = new PTFeatRepository();
 	}
 
 	@Override
@@ -39,37 +45,37 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		setRootView(inflater.inflate(R.layout.character_feats_fragment,
 				container, false));
 
-		mAddButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
-		mAddButton.setOnClickListener(this);
+		m_addButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
+		m_addButton.setOnClickListener(this);
 
-		mFeatsListView = (ListView) getRootView()
+		m_featsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewFeats);
 		refreshFeatsListView();
-		mFeatsListView.setOnItemClickListener(this);
+		m_featsListView.setOnItemClickListener(this);
 
 		return getRootView();
 	}
 
 	private void refreshFeatsListView() {
-		String[] featNames = mCharacter.getFeatList().getFeatNames();
+		String[] featNames = m_featList.getFeatNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_list_item_1,
 				featNames);
-		mFeatsListView.setAdapter(adapter);
+		m_featsListView.setAdapter(adapter);
 
 	}
 
 	// Add Feat button was tapped
 	public void onClick(View button) {
-		mFeatSelectedForEdit = -1;
+		m_featSelectedForEdit = -1;
 		showFeatEditor(null);
 
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		mFeatSelectedForEdit = position;
-		showFeatEditor(mCharacter.getFeatList().getFeat(position));
+		m_featSelectedForEdit = position;
+		showFeatEditor(m_featList.getFeat(position));
 
 	}
 	
@@ -88,15 +94,15 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 			PTFeat item = data.getExtras().getParcelable(
 					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add/edit feat OK: " + item.getName());
-			if(mFeatSelectedForEdit < 0) {
+			if(m_featSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a feat");
 				if(item != null) {
-					mCharacter.getFeatList().addFeat(item);
+					m_featList.addFeat(item);
 					refreshFeatsListView();
 				}
 			} else {
 				Log.v(TAG, "Editing a feat");
-				mCharacter.getFeatList().setFeat(item, mFeatSelectedForEdit);
+				m_featList.setFeat(item, m_featSelectedForEdit);
 				refreshFeatsListView();
 			}
 			
@@ -104,7 +110,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		
 		case PTCharacterFeatEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
-			mCharacter.getFeatList().deleteFeat(mFeatSelectedForEdit);
+			m_featList.deleteFeat(m_featSelectedForEdit);
 			refreshFeatsListView();
 			break;
 		
@@ -114,7 +120,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		default:
 			break;
 		}
-		updateCharacterDatabase();
+		updateDatabase();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -126,6 +132,19 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_feats);
+	}
+
+	@Override
+	public void updateDatabase() {
+		PTFeat[] feats = m_featList.getFeats();
+		for(PTFeat feat : feats) {
+			m_featRepo.update(feat);
+		}
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_featList = new PTFeatList(m_featRepo.querySet(getCurrentCharacterID()));
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,16 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTCombatStatRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTSaveRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
 
 public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		implements OnFocusChangeListener, OnEditorActionListener {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterCombatStatsFragment.class.getSimpleName();
 
 	static final int STR_KEY = 0;
@@ -29,64 +34,71 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	static final int REF_KEY = 1;
 	static final int WILL_KEY = 2;
 
-	private TextView mCurrentHPTextView;
-	private EditText mTotalHPEditText;
-	private EditText mDamageReductEditText;
-	private EditText mWoundsEditText;
-	private EditText mNonLethalDmgEditText;
+	private TextView m_currentHPTextView;
+	private EditText m_totalHPEditText;
+	private EditText m_damageReductEditText;
+	private EditText m_woundsEditText;
+	private EditText m_nonLethalDmgEditText;
 
-	private EditText mBaseSpeedEditText;
+	private EditText m_baseSpeedEditText;
 
-	private TextView mInitTextView;
-	private EditText mInitDexEditText;
-	private EditText mInitMiscEditText;
+	private TextView m_initTextView;
+	private EditText m_initDexEditText;
+	private EditText m_initMiscEditText;
 
-	private TextView mACTextView;
-	private EditText mArmourBonusEditText;
-	private EditText mShieldBonusEditText;
-	private EditText mACDexEditText;
-	private EditText mACSizeEditText;
-	private EditText mNaturalArmourEditText;
-	private EditText mDeflectEditText;
-	private EditText mACMiscEditText;
-	private TextView mACTouchTextView;
-	private TextView mACFFTextView;
-	private EditText mSpellResistEditText;
+	private TextView m_ACTextView;
+	private EditText m_armourBonusEditText;
+	private EditText m_shieldBonusEditText;
+	private EditText m_ACDexEditText;
+	private EditText m_ACSizeEditText;
+	private EditText m_naturalArmourEditText;
+	private EditText m_deflectEditText;
+	private EditText m_ACMiscEditText;
+	private TextView m_ACTouchTextView;
+	private TextView m_ACFFTextView;
+	private EditText m_spellResistEditText;
 
-	private EditText mBABPrimaryEditText;
-	private EditText mBABSecondaryEditText;
-	private TextView mCMBTextView;
-	private EditText mCmbBABEditText;
-	private EditText mCMBStrengthEditText;
-	private EditText mCMBSizeEditText;
-	private TextView mCMDTextView;
-	private EditText mCMDDexEditText;
-	private EditText mCMDMiscModEditText;
+	private EditText m_BABPrimaryEditText;
+	private EditText m_BABSecondaryEditText;
+	private TextView m_CMBTextView;
+	private EditText m_CmbBABEditText;
+	private EditText m_CMBStrengthEditText;
+	private EditText m_CMBSizeEditText;
+	private TextView m_CMDTextView;
+	private EditText m_CMDDexEditText;
+	private EditText m_CMDMiscModEditText;
 
-	private TextView mFortTextView;
-	private EditText mFortBaseEditText;
-	private EditText mFortAbilityModEditText;
-	private EditText mFortMagicModEditText;
-	private EditText mFortMiscModEditText;
-	private EditText mFortTempModEditText;
+	private TextView m_fortTextView;
+	private EditText m_fortBaseEditText;
+	private EditText m_fortAbilityModEditText;
+	private EditText m_fortMagicModEditText;
+	private EditText m_fortMiscModEditText;
+	private EditText m_fortTempModEditText;
 
-	private TextView mRefTextView;
-	private EditText mRefBaseEditText;
-	private EditText mRefAbilityModEditText;
-	private EditText mRefMagicModEditText;
-	private EditText mRefMiscModEditText;
-	private EditText mRefTempModEditText;
+	private TextView m_refTextView;
+	private EditText m_refBaseEditText;
+	private EditText m_refAbilityModEditText;
+	private EditText m_refMagicModEditText;
+	private EditText m_refMiscModEditText;
+	private EditText m_refTempModEditText;
 
-	private TextView mWillTextView;
-	private EditText mWillBaseEditText;
-	private EditText mWillAbilityModEditText;
-	private EditText mWillMagicModEditText;
-	private EditText mWillMiscModEditText;
-	private EditText mWillTempModEditText;
+	private TextView m_willTextView;
+	private EditText m_willBaseEditText;
+	private EditText m_willAbilityModEditText;
+	private EditText m_willMagicModEditText;
+	private EditText m_willMiscModEditText;
+	private EditText m_willTempModEditText;
+	
+	private PTCombatStatRepository m_statsRepo;
+	private PTSaveRepository m_saveRepo;
+	private PTCombatStatSet m_combatStats;
+	private PTSaveSet m_saveSet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_statsRepo = new PTCombatStatRepository();
+		m_saveRepo = new PTSaveRepository();
 	}
 
 	@Override
@@ -115,14 +127,10 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * Updates all stats for HP
 	 */
 	public void updateHP() {
-		mCharacter.getCombatStatSet().setTotalHP(
-				getEditTextInt(mTotalHPEditText));
-		mCharacter.getCombatStatSet()
-				.setWounds(getEditTextInt(mWoundsEditText));
-		mCharacter.getCombatStatSet().setNonLethalDamage(
-				getEditTextInt(mNonLethalDmgEditText));
-		mCharacter.getCombatStatSet().setDamageReduction(
-				getEditTextInt(mDamageReductEditText));
+		m_combatStats.setTotalHP(getEditTextInt(m_totalHPEditText));
+		m_combatStats.setWounds(getEditTextInt(m_woundsEditText));
+		m_combatStats.setNonLethalDamage(getEditTextInt(m_nonLethalDmgEditText));
+		m_combatStats.setDamageReduction(getEditTextInt(m_damageReductEditText));
 		updateHPViews();
 	}
 
@@ -130,40 +138,33 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * Updates all views for HP
 	 */
 	public void updateHPViews() {
-		setIntText(mCurrentHPTextView, mCharacter.getCombatStatSet()
-				.getCurrentHP());
-		setIntText(mTotalHPEditText, mCharacter.getCombatStatSet().getTotalHP());
-		setIntText(mWoundsEditText, mCharacter.getCombatStatSet().getWounds());
-		setIntText(mNonLethalDmgEditText, mCharacter.getCombatStatSet()
-				.getNonLethalDamage());
-		setIntText(mDamageReductEditText, mCharacter.getCombatStatSet()
-				.getDamageReduction());
+		setIntText(m_currentHPTextView, m_combatStats.getCurrentHP());
+		setIntText(m_totalHPEditText, m_combatStats.getTotalHP());
+		setIntText(m_woundsEditText, m_combatStats.getWounds());
+		setIntText(m_nonLethalDmgEditText, m_combatStats.getNonLethalDamage());
+		setIntText(m_damageReductEditText, m_combatStats.getDamageReduction());
 	}
 
 	/**
 	 * Updates all stats for speed
 	 */
 	public void updateSpeed() {
-		mCharacter.getCombatStatSet().setBaseSpeed(
-				getEditTextInt(mBaseSpeedEditText));
+		m_combatStats.setBaseSpeed(getEditTextInt(m_baseSpeedEditText));
 	}
 
 	/**
 	 * Updates all views for speed
 	 */
 	public void updateSpeedViews() {
-		setIntText(mBaseSpeedEditText, mCharacter.getCombatStatSet()
-				.getBaseSpeed());
+		setIntText(m_baseSpeedEditText, m_combatStats.getBaseSpeed());
 	}
 
 	/**
 	 * Updates all stats for initiative
 	 */
 	public void updateInitiative() {
-		mCharacter.getCombatStatSet().setInitDexMod(
-				getEditTextInt(mInitDexEditText));
-		mCharacter.getCombatStatSet().setInitiativeMiscMod(
-				getEditTextInt(mInitMiscEditText));
+		m_combatStats.setInitDexMod(getEditTextInt(m_initDexEditText));
+		m_combatStats.setInitiativeMiscMod(getEditTextInt(m_initMiscEditText));
 		updateInitiativeViews();
 	}
 
@@ -171,34 +172,23 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * Updates all views for initiative
 	 */
 	public void updateInitiativeViews() {
-		setIntText(mInitTextView, mCharacter.getCombatStatSet()
-				.getInitiativeMod());
-		setIntText(mInitDexEditText, mCharacter.getCombatStatSet()
-				.getInitDexMod());
-		setIntText(mInitMiscEditText, mCharacter.getCombatStatSet()
-				.getInitiativeMiscMod());
+		setIntText(m_initTextView, m_combatStats.getInitiativeMod());
+		setIntText(m_initDexEditText, m_combatStats.getInitDexMod());
+		setIntText(m_initMiscEditText, m_combatStats.getInitiativeMiscMod());
 	}
 
 	/**
 	 * Updates all stats for AC
 	 */
 	public void updateAC() {
-		mCharacter.getCombatStatSet().setACArmourBonus(
-				getEditTextInt(mArmourBonusEditText));
-		mCharacter.getCombatStatSet().setACShieldBonus(
-				getEditTextInt(mShieldBonusEditText));
-		mCharacter.getCombatStatSet().setACDexMod(
-				getEditTextInt(mACDexEditText));
-		mCharacter.getCombatStatSet().setSizeModifier(
-				getEditTextInt(mACSizeEditText));
-		mCharacter.getCombatStatSet().setNaturalArmour(
-				getEditTextInt(mNaturalArmourEditText));
-		mCharacter.getCombatStatSet().setDeflectionMod(
-				getEditTextInt(mDeflectEditText));
-		mCharacter.getCombatStatSet().setACMiscMod(
-				getEditTextInt(mACMiscEditText));
-		mCharacter.getCombatStatSet().setSpellResistance(
-				getEditTextInt(mSpellResistEditText));
+		m_combatStats.setACArmourBonus(getEditTextInt(m_armourBonusEditText));
+		m_combatStats.setACShieldBonus(getEditTextInt(m_shieldBonusEditText));
+		m_combatStats.setACDexMod(getEditTextInt(m_ACDexEditText));
+		m_combatStats.setSizeModifier(getEditTextInt(m_ACSizeEditText));
+		m_combatStats.setNaturalArmour(getEditTextInt(m_naturalArmourEditText));
+		m_combatStats.setDeflectionMod(getEditTextInt(m_deflectEditText));
+		m_combatStats.setACMiscMod(getEditTextInt(m_ACMiscEditText));
+		m_combatStats.setSpellResistance(getEditTextInt(m_spellResistEditText));
 		updateACViews();
 	}
 
@@ -206,40 +196,31 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * Updates all views for ac
 	 */
 	public void updateACViews() {
-		setIntText(mACTextView, mCharacter.getCombatStatSet().getTotalAC());
-		setIntText(mACTouchTextView, mCharacter.getCombatStatSet().getTouchAC());
-		setIntText(mACFFTextView, mCharacter.getCombatStatSet()
-				.getFlatFootedAC());
-		setIntText(mArmourBonusEditText, mCharacter.getCombatStatSet()
-				.getACArmourBonus());
-		setIntText(mShieldBonusEditText, mCharacter.getCombatStatSet()
-				.getACShieldBonus());
-		setIntText(mACDexEditText, mCharacter.getCombatStatSet().getACDexMod());
+		setIntText(m_ACTextView, m_combatStats.getTotalAC());
+		setIntText(m_ACTouchTextView, m_combatStats.getTouchAC());
+		setIntText(m_ACFFTextView, m_combatStats.getFlatFootedAC());
+		setIntText(m_armourBonusEditText, m_combatStats.getACArmourBonus());
+		setIntText(m_shieldBonusEditText, m_combatStats.getACShieldBonus());
+		setIntText(m_ACDexEditText, m_combatStats.getACDexMod());
 		updateSizeModViews();
-		setIntText(mNaturalArmourEditText, mCharacter.getCombatStatSet()
-				.getNaturalArmour());
-		setIntText(mDeflectEditText, mCharacter.getCombatStatSet()
-				.getDeflectionMod());
-		setIntText(mACMiscEditText, mCharacter.getCombatStatSet()
-				.getACMiscMod());
-		setIntText(mSpellResistEditText, mCharacter.getCombatStatSet()
-				.getSpellResist());
+		setIntText(m_naturalArmourEditText, m_combatStats.getNaturalArmour());
+		setIntText(m_deflectEditText, m_combatStats.getDeflectionMod());
+		setIntText(m_ACMiscEditText, m_combatStats.getACMiscMod());
+		setIntText(m_spellResistEditText, m_combatStats.getSpellResist());
 	}
 
 	/**
 	 * Updates all stats for BAB
 	 */
 	public void updateBAB() {
-		mCharacter.getCombatStatSet().setBABPrimary(
-				getEditTextInt(mBABPrimaryEditText));
-		mCharacter.getCombatStatSet().setBABSecondary(
-				mBABSecondaryEditText.getText().toString());
+		m_combatStats.setBABPrimary(getEditTextInt(m_BABPrimaryEditText));
+		m_combatStats.setBABSecondary(m_BABSecondaryEditText.getText().toString());
 		updateBABViews();
 	}
 
 	public void updateBABViews() {
 		updateCombatManeuverViews();
-		mBABSecondaryEditText.setText(mCharacter.getCombatStatSet()
+		m_BABSecondaryEditText.setText(m_combatStats
 				.getBABSecondary());
 	}
 
@@ -247,16 +228,11 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * Updates all stats for combat maneuvers
 	 */
 	public void updateCombatManeuvers() {
-		mCharacter.getCombatStatSet().setBABPrimary(
-				getEditTextInt(mCmbBABEditText));
-		mCharacter.getCombatStatSet().setStrengthMod(
-				getEditTextInt(mCMBStrengthEditText));
-		mCharacter.getCombatStatSet().setSizeModifier(
-				getEditTextInt(mCMBSizeEditText));
-		mCharacter.getCombatStatSet().setCMDDexMod(
-				getEditTextInt(mCMDDexEditText));
-		mCharacter.getCombatStatSet().setCMDMiscMod(
-				getEditTextInt(mCMDMiscModEditText));
+		m_combatStats.setBABPrimary(getEditTextInt(m_CmbBABEditText));
+		m_combatStats.setStrengthMod(getEditTextInt(m_CMBStrengthEditText));
+		m_combatStats.setSizeModifier(getEditTextInt(m_CMBSizeEditText));
+		m_combatStats.setCMDDexMod(getEditTextInt(m_CMDDexEditText));
+		m_combatStats.setCMDMiscMod(getEditTextInt(m_CMDMiscModEditText));
 		updateCombatManeuverViews();
 	}
 
@@ -270,80 +246,56 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	}
 
 	public void updateFort() {
-		mCharacter.getSaveSet().getSave(0)
-				.setBase(getEditTextInt(mFortBaseEditText));
-		mCharacter.getSaveSet().getSave(0)
-				.setAbilityMod(getEditTextInt(mFortAbilityModEditText));
-		mCharacter.getSaveSet().getSave(0)
-				.setMagicMod(getEditTextInt(mFortMagicModEditText));
-		mCharacter.getSaveSet().getSave(0)
-				.setMiscMod(getEditTextInt(mFortMiscModEditText));
-		mCharacter.getSaveSet().getSave(0)
-				.setTempMod(getEditTextInt(mFortTempModEditText));
+		m_saveSet.getSave(0).setBase(getEditTextInt(m_fortBaseEditText));
+		m_saveSet.getSave(0).setAbilityMod(getEditTextInt(m_fortAbilityModEditText));
+		m_saveSet.getSave(0).setMagicMod(getEditTextInt(m_fortMagicModEditText));
+		m_saveSet.getSave(0).setMiscMod(getEditTextInt(m_fortMiscModEditText));
+		m_saveSet.getSave(0).setTempMod(getEditTextInt(m_fortTempModEditText));
 	}
 
 	public void updateRef() {
-		mCharacter.getSaveSet().getSave(1)
-				.setBase(getEditTextInt(mRefBaseEditText));
-		mCharacter.getSaveSet().getSave(1)
-				.setAbilityMod(getEditTextInt(mRefAbilityModEditText));
-		mCharacter.getSaveSet().getSave(1)
-				.setMagicMod(getEditTextInt(mRefMagicModEditText));
-		mCharacter.getSaveSet().getSave(1)
-				.setMiscMod(getEditTextInt(mRefMiscModEditText));
-		mCharacter.getSaveSet().getSave(1)
-				.setTempMod(getEditTextInt(mRefTempModEditText));
+		m_saveSet.getSave(1).setBase(getEditTextInt(m_refBaseEditText));
+		m_saveSet.getSave(1).setAbilityMod(getEditTextInt(m_refAbilityModEditText));
+		m_saveSet.getSave(1).setMagicMod(getEditTextInt(m_refMagicModEditText));
+		m_saveSet.getSave(1).setMiscMod(getEditTextInt(m_refMiscModEditText));
+		m_saveSet.getSave(1).setTempMod(getEditTextInt(m_refTempModEditText));
 	}
 
 	public void updateWill() {
-		mCharacter.getSaveSet().getSave(2)
-				.setBase(getEditTextInt(mWillBaseEditText));
-		mCharacter.getSaveSet().getSave(2)
-				.setAbilityMod(getEditTextInt(mWillAbilityModEditText));
-		mCharacter.getSaveSet().getSave(2)
-				.setMagicMod(getEditTextInt(mWillMagicModEditText));
-		mCharacter.getSaveSet().getSave(2)
-				.setMiscMod(getEditTextInt(mWillMiscModEditText));
-		mCharacter.getSaveSet().getSave(2)
-				.setTempMod(getEditTextInt(mWillTempModEditText));
+		m_saveSet.getSave(2).setBase(getEditTextInt(m_willBaseEditText));
+		m_saveSet.getSave(2).setAbilityMod(getEditTextInt(m_willAbilityModEditText));
+		m_saveSet.getSave(2).setMagicMod(getEditTextInt(m_willMagicModEditText));
+		m_saveSet.getSave(2).setMiscMod(getEditTextInt(m_willMiscModEditText));
+		m_saveSet.getSave(2).setTempMod(getEditTextInt(m_willTempModEditText));
 	}
 
 	/**
 	 * Updates all views for combat maneuvers
 	 */
 	public void updateCombatManeuverViews() {
-		setIntText(mCMBTextView, mCharacter.getCombatStatSet()
-				.getCombatManeuverBonus());
+		setIntText(m_CMBTextView, m_combatStats.getCombatManeuverBonus());
 		updatePrimaryBABViews();
-		setIntText(mCMBStrengthEditText, mCharacter.getCombatStatSet()
-				.getStrengthMod());
+		setIntText(m_CMBStrengthEditText, m_combatStats.getStrengthMod());
 		updateSizeModViews();
-		setIntText(mCMDTextView, mCharacter.getCombatStatSet()
-				.getCombatManeuverDefense());
-		setIntText(mCMDDexEditText, mCharacter.getCombatStatSet()
-				.getCMDDexMod());
-		setIntText(mCMDMiscModEditText, mCharacter.getCombatStatSet()
-				.getCMDMiscMod());
+		setIntText(m_CMDTextView, m_combatStats.getCombatManeuverDefense());
+		setIntText(m_CMDDexEditText, m_combatStats.getCMDDexMod());
+		setIntText(m_CMDMiscModEditText, m_combatStats.getCMDMiscMod());
 	}
 
 	/**
 	 * Updates the BAB edit texts in BAB and CMB
 	 */
 	public void updatePrimaryBABViews() {
-		setIntText(mBABPrimaryEditText, mCharacter.getCombatStatSet()
-				.getBABPrimary());
-		setIntText(mCmbBABEditText, mCharacter.getCombatStatSet()
-				.getBABPrimary());
+		setIntText(m_BABPrimaryEditText, m_combatStats.getBABPrimary());
+		setIntText(m_CmbBABEditText, m_combatStats.getBABPrimary());
 	}
 
 	/**
 	 * Updates the size mod edit texts in AC and CMB
 	 */
 	public void updateSizeModViews() {
-		setIntText(mACSizeEditText, mCharacter.getCombatStatSet()
-				.getSizeModifier());
-		setIntText(mCMBSizeEditText, mCharacter.getCombatStatSet()
-				.getSizeModifier());
+		setIntText(m_ACSizeEditText, m_combatStats.getSizeModifier());
+		setIntText(m_CMBSizeEditText, m_combatStats.getSizeModifier());
 	}
 
 	private void setIntText(TextView textView, int number) {
@@ -357,45 +309,30 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	}
 
 	public void updateFortSaveViews() {
-		setIntText(mFortTextView, mCharacter.getSaveSet().getSave(0).getTotal());
-		setIntText(mFortBaseEditText, mCharacter.getSaveSet().getSave(0)
-				.getBase());
-		setIntText(mFortAbilityModEditText, mCharacter.getSaveSet().getSave(0)
-				.getAbilityMod());
-		setIntText(mFortMagicModEditText, mCharacter.getSaveSet().getSave(0)
-				.getMagicMod());
-		setIntText(mFortMiscModEditText, mCharacter.getSaveSet().getSave(0)
-				.getMiscMod());
-		setIntText(mFortTempModEditText, mCharacter.getSaveSet().getSave(0)
-				.getTempMod());
+		setIntText(m_fortTextView, m_saveSet.getSave(0).getTotal());
+		setIntText(m_fortBaseEditText, m_saveSet.getSave(0).getBase());
+		setIntText(m_fortAbilityModEditText, m_saveSet.getSave(0).getAbilityMod());
+		setIntText(m_fortMagicModEditText, m_saveSet.getSave(0).getMagicMod());
+		setIntText(m_fortMiscModEditText, m_saveSet.getSave(0).getMiscMod());
+		setIntText(m_fortTempModEditText, m_saveSet.getSave(0).getTempMod());
 	}
 
 	public void updateRefSaveViews() {
-		setIntText(mRefTextView, mCharacter.getSaveSet().getSave(1).getTotal());
-		setIntText(mRefBaseEditText, mCharacter.getSaveSet().getSave(1)
-				.getBase());
-		setIntText(mRefAbilityModEditText, mCharacter.getSaveSet().getSave(1)
-				.getAbilityMod());
-		setIntText(mRefMagicModEditText, mCharacter.getSaveSet().getSave(1)
-				.getMagicMod());
-		setIntText(mRefMiscModEditText, mCharacter.getSaveSet().getSave(1)
-				.getMiscMod());
-		setIntText(mRefTempModEditText, mCharacter.getSaveSet().getSave(1)
-				.getTempMod());
+		setIntText(m_refTextView, m_saveSet.getSave(1).getTotal());
+		setIntText(m_refBaseEditText, m_saveSet.getSave(1).getBase());
+		setIntText(m_refAbilityModEditText, m_saveSet.getSave(1).getAbilityMod());
+		setIntText(m_refMagicModEditText, m_saveSet.getSave(1).getMagicMod());
+		setIntText(m_refMiscModEditText, m_saveSet.getSave(1).getMiscMod());
+		setIntText(m_refTempModEditText, m_saveSet.getSave(1).getTempMod());
 	}
 
 	public void updateWillSaveViews() {
-		setIntText(mWillTextView, mCharacter.getSaveSet().getSave(2).getTotal());
-		setIntText(mWillBaseEditText, mCharacter.getSaveSet().getSave(2)
-				.getBase());
-		setIntText(mWillAbilityModEditText, mCharacter.getSaveSet().getSave(2)
-				.getAbilityMod());
-		setIntText(mWillMagicModEditText, mCharacter.getSaveSet().getSave(2)
-				.getMagicMod());
-		setIntText(mWillMiscModEditText, mCharacter.getSaveSet().getSave(2)
-				.getMiscMod());
-		setIntText(mWillTempModEditText, mCharacter.getSaveSet().getSave(2)
-				.getTempMod());
+		setIntText(m_willTextView, m_saveSet.getSave(2).getTotal());
+		setIntText(m_willBaseEditText, m_saveSet.getSave(2).getBase());
+		setIntText(m_willAbilityModEditText, m_saveSet.getSave(2).getAbilityMod());
+		setIntText(m_willMagicModEditText, m_saveSet.getSave(2).getMagicMod());
+		setIntText(m_willMiscModEditText, m_saveSet.getSave(2).getMiscMod());
+		setIntText(m_willTempModEditText, m_saveSet.getSave(2).getTempMod());
 	}
 
 	/**
@@ -420,154 +357,154 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 
 	// Sets up all the text and edit texts
 	public void setupViews(View fragmentView) {
-		mCurrentHPTextView = (TextView) fragmentView
+		m_currentHPTextView = (TextView) fragmentView
 				.findViewById(R.id.textViewCurrentHP);
-		mTotalHPEditText = (EditText) fragmentView
+		m_totalHPEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextTotalHP);
-		setEditTextListeners(mTotalHPEditText);
+		setEditTextListeners(m_totalHPEditText);
 
-		mDamageReductEditText = (EditText) fragmentView
+		m_damageReductEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextDamageReduction);
-		setEditTextListeners(mDamageReductEditText);
+		setEditTextListeners(m_damageReductEditText);
 
-		mWoundsEditText = (EditText) fragmentView
+		m_woundsEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextWounds);
-		setEditTextListeners(mWoundsEditText);
+		setEditTextListeners(m_woundsEditText);
 
-		mNonLethalDmgEditText = (EditText) fragmentView
+		m_nonLethalDmgEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextNonLethalDmg);
-		setEditTextListeners(mNonLethalDmgEditText);
+		setEditTextListeners(m_nonLethalDmgEditText);
 
-		mBaseSpeedEditText = (EditText) fragmentView
+		m_baseSpeedEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextBaseSpeed);
-		setEditTextListeners(mBaseSpeedEditText);
+		setEditTextListeners(m_baseSpeedEditText);
 
-		mInitTextView = (TextView) fragmentView
+		m_initTextView = (TextView) fragmentView
 				.findViewById(R.id.textViewInitiative);
-		mInitDexEditText = (EditText) fragmentView
+		m_initDexEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextInitDexMod);
-		setEditTextListeners(mInitDexEditText);
+		setEditTextListeners(m_initDexEditText);
 
-		mInitMiscEditText = (EditText) fragmentView
+		m_initMiscEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextInitMiscMod);
-		setEditTextListeners(mInitMiscEditText);
+		setEditTextListeners(m_initMiscEditText);
 
-		mACTextView = (TextView) fragmentView.findViewById(R.id.textViewAC);
-		mArmourBonusEditText = (EditText) fragmentView
+		m_ACTextView = (TextView) fragmentView.findViewById(R.id.textViewAC);
+		m_armourBonusEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextArmourBonus);
-		setEditTextListeners(mArmourBonusEditText);
+		setEditTextListeners(m_armourBonusEditText);
 
-		mShieldBonusEditText = (EditText) fragmentView
+		m_shieldBonusEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextShieldBonus);
-		setEditTextListeners(mShieldBonusEditText);
+		setEditTextListeners(m_shieldBonusEditText);
 
-		mACDexEditText = (EditText) fragmentView
+		m_ACDexEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextACDexMod);
-		setEditTextListeners(mACDexEditText);
+		setEditTextListeners(m_ACDexEditText);
 
-		mACSizeEditText = (EditText) fragmentView
+		m_ACSizeEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextACSizeMod);
-		setEditTextListeners(mACSizeEditText);
+		setEditTextListeners(m_ACSizeEditText);
 
-		mNaturalArmourEditText = (EditText) fragmentView
+		m_naturalArmourEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextNaturalArmour);
-		setEditTextListeners(mNaturalArmourEditText);
+		setEditTextListeners(m_naturalArmourEditText);
 
-		mDeflectEditText = (EditText) fragmentView
+		m_deflectEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextDeflectionMod);
-		setEditTextListeners(mDeflectEditText);
+		setEditTextListeners(m_deflectEditText);
 
-		mACMiscEditText = (EditText) fragmentView
+		m_ACMiscEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextACMiscMod);
-		setEditTextListeners(mACMiscEditText);
+		setEditTextListeners(m_ACMiscEditText);
 
-		mACTouchTextView = (TextView) fragmentView
+		m_ACTouchTextView = (TextView) fragmentView
 				.findViewById(R.id.textViewTouchAC);
-		mACFFTextView = (TextView) fragmentView
+		m_ACFFTextView = (TextView) fragmentView
 				.findViewById(R.id.textViewFlatFootedAC);
-		mSpellResistEditText = (EditText) fragmentView
+		m_spellResistEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextSpellResist);
-		setEditTextListeners(mSpellResistEditText);
+		setEditTextListeners(m_spellResistEditText);
 
-		mBABPrimaryEditText = (EditText) fragmentView
+		m_BABPrimaryEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextBABPrimary);
-		setEditTextListeners(mBABPrimaryEditText);
+		setEditTextListeners(m_BABPrimaryEditText);
 
-		mBABSecondaryEditText = (EditText) fragmentView
+		m_BABSecondaryEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextBABSecondary);
-		setEditTextListeners(mBABSecondaryEditText);
+		setEditTextListeners(m_BABSecondaryEditText);
 
-		mCMBTextView = (TextView) fragmentView.findViewById(R.id.textViewCMB);
-		mCmbBABEditText = (EditText) fragmentView
+		m_CMBTextView = (TextView) fragmentView.findViewById(R.id.textViewCMB);
+		m_CmbBABEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextCmbBAB);
-		setEditTextListeners(mCmbBABEditText);
+		setEditTextListeners(m_CmbBABEditText);
 
-		mCMBStrengthEditText = (EditText) fragmentView
+		m_CMBStrengthEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextCMBStrengthMod);
-		setEditTextListeners(mCMBStrengthEditText);
+		setEditTextListeners(m_CMBStrengthEditText);
 
-		mCMBSizeEditText = (EditText) fragmentView
+		m_CMBSizeEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextCMBSizeMod);
-		setEditTextListeners(mCMBSizeEditText);
+		setEditTextListeners(m_CMBSizeEditText);
 
-		mCMDTextView = (TextView) fragmentView.findViewById(R.id.textViewCMD);
-		mCMDDexEditText = (EditText) fragmentView
+		m_CMDTextView = (TextView) fragmentView.findViewById(R.id.textViewCMD);
+		m_CMDDexEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextCMDDex);
-		mCMDMiscModEditText = (EditText) fragmentView
+		m_CMDMiscModEditText = (EditText) fragmentView
 				.findViewById(R.id.editTextCMDMiscMod);
-		setEditTextListeners(mCMDDexEditText);
-		setEditTextListeners(mCMDMiscModEditText);
+		setEditTextListeners(m_CMDDexEditText);
+		setEditTextListeners(m_CMDMiscModEditText);
 
-		mFortTextView = (TextView) fragmentView.findViewById(R.id.tvFort);
-		mFortBaseEditText = (EditText) fragmentView
+		m_fortTextView = (TextView) fragmentView.findViewById(R.id.tvFort);
+		m_fortBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortBase);
-		mFortAbilityModEditText = (EditText) fragmentView
+		m_fortAbilityModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortAbilityMod);
-		mFortMagicModEditText = (EditText) fragmentView
+		m_fortMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortMagicMod);
-		mFortMiscModEditText = (EditText) fragmentView
+		m_fortMiscModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortMiscMod);
-		mFortTempModEditText = (EditText) fragmentView
+		m_fortTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortTempMod);
-		setEditTextListeners(mFortBaseEditText);
-		setEditTextListeners(mFortAbilityModEditText);
-		setEditTextListeners(mFortMagicModEditText);
-		setEditTextListeners(mFortMiscModEditText);
-		setEditTextListeners(mFortTempModEditText);
+		setEditTextListeners(m_fortBaseEditText);
+		setEditTextListeners(m_fortAbilityModEditText);
+		setEditTextListeners(m_fortMagicModEditText);
+		setEditTextListeners(m_fortMiscModEditText);
+		setEditTextListeners(m_fortTempModEditText);
 
-		mRefTextView = (TextView) fragmentView.findViewById(R.id.tvRef);
-		mRefBaseEditText = (EditText) fragmentView
+		m_refTextView = (TextView) fragmentView.findViewById(R.id.tvRef);
+		m_refBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefBase);
-		mRefAbilityModEditText = (EditText) fragmentView
+		m_refAbilityModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefAbilityMod);
-		mRefMagicModEditText = (EditText) fragmentView
+		m_refMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefMagicMod);
-		mRefMiscModEditText = (EditText) fragmentView
+		m_refMiscModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefMiscMod);
-		mRefTempModEditText = (EditText) fragmentView
+		m_refTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefTempMod);
-		setEditTextListeners(mRefBaseEditText);
-		setEditTextListeners(mRefAbilityModEditText);
-		setEditTextListeners(mRefMagicModEditText);
-		setEditTextListeners(mRefMiscModEditText);
-		setEditTextListeners(mRefTempModEditText);
+		setEditTextListeners(m_refBaseEditText);
+		setEditTextListeners(m_refAbilityModEditText);
+		setEditTextListeners(m_refMagicModEditText);
+		setEditTextListeners(m_refMiscModEditText);
+		setEditTextListeners(m_refTempModEditText);
 
-		mWillTextView = (TextView) fragmentView.findViewById(R.id.tvWill);
-		mWillBaseEditText = (EditText) fragmentView
+		m_willTextView = (TextView) fragmentView.findViewById(R.id.tvWill);
+		m_willBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillBase);
-		mWillAbilityModEditText = (EditText) fragmentView
+		m_willAbilityModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillAbilityMod);
-		mWillMagicModEditText = (EditText) fragmentView
+		m_willMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillMagicMod);
-		mWillMiscModEditText = (EditText) fragmentView
+		m_willMiscModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillMiscMod);
-		mWillTempModEditText = (EditText) fragmentView
+		m_willTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillTempMod);
-		setEditTextListeners(mWillBaseEditText);
-		setEditTextListeners(mWillAbilityModEditText);
-		setEditTextListeners(mWillMagicModEditText);
-		setEditTextListeners(mWillMiscModEditText);
-		setEditTextListeners(mWillTempModEditText);
+		setEditTextListeners(m_willBaseEditText);
+		setEditTextListeners(m_willAbilityModEditText);
+		setEditTextListeners(m_willMagicModEditText);
+		setEditTextListeners(m_willMiscModEditText);
+		setEditTextListeners(m_willTempModEditText);
 	}
 
 	@Override
@@ -589,67 +526,67 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	 * @param viewID
 	 */
 	public void finishedEditing(int viewID) {
-		if (viewID == mWoundsEditText.getId()
-				|| viewID == mTotalHPEditText.getId()
-				|| viewID == mNonLethalDmgEditText.getId()
-				|| viewID == mDamageReductEditText.getId())
+		if (viewID == m_woundsEditText.getId()
+				|| viewID == m_totalHPEditText.getId()
+				|| viewID == m_nonLethalDmgEditText.getId()
+				|| viewID == m_damageReductEditText.getId())
 			updateHP();
 
-		else if (viewID == mBaseSpeedEditText.getId())
+		else if (viewID == m_baseSpeedEditText.getId())
 			updateSpeed();
 
-		else if (viewID == mInitDexEditText.getId()
-				|| viewID == mInitMiscEditText.getId())
+		else if (viewID == m_initDexEditText.getId()
+				|| viewID == m_initMiscEditText.getId())
 			updateInitiative();
 
-		else if (viewID == mArmourBonusEditText.getId()
-				|| viewID == mShieldBonusEditText.getId()
-				|| viewID == mACDexEditText.getId()
-				|| viewID == mACSizeEditText.getId()
-				|| viewID == mNaturalArmourEditText.getId()
-				|| viewID == mDeflectEditText.getId()
-				|| viewID == mACMiscEditText.getId()
-				|| viewID == mSpellResistEditText.getId()) {
+		else if (viewID == m_armourBonusEditText.getId()
+				|| viewID == m_shieldBonusEditText.getId()
+				|| viewID == m_ACDexEditText.getId()
+				|| viewID == m_ACSizeEditText.getId()
+				|| viewID == m_naturalArmourEditText.getId()
+				|| viewID == m_deflectEditText.getId()
+				|| viewID == m_ACMiscEditText.getId()
+				|| viewID == m_spellResistEditText.getId()) {
 			updateAC();
 			updateCombatManeuverViews();
 		}
 
-		else if (viewID == mBABPrimaryEditText.getId()
-				|| viewID == mBABSecondaryEditText.getId())
+		else if (viewID == m_BABPrimaryEditText.getId()
+				|| viewID == m_BABSecondaryEditText.getId())
 			updateBAB();
 
-		else if (viewID == mCmbBABEditText.getId()
-				|| viewID == mCMBStrengthEditText.getId()
-				|| viewID == mCMDDexEditText.getId()
-				|| viewID == mCMBSizeEditText.getId()
-				|| viewID == mCMDMiscModEditText.getId()) {
+		else if (viewID == m_CmbBABEditText.getId()
+				|| viewID == m_CMBStrengthEditText.getId()
+				|| viewID == m_CMDDexEditText.getId()
+				|| viewID == m_CMBSizeEditText.getId()
+				|| viewID == m_CMDMiscModEditText.getId()) {
 			updateCombatManeuvers();
 			updateACViews();
 		}
 
-		else if (viewID == mFortBaseEditText.getId()
-				|| viewID == mFortAbilityModEditText.getId()
-				|| viewID == mFortMagicModEditText.getId()
-				|| viewID == mFortMiscModEditText.getId()
-				|| viewID == mFortTempModEditText.getId()) {
+		else if (viewID == m_fortBaseEditText.getId()
+				|| viewID == m_fortAbilityModEditText.getId()
+				|| viewID == m_fortMagicModEditText.getId()
+				|| viewID == m_fortMiscModEditText.getId()
+				|| viewID == m_fortTempModEditText.getId()) {
 			updateFort();
 			updateFortSaveViews();
 		}
 
-		else if (viewID == mRefBaseEditText.getId()
-				|| viewID == mRefAbilityModEditText.getId()
-				|| viewID == mRefMagicModEditText.getId()
-				|| viewID == mRefMiscModEditText.getId()
-				|| viewID == mRefTempModEditText.getId()) {
+		else if (viewID == m_refBaseEditText.getId()
+				|| viewID == m_refAbilityModEditText.getId()
+				|| viewID == m_refMagicModEditText.getId()
+				|| viewID == m_refMiscModEditText.getId()
+				|| viewID == m_refTempModEditText.getId()) {
 			updateRef();
 			updateRefSaveViews();
 		}
 
-		else if (viewID == mWillBaseEditText.getId()
-				|| viewID == mWillAbilityModEditText.getId()
-				|| viewID == mWillMagicModEditText.getId()
-				|| viewID == mWillMiscModEditText.getId()
-				|| viewID == mWillTempModEditText.getId()) {
+		else if (viewID == m_willBaseEditText.getId()
+				|| viewID == m_willAbilityModEditText.getId()
+				|| viewID == m_willMagicModEditText.getId()
+				|| viewID == m_willMiscModEditText.getId()
+				|| viewID == m_willTempModEditText.getId()) {
 			updateWill();
 			updateWillSaveViews();
 		}
@@ -676,6 +613,21 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	@Override
 	public String getFragmentTitle() {
 		return getString(R.string.tab_character_combat_stats);
+	}
+
+	@Override
+	public void updateDatabase() {
+		m_statsRepo.update(m_combatStats);
+		PTSave[] saves = m_saveSet.getSaves();
+		for(PTSave save : saves) {
+			m_saveRepo.update(save);
+		}
+	}
+
+	@Override
+	public void loadFromDatabase() {
+		m_combatStats = m_statsRepo.query(getCurrentCharacterID());
+		m_saveSet = new PTSaveSet(m_saveRepo.querySet(getCurrentCharacterID()));
 	}
 
 }

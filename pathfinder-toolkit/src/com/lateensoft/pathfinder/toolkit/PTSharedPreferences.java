@@ -110,24 +110,6 @@ public class PTSharedPreferences {
 		return m_sharedPreferences.getString(key, defValue);
 	}
 	
-	
-	/**
-	 * Saves the ID of the currently selected character to SharedPreferences
-	 * @param characterID
-	 * @return true if the save was successful, false otherwise
-	 */
-	public boolean setSelectedCharacter(long characterID){
-		Log.i(TAG, "Selected character set to "+characterID);
-		return this.putLong(KEY_LONG_SELECTED_CHARACTER_ID, characterID);
-	}
-	
-	/**
-	 * @return The ID of the currently selected character. Returns -1 if no character is selected
-	 */
-	public long getSelectedCharacter(){
-		return this.getLong(KEY_LONG_SELECTED_CHARACTER_ID, -1);
-	}
-	
 	/**
 	 * Saves the current party in the encounter to shared prefs
 	 * @param encounterParty

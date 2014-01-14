@@ -282,7 +282,8 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)
 					[mRacesSpinner.getSelectedItemPosition()]);
 
-			PTSharedPreferences.getInstance().setSelectedCharacter(character.getID());
+			PTSharedPreferences.getInstance().putLong(
+					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
 			mSQLManager.updateCharacter(character);
 			((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 			break;
@@ -318,7 +319,8 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 				character.getFluff().setRace(r.getStringArray(R.array.races_array)
 						[mRacesSpinner.getSelectedItemPosition()]);
 				
-				PTSharedPreferences.getInstance().setSelectedCharacter(character.getID());
+				PTSharedPreferences.getInstance().putLong(
+						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
 				mSQLManager.updateCharacter(character);
 				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 				break;
