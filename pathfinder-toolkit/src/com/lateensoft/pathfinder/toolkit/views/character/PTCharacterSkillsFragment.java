@@ -98,6 +98,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 					updateSkillsList();
 				}
 				
+				m_skillRepo.update(m_skillSelectedForEdit);
 				m_skillSelectedForEdit = null;
 			}		
 			break;
@@ -160,11 +161,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	@Override
 	public void updateDatabase() {
-		// TODO optimize to update as needed
-		PTSkill[] skills = m_skillSet.getSkills();
-		for (PTSkill skill : skills) {
-			m_skillRepo.update(skill);
-		}
+		// Done in onActivityResult
 	}
 
 	@Override

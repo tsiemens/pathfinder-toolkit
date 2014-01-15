@@ -46,22 +46,11 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 		m_addButton = (Button) getRootView().findViewById(R.id.addSpell);
 		m_addButton.setOnClickListener(this);
 		
-		m_listView = new ListView(container.getContext());
-		setListViews(getRootView());
-		refreshSpellListView();
-		setonItemClickListeners();
+		m_listView = (ListView) getRootView().findViewById(R.id.spells);
+		m_listView.setOnItemClickListener(this);
 		
 		return getRootView();
 	}
-
-	private void setListViews(View fragmentView) {
-		m_listView = (ListView) fragmentView.findViewById(R.id.spells);
-	}
-
-	private void setonItemClickListeners() {
-		m_listView.setOnItemClickListener(this);
-	}
-
 
 	private void refreshSpellListView() {
 		

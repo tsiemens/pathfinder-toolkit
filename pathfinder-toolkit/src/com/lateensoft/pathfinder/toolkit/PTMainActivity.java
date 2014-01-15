@@ -7,11 +7,13 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -121,6 +124,7 @@ public class PTMainActivity extends Activity implements
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
 				invalidateOptionsMenu();
+				hideKeyboard();
 			}
 		};
 		m_drawerToggle.syncState();
@@ -330,5 +334,19 @@ public class PTMainActivity extends Activity implements
 		}
 		m_drawerLayout.closeDrawer(m_drawerList);	
 		return false;
+	}
+	
+	public void hideKeyboardDelayed(long delayMs) {
+		new Handler().postDelayed(new Runnable() {
+		    @Override
+		    public void run() {
+		    	hideKeyboard();
+		    }
+		 }, delayMs);
+	}
+	
+	public void hideKeyboard() {
+		InputMethodManager iMM = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		iMM.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
 }

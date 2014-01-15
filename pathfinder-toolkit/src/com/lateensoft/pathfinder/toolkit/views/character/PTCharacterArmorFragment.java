@@ -50,7 +50,6 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 		
 		m_listView = new ListView(container.getContext());
 		m_listView = (ListView) getRootView().findViewById(R.id.lvArmor);
-		refreshArmorListView();
 
 		m_listView.setOnItemClickListener(this);
 		

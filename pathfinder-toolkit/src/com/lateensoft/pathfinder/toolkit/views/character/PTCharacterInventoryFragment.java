@@ -31,8 +31,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	private EditText m_goldEditText;
 	private TextView m_totalWeightText;
 	
-	private int m_itemSelectedForEdit;
-	private View m_dummyView;
+	private int m_itemIndexSelectedForEdit;
 	
 	private PTCharacter m_character;
 	private PTItemRepository m_itemRepo;
@@ -51,8 +50,6 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		setRootView(inflater.inflate(R.layout.character_inventory_fragment, 
 				container, false));
 		
-		m_dummyView = (View) getRootView().findViewById(R.id.dummyView);
-		
 		m_addButton = (Button) getRootView().findViewById(R.id.buttonAddItem);
 		m_addButton.setOnClickListener(this);
 		
@@ -64,22 +61,17 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		m_itemsListView = (ListView) getRootView().findViewById(R.id.listViewInventory);
 		m_itemsListView.setOnItemClickListener(this);
 		
-		updateFragmentUI();
-		
 		return getRootView();
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		m_dummyView.requestFocus();
 	}
 
 	@Override
 	public void onPause() {
 		m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
-		/*InputMethodManager iMM = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromInputMethod(mGoldEditText.getWindowToken(), 0);*/
 		super.onPause();
 	}
 
@@ -100,13 +92,13 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 
 	//An items has been clicked in the list
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		m_itemSelectedForEdit = position;
+		m_itemIndexSelectedForEdit = position;
 		showItemEditor(m_character.getInventory().getItem(position));
 	}
 
 	//The add button was clicked
 	public void onClick(View view) {
-		m_itemSelectedForEdit = -1;
+		m_itemIndexSelectedForEdit = -1;
 		showItemEditor(null);
 	}
 	
@@ -124,17 +116,21 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		case Activity.RESULT_OK:
 			PTItem item = data.getExtras().getParcelable(
 					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add/edit item OK: " + item.getName());
-			if(m_itemSelectedForEdit < 0) {
-				Log.v(TAG, "Adding an item");
+			if(m_itemIndexSelectedForEdit < 0) {
+				Log.i(TAG, "Adding item "+item.getName());
 				if(item != null) {
-					m_character.getInventory().addItem(item);
+					item.setCharacterID(getCurrentCharacterID());
+					if (m_itemRepo.insert(item) != -1) {
+						m_character.getInventory().addItem(item);
+					}
 					refreshItemsListView();
 					updateTotalWeight();
 				}
 			} else {
-				Log.v(TAG, "Editing an item");
-				m_character.getInventory().setItem(item, m_itemSelectedForEdit);
+				Log.v(TAG, "Editing an item "+item.getName());
+				if (m_itemRepo.update(item) != 0) {
+					m_character.getInventory().setItem(item, m_itemIndexSelectedForEdit);
+				}
 				refreshItemsListView();
 				updateTotalWeight();
 			}
@@ -142,8 +138,11 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			break;
 		
 		case PTCharacterInventoryEditActivity.RESULT_DELETE:
-			Log.v(TAG, "Deleting an item");
-			m_character.getInventory().deleteItem(m_itemSelectedForEdit);
+			PTItem itemToDelete = m_character.getInventory().getItem(m_itemIndexSelectedForEdit);
+			Log.i(TAG, "Deleting item "+itemToDelete.getName());
+			if(itemToDelete != null && m_itemRepo.delete(itemToDelete) != 0 ) {
+				m_character.getInventory().deleteItem(m_itemIndexSelectedForEdit);
+			}
 			refreshItemsListView();
 			updateTotalWeight();
 			break;
@@ -178,12 +177,8 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 
 	@Override
 	public void updateDatabase() {
-		// TODO optimize by doing dynamically
-		PTItem[] items = m_character.getInventory().getItems();
-		for (PTItem item : items) {
-			m_itemRepo.update(item);
-			getCharacterRepo().update(m_character);
-		}
+		m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
+		getCharacterRepo().update(m_character);
 	}
 
 	@Override

@@ -50,7 +50,6 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 
 		m_featsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewFeats);
-		refreshFeatsListView();
 		m_featsListView.setOnItemClickListener(this);
 
 		return getRootView();

@@ -76,22 +76,32 @@ public class PTDatabase extends SQLiteOpenHelper {
 		return result;
 	}
 
+	/**
+	 * Updates table
+	 * @param table
+	 * @param values
+	 * @param whereClause
+	 * @return number of rows affected, 0 otherwise
+	 */
 	public int update(String table, ContentValues values, String whereClause) {
 		open();
-		int result = m_database.update(table, values, whereClause, null);
-		return result;
+		return m_database.update(table, values, whereClause, null);
 	}
 	
 	public long insert(String table, ContentValues values) {
 		open();
-		long result = m_database.insert(table, null, values);
-		return result;
+		return m_database.insert(table, null, values);
 	}
 	
+	/**
+	 * Performs delete on table
+	 * @param table
+	 * @param selector
+	 * @return the number of rows deleted, 0 otherwise
+	 */
 	public int delete(String table, String selector) {
 		open();
-		int result = m_database.delete(table, selector, null);
-		return result;
+		return m_database.delete(table, selector, null);
 	}
 	
 	public void create(String name, PTTableAttribute[] attributes) {

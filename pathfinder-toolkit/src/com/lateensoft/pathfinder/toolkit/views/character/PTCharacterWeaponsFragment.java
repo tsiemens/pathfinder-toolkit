@@ -40,7 +40,7 @@ OnClickListener, OnItemClickListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.v(TAG, "Starting onCreateView");
+		Log.d(TAG, "Starting onCreateView");
 		
 		setRootView(inflater.inflate(R.layout.character_weapon_fragment,
 				container, false));
@@ -50,11 +50,9 @@ OnClickListener, OnItemClickListener{
 		
 		m_listView = new ListView(container.getContext());
 		m_listView = (ListView) getRootView().findViewById(R.id.listViewWeapons);
-		refreshWeaponsListView();
 
 		m_listView.setOnItemClickListener(this);
 		
-		Log.v(TAG, "Finishing onCreateView");
 		return getRootView();
 	}
 
@@ -63,7 +61,7 @@ OnClickListener, OnItemClickListener{
 				R.layout.character_weapon_row,
 				m_inventory.getWeaponArray());
 		
-		Log.v(TAG, "Called refreshWeaponsListView");
+		Log.d(TAG, "Called refreshWeaponsListView");
 		
 		m_listView.setAdapter(adapter);
 	}
@@ -97,7 +95,7 @@ OnClickListener, OnItemClickListener{
 		case Activity.RESULT_OK:
 			PTWeapon weapon = data.getExtras().getParcelable(
 					PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add.edit weapon OK: " + weapon.getName());
+			Log.i(TAG, "Add.edit weapon OK: " + weapon.getName());
 			if(m_weaponSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a weapon");
 				if(weapon != null) {
@@ -113,7 +111,7 @@ OnClickListener, OnItemClickListener{
 			break;
 		
 		case PTCharacterWeaponEditActivity.RESULT_DELETE:
-			Log.v(TAG, "Deleting a weapon");
+			Log.i(TAG, "Deleting a weapon");
 			m_inventory.deleteWeapon(m_weaponSelectedForEdit);
 			refreshWeaponsListView();
 			break;
