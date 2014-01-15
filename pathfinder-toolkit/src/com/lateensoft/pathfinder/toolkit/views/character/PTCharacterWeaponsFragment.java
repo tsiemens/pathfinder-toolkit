@@ -99,21 +99,29 @@ OnClickListener, OnItemClickListener{
 			if(m_weaponSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a weapon");
 				if(weapon != null) {
-					m_inventory.addWeapon(weapon);
-					refreshWeaponsListView(); 
+					weapon.setCharacterID(getCurrentCharacterID());
+					if (m_weaponRepo.insert(weapon) != -1) {
+						m_inventory.addWeapon(weapon);
+						refreshWeaponsListView();
+					}
 				}
 			} else {
 				Log.v(TAG, "Editing a weapon");
-				m_inventory.setWeapon(weapon, m_weaponSelectedForEdit);
-				refreshWeaponsListView();
+				if (m_weaponRepo.update(weapon) != 0) {
+					m_inventory.setWeapon(weapon, m_weaponSelectedForEdit);
+					refreshWeaponsListView();
+				}
 			}
 			
 			break;
 		
 		case PTCharacterWeaponEditActivity.RESULT_DELETE:
 			Log.i(TAG, "Deleting a weapon");
-			m_inventory.deleteWeapon(m_weaponSelectedForEdit);
-			refreshWeaponsListView();
+			PTWeapon weaponToDelete = m_inventory.getWeapon(m_weaponSelectedForEdit);
+			if (weaponToDelete != null && m_weaponRepo.delete(weaponToDelete) != 0) {
+				m_inventory.deleteWeapon(m_weaponSelectedForEdit);
+				refreshWeaponsListView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:
@@ -138,11 +146,7 @@ OnClickListener, OnItemClickListener{
 
 	@Override
 	public void updateDatabase() {
-		// TODO optimize to update when needed
-		PTWeapon[] weapons = m_inventory.getWeaponArray();
-		for (PTWeapon weapon : weapons) {
-			m_weaponRepo.update(weapon);
-		}
+		// Done dynamically
 	}
 
 	@Override

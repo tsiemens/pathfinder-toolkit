@@ -122,17 +122,17 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 					item.setCharacterID(getCurrentCharacterID());
 					if (m_itemRepo.insert(item) != -1) {
 						m_character.getInventory().addItem(item);
+						refreshItemsListView();
+						updateTotalWeight();
 					}
-					refreshItemsListView();
-					updateTotalWeight();
 				}
 			} else {
 				Log.v(TAG, "Editing an item "+item.getName());
 				if (m_itemRepo.update(item) != 0) {
 					m_character.getInventory().setItem(item, m_itemIndexSelectedForEdit);
+					refreshItemsListView();
+					updateTotalWeight();
 				}
-				refreshItemsListView();
-				updateTotalWeight();
 			}
 			
 			break;
@@ -142,9 +142,9 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 			Log.i(TAG, "Deleting item "+itemToDelete.getName());
 			if(itemToDelete != null && m_itemRepo.delete(itemToDelete) != 0 ) {
 				m_character.getInventory().deleteItem(m_itemIndexSelectedForEdit);
+				refreshItemsListView();
+				updateTotalWeight();
 			}
-			refreshItemsListView();
-			updateTotalWeight();
 			break;
 		
 		case Activity.RESULT_CANCELED:

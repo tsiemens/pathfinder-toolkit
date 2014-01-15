@@ -99,21 +99,29 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 			if(m_armorSelectedForEdit < 0) {
 				Log.v(TAG, "Adding an armor");
 				if(armor != null) {
-					m_inventory.addArmor(armor);
-					refreshArmorListView(); 
+					armor.setCharacterID(getCurrentCharacterID());
+					if (m_armorRepo.insert(armor) != -1) {
+						m_inventory.addArmor(armor);
+						refreshArmorListView();
+					}
 				}
 			} else {
 				Log.v(TAG, "Editing an armor");
-				m_inventory.setArmor(armor, m_armorSelectedForEdit);
-				refreshArmorListView();
+				if (m_armorRepo.update(armor) != 0 ){
+					m_inventory.setArmor(armor, m_armorSelectedForEdit);
+					refreshArmorListView();
+				}
 			}
 			
 			break;
 		
 		case PTCharacterArmorEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an armor");
-			m_inventory.deleteArmor(m_armorSelectedForEdit);
-			refreshArmorListView();
+			PTArmor armorToDelete = m_inventory.getArmor(m_armorSelectedForEdit);
+			if (armorToDelete != null && m_armorRepo.delete(armorToDelete) != 0) {
+				m_inventory.deleteArmor(m_armorSelectedForEdit);
+				refreshArmorListView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:
@@ -138,11 +146,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 
 	@Override
 	public void updateDatabase() {
-		// TODO optimize to update when needed
-		PTArmor[] armors = m_inventory.getArmorArray();
-		for (PTArmor armor : armors) {
-			m_armorRepo.update(armor);
-		}
+		// Done dynamically
 	}
 
 	@Override

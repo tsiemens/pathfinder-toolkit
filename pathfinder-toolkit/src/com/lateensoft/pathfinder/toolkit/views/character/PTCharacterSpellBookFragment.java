@@ -96,21 +96,29 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 			if(m_spellSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a spell");
 				if(spell != null) {
-					m_spellBook.addSpell(spell);
-					refreshSpellListView(); 
+					spell.setCharacterID(getCurrentCharacterID());
+					if (m_spellRepo.insert(spell) != -1 ) {
+						m_spellBook.addSpell(spell);
+						refreshSpellListView(); 
+					}
 				}
 			} else {
 				Log.v(TAG, "Editing a spell");
-				m_spellBook.setSpell(m_spellSelectedForEdit, spell);
-				refreshSpellListView();
+				if (m_spellRepo.update(spell) != 0 ) {
+					m_spellBook.setSpell(m_spellSelectedForEdit, spell);
+					refreshSpellListView();
+				}
 			}
 			
 			break;
 		
 		case PTCharacterSpellEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a spell");
-			m_spellBook.deleteSpell(m_spellSelectedForEdit);
-			refreshSpellListView();
+			PTSpell spellToDelete = m_spellBook.getSpell(m_spellSelectedForEdit);
+			if (spellToDelete != null && m_spellRepo.delete(spellToDelete) != 0) {
+				m_spellBook.deleteSpell(m_spellSelectedForEdit);
+				refreshSpellListView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:
@@ -136,10 +144,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 
 	@Override
 	public void updateDatabase() {
-		PTSpell[] spells = m_spellBook.getSpells();
-		for(PTSpell spell : spells) {
-			m_spellRepo.update(spell);
-		}
+		// Done dynamically
 	}
 
 	@Override

@@ -90,27 +90,35 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTFeat item = data.getExtras().getParcelable(
+			PTFeat feat = data.getExtras().getParcelable(
 					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add/edit feat OK: " + item.getName());
+			Log.v(TAG, "Add/edit feat OK: " + feat.getName());
 			if(m_featSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a feat");
-				if(item != null) {
-					m_featList.addFeat(item);
-					refreshFeatsListView();
+				if(feat != null) {
+					feat.setCharacterID(getCurrentCharacterID());
+					if(m_featRepo.insert(feat) != -1) {
+						m_featList.addFeat(feat);
+						refreshFeatsListView();
+					}
 				}
 			} else {
 				Log.v(TAG, "Editing a feat");
-				m_featList.setFeat(item, m_featSelectedForEdit);
-				refreshFeatsListView();
+				if(m_featRepo.update(feat) != 0) {
+					m_featList.setFeat(feat, m_featSelectedForEdit);
+					refreshFeatsListView();
+				}
 			}
 			
 			break;
 		
 		case PTCharacterFeatEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
-			m_featList.deleteFeat(m_featSelectedForEdit);
-			refreshFeatsListView();
+			PTFeat featToDelete = m_featList.getFeat(m_featSelectedForEdit);
+			if(featToDelete != null && m_featRepo.delete(featToDelete) != 0) {
+				m_featList.deleteFeat(m_featSelectedForEdit);
+				refreshFeatsListView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:
@@ -135,10 +143,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 
 	@Override
 	public void updateDatabase() {
-		PTFeat[] feats = m_featList.getFeats();
-		for(PTFeat feat : feats) {
-			m_featRepo.update(feat);
-		}
+		// Done dynamically
 	}
 
 	@Override
