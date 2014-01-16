@@ -2,11 +2,9 @@ package com.lateensoft.pathfinder.toolkit.views.party;
 
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.R.drawable;
-import com.lateensoft.pathfinder.toolkit.R.id;
-import com.lateensoft.pathfinder.toolkit.R.layout;
-import com.lateensoft.pathfinder.toolkit.R.string;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyMemberRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
@@ -40,21 +38,25 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	private final int MENU_ITEM_DELETE_PARTY = 3;
 	private final int DIALOG_MODE_ADD_MEMBER = 4;
 
-	public PTParty mParty;
+	public PTParty m_party;
 
-	private PTDatabaseManager mSQLManager;
+	private int m_dialogMode;
+	private long m_partyIDSelectedInDialog;
 
-	private int mDialogMode;
-	private long mPartySelectedInDialog;
-
-	private EditText mPartyNameEditText;
-	private ListView mPartyMemberList;
+	private EditText m_partyNameEditText;
+	private ListView m_partyMemberList;
 	
-	private int m_partyMemberSelectedForEdit;
+	private int m_partyMemberIndexSelectedForEdit;
+	
+	private PTPartyRepository m_partyRepo;
+	private PTPartyMemberRepository m_memberRepo;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		m_partyRepo = new PTPartyRepository();
+		m_memberRepo = new PTPartyMemberRepository();
 	}
 
 	@Override
@@ -66,14 +68,12 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		setTitle(R.string.title_activity_party_manager);
 		setSubtitle(null);
 
-		mSQLManager = new PTDatabaseManager(getActivity());
-
-		mPartyNameEditText = (EditText) getRootView()
+		m_partyNameEditText = (EditText) getRootView()
 				.findViewById(R.id.editTextPartyName);
 
-		mPartyMemberList = (ListView) getRootView()
+		m_partyMemberList = (ListView) getRootView()
 				.findViewById(R.id.listViewPartyMembers);
-		mPartyMemberList.setOnItemClickListener(this);
+		m_partyMemberList.setOnItemClickListener(this);
 
 		loadCurrentParty();
 		return getRootView();
@@ -93,11 +93,26 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		long currentPartyID = PTSharedPreferences.getInstance().getLong(
 				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 
-		if (currentPartyID == -1) { // There was no current party set in shared
-									// prefs
+		if (currentPartyID == -1) {
+			// There was no current party set in shared prefs
 			addNewParty();
 		} else {
-			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
+			m_party = m_partyRepo.query(currentPartyID);
+			if (m_party == null) {
+				// Recovery for some kind of catastrophic failure.
+				IDNamePair[] ids = m_partyRepo.queryList();
+				for (int i = 0; i < ids.length; i++) {
+					m_party = m_partyRepo.query(ids[i].getID());
+					if (m_party != null) {
+						PTSharedPreferences.getInstance().putLong(
+								PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+						break;
+					}
+				}
+				if (m_party == null) {
+					addNewParty();
+				}
+			}
 			refreshPartyView();
 
 		}
@@ -107,9 +122,10 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 * Generates a new party and sets it to the current party.
 	 */
 	private void addNewParty() {
-		mParty = mSQLManager.addNewParty("New Party");
+		m_party = new PTParty("New Party");
+		m_partyRepo.insert(m_party);
 		PTSharedPreferences.getInstance().putLong(
-				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, mParty.getID());
+				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
 		refreshPartyView();
 	}
 
@@ -119,11 +135,11 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
-		long currentPartyID = mParty.getID();
-		int partyIDs[] = mSQLManager.getPartyIDs();
+		long currentPartyID = m_party.getID();
+		IDNamePair[] partyIDs = m_partyRepo.queryList();
 
 		for (int i = 0; i < partyIDs.length; i++) {
-			if (currentPartyID == partyIDs[i])
+			if (currentPartyID == partyIDs[i].getID())
 				currentPartyIndex = i;
 		}
 
@@ -131,28 +147,28 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
 			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[1]);
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[1].getID());
 			loadCurrentParty();
 		} else {
 			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[0]);
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[0].getID());
 			loadCurrentParty();
 		}
 
-		mSQLManager.deleteParty(Long.valueOf(currentPartyID).intValue());
+		m_partyRepo.delete(currentPartyID);
 	}
 
 	private void updateDatabase() {
-		mParty.setName(mPartyNameEditText.getText().toString());
-		mSQLManager.updateParty(mParty);
+		m_party.setName(m_partyNameEditText.getText().toString());
+		m_partyRepo.update(m_party);
 	}
 
 	private void refreshPartyView() {
-		mPartyNameEditText.setText(mParty.getName());
-		String[] memberNames = mParty.getPartyMemberNames();
+		m_partyNameEditText.setText(m_party.getName());
+		String[] memberNames = m_party.getPartyMemberNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, memberNames);
-		mPartyMemberList.setAdapter(adapter);
+		m_partyMemberList.setAdapter(adapter);
 	}
 
 	@Override
@@ -162,21 +178,21 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 
 		switch (item.getItemId()) {
 		case MENU_ITEM_PARTY_LIST: // Tapped party list button
-			mDialogMode = MENU_ITEM_PARTY_LIST;
+			m_dialogMode = MENU_ITEM_PARTY_LIST;
 			showPartyDialog();
 			break;
 		case MENU_ITEM_ADD_MEMBER:
-			mDialogMode = DIALOG_MODE_ADD_MEMBER;
+			m_dialogMode = DIALOG_MODE_ADD_MEMBER;
 			showPartyDialog();
 			break;
 		case MENU_ITEM_NEW_PARTY:
 			// Add new party
-			mDialogMode = MENU_ITEM_NEW_PARTY;
+			m_dialogMode = MENU_ITEM_NEW_PARTY;
 			showPartyDialog();
 			break;
 		case MENU_ITEM_DELETE_PARTY:
 			// Delete party
-			mDialogMode = MENU_ITEM_DELETE_PARTY;
+			m_dialogMode = MENU_ITEM_DELETE_PARTY;
 			showPartyDialog();
 			break;
 		}
@@ -211,20 +227,20 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	}
 
 	private void showPartyDialog() {
-		mPartySelectedInDialog = mParty.getID(); // actual current party
+		m_partyIDSelectedInDialog = m_party.getID(); // actual current party
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_PARTY_LIST:
 			builder.setTitle("Select Party");
 
-			String[] partyList = mSQLManager.getPartyNames();
-			int partyIDs[] = mSQLManager.getPartyIDs();
+			IDNamePair[] partyIDs = m_partyRepo.queryList();
+			String[] partyList = IDNamePair.toNameArray(partyIDs);
 			int currentPartyIndex = 0;
 
 			for (int i = 0; i < partyIDs.length; i++) {
-				if (mPartySelectedInDialog == partyIDs[i])
+				if (m_partyIDSelectedInDialog == partyIDs[i].getID())
 					currentPartyIndex = i;
 			}
 
@@ -244,7 +260,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			builder.setTitle(getString(R.string.menu_item_delete_party));
 			builder.setMessage(
 					getString(R.string.delete_character_dialog_message_1)
-							+ mParty.getName()
+							+ m_party.getName()
 							+ getString(R.string.delete_character_dialog_message_2))
 					.setPositiveButton(R.string.delete_button_text, this)
 					.setNegativeButton(R.string.cancel_button_text, this);
@@ -273,7 +289,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			break;
 		default:
 			// Set the currently selected party in the dialog
-			mPartySelectedInDialog = mSQLManager.getPartyIDs()[selection];
+			m_partyIDSelectedInDialog = m_partyRepo.queryList()[selection].getID();
 			break;
 
 		}
@@ -283,14 +299,14 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 * Called when dialog positive button is tapped
 	 */
 	private void performPositiveDialogAction() {
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_PARTY_LIST:
 			// Check if "currently selected" party is the same as saved one
-			if (mPartySelectedInDialog != mParty.getID()) {
+			if (m_partyIDSelectedInDialog != m_party.getID()) {
 				updateDatabase(); // Ensures any data changed on the party
 										// in the current fragment is saved
 				PTSharedPreferences.getInstance().putLong(
-						PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, mPartySelectedInDialog);
+						PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, m_partyIDSelectedInDialog);
 				loadCurrentParty();
 			}
 			break;
@@ -305,7 +321,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			break;
 
 		case DIALOG_MODE_ADD_MEMBER:
-			m_partyMemberSelectedForEdit = -1;
+			m_partyMemberIndexSelectedForEdit = -1;
 			showPartyMemberEditor(null);
 			break;
 
@@ -317,8 +333,8 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		m_partyMemberSelectedForEdit = position;
-		showPartyMemberEditor(mParty.getPartyMember(position));
+		m_partyMemberIndexSelectedForEdit = position;
+		showPartyMemberEditor(m_party.getPartyMember(position));
 
 	}
 
@@ -337,24 +353,31 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			PTPartyMember member = data.getExtras().getParcelable(
 					PTPartyMemberEditorActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Add/edit member OK: " + member.getName());
-			if(m_partyMemberSelectedForEdit < 0) {
+			if(m_partyMemberIndexSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a member");
 				if(member != null) {
-					mParty.addPartyMember(member);
-					refreshPartyView(); 
+					member.setPartyID(m_party.getID());
+					if (m_memberRepo.insert(member) != -1) {
+						m_party.addPartyMember(member);
+						refreshPartyView(); 
+					}
 				}
 			} else {
 				Log.v(TAG, "Editing a member");
-				mParty.setPartyMember(m_partyMemberSelectedForEdit, member);
-				refreshPartyView();
+				if (m_memberRepo.update(member) != 0) {
+					m_party.setPartyMember(m_partyMemberIndexSelectedForEdit, member);
+					refreshPartyView();
+				}
 			}
 			
 			break;
 		
 		case PTPartyMemberEditorActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a member");
-			mParty.deletePartyMember(m_partyMemberSelectedForEdit);
-			refreshPartyView();
+			if (m_memberRepo.delete(m_party.getPartyMember(m_partyMemberIndexSelectedForEdit)) != 0) {
+				m_party.deletePartyMember(m_partyMemberIndexSelectedForEdit);
+				refreshPartyView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:

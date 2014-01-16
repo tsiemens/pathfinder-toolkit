@@ -2,12 +2,10 @@ package com.lateensoft.pathfinder.toolkit.views.party;
 
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.R.drawable;
-import com.lateensoft.pathfinder.toolkit.R.id;
-import com.lateensoft.pathfinder.toolkit.R.layout;
-import com.lateensoft.pathfinder.toolkit.R.string;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PTPartyRollAdapter;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyMemberRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
@@ -39,21 +37,25 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	private static final int MENU_ITEM_RESET = 0;
 	private static final int MENU_ITEM_ADD_MEMBER = 1;
 
-	public PTParty mParty;
+	public PTParty m_party;
 
-	private PTDatabaseManager mSQLManager;
+	private int m_dialogMode;
+	private boolean m_hasRolled;
 
-	private int mDialogMode;
-	private boolean mHasRolled;
-
-	private Button mRollInitiativeButton;
-	private ListView mPartyMemberList;
+	private Button m_rollInitiativeButton;
+	private ListView m_partyMemberList;
 	
 	private int m_partyMemberSelectedForEdit;
+	
+	private PTPartyRepository m_partyRepo;
+	private PTPartyMemberRepository m_memberRepo;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		m_partyRepo = new PTPartyRepository();
+		m_memberRepo = new PTPartyMemberRepository();
 	}
 	
 	@Override
@@ -63,24 +65,16 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		setRootView(inflater.inflate(R.layout.fragment_initiative_tracker, container, false));
 		setTitle(R.string.title_activity_initiative_tracker);
 
-		mSQLManager = new PTDatabaseManager(getActivity());
+		m_rollInitiativeButton = (Button) getRootView().findViewById(R.id.buttonRollInitiative);
+		m_rollInitiativeButton.setOnClickListener(this);
 
-		mRollInitiativeButton = (Button) getRootView().findViewById(R.id.buttonRollInitiative);
-		mRollInitiativeButton.setOnClickListener(this);
+		m_partyMemberList = (ListView) getRootView().findViewById(R.id.listViewEncounterMembers);
+		m_partyMemberList.setOnItemClickListener(this);
 
-		mPartyMemberList = (ListView) getRootView().findViewById(R.id.listViewEncounterMembers);
-		mPartyMemberList.setOnItemClickListener(this);
-
-		mHasRolled = false;
+		m_hasRolled = false;
 		
 		loadEncounterParty();
 		return getRootView();
-	}
-	
-	@Override
-	public void onPause() {
-		updateDatabase();
-		super.onPause();
 	}
 
 	@Override
@@ -88,11 +82,11 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 		switch (item.getItemId()) {
 		case MENU_ITEM_RESET: // Tapped party list button
-			mDialogMode = MENU_ITEM_RESET;
+			m_dialogMode = MENU_ITEM_RESET;
 			showPartyDialog();
 			break;
 		case MENU_ITEM_ADD_MEMBER:
-			mDialogMode = MENU_ITEM_ADD_MEMBER;
+			m_dialogMode = MENU_ITEM_ADD_MEMBER;
 			showPartyDialog();
 			break;
 		}
@@ -121,7 +115,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_RESET:
 			builder.setTitle(getString(R.string.reset_encounter_dialog_title));
 			builder.setMessage(getString(R.string.reset_encounter_dialog_text))
@@ -162,7 +156,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * Called when dialog positive button is tapped
 	 */
 	private void performPositiveDialogAction() {
-		switch (mDialogMode) {
+		switch (m_dialogMode) {
 		case MENU_ITEM_RESET:
 			resetPartyRolls();
 			break;
@@ -182,18 +176,19 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * there is not current party, an empty party is set
 	 */
 	private void loadEncounterParty() {
-		PTParty currentEncounterParty = PTSharedPreferences.getInstance().getEncounterParty();
+		PTParty currentEncounterParty = m_partyRepo.queryEncounterParty();
 		// If there is no saved encounter party, get from party manager
 		// Also, if the encounter party was saved, but previously was empty, get
 		// from party manager.
 		if (currentEncounterParty == null || currentEncounterParty.size() == 0) {
 			loadDefaultParty();
 		} else {
-			mParty = currentEncounterParty;
-			mHasRolled = false;
-			for (int i = 0; i < mParty.size(); i++)
-				if (mParty.getPartyMember(i).getLastRolledValue() != 0)
-					mHasRolled = true;
+			m_party = currentEncounterParty;
+			m_hasRolled = false;
+			for (int i = 0; i < m_party.size(); i++)
+				if (m_party.getPartyMember(i).getLastRolledValue() != 0) {
+					m_hasRolled = true;
+				}
 
 			refreshPartyView();
 		}
@@ -202,33 +197,49 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	private void loadDefaultParty() {
 		long currentPartyID = PTSharedPreferences.getInstance().getLong(
 				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
-		if (currentPartyID >= 0)
-			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
-		else
-			mParty = new PTParty("Empty Party");
-		updateDatabase();
-		mHasRolled = false;
+		PTParty defaultParty = null;
+		if (currentPartyID > 0) {
+			defaultParty = m_partyRepo.query(currentPartyID);
+		} 
+		
+		if(defaultParty != null && defaultParty.size() > 0) {
+			PTParty currentEncParty = m_partyRepo.queryEncounterParty();
+			if (currentEncParty != null) {
+				m_partyRepo.delete(currentEncParty.getID());
+			}
+			// Make a copy, but only if there are members in it
+			defaultParty.setID(PTStorable.UNSET_ID);
+			for (int i = 0; i < defaultParty.size(); i++) {
+				defaultParty.getPartyMember(i).setID(PTStorable.UNSET_ID);
+			}
+			m_partyRepo.insert(defaultParty, true);
+		} else {
+			defaultParty = new PTParty("New Party");
+		}
+	
+		m_party = defaultParty;
+		m_hasRolled = false;
 		refreshPartyView();
 	}
 
 	private void resetPartyRolls() {
-		for (int i = 0; i < mParty.size(); i++) {
-			mParty.getPartyMember(i).setLastRolledValue(0);
+		for (int i = 0; i < m_party.size(); i++) {
+			m_party.getPartyMember(i).setLastRolledValue(0);
 		}
 		updateDatabase();
-		mHasRolled = false;
+		m_hasRolled = false;
 		refreshPartyView();
 	}
 
 	private void refreshPartyView() {
-		String[] memberNames = mParty.getNamesByRollValue();
-		int[] memberRollValues = mParty.getRollValuesByRollValue();
+		String[] memberNames = m_party.getNamesByRollValue();
+		int[] memberRollValues = m_party.getRollValuesByRollValue();
 		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(),
 				R.layout.party_roll_row, memberNames, memberRollValues, null);
-		mPartyMemberList.setAdapter(adapter);
-		mRollInitiativeButton.setEnabled(!mHasRolled);
+		m_partyMemberList.setAdapter(adapter);
+		m_rollInitiativeButton.setEnabled(!m_hasRolled);
 		setTitle(R.string.title_activity_initiative_tracker);
-		setSubtitle(mParty.getName());
+		setSubtitle(m_party.getName());
 	}
 
 	/**
@@ -255,21 +266,34 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 			if(m_partyMemberSelectedForEdit < 0) {
 				Log.v(TAG, "Adding a member");
 				if(member != null) {
-					mParty.addPartyMember(member);
+					if (m_party.getID() == PTStorable.UNSET_ID) {
+						// Party has not yet been added to database
+						m_party.addPartyMember(member);
+						m_partyRepo.insert(m_party);
+					} else {
+						member.setPartyID(m_party.getID());
+						if (m_memberRepo.insert(member) != -1) {
+							m_party.addPartyMember(member);
+						}
+					}
 					refreshPartyView(); 
 				}
 			} else {
 				Log.v(TAG, "Editing a member");
-				mParty.setPartyMember(m_partyMemberSelectedForEdit, member);
-				refreshPartyView();
+				if (m_memberRepo.update(member) != 0) {
+					m_party.setPartyMember(m_partyMemberSelectedForEdit, member);
+					refreshPartyView();
+				}
 			}
 			
 			break;
 		
 		case PTPartyMemberEditorActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a member");
-			mParty.deletePartyMember(m_partyMemberSelectedForEdit);
-			refreshPartyView();
+			if (m_memberRepo.delete(m_party.getPartyMember(m_partyMemberSelectedForEdit)) != 0) {
+				m_party.deletePartyMember(m_partyMemberSelectedForEdit);
+				refreshPartyView();
+			}
 			break;
 		
 		case Activity.RESULT_CANCELED:
@@ -278,7 +302,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		default:
 			break;
 		}
-		updateDatabase();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -288,13 +311,13 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		PTDiceSet diceSet = new PTDiceSet();
 		int initiativeMod;
 
-		for (int i = 0; i < mParty.size(); i++) {
-			initiativeMod = mParty.getPartyMember(i).getInitiative();
-			mParty.getPartyMember(i).setLastRolledValue(
+		for (int i = 0; i < m_party.size(); i++) {
+			initiativeMod = m_party.getPartyMember(i).getInitiative();
+			m_party.getPartyMember(i).setLastRolledValue(
 					diceSet.singleRoll(20) + initiativeMod);
 		}
 		updateDatabase();
-		mHasRolled = true;
+		m_hasRolled = true;
 		loadEncounterParty();
 	}
 
@@ -302,13 +325,15 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		m_partyMemberSelectedForEdit = mParty
+		m_partyMemberSelectedForEdit = m_party
 				.getPartyMemberIndexByRollValueIndex(position);
-		showPartyMemberEditor(mParty.getPartyMember(m_partyMemberSelectedForEdit));
+		showPartyMemberEditor(m_party.getPartyMember(m_partyMemberSelectedForEdit));
 
 	}
 	
 	private void updateDatabase() {
-		PTSharedPreferences.getInstance().setEncounterParty(mParty);
+		for (int i = 0; i < m_party.size(); i++) {
+			m_memberRepo.update(m_party.getPartyMember(i));
+		}
 	}
 }

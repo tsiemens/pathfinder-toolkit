@@ -263,9 +263,15 @@ public class PTParty implements Parcelable, PTStorable {
 		return m_partyMembers.size();
 	}
 	
+	/**
+	 * Sets ID and IDs of all members
+	 */
 	@Override
 	public void setID(long id) {
 		m_id = id;
+		for (PTPartyMember member : m_partyMembers) {
+			member.setPartyID(id);
+		}
 	}
 
 	@Override

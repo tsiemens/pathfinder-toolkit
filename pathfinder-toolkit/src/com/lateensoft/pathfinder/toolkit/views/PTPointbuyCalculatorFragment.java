@@ -14,21 +14,22 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.R.array;
-import com.lateensoft.pathfinder.toolkit.R.id;
-import com.lateensoft.pathfinder.toolkit.R.integer;
-import com.lateensoft.pathfinder.toolkit.R.layout;
-import com.lateensoft.pathfinder.toolkit.R.string;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityScoreRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTFluffInfoRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityModSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySetCalc;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
 
@@ -47,24 +48,42 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	
 	static final int CUSTOM_RACE_INDEX = 7;
 	
-	PTAbilitySetCalc mAbilitySet;
-	PTAbilityModSet mRacialModSet;
-	HumanRaceModSelectedListener mHumanRaceListener;
-	boolean isHuman;
+	private PTAbilitySetCalc m_abilitySet;
+	private PTAbilityModSet m_racialModSet;
+	private HumanRaceModSelectedListener m_humanRaceListener;
+	private boolean m_isHuman;
 	
-	Spinner mRacesSpinner;
+	private Button m_strIncBtn;
+	private Button m_strDecBtn;
+	private Button m_dexIncBtn;
+	private Button m_dexDecBtn;
+	private Button m_conIncBtn;
+	private Button m_conDecBtn;
+	private Button m_intIncBtn;
+	private Button m_intDecBtn;
+	private Button m_wisIncBtn;
+	private Button m_wisDecBtn;
+	private Button m_chaIncBtn;
+	private Button m_chaDecBtn;
 	
-	Spinner mDialogStrSpinner;
-	Spinner mDialogDexSpinner;
-	Spinner mDialogConSpinner;
-	Spinner mDialogIntSpinner;
-	Spinner mDialogWisSpinner;
-	Spinner mDialogChaSpinner;
+	private Spinner m_racesSpinner;
 	
-	PTDatabaseManager mSQLManager;
+	private Spinner m_dialogStrSpinner;
+	private Spinner m_dialogDexSpinner;
+	private Spinner m_dialogConSpinner;
+	private Spinner m_dialogIntSpinner;
+	private Spinner m_dialogWisSpinner;
+	private Spinner m_dialogChaSpinner;
+	
+	private PTCharacterRepository m_characterRepo;
+	private PTFluffInfoRepository m_fluffRepo;
+	private PTAbilityScoreRepository m_abilityRepo;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_characterRepo = new PTCharacterRepository();
+		m_fluffRepo = new PTFluffInfoRepository();
+		m_abilityRepo = new PTAbilityScoreRepository();
 	}
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,33 +93,60 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		setTitle(R.string.title_activity_ability_calc);
 		setSubtitle(null);
 
-		isHuman = true;
+		m_isHuman = true;
+
+		IncDecButtonListener buttonListener = new IncDecButtonListener();
 		
-		mAbilitySet = new PTAbilitySetCalc();
-		mRacialModSet = new PTAbilityModSet();
-		
-		mRacesSpinner = (Spinner) getRootView().findViewById(R.id.races_spinner);
+		m_strIncBtn = (Button) getRootView().findViewById(R.id.btnIncStr);
+		m_strIncBtn.setOnClickListener(buttonListener);
+		m_strDecBtn = (Button) getRootView().findViewById(R.id.btnDecStr);
+		m_strDecBtn.setOnClickListener(buttonListener);
+		m_dexIncBtn = (Button) getRootView().findViewById(R.id.btnIncDex);
+		m_dexIncBtn.setOnClickListener(buttonListener);
+		m_dexDecBtn = (Button) getRootView().findViewById(R.id.btnDecDex);
+		m_dexDecBtn.setOnClickListener(buttonListener);
+		m_conIncBtn = (Button) getRootView().findViewById(R.id.btnIncCon);
+		m_conIncBtn.setOnClickListener(buttonListener);
+		m_conDecBtn = (Button) getRootView().findViewById(R.id.btnDecCon);
+		m_conDecBtn.setOnClickListener(buttonListener);
+		m_intIncBtn = (Button) getRootView().findViewById(R.id.btnIncInt);
+		m_intIncBtn.setOnClickListener(buttonListener);
+		m_intDecBtn = (Button) getRootView().findViewById(R.id.btnDecInt);
+		m_intDecBtn.setOnClickListener(buttonListener);
+		m_wisIncBtn = (Button) getRootView().findViewById(R.id.btnIncWis);
+		m_wisIncBtn.setOnClickListener(buttonListener);
+		m_wisDecBtn = (Button) getRootView().findViewById(R.id.btnDecWis);
+		m_wisDecBtn.setOnClickListener(buttonListener);
+		m_chaIncBtn = (Button) getRootView().findViewById(R.id.btnIncCha);
+		m_chaIncBtn.setOnClickListener(buttonListener);
+		m_chaDecBtn = (Button) getRootView().findViewById(R.id.btnDecCha);
+		m_chaDecBtn.setOnClickListener(buttonListener);
+
+		m_abilitySet = new PTAbilitySetCalc();
+		m_racialModSet = new PTAbilityModSet();
+
+		m_racesSpinner = (Spinner) getRootView().findViewById(R.id.races_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-		        R.array.races_array, android.R.layout.simple_spinner_item);
+				R.array.races_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		// Apply the adapter to the spinner
-		mRacesSpinner.setAdapter(adapter);
-		mRacesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());
-		
-		mHumanRaceListener = new HumanRaceModSelectedListener();
-		getRootView().findViewById(R.id.raceStr).setOnClickListener(mHumanRaceListener);
-		getRootView().findViewById(R.id.raceDex).setOnClickListener(mHumanRaceListener);
-		getRootView().findViewById(R.id.raceCon).setOnClickListener(mHumanRaceListener);
-		getRootView().findViewById(R.id.raceInt).setOnClickListener(mHumanRaceListener);
-		getRootView().findViewById(R.id.raceWis).setOnClickListener(mHumanRaceListener);
-		getRootView().findViewById(R.id.raceCha).setOnClickListener(mHumanRaceListener);
-		
+		m_racesSpinner.setAdapter(adapter);
+		m_racesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());
+
+		m_humanRaceListener = new HumanRaceModSelectedListener();
+		getRootView().findViewById(R.id.raceStr).setOnClickListener(m_humanRaceListener);
+		getRootView().findViewById(R.id.raceDex).setOnClickListener(m_humanRaceListener);
+		getRootView().findViewById(R.id.raceCon).setOnClickListener(m_humanRaceListener);
+		getRootView().findViewById(R.id.raceInt).setOnClickListener(m_humanRaceListener);
+		getRootView().findViewById(R.id.raceWis).setOnClickListener(m_humanRaceListener);
+		getRootView().findViewById(R.id.raceCha).setOnClickListener(m_humanRaceListener);
+
 		for(int i = 0; i < NUM_ABILITIES; i++) {
-			updateInterfaceAbility(i);
+			updateAbilityViews(i);
 		}
-		updateInterfaceRaceMods();
-		
+		updateRaceModsColumn();
+
 		return getRootView();
 	}
 	
@@ -120,20 +166,20 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		return true;
 	}
 	
-	public class RaceItemSelectedListener implements OnItemSelectedListener {
+	private class RaceItemSelectedListener implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View view, 
 		        int pos, long id) {
 		    // An item was selected. You can retrieve the selected item using
 		    // parent.getItemAtPosition(pos)
 			if(parent.getSelectedItemPosition() != CUSTOM_RACE_INDEX) {
-				isHuman = mRacialModSet.setRacialMods((int) parent.getSelectedItemId(),
+				m_isHuman = m_racialModSet.setRacialMods((int) parent.getSelectedItemId(),
 						getActivity());
 			
-				mAbilitySet.applyMods(mRacialModSet);
+				m_abilitySet.applyMods(m_racialModSet);
 				
-				updateInterfaceRaceMods();
+				updateRaceModsColumn();
 				for(int i = 0; i < NUM_ABILITIES; i++) {
-					updateInterfaceAbility(i);
+					updateAbilityViews(i);
 				}
 			} else {
 				// Custom race
@@ -152,19 +198,19 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
 		View dialogView = inflater.inflate(R.layout.calculator_custom_race_dialog, null);
-		mDialogStrSpinner = (Spinner) dialogView.findViewById(R.id.spCustomStrMod);
-		mDialogDexSpinner = (Spinner) dialogView.findViewById(R.id.spCustomDexMod);
-		mDialogConSpinner = (Spinner) dialogView.findViewById(R.id.spCustomConMod);
-		mDialogIntSpinner = (Spinner) dialogView.findViewById(R.id.spCustomIntMod);
-		mDialogWisSpinner = (Spinner) dialogView.findViewById(R.id.spCustomWisMod);
-		mDialogChaSpinner = (Spinner) dialogView.findViewById(R.id.spCustomChaMod);
+		m_dialogStrSpinner = (Spinner) dialogView.findViewById(R.id.spCustomStrMod);
+		m_dialogDexSpinner = (Spinner) dialogView.findViewById(R.id.spCustomDexMod);
+		m_dialogConSpinner = (Spinner) dialogView.findViewById(R.id.spCustomConMod);
+		m_dialogIntSpinner = (Spinner) dialogView.findViewById(R.id.spCustomIntMod);
+		m_dialogWisSpinner = (Spinner) dialogView.findViewById(R.id.spCustomWisMod);
+		m_dialogChaSpinner = (Spinner) dialogView.findViewById(R.id.spCustomChaMod);
 		
-		setupCustomRaceSpinner(mDialogStrSpinner);
-		setupCustomRaceSpinner(mDialogDexSpinner);
-		setupCustomRaceSpinner(mDialogConSpinner);
-		setupCustomRaceSpinner(mDialogIntSpinner);
-		setupCustomRaceSpinner(mDialogWisSpinner);
-		setupCustomRaceSpinner(mDialogChaSpinner);
+		setupCustomRaceSpinner(m_dialogStrSpinner);
+		setupCustomRaceSpinner(m_dialogDexSpinner);
+		setupCustomRaceSpinner(m_dialogConSpinner);
+		setupCustomRaceSpinner(m_dialogIntSpinner);
+		setupCustomRaceSpinner(m_dialogWisSpinner);
+		setupCustomRaceSpinner(m_dialogChaSpinner);
 		
 		onCustomRaceModSetListener customRaceModSetListener = new onCustomRaceModSetListener();
 		
@@ -176,17 +222,17 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		alert.show();
 	}
 	
-	public class onCustomRaceModSetListener implements DialogInterface.OnClickListener {
+	private class onCustomRaceModSetListener implements DialogInterface.OnClickListener {
 		public void onClick(DialogInterface dialogInterface, int selection) {
-			mRacialModSet = getRacialModSetFromDialog();
+			m_racialModSet = getRacialModSetFromDialog();
 			
-			isHuman = false;
+			m_isHuman = false;
 		
-			mAbilitySet.applyMods(mRacialModSet);
+			m_abilitySet.applyMods(m_racialModSet);
 			
-			updateInterfaceRaceMods();
+			updateRaceModsColumn();
 			for(int i = 0; i < NUM_ABILITIES; i++) {
-				updateInterfaceAbility(i);
+				updateAbilityViews(i);
 			}
 		}
 	}
@@ -197,12 +243,12 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		Resources r = getResources();
 		int offset = r.getInteger(R.integer.calc_custom_option_offset);
 				
-		mods[STR_KEY] = mDialogStrSpinner.getSelectedItemPosition() - offset;
-		mods[DEX_KEY] = mDialogDexSpinner.getSelectedItemPosition() - offset;
-		mods[CON_KEY] = mDialogConSpinner.getSelectedItemPosition() - offset;
-		mods[INT_KEY] = mDialogIntSpinner.getSelectedItemPosition() - offset;
-		mods[WIS_KEY] = mDialogWisSpinner.getSelectedItemPosition() - offset;
-		mods[CHA_KEY] = mDialogChaSpinner.getSelectedItemPosition() - offset;
+		mods[STR_KEY] = m_dialogStrSpinner.getSelectedItemPosition() - offset;
+		mods[DEX_KEY] = m_dialogDexSpinner.getSelectedItemPosition() - offset;
+		mods[CON_KEY] = m_dialogConSpinner.getSelectedItemPosition() - offset;
+		mods[INT_KEY] = m_dialogIntSpinner.getSelectedItemPosition() - offset;
+		mods[WIS_KEY] = m_dialogWisSpinner.getSelectedItemPosition() - offset;
+		mods[CHA_KEY] = m_dialogChaSpinner.getSelectedItemPosition() - offset;
 		
 		PTAbilityModSet racialModSet = new PTAbilityModSet();
 		racialModSet.setMods(mods);
@@ -221,79 +267,76 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		spinner.setSelection(r.getInteger(R.integer.calc_custom_option_offset));
 	}
 
-	public class HumanRaceModSelectedListener implements OnClickListener {
+	private class HumanRaceModSelectedListener implements OnClickListener {
 		public void onClick(View v) {
 			Resources r = getResources();
 			int id = v.getId();
 			
-			if(isHuman == false) {
+			if(m_isHuman == false) {
 				return;
 			}
 			
 			switch (id) {
 			case R.id.raceStr:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_strength), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_strength), 
 						getActivity());
 				break;
 			case R.id.raceDex:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_dexterity), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_dexterity), 
 						getActivity());
 				break;
 			case R.id.raceCon:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_constitution), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_constitution), 
 						getActivity());
 				break;
 			case R.id.raceInt:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_intelligence), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_intelligence), 
 						getActivity());
 				break;
 			case R.id.raceWis:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_wisdom), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_wisdom), 
 						getActivity());
 				break;
 			case R.id.raceCha:
-				mRacialModSet.setHumanRacialMods(r.getInteger(R.integer.key_charisma), 
+				m_racialModSet.setHumanRacialMods(r.getInteger(R.integer.key_charisma), 
 						getActivity());
 				break;
 			}
 			
-			mAbilitySet.applyMods(mRacialModSet);
-			updateInterfaceRaceMods();
+			m_abilitySet.applyMods(m_racialModSet);
+			updateRaceModsColumn();
 			for(int i = 0; i < NUM_ABILITIES; i++) {
-				updateInterfaceAbility(i);
+				updateAbilityViews(i);
 			}
 		}
 		
-		public void onNothingSelected(AdapterView<?> parent) {
-			//deerrrr
-		}
-
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		mSQLManager = new PTDatabaseManager(getActivity());
 
 		switch (item.getItemId()) {
 		case MENU_ITEM_EXPORT_TO_NEW:
-			PTCharacter character = mSQLManager.addNewCharacter("From calc", getActivity());
-			character.setAbilitySet(mAbilitySet.getAbilitySetPostMods());
+			PTCharacter character = new PTCharacter("From calc", getActivity());
+			character.setAbilitySet(m_abilitySet.getAbilitySetPostMods());
 			Resources r = getResources();
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)
-					[mRacesSpinner.getSelectedItemPosition()]);
+					[m_racesSpinner.getSelectedItemPosition()]);
 
-			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
-			mSQLManager.updateCharacter(character);
-			((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
+			if (m_characterRepo.insert(character) != -1) {
+				PTSharedPreferences.getInstance().putLong(
+						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
+				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
+			}
 			break;
 		case MENU_ITEM_EXPORT_TO_EXISTING:
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(getString(R.string.select_character_dialog_header));
-			String[] characterList = mSQLManager.getCharacterNames();
+			IDNamePair[] characterIDs = m_characterRepo.queryList();
+			String[] characterList = IDNamePair.toNameArray(characterIDs);
 
 			onCharacterExportSelectListener exportListener = 
-					new onCharacterExportSelectListener();
+					new onCharacterExportSelectListener(characterIDs);
 
 			builder.setSingleChoiceItems(characterList, -1,
 					exportListener).setPositiveButton(R.string.ok_button_text, exportListener)
@@ -307,37 +350,47 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		return true;
 	}
 
-	public class onCharacterExportSelectListener implements DialogInterface.OnClickListener {
-		int mCharacterSelectedInDialog;
+	private class onCharacterExportSelectListener implements DialogInterface.OnClickListener {
+		long _characterSelectedInDialog;
+		IDNamePair[] _characterList;
+		
+		public onCharacterExportSelectListener(IDNamePair[] characterIds) {
+			_characterList = characterIds;
+		}
 		
 		public void onClick(DialogInterface dialogInterface, int selection) {
 			switch (selection) {
 			case DialogInterface.BUTTON_POSITIVE:
-				PTCharacter character = mSQLManager.getCharacter(mCharacterSelectedInDialog);
-				character.setAbilitySet(mAbilitySet.getAbilitySetPostMods());
+				PTFluffInfo fluff = m_fluffRepo.query(_characterSelectedInDialog);
+				PTAbilitySet abilities = new PTAbilitySet(m_abilityRepo.querySet(_characterSelectedInDialog, false));
+				abilities.setScores(m_abilitySet.getScoresPostMods());
 				Resources r = getResources();
-				character.getFluff().setRace(r.getStringArray(R.array.races_array)
-						[mRacesSpinner.getSelectedItemPosition()]);
+				fluff.setRace(r.getStringArray(R.array.races_array)
+						[m_racesSpinner.getSelectedItemPosition()]);
+				
+				for (int i = 0; i < abilities.getLength(); i++) {
+					m_abilityRepo.update(abilities.getAbilityScore(i));
+				}
+				m_fluffRepo.update(fluff);
 				
 				PTSharedPreferences.getInstance().putLong(
-						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
-				mSQLManager.updateCharacter(character);
+						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterSelectedInDialog);
 				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				break;
 			default:
 				// Set the currently selected character in the dialog
-				mCharacterSelectedInDialog = mSQLManager.getCharacterIDs()[selection];
+				_characterSelectedInDialog = _characterList[selection].getID();
 				break;
 
 			}
 		}
 	}
     
-    public void updateInterfaceRaceMods() {
+    private void updateRaceModsColumn() {
 		TextView t = new TextView(getActivity());
-		int[] abilityMods = mRacialModSet.getMods();
+		int[] abilityMods = m_racialModSet.getMods();
 		int[] racialModIds = {R.id.raceStr, R.id.raceDex, R.id.raceCon, R.id.raceInt, R.id.raceWis, R.id.raceCha};
 		
 		for(int i = 0; i < NUM_ABILITIES; i++) {
@@ -346,87 +399,27 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
     	}
 	}
     
-    public void updateInterfaceAbility(int key) {
+    private void updateAbilityViews(int abilityKey) {
     	TextView t = new TextView(getActivity());
 		int[] modIds = {R.id.strMod, R.id.dexMod, R.id.conMod, R.id.intMod, R.id.wisMod, R.id.chaMod};
 		int[] finalScoreIds = {R.id.finStr, R.id.finDex, R.id.finCon, R.id.finInt, R.id.finWis, R.id.finCha};
 		int[] baseScoreIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt, R.id.baseWis, R.id.baseCha};
-		mAbilitySet.applyMods(mRacialModSet);
+		m_abilitySet.applyMods(m_racialModSet);
     	
-		t = (TextView) getRootView().findViewById(modIds[key]);
-		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getModifier()));
+		t = (TextView) getRootView().findViewById(modIds[abilityKey]);
+		t.setText(Integer.toString(m_abilitySet.getAbilityScorePostMod(abilityKey).getModifier()));
 		
-		t = (TextView) getRootView().findViewById(baseScoreIds[key]);
-		t.setText(Integer.toString(mAbilitySet.getAbilityScore(key).getScore()));
+		t = (TextView) getRootView().findViewById(baseScoreIds[abilityKey]);
+		t.setText(Integer.toString(m_abilitySet.getAbilityScore(abilityKey).getScore()));
 		
-		t = (TextView) getRootView().findViewById(finalScoreIds[key]);
-		t.setText(Integer.toString(mAbilitySet.getAbilityScorePostMod(key).getScore()));
+		t = (TextView) getRootView().findViewById(finalScoreIds[abilityKey]);
+		t.setText(Integer.toString(m_abilitySet.getAbilityScorePostMod(abilityKey).getScore()));
 		
 		t = (TextView) getRootView().findViewById(R.id.textCost);
-		t.setText(Integer.toString(mAbilitySet.getPointBuyCost()));
+		t.setText(Integer.toString(m_abilitySet.getPointBuyCost()));
     }
     
-    public void incStr(View v) {
-    	mAbilitySet.getAbilityScore(STR_KEY).incScore();
-    	updateInterfaceAbility(STR_KEY);
-    }
-    
-    public void decStr(View v) {
-    	mAbilitySet.getAbilityScore(STR_KEY).decScore();
-    	updateInterfaceAbility(STR_KEY);
-    }
-    
-    public void incDex(View v) {
-    	mAbilitySet.getAbilityScore(DEX_KEY).incScore();
-    	updateInterfaceAbility(DEX_KEY);
-    }
-    
-    public void decDex(View v) {
-    	mAbilitySet.getAbilityScore(DEX_KEY).decScore();
-    	updateInterfaceAbility(DEX_KEY);
-    }
-    
-    public void incCon(View v) {
-    	mAbilitySet.getAbilityScore(CON_KEY).incScore();
-    	updateInterfaceAbility(CON_KEY);
-    }
-    
-    public void decCon(View v) {
-    	mAbilitySet.getAbilityScore(CON_KEY).decScore();
-    	updateInterfaceAbility(CON_KEY);
-    }
-    
-    public void incInt(View v) {
-    	mAbilitySet.getAbilityScore(INT_KEY).incScore();
-    	updateInterfaceAbility(INT_KEY);
-    }
-    
-    public void decInt(View v) {
-    	mAbilitySet.getAbilityScore(INT_KEY).decScore();
-    	updateInterfaceAbility(INT_KEY);
-    }
-    
-    public void incWis(View v) {
-    	mAbilitySet.getAbilityScore(WIS_KEY).incScore();
-    	updateInterfaceAbility(WIS_KEY);
-    }
-    
-    public void decWis(View v) {
-    	mAbilitySet.getAbilityScore(WIS_KEY).decScore();
-    	updateInterfaceAbility(WIS_KEY);
-    }
-    
-    public void incCha(View v) {
-    	mAbilitySet.getAbilityScore(CHA_KEY).incScore();
-    	updateInterfaceAbility(CHA_KEY);
-    }
-    
-    public void decCha(View v) {
-    	mAbilitySet.getAbilityScore(CHA_KEY).decScore();
-    	updateInterfaceAbility(CHA_KEY);
-    }
-    
-    public PTAbilitySetCalc rollXdYDropZ(int x, int y, int z) {
+    private PTAbilitySetCalc rollXdYDropZ(int x, int y, int z) {
     	PTAbilitySetCalc abilitySet = new PTAbilitySetCalc();
     	PTDiceSet dice = new PTDiceSet();
     	int[] rollSet = dice.multiRollWithResults(x, y);
@@ -451,5 +444,66 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
     	}
     	
     	return temp;
+    }
+    
+    private class IncDecButtonListener implements Button.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			int abilityKey = 0;
+			boolean isInc = true;
+			switch(v.getId()) {
+			case R.id.btnIncStr:
+				abilityKey = STR_KEY;
+				break;
+			case R.id.btnDecStr:
+				abilityKey = STR_KEY;
+				isInc = false;
+				break;
+			case R.id.btnIncDex:
+				abilityKey = DEX_KEY;
+				break;
+			case R.id.btnDecDex:
+				abilityKey = DEX_KEY;
+				isInc = false;
+				break;
+			case R.id.btnIncCon:
+				abilityKey = CON_KEY;
+				break;
+			case R.id.btnDecCon:
+				abilityKey = CON_KEY;
+				isInc = false;
+				break;
+			case R.id.btnIncInt:
+				abilityKey = INT_KEY;
+				break;
+			case R.id.btnDecInt:
+				abilityKey = INT_KEY;
+				isInc = false;
+				break;
+			case R.id.btnIncWis:
+				abilityKey = WIS_KEY;
+				break;
+			case R.id.btnDecWis:
+				abilityKey = WIS_KEY;
+				isInc = false;
+				break;
+			case R.id.btnIncCha:
+				abilityKey = CHA_KEY;
+				break;
+			case R.id.btnDecCha:
+				abilityKey = CHA_KEY;
+				isInc = false;
+				break;
+			}
+			
+			if (isInc) {
+				m_abilitySet.getAbilityScore(abilityKey).incScore();
+			} else {
+				m_abilitySet.getAbilityScore(abilityKey).decScore();
+			}
+	    	updateAbilityViews(abilityKey);
+		}
+    	
     }
 }

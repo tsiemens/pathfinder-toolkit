@@ -177,8 +177,10 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 
 	@Override
 	public void updateDatabase() {
-		m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
-		getCharacterRepo().update(m_character);
+		if (m_character != null) {
+			m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
+			getCharacterRepo().update(m_character);
+		}
 	}
 
 	@Override

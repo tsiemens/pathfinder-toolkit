@@ -111,35 +111,6 @@ public class PTSharedPreferences {
 	}
 	
 	/**
-	 * Saves the current party in the encounter to shared prefs
-	 * @param encounterParty
-	 * @return true if the save was successful, false otherwise
-	 * 
-	 */
-	public boolean setEncounterParty(PTParty encounterParty){
-		Gson gson = new Gson();
-		String partyJson = gson.toJson(encounterParty);
-		Log.i(TAG, "Saved current encounter party");
-		return this.putString(KEY_STRING_ENCOUNTER_PARTY_JSON, partyJson);
-	}
-	
-	/**
-	 * Should be getting from database in future
-	 * @return the current encounter party. returns null if none is saved.
-	 */
-	public PTParty getEncounterParty(){
-		Gson gson = new Gson();
-		String partyJson = m_sharedPreferences.getString(KEY_STRING_ENCOUNTER_PARTY_JSON, "");
-		PTParty encounterParty;
-		try{
-			encounterParty = gson.fromJson(partyJson, PTParty.class);
-		}catch(JsonSyntaxException e){
-			encounterParty = null;
-		}
-		return encounterParty;
-	}
-	
-	/**
 	 * @return true if the app was prompted for rating more than one week ago. ie since KEY_LONG_LAST_RATE_TIME was set.
 	 */
 	public boolean isLastRateTimeLongEnough(){

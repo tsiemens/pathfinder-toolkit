@@ -132,7 +132,9 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 
 	@Override
 	public void updateDatabase() {
-		m_fluffRepo.update(m_fluffModel);
+		if (m_fluffModel != null) {
+			m_fluffRepo.update(m_fluffModel);
+		}
 	}
 
 	@Override

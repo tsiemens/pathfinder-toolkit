@@ -347,6 +347,9 @@ public class PTMainActivity extends Activity implements
 	
 	public void hideKeyboard() {
 		InputMethodManager iMM = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		View focus = getCurrentFocus();
+		if (focus != null) {
+			iMM.hideSoftInputFromWindow(focus.getWindowToken(), 0);
+		}
 	}
 }

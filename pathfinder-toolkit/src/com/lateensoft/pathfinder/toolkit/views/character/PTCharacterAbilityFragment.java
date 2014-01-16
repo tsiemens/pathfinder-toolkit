@@ -164,12 +164,13 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 
 	@Override
 	public void updateDatabase() {
-		// TODO optimize to update when needed
-		for (int i = 0; i < m_baseAbilityScores.getLength(); i++) {
-			m_abilityRepo.update(m_baseAbilityScores.getAbilityScore(i));
-		}
-		for (int i = 0; i < m_tempAbilityScores.getLength(); i++) {
-			m_abilityRepo.update(m_tempAbilityScores.getAbilityScore(i));
+		if (m_baseAbilityScores != null && m_tempAbilityScores != null) {
+			for (int i = 0; i < m_baseAbilityScores.getLength(); i++) {
+				m_abilityRepo.update(m_baseAbilityScores.getAbilityScore(i));
+			}
+			for (int i = 0; i < m_tempAbilityScores.getLength(); i++) {
+				m_abilityRepo.update(m_tempAbilityScores.getAbilityScore(i));
+			}
 		}
 	}
 

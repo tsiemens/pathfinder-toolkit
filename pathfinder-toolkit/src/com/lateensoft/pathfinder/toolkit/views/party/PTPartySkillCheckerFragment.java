@@ -2,18 +2,14 @@ package com.lateensoft.pathfinder.toolkit.views.party;
 
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.R.array;
-import com.lateensoft.pathfinder.toolkit.R.id;
-import com.lateensoft.pathfinder.toolkit.R.layout;
-import com.lateensoft.pathfinder.toolkit.R.string;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PTPartyRollAdapter;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabaseManager;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyMemberRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,22 +26,24 @@ import android.widget.Spinner;
 
 public class PTPartySkillCheckerFragment extends PTBasePageFragment implements OnClickListener, OnItemSelectedListener{
 
+	@SuppressWarnings("unused")
 	private static final String TAG = PTPartySkillCheckerFragment.class.getSimpleName();
 	
-	public PTParty mParty;
+	public PTParty m_party;
 	
-	private PTDatabaseManager mSQLManager;
+	private Button m_rollButton;
+	private Spinner m_skillSpinner;
+	private ListView m_partyMemberList;
 	
-	private Button mRollButton;
-	private Spinner mSkillSpinner;
-	private ListView mPartyMemberList;
+	private int m_skillSelectedForRoll;
 	
-	private int mSkillSelectedForRoll;
-	
+	private PTPartyRepository m_partyRepo;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        m_partyRepo = new PTPartyRepository();
 	}
 	
 	@Override
@@ -56,22 +54,20 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		setTitle(R.string.title_activity_skill_checker);
 		setSubtitle(null);
 		
-		mSkillSelectedForRoll = 0;
+		m_skillSelectedForRoll = 0;
 		
-		mSQLManager = new PTDatabaseManager(getActivity());
-		
-		mRollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
-		mRollButton.setOnClickListener(this);
+		m_rollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
+		m_rollButton.setOnClickListener(this);
 	
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
 				R.array.checkable_skills_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		mSkillSpinner = (Spinner) getRootView().findViewById(R.id.spinnerSkillToRoll);
-		mSkillSpinner.setAdapter(adapter);
-		mSkillSpinner.setOnItemSelectedListener(this);
-		mSkillSpinner.setSelection(mSkillSelectedForRoll);
+		m_skillSpinner = (Spinner) getRootView().findViewById(R.id.spinnerSkillToRoll);
+		m_skillSpinner.setAdapter(adapter);
+		m_skillSpinner.setOnItemSelectedListener(this);
+		m_skillSpinner.setSelection(m_skillSelectedForRoll);
 		
-		mPartyMemberList = (ListView) getRootView().findViewById(R.id.listViewPartyMembers);
+		m_partyMemberList = (ListView) getRootView().findViewById(R.id.listViewPartyMembers);
 		
 		loadEncounterParty();
 		resetPartyRolls();
@@ -97,7 +93,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    	 */
    	public void loadEncounterParty(){
    		
-   		PTParty currentEncounterParty = PTSharedPreferences.getInstance().getEncounterParty();
+   		PTParty currentEncounterParty = m_partyRepo.queryEncounterParty();
    		//If there is no saved encounter party, get from party manager
    		//Also, if the encounter party was saved, but previously was empty, get from party manager.
    		//Thirdly, if the party in encounter is not rolled (not in an encounter) use default party
@@ -105,8 +101,8 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
    			loadDefaultParty();
    		}
    		else{
-   			mParty = currentEncounterParty;
-   			mParty.setName(mParty.getName() + " (in encounter)");
+   			m_party = currentEncounterParty;
+   			m_party.setName(m_party.getName() + " (in encounter)");
    			refreshPartyView();	
    		}
    	}
@@ -114,22 +110,28 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	public void loadDefaultParty(){
 		long currentPartyID = PTSharedPreferences.getInstance().getLong(
 				PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
-		if(currentPartyID >= 0)
-			mParty = mSQLManager.getParty(Long.valueOf(currentPartyID).intValue());
-		else
-			mParty = new PTParty("Empty Party");
+		PTParty party = null;
+		if(currentPartyID > 0) {
+			party = m_partyRepo.query(currentPartyID);
+		}
+		
+		if (party == null) {
+			party = new PTParty("Empty Party");
+		}
+		
+		m_party = party;
 		refreshPartyView();
 	}
 	
 	private void refreshPartyView(){
-		String[] memberNames = mParty.getNamesByRollValue();
-		int[] memberRollValues = mParty.getRollValuesByRollValue();
-		int[] indexesByRollValue = mParty.getIndexesByRollValue();
+		String[] memberNames = m_party.getNamesByRollValue();
+		int[] memberRollValues = m_party.getRollValuesByRollValue();
+		int[] indexesByRollValue = m_party.getIndexesByRollValue();
 		int[] critValues = null;
 		
-		if(mParty.size() > 0) critValues = new int[mParty.size()];
+		if(m_party.size() > 0) critValues = new int[m_party.size()];
 		
-		for(int i = 0; i < mParty.size(); i++){
+		for(int i = 0; i < m_party.size(); i++){
 			int naturalRollVal = memberRollValues[i] - getSkillModForMember(indexesByRollValue[i]);
 			switch(naturalRollVal){
 			case 20:
@@ -144,14 +146,14 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 			}		
 		}
 		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
-		mPartyMemberList.setAdapter(adapter);
+		m_partyMemberList.setAdapter(adapter);
 		setTitle(R.string.title_activity_skill_checker);
-		setSubtitle(mParty.getName());
+		setSubtitle(m_party.getName());
 	}
 	
 	public void resetPartyRolls(){
-		for(int i = 0; i < mParty.size(); i++){
-			mParty.getPartyMember(i).setLastRolledValue(0);
+		for(int i = 0; i < m_party.size(); i++){
+			m_party.getPartyMember(i).setLastRolledValue(0);
 		}
 	}
 	
@@ -172,31 +174,31 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		PTDiceSet diceSet = new PTDiceSet();
 		int skillMod;
 		
-		for(int i = 0; i < mParty.size(); i++){
+		for(int i = 0; i < m_party.size(); i++){
 			skillMod = getSkillModForMember(i);
-			mParty.getPartyMember(i).setLastRolledValue(diceSet.singleRoll(20)+skillMod);
+			m_party.getPartyMember(i).setLastRolledValue(diceSet.singleRoll(20)+skillMod);
 		}
 		refreshPartyView();
 	}
 
 	private int getSkillModForMember(int partyMemberIndex){
-		switch(mSkillSelectedForRoll){
+		switch(m_skillSelectedForRoll){
 		case 0:
-			return mParty.getPartyMember(partyMemberIndex).getFortSave();
+			return m_party.getPartyMember(partyMemberIndex).getFortSave();
 		case 1:
-			return mParty.getPartyMember(partyMemberIndex).getReflexSave();
+			return m_party.getPartyMember(partyMemberIndex).getReflexSave();
 		case 2:
-			return mParty.getPartyMember(partyMemberIndex).getWillSave();
+			return m_party.getPartyMember(partyMemberIndex).getWillSave();
 		case 3:
-			return mParty.getPartyMember(partyMemberIndex).getBluffSkillBonus();
+			return m_party.getPartyMember(partyMemberIndex).getBluffSkillBonus();
 		case 4:
-			return mParty.getPartyMember(partyMemberIndex).getDisguiseSkillBonus();
+			return m_party.getPartyMember(partyMemberIndex).getDisguiseSkillBonus();
 		case 5:
-			return mParty.getPartyMember(partyMemberIndex).getPerceptionSkillBonus();
+			return m_party.getPartyMember(partyMemberIndex).getPerceptionSkillBonus();
 		case 6:
-			return mParty.getPartyMember(partyMemberIndex).getSenseMotiveSkillBonus();
+			return m_party.getPartyMember(partyMemberIndex).getSenseMotiveSkillBonus();
 		case 7:
-			return mParty.getPartyMember(partyMemberIndex).getStealthSkillBonus();
+			return m_party.getPartyMember(partyMemberIndex).getStealthSkillBonus();
 		default:
 			return 0;
 		}
@@ -211,7 +213,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 
 	public void onItemSelected(AdapterView<?> adapterView, View view, int position,
 			long id) {
-		mSkillSelectedForRoll = position;
+		m_skillSelectedForRoll = position;
 		
 	}
 

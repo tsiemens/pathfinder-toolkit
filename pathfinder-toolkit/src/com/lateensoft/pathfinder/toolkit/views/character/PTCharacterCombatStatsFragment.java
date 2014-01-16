@@ -617,10 +617,12 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 
 	@Override
 	public void updateDatabase() {
-		m_statsRepo.update(m_combatStats);
-		PTSave[] saves = m_saveSet.getSaves();
-		for(PTSave save : saves) {
-			m_saveRepo.update(save);
+		if (m_combatStats != null) {
+			m_statsRepo.update(m_combatStats);
+			PTSave[] saves = m_saveSet.getSaves();
+			for(PTSave save : saves) {
+				m_saveRepo.update(save);
+			}
 		}
 	}
 
