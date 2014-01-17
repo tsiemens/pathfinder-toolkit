@@ -20,10 +20,10 @@ public class PTUserPrefsManager {
 	private final String KEY_SHARED_PREFS_LAST_RATE_TIME = "lastRateTime";
 	private final String KEY_SHARED_PREFS_LAST_RATE_VERSION = "lastRateVersion";
 	private final String KEY_SHARED_PREFS_LAST_USED_VERSION = "lastUsedVersion";
-    private final String KEY_SHARED_PREFS_SELECTED_CHARACTER = "selectedCharacter";
-    private final String KEY_SHARED_PREFS_LAST_TAB = "lastTab";
-    private final String KEY_SHARED_PREFS_SELECTED_PARTY = "selectedParty";
-    private final String KEY_SHARED_PREFS_ENCOUNTER_PARTY = "encounterParty";
+    public static final String KEY_SHARED_PREFS_SELECTED_CHARACTER = "selectedCharacter";
+    public static final String KEY_SHARED_PREFS_LAST_TAB = "lastTab";
+    public static final String KEY_SHARED_PREFS_SELECTED_PARTY = "selectedParty";
+    public static final String KEY_SHARED_PREFS_ENCOUNTER_PARTY = "encounterParty";
 
 	SharedPreferences mSharedPreferences;
 	Editor mEditor;
@@ -209,4 +209,10 @@ public class PTUserPrefsManager {
 		}
 	}
 	
+	/**
+	 * Removes a preference for key
+	 */
+	public void remove(String key) {
+		mEditor.remove(key);
+	}
 }

@@ -7,7 +7,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
+import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTAboutActivity extends Activity{
@@ -24,7 +24,7 @@ public class PTAboutActivity extends Activity{
 		TextView versionText = (TextView)findViewById(R.id.tv_version);
 		
 		versionText.setText(getString(R.string.about_app_version) + " " + 
-				PTSharedPreferences.getInstance().getAppVersionName());
+				PTBaseApplication.getAppVersionName());
 
 		// Makes the html <a> tags clickable 
 		TextView oglText = (TextView)findViewById(R.id.tv_ogl_link);

@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
 

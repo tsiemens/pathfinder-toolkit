@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,7 +30,9 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
-import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
+import com.lateensoft.pathfinder.toolkit.patching.PTUpdatePatcher;
+import com.lateensoft.pathfinder.toolkit.patching.PTUpdatePatcher.PatcherListener;
+import com.lateensoft.pathfinder.toolkit.patching.PTUpdatePatcher.PatcherTask;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.PTDiceRollerFragment;
 import com.lateensoft.pathfinder.toolkit.views.PTPointbuyCalculatorFragment;
@@ -69,34 +72,36 @@ public class PTMainActivity extends Activity implements
 			m_currentFragmentId = savedInstanceState.getLong(KEY_CURRENT_FRAGMENT);
 		}
 
-		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
-		
-		// TODO show loading dialog for db creation, and patching
-		PTDatabase.getInstance();
-
-		// Needs to update the database after upgrading
-		if (sharedPrefs.isNewVersion()) {
-			
-			// TODO move this to patcher
-			//SQLManager.performUpdates(this);
-			sharedPrefs.updateLastUsedVersion();
-		}
-
 		setContentView(R.layout.activity_drawer_main);
 		
 		setupNavDrawer();
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		
+		// Patching
+		if (PTUpdatePatcher.isPatchRequired()) {
 
-		if (m_currentFragmentId != 0) {
-			showView(m_currentFragmentId);
+			final ProgressDialog progDialog = new ProgressDialog(this);
+			progDialog.setCancelable(false);
+			progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progDialog.setTitle("Updating...");
+			progDialog.show();
+
+			PatcherTask task = new PatcherTask();
+			PatcherListener patchListener = new PatcherListener() {
+				@Override public void onPatchComplete(boolean completeSuccess) {
+					progDialog.dismiss();
+					PTMainActivity.this.showStartupFragment();
+				}
+			};
+			task.execute(patchListener);
+
 		} else {
-			showView(PTNavDrawerAdapter.FLUFF_ID);
+			PTMainActivity.this.showStartupFragment();
 		}
 		
 		showRateDialogIfRequired();
-		
 	}
 	
 	@Override
@@ -104,7 +109,15 @@ public class PTMainActivity extends Activity implements
 		outState.putLong(KEY_CURRENT_FRAGMENT, m_currentFragmentId);
 		super.onSaveInstanceState(outState);
 	}
-
+	
+	private void showStartupFragment() {
+		if (m_currentFragmentId != 0) {
+			showView(m_currentFragmentId);
+		} else {
+			showView(PTNavDrawerAdapter.FLUFF_ID);
+		}
+	}
+	
 	private void setupNavDrawer() {
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		m_drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,

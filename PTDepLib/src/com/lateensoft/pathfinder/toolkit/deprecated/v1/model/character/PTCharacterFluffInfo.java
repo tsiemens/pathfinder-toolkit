@@ -169,6 +169,14 @@ public class PTCharacterFluffInfo {
 		mLevel = level;
 	}
 	
+	public String getSize() {
+		return mSize;
+	}
+	
+	public void setSize(String size) {
+		mSize = size;
+	}
+	
 	public String getGender() {
 		return mGender;
 	}
@@ -211,5 +219,21 @@ public class PTCharacterFluffInfo {
 	
 	public void setRace(String race) {
 		mRace = race;
+	}
+	
+	public String getLanguages() {
+		return mLanguages;
+	}
+
+	public void setLanguages(String Languages) {
+		this.mLanguages = Languages;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public void setDescription(String Description) {
+		this.mDescription = Description;
 	}
 }

@@ -2,18 +2,14 @@ package com.lateensoft.pathfinder.toolkit;
 
 import java.util.GregorianCalendar;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
 
 public class PTSharedPreferences {
+	@SuppressWarnings("unused")
 	private final String TAG = PTSharedPreferences.class.getSimpleName();
 	
 	private final long MILISECONDS_BETWEEN_RATE_PROMPT = 604800000L; //One week
@@ -25,7 +21,6 @@ public class PTSharedPreferences {
 	public static String KEY_INT_LAST_USED_VERSION = "lastUsedVersion";
 	public static String KEY_LONG_SELECTED_CHARACTER_ID = "selectedCharacter";
 	public static String KEY_LONG_SELECTED_PARTY_ID = "selectedParty";
-	public static String KEY_STRING_ENCOUNTER_PARTY_JSON = "encounterParty";
 	
 	private static PTSharedPreferences s_instance;
 
@@ -154,61 +149,6 @@ public class PTSharedPreferences {
 		}catch (NameNotFoundException e) {
 			e.printStackTrace();
 			return false;
-		}
-	}
-	
-	/**
-	 * Sets the last used version (KEY_INT_LAST_RATED_VERSION) to the current version
-	 * @return true if the save was successful, false otherwise
-	 */
-	public boolean updateLastUsedVersion(){
-		Context context = PTBaseApplication.getAppContext();
-		PackageInfo pInfo;
-		try{
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return this.putInt(KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
-		}catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	/**
-	 * @return true if a new version of the app is running, since KEY_INT_LAST_USED_VERSION
-	 * was last updated
-	 */
-	public boolean isNewVersion(){
-		int appCode = this.getInt(KEY_INT_LAST_USED_VERSION, 0);
-		return appCode != getAppVersionCode();
-	}
-	
-	/**
-	 * @return: The the incremental app version code, or -1 in the event of an error.
-	 */
-	public int getAppVersionCode() {
-		Context context = PTBaseApplication.getAppContext();
-		PackageInfo pInfo;
-		try{
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return pInfo.versionCode;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
-	/**
-	 * @return: The the human readable app version, or null in the event of an error.
-	 */
-	public String getAppVersionName() {
-		Context context = PTBaseApplication.getAppContext();
-		PackageInfo pInfo;
-		try{
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return pInfo.versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 	
