@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg3554"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="logo_holo.svg"
+   inkscape:export-filename="C:\Users\trevsiemens\Documents\Pathfinder Toolkit\pathfinder-toolkit\pathfinder-toolkit\assets\iconsV4\feather_holo.png"
+   inkscape:export-xdpi="45"
+   inkscape:export-ydpi="45">
+  <defs
+     id="defs3556" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.09019608"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.45898438"
+     inkscape:cx="512"
+     inkscape:cy="512"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="757"
+     inkscape:window-height="649"
+     inkscape:window-x="434"
+     inkscape:window-y="154"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3559">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-28.362139)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1.03731024px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0"
+       d="m 903.01197,34.919748 c -2.00047,-9.59e-4 -4.01087,0.01245 -6.06178,0.03242 C 817.5362,35.725495 700.77702,52.302255 580.86229,91.809738 539.86976,134.15028 490.93022,192.19797 433.46698,271.88032 420.6288,225.9591 420.87273,187.18688 430.19297,154.46976 205.36401,270.53669 22.281517,483.53628 126.19623,845.41567 321.05383,573.48906 660.97473,273.28815 686.70036,250.71271 c 1.77513,-1.65665 3.01503,-2.75536 3.14435,-2.75536 0,0 -2.126,1.86172 -3.14435,2.75536 -37.33223,34.84052 -423.55231,423.07871 -535.90043,631.55989 252.51751,95.254 454.94327,-60.60193 598.52804,-261.66152 -61.98078,9.66814 -141.84051,11.27645 -244.80523,-0.68074 91.08233,-25.56697 217.20795,-70.86605 314.36985,-107.26437 30.55728,-52.37149 57.37102,-105.33194 80.32672,-155.69379 -40.67678,12.13604 -95.08476,13.92178 -167.88219,-2.33395 C 788.00401,335.74927 889.04984,267.61569 955.00715,220.59829 984.6916,138.54177 999.37436,77.726954 998.05553,61.241496 1002.5417,44.979255 965.02677,34.949449 903.01197,34.919748 z"
+       id="path3562"
+       inkscape:export-xdpi="18.922417"
+       inkscape:export-ydpi="18.922417"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:10.99548912;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 123.87649,859.76568 c -38.541401,55.74675 -74.275513,113.90508 -99.290048,176.95872 32.14289,-18.7008 64.378272,-37.24021 96.242948,-56.40381 -6.87005,-30.05582 5.50259,-55.20016 18.17142,-81.73881 1.68922,-4.90153 5.50836,-14.8025 5.50836,-14.8025 -7.76991,-6.2441 -15.95168,-17.32915 -19.24348,-26.54894 -0.74557,1.08053 -0.64363,1.45481 -1.3892,2.53534 z"
+       id="path4395"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
+  </g>
+</svg>

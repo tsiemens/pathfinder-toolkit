@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg3554"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="logo.svg"
+   inkscape:export-filename="C:\Users\trevsiemens\Documents\Pathfinder Toolkit\pathfinder-toolkit\pathfinder-toolkit\assets\iconsV4\icon.png"
+   inkscape:export-xdpi="45"
+   inkscape:export-ydpi="45">
+  <defs
+     id="defs3556" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.45898438"
+     inkscape:cx="512"
+     inkscape:cy="512"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="757"
+     inkscape:window-height="649"
+     inkscape:window-x="651"
+     inkscape:window-y="153"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3559">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-28.362139)">
+    <path
+       style="fill:#490059;fill-opacity:1;stroke:#490059;stroke-width:1.03313254999999990px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 912.88938,31.905037 c -1.99241,-9.55e-4 -3.99472,0.0124 -6.03737,0.03228 C 827.75786,32.707539 711.46893,49.217537 592.03715,88.565898 551.20972,130.73591 502.46727,188.54983 445.23546,267.91126 432.44899,222.17498 432.69194,183.55892 441.97464,150.97357 211.75929,269.82119 25.479397,490.71436 148.59727,869.87241 407.14818,976.90695 613.96262,819.48549 759.82434,615.23752 c -61.73117,9.62921 -141.26926,11.23103 -243.81929,-0.67799 90.7155,-25.46401 216.33316,-70.58065 313.10374,-106.83237 30.43421,-52.16057 57.13996,-104.90772 80.0032,-155.06674 -40.51295,12.08716 -94.7018,13.8657 -167.20605,-2.32455 56.43867,-18.81289 157.07754,-86.67207 222.76922,-133.5001 29.56489,-81.72605 44.18854,-142.295931 42.87504,-158.714994 4.468,-16.196746 -32.89578,-26.186158 -94.66082,-26.215739 z"
+       id="path3562"
+       inkscape:export-xdpi="18.922417"
+       inkscape:export-ydpi="18.922417"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#800080;stroke:#800080;stroke-width:1.03313254999999990px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 385.44291,183.25896 c -29.87804,18.43136 -58.52687,38.80491 -85.33029,61.27768 l -66.6217,494.37053 487.49409,-71.8516 c 13.46026,-16.75668 26.50335,-34.00171 39.06532,-51.59206 -61.73116,9.62922 -141.26926,11.23104 -243.81928,-0.67799 90.71549,-25.464 216.33316,-70.58064 313.10374,-106.83237 l 3.37266,-6.54964 -460.22016,77.68015 z"
+       id="path3562-4"
+       inkscape:export-filename="C:\Users\trevsiemens\Dropbox\Trevor and Alisa Stuff\Pathfinder Icon Stuff\path3562.png"
+       inkscape:export-xdpi="18.922417"
+       inkscape:export-ydpi="18.922417"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc" />
+    <path
+       style="fill:#800080;fill-opacity:1;stroke:#800080;stroke-width:1.03313255px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 750.94586,48.20916 c -18.3104,3.332071 -37.13703,7.192402 -56.33802,11.655028 L 659.26456,285.39149 932.80947,239.20954 c 11.21057,-7.76862 21.97049,-15.32003 31.86569,-22.37377 8.19753,-22.66041 7.32523,-18.85955 13.20418,-37.7768 l -253.71192,41.39276 z"
+       id="path4436"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-xdpi="18.922417"
+       inkscape:export-ydpi="18.922417"
+       inkscape:export-filename="C:\Users\trevsiemens\Dropbox\Trevor and Alisa Stuff\Pathfinder Icon Stuff\path3562.png" />
+    <path
+       style="fill:#cccccc;stroke:#ffffff;stroke-width:1.03313255px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 700.57603,244.07542 c 0,0 -575.60243,501.80724 -678.915695,805.84338 L 136.78082,982.9128 C 82.201537,855.98508 697.12746,244.07542 700.57603,244.07542 z"
+       id="path4395"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\trevsiemens\Dropbox\Trevor and Alisa Stuff\Pathfinder Icon Stuff\path3562.png"
+       inkscape:export-xdpi="18.922417"
+       inkscape:export-ydpi="18.922417" />
+  </g>
+</svg>
