@@ -9,7 +9,8 @@
 
     <application
         android:name="com.lateensoft.pathfinder.toolkit.PTBaseApplication"
-        android:icon="@drawable/ic_launcher_quillsword"
+        android:icon="@drawable/ic_launcher"
+        android:logo="@drawable/ic_logo_holo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:hasCode="true" android:allowBackup="true">
         <activity
