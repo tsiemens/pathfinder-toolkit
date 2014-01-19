@@ -66,11 +66,11 @@ public class PTSaveSet implements Parcelable{
 		Resources r = context.getResources();
 		
 		m_saves[r.getInteger(R.integer.key_fort_save)].setAbilityMod(
-				abilities.getAbilityScore(R.integer.key_constitution).getModifier());
+				abilities.getAbilityAtIndex(R.integer.key_constitution).getAbilityModifier());
 		m_saves[r.getInteger(R.integer.key_ref_save)].setAbilityMod(
-				abilities.getAbilityScore(R.integer.key_dexterity).getModifier());
+				abilities.getAbilityAtIndex(R.integer.key_dexterity).getAbilityModifier());
 		m_saves[r.getInteger(R.integer.key_will_save)].setAbilityMod(
-				abilities.getAbilityScore(R.integer.key_wisdom).getModifier());
+				abilities.getAbilityAtIndex(R.integer.key_wisdom).getAbilityModifier());
 	}
 	
 	public void setCharacterID(long id) {

@@ -36,8 +36,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	
 	private PTAbilityScoreRepository m_abilityRepo;
 	
-	private PTAbilitySet m_baseAbilityScores;
-	private PTAbilitySet m_tempAbilityScores;
+	private PTAbilitySet m_abilityScores;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,18 +73,18 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
     	TextView tv = new TextView(getActivity());
     	
 		tv = (TextView) getRootView().findViewById(modIds[abilityKey]);
-		tv.setText(String.valueOf(m_baseAbilityScores.getAbilityScore(abilityKey).getModifier()));
+		tv.setText(String.valueOf(m_abilityScores.getAbilityAtIndex(abilityKey).getAbilityModifier()));
 		
 		s = (Spinner) getRootView().findViewById(baseScoreIds[abilityKey]);
-		s.setSelection((m_baseAbilityScores.getAbilityScore(abilityKey).getScore()));
+		s.setSelection((m_abilityScores.getAbilityAtIndex(abilityKey).getScore()));
 		
 		s = (Spinner) getRootView().findViewById(tempScoreIds[abilityKey]);
-		s.setSelection((m_tempAbilityScores
-				.getAbilityScore(abilityKey).getScore()));
+		s.setSelection((m_abilityScores
+				.getAbilityAtIndex(abilityKey).getTempScore()));
 		
 		tv = (TextView) getRootView().findViewById(tempModIds[abilityKey]);
-		tv.setText(String.valueOf(m_tempAbilityScores
-				.getAbilityScore(abilityKey).getModifier()));
+		tv.setText(String.valueOf(m_abilityScores
+				.getAbilityAtIndex(abilityKey).getTempModifier()));
     }
 	
 	private void setupSpinners(Spinner[] spinners, int viewIds[], 
@@ -109,12 +108,12 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		for(int i = 0; i < viewIds.length; i++) {
 			tv = (TextView) getRootView().findViewById(viewIds[i]); 
 			if(isTemp) {
-				tv.setText(Integer.toString(m_tempAbilityScores.getAbilityScore(i)
-					.getModifier()));
+				tv.setText(Integer.toString(m_abilityScores.getAbilityAtIndex(i)
+					.getTempModifier()));
 			}
 			else {
-				tv.setText(Integer.toString(m_baseAbilityScores.getAbilityScore(i)
-						.getModifier()));
+				tv.setText(Integer.toString(m_abilityScores.getAbilityAtIndex(i)
+						.getAbilityModifier()));
 			}
 		}
 	}
@@ -137,10 +136,10 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		        int pos, long id) {
 
 			if(_isTemp) {
-				m_tempAbilityScores.setScore(_abilityIndex, pos);
+				m_abilityScores.getAbilityAtIndex(_abilityIndex).setTempScore(pos);
 			}
 			else {
-				m_baseAbilityScores.setScore(_abilityIndex, pos);
+				m_abilityScores.getAbilityAtIndex(_abilityIndex).setScore(pos);
 			}
 	
 			updateModsViews(tempModIds, true);
@@ -164,19 +163,15 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 
 	@Override
 	public void updateDatabase() {
-		if (m_baseAbilityScores != null && m_tempAbilityScores != null) {
-			for (int i = 0; i < m_baseAbilityScores.getLength(); i++) {
-				m_abilityRepo.update(m_baseAbilityScores.getAbilityScore(i));
-			}
-			for (int i = 0; i < m_tempAbilityScores.getLength(); i++) {
-				m_abilityRepo.update(m_tempAbilityScores.getAbilityScore(i));
+		if (m_abilityScores != null) {
+			for (int i = 0; i < m_abilityScores.size(); i++) {
+				m_abilityRepo.update(m_abilityScores.getAbilityAtIndex(i));
 			}
 		}
 	}
 
 	@Override
 	public void loadFromDatabase() {
-		m_baseAbilityScores = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID(), false));
-		m_tempAbilityScores = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID(), true));
+		m_abilityScores = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
 	}
 }

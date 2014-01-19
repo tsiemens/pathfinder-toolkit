@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
+import com.lateensoft.pathfinder.toolkit.R;
+
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,27 +19,42 @@ public class PTAbilitySet implements Parcelable{
 	private static final String TAG = PTAbilitySet.class.getSimpleName();
 	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
 	
-	public static final String[] ABILITY_NAMES = {"Strength", "Dexterity", "Constitution",
-		"Intelligence", "Wisdom", "Charisma"};
-	public static final int BASE_ABILITY_SCORE = 10;
+	public static final int ID_STR = 1;
+	public static final int ID_DEX = 2;
+	public static final int ID_CON = 3;
+	public static final int ID_INT = 4;
+	public static final int ID_WIS = 5;
+	public static final int ID_CHA = 6;
 	
-	private PTAbilityScore[] m_abilities;
+	/**
+	* This matches the order for string resources, and how the abilities are stored
+	* in the set.
+	*/
+	public static final int[] ABILITY_IDS = {ID_STR, ID_DEX, ID_CON, ID_INT, ID_WIS, ID_CHA};
+	
+	private PTAbility[] m_abilities;
 	
 	public PTAbilitySet() {
-		m_abilities = new PTAbilityScore[ABILITY_NAMES.length];
+		m_abilities = new PTAbility[ABILITY_IDS.length];
 		
-		for(int i = 0; i < ABILITY_NAMES.length; i++) {
-			m_abilities[i] = new PTAbilityScore(ABILITY_NAMES[i], BASE_ABILITY_SCORE);
+		for(int i = 0; i < ABILITY_IDS.length; i++) {
+			m_abilities[i] = new PTAbility(ABILITY_IDS[i], PTAbility.BASE_ABILITY_SCORE, PTAbility.BASE_ABILITY_SCORE);
 		}
 	}
 	
-	public PTAbilitySet(PTAbilityScore[] scores) {
-		m_abilities = new PTAbilityScore[ABILITY_NAMES.length];
-		List<PTAbilityScore> scoresList = new ArrayList<PTAbilityScore>(Arrays.asList(scores));
+	/**
+	 * Safely populates the ability set with scores 
+	 * If an ability does not exist in scores, will be set to default.
+	 * @param scores
+	 */
+	
+	public PTAbilitySet(PTAbility[] scores) {
+		m_abilities = new PTAbility[ABILITY_IDS.length];
+		List<PTAbility> scoresList = new ArrayList<PTAbility>(Arrays.asList(scores));
 		
-		for(int i = 0; i < ABILITY_NAMES.length; i++) {
-			for (PTAbilityScore score : scoresList) {
-				if(score.getAbility().contentEquals(ABILITY_NAMES[i])) {
+		for(int i = 0; i < ABILITY_IDS.length; i++) {
+			for (PTAbility score : scoresList) {
+				if(score.getID() == ABILITY_IDS[i]) {
 					scoresList.remove(score);
 					m_abilities[i] = score;
 					break;
@@ -46,7 +65,7 @@ public class PTAbilitySet implements Parcelable{
 	
 	public PTAbilitySet(Parcel in) {
 		Bundle objectBundle = in.readBundle();
-		m_abilities = (PTAbilityScore[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES);
+		m_abilities = (PTAbility[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES);
 	}
 
 	@Override
@@ -56,74 +75,81 @@ public class PTAbilitySet implements Parcelable{
 		out.writeBundle(objectBundle);
 	}
 	
-	// Given a string ability name and a score, sets the 
-	// ability score with the matching ability string
-	// to have the given score
-	public void setScore(String ability, int score) {
+	/**
+	 * @param abilityId
+	 * @return The ability in the set with abilityId. null if no such ability exists.
+	 */
+	public PTAbility getAbility(long abilityId) {
 		for(int i = 0; i < m_abilities.length; i++) {
-			if(ability.equals(m_abilities[i].getAbility())) {
-				m_abilities[i].setScore(score);
-				return;
+			if(abilityId == m_abilities[i].getID()) {
+				return m_abilities[i];
 			}
 		}
+		return null;
 	}
 	
-	public void setScore(int index, int score) {
-		m_abilities[index].setScore(score);
-	}
+//	// Returns an array of strings corresponding to the abilities
+//	// in the set
+//	public String[] getAbilities() {
+//		String[] abilities = new String[m_abilities.length];
+//		for(int i = 0; i < m_abilities.length; i++) {
+//			abilities[i] = m_abilities[i].getAbility();
+//		}
+//		return abilities;
+//	}
+//	
+//	// Returns an array of scores corresponding to the abilities
+//	// in the set
+//	public int[] getScores() {
+//		int[] scores = new int[m_abilities.length];
+//		for(int i = 0; i < m_abilities.length; i++) {
+//			scores[i] = m_abilities[i].getScore();
+//		}
+//		return scores;
+//	}
 	
-	public void setScores(int[] scores) {
-		if(scores.length != m_abilities.length)
-			return;
-		
-		for(int i = 0; i < m_abilities.length; i++) {
-			m_abilities[i].setScore(scores[i]);
-		}
-	}
-	
-	// Returns the score for the corresponding ability
-	// or zero if such an ability does not exist in the set
-	public int getScore(String ability) {
-		for(int i = 0; i < m_abilities.length; i++) {
-			if(ability.equals(m_abilities[i].getAbility())) {
-				return m_abilities[i].getScore();
-			}
-		}
-		return 0;
-	}
-	
-	// Returns an array of strings corresponding to the abilities
-	// in the set
-	public String[] getAbilities() {
-		String[] abilities = new String[m_abilities.length];
-		for(int i = 0; i < m_abilities.length; i++) {
-			abilities[i] = m_abilities[i].getAbility();
-		}
-		return abilities;
-	}
-	
-	// Returns an array of scores corresponding to the abilities
-	// in the set
-	public int[] getScores() {
-		int[] scores = new int[m_abilities.length];
-		for(int i = 0; i < m_abilities.length; i++) {
-			scores[i] = m_abilities[i].getScore();
-		}
-		return scores;
-	}
-	
-	public PTAbilityScore getAbilityScore(int index) {
-		if( index >=0 && index <= m_abilities.length)
+	/**
+	 * @param index
+	 * @return the ability at index. Note: indexes of the set are defined by ABILITY_IDS
+	 */
+	public PTAbility getAbilityAtIndex(int index) {
+		if( index >=0 && index <= m_abilities.length) {
 			return m_abilities[index];
-		return m_abilities[0];
+		} else {
+			throw new IndexOutOfBoundsException("No ability for index "+index);
+		}
+	}
+
+	/**
+	 * @return the long ability names, in the order as defined by ABILITY_IDS
+	 */
+	public static String[] getLongAbilityNames() {
+		return getStringArray(R.array.abilities_long);
 	}
 	
-	public int getLength(){
+	/**
+	 * @return the short ability names, in the order as defined by ABILITY_IDS
+	 */
+	public static String[] getShortAbilityNames() {
+		return getStringArray(R.array.abilities_short);
+	}
+	
+	/**
+	 * @param arrayResId resource id of long or short name array
+	 * @return Array of the names
+	 */
+	private static String[] getStringArray(int arrayResId) {
+		Resources res = PTBaseApplication.getAppContext().getResources();
+		return res.getStringArray(arrayResId);
+	}
+
+	
+	public int size(){
 		return m_abilities.length;
 	}
 	
 	public void setCharacterID(long id) {
-		for (PTAbilityScore ability : m_abilities) {
+		for (PTAbility ability : m_abilities) {
 			ability.setCharacterID(id);
 		}
 	}

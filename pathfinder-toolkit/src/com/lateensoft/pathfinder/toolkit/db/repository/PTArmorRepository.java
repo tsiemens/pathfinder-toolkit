@@ -69,7 +69,7 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 	}
 	
 	@Override
-	public PTArmor query(long id) {
+	public PTArmor query(long ... id) {
 		Locale l = null;
 		String selector = String.format(l, "%s.%s=%d AND "
 				+"%s.%s=%s.%s", 
@@ -96,7 +96,7 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 	}
 	
 	@Override
-	public int delete(long id) {
+	public int delete(long ... id) {
 		return m_itemRepo.delete(id);
 	}
 	

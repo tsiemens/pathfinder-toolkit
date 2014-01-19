@@ -62,18 +62,8 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			// AbilityScores
 			PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
 			PTAbilitySet abilitySet = object.getAbilitySet();
-			for (int i = 0; i < abilitySet.getLength(); i++) {
-				subCompId = abScoreRepo.insert(abilitySet.getAbilityScore(i), false);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
-			
-			// Temp AbilityScores
-			PTAbilitySet tempAbilitySet = object.getTempAbilitySet();
-			for (int i = 0; i < tempAbilitySet.getLength(); i++) {
-				subCompId = abScoreRepo.insert(tempAbilitySet.getAbilityScore(i), true);
+			for (int i = 0; i < abilitySet.size(); i++) {
+				subCompId = abScoreRepo.insert(abilitySet.getAbilityAtIndex(i));
 				if (subCompId == -1) {
 					delete(id);
 					return subCompId;
@@ -179,8 +169,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		
 		// Ability Scores
 		PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
-		PTAbilitySet abilityScores = new PTAbilitySet(abScoreRepo.querySet(id, false));
-		PTAbilitySet tempAbilityScores = new PTAbilitySet(abScoreRepo.querySet(id, true));
+		PTAbilitySet abilityScores = new PTAbilitySet(abScoreRepo.querySet(id));
 
 		// Combat Stats
 		PTCombatStatRepository csRepo = new PTCombatStatRepository();
@@ -215,7 +204,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTSpellRepository spellRepo = new PTSpellRepository();
 		PTSpellBook spells = new PTSpellBook(spellRepo.querySet(id));
 
-		PTCharacter character = new PTCharacter(id, gold, abilityScores, tempAbilityScores,
+		PTCharacter character = new PTCharacter(id, gold, abilityScores,
 				fluff, csSet, saves, skills, inventory, feats, spells);
 		return character;
 	}

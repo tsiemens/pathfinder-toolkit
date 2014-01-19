@@ -1,13 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityScoreRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityScore;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 
 public class PTAbilityScoreRepositoryTest extends PTBaseRepositoryTest {
 	
-	private PTAbilityScore m_abilityScore;
-	private PTAbilityScore m_tempAbilityScore;
+	private PTAbility m_abilityScore;
+	private PTAbility m_tempAbilityScore;
 	private PTAbilityScoreRepository m_repo;
 	
 	public void setUp() {
@@ -19,20 +19,20 @@ public class PTAbilityScoreRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuery() {
-		PTAbilityScore queried = m_repo.query(m_abilityScore.getID());
+		PTAbility queried = m_repo.query(m_abilityScore.getID());
 		assertEquals(m_abilityScore, queried);
 		queried = m_repo.query(m_tempAbilityScore.getID());
 		assertEquals(m_tempAbilityScore, queried);
 	}
 	
 	public void testUpdate() {
-		PTAbilityScore toUpdate = new PTAbilityScore(m_abilityScore.getID(), m_abilityScore.getCharacterID(),
+		PTAbility toUpdate = new PTAbility(m_abilityScore.getID(), m_abilityScore.getCharacterID(),
 				"Invalid name", 7);
 		m_repo.update(toUpdate);
-		PTAbilityScore updated = m_repo.query(m_abilityScore.getID());
+		PTAbility updated = m_repo.query(m_abilityScore.getID());
 		assertEquals(updated, toUpdate);
 		
-		toUpdate = new PTAbilityScore(m_tempAbilityScore.getID(), m_tempAbilityScore.getCharacterID(),
+		toUpdate = new PTAbility(m_tempAbilityScore.getID(), m_tempAbilityScore.getCharacterID(),
 				"temp Invalid name", 8);
 		m_repo.update(toUpdate);
 		updated = m_repo.query(m_tempAbilityScore.getID());
@@ -40,7 +40,7 @@ public class PTAbilityScoreRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTAbilityScore[] queriedAbilityScores = m_repo.querySet(m_characterId, false);
+		PTAbility[] queriedAbilityScores = m_repo.querySet(m_characterId, false);
 
 		for (int i = 0; i < PTAbilitySet.ABILITY_NAMES.length; i++){
 			assertTrue(queriedAbilityScores[i].getAbility()+" should = "+PTAbilitySet.ABILITY_NAMES[i], 
@@ -48,7 +48,7 @@ public class PTAbilityScoreRepositoryTest extends PTBaseRepositoryTest {
 		}
 	}
 	
-	private static void assertEquals(PTAbilityScore score1, PTAbilityScore score2) {
+	private static void assertEquals(PTAbility score1, PTAbility score2) {
 		assertEquals(score1.getAbility(), score2.getAbility());
 		assertEquals(score1.getScore(), score2.getScore());
 		assertEquals(score1.getCharacterID(), score2.getCharacterID());

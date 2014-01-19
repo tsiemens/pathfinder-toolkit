@@ -13,7 +13,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 public class PTCharacter implements Parcelable, PTStorable {
 	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
-	private static final String PARCEL_BUNDLE_KEY_TEMP_ABILITIES = "abilities_temp";
 	private static final String PARCEL_BUNDLE_KEY_COMBAT_STATS = "combat_stats";
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
 	private static final String PARCEL_BUNDLE_KEY_SAVES = "saves";
@@ -23,7 +22,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	private static final String PARCEL_BUNDLE_KEY_SPELLS = "spells";
 	
 	private PTAbilitySet m_abilitySet;
-	private PTAbilitySet m_tempAbilitySet;
 	private PTCombatStatSet m_combatStatSet;
 	private PTSkillSet m_skillSet;
 	private PTSaveSet m_saveSet;
@@ -43,13 +41,12 @@ public class PTCharacter implements Parcelable, PTStorable {
 	/**
 	 * Only use for instantiation from database
 	 */
-	public PTCharacter(long characterId, double gold, PTAbilitySet abilitySet, PTAbilitySet tempAbilitySet, 
+	public PTCharacter(long characterId, double gold, PTAbilitySet abilitySet, 
 			PTFluffInfo fluff, PTCombatStatSet combatStats, PTSaveSet saves, PTSkillSet skills,
 			PTInventory inventory, PTFeatList feats, PTSpellBook spells) {
 		m_id = characterId;
 		m_gold = gold;
 		m_abilitySet = abilitySet;
-		m_tempAbilitySet = tempAbilitySet;
 		m_fluffInfo = fluff;
 		m_combatStatSet = combatStats;
 		m_saveSet = saves;
@@ -62,7 +59,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	public PTCharacter(String name, Context context) {
 		m_id = UNSET_ID;
 		m_abilitySet = new PTAbilitySet();
-		m_tempAbilitySet = new PTAbilitySet();
 		m_combatStatSet = new PTCombatStatSet();
 		m_skillSet = new PTSkillSet(context);
 		m_saveSet = new PTSaveSet(context);
@@ -77,7 +73,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	public PTCharacter(Parcel in) {
 		Bundle objectBundle = in.readBundle();
 		m_abilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
-		m_tempAbilitySet = (PTAbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES);
 		m_combatStatSet = (PTCombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
 		m_skillSet = (PTSkillSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SKILLS);
 		m_saveSet = (PTSaveSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SAVES);
@@ -93,7 +88,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
 		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_ABILITIES, m_abilitySet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_TEMP_ABILITIES, m_tempAbilitySet);
 		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS, m_combatStatSet);
 		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SKILLS, m_skillSet);
 		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SAVES, m_saveSet);
@@ -112,10 +106,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	
 	public PTAbilitySet getAbilitySet() {
 		return m_abilitySet;
-	}
-	
-	public PTAbilitySet getTempAbilitySet() {
-		return m_tempAbilitySet;
 	}
 	
 	public PTCombatStatSet getCombatStatSet(){
@@ -187,7 +177,6 @@ public class PTCharacter implements Parcelable, PTStorable {
 	public void setID(long id) {
 		m_id = id;
 		m_abilitySet.setCharacterID(id);
-		m_tempAbilitySet.setCharacterID(id);
 		m_combatStatSet.setID(id);
 		m_skillSet.setCharacterID(id);
 		m_saveSet.setCharacterID(id);

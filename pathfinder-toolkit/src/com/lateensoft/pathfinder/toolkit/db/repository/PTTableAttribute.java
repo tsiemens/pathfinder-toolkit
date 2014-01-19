@@ -1,9 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 public class PTTableAttribute {
-	private final String mColumn;
-	private final SQLDataType mType;
-	public final Boolean isPrimaryKey;
+	private final String m_column;
+	private final SQLDataType m_type;
+	public final Boolean m_isPrimaryKey;
 	
 	public enum SQLDataType {
 		NULL,
@@ -14,22 +14,22 @@ public class PTTableAttribute {
 	};
 	
 	public PTTableAttribute(String column, SQLDataType dataType, Boolean isPrimaryKey) {
-		mColumn = column;
-		mType = dataType;
-		this.isPrimaryKey = isPrimaryKey;
+		m_column = column;
+		m_type = dataType;
+		this.m_isPrimaryKey = isPrimaryKey;
 	}
 	
 	public PTTableAttribute(String column, SQLDataType dataType) {
-		mColumn = column;
-		mType = dataType;
-		isPrimaryKey = false;
+		m_column = column;
+		m_type = dataType;
+		m_isPrimaryKey = false;
 	}
 	
 	public String GetColumn() {
-		return mColumn;
+		return m_column;
 	}
 	
 	public SQLDataType GetType() {
-		return mType;
+		return m_type;
 	}
 }

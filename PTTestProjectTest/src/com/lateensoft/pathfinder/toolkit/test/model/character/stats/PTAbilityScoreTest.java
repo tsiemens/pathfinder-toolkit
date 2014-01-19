@@ -1,11 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.test.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilityScore;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
 
 import junit.framework.TestCase;
 
 public class PTAbilityScoreTest extends TestCase {
-	private PTAbilityScore abilityScore;
+	private PTAbility abilityScore;
 	
 	private static final String NAME = "NAME";
 	private static final int DEFAULT_SCORE = 10;
@@ -14,7 +14,7 @@ public class PTAbilityScoreTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		abilityScore = new PTAbilityScore(NAME, DEFAULT_SCORE);
+		abilityScore = new PTAbility(NAME, DEFAULT_SCORE);
 	}
 
 	protected void tearDown() throws Exception {

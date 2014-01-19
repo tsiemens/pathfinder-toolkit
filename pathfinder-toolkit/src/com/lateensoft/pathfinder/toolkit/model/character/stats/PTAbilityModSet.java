@@ -30,7 +30,7 @@ public class PTAbilityModSet extends PTAbilitySet implements Parcelable{
 	}
 	
 	public int getMod(String ability) {
-		return super.getScore(ability);
+		return super.getAbility(ability);
 	}
 	
 	public int[] getMods() {
@@ -38,7 +38,7 @@ public class PTAbilityModSet extends PTAbilitySet implements Parcelable{
 	}
 	
 	public void setMods(int[] modifiers) {
-		if(modifiers.length != super.getLength())
+		if(modifiers.length != super.size())
 			return;
 		
 		super.setScores(modifiers);

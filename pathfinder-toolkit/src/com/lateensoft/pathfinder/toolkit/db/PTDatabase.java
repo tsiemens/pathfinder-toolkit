@@ -116,7 +116,7 @@ public class PTDatabase extends SQLiteOpenHelper {
 			String columnType = attributes[i].GetType().name();
 			String columnDefine = String.format(columnTemplate, columnName, columnType);
 			sb.append(columnDefine);
-			if (attributes[i].isPrimaryKey) {
+			if (attributes[i].m_isPrimaryKey) {
 				sb.append(primaryKeyAddition);
 			}
 			if ((i + 1) < attributes.length) {

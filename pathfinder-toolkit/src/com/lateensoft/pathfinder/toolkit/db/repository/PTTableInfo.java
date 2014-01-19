@@ -3,42 +3,41 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 
 public class PTTableInfo {
-	private PTTableAttribute[] mAttributes;
-	private String mTable;
-	// TODO hashmap? Probably unnecessary
+	private PTTableAttribute[] m_attributes;
+	private String m_table;
 	
 	public PTTableInfo(String table, PTTableAttribute[] attributes) {
-		mTable = table;
-		mAttributes = attributes;
+		m_table = table;
+		m_attributes = attributes;
 	}
 	
 	public String[] getColumns() {
-		String[] columns = new String[mAttributes.length];
-		for(int i = 0; i < mAttributes.length; i++) {
-			columns[i] = mAttributes[i].GetColumn();
+		String[] columns = new String[m_attributes.length];
+		for(int i = 0; i < m_attributes.length; i++) {
+			columns[i] = m_attributes[i].GetColumn();
 		}
 		return columns;
 	}
 	
 	public String getPrimaryKeyColumn() {
-		for(int i = 0; i < mAttributes.length; i++) {
-			if (mAttributes[i].isPrimaryKey) {
-				return mAttributes[i].GetColumn();
+		for(int i = 0; i < m_attributes.length; i++) {
+			if (m_attributes[i].m_isPrimaryKey) {
+				return m_attributes[i].GetColumn();
 			}
 		}
 		return null;
 	}
 	
 	public SQLDataType getDataType(String name) {
-		for(int i = 0; i < mAttributes.length; i++) {
-			if (mAttributes[i].GetColumn().equals(name)) {
-				return mAttributes[i].GetType();
+		for(int i = 0; i < m_attributes.length; i++) {
+			if (m_attributes[i].GetColumn().equals(name)) {
+				return m_attributes[i].GetType();
 			}
 		}
 		return SQLDataType.NULL;
 	}
 	
 	public String getTable() {
-		return mTable;
+		return m_table;
 	}
 }

@@ -36,8 +36,8 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 		return id;
 	}
 
-	public T query(long id) {
-		String selector = getSelector(id);
+	public T query(long ... ids) {
+		String selector = getSelector(ids);
 		String table = m_tableInfo.getTable();
 		String[] columns = m_tableInfo.getColumns();
 		Cursor cursor = m_database.query(table, columns, selector);
@@ -53,25 +53,44 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 	protected abstract T buildFromHashTable(Hashtable<String, Object> hashTable);
 
 	public int update(T object) {
-		String selector = getSelector(((PTStorable)object).getID());
+		String selector = getSelector(object);
 		ContentValues values = getContentValues(object);
 		String table = m_tableInfo.getTable();
 		return m_database.update(table, values, selector);
 	}
 	
-	protected String getSelector(long id) {
+	/**
+	 * Gets selector for PTStorable
+	 * Unoverriden methods will only use getID(), as the single primary key 
+	 * defined by the table attributes
+	 * @param object
+	 * @return an SQL where clause
+	 */
+	protected String getSelector(T object) {
 		String idColumn = m_tableInfo.getPrimaryKeyColumn();
-		return idColumn + "=" + id;
+		return idColumn + "=" + object.getID();
 	}
 	
-	public int delete(long id) {
-		String selector = getSelector(id);
+	/**
+	 * Gets selector for PTStorable with ids for primary keys.
+	 * Unoverriden methods will only use the first argument, as the single primary key 
+	 * defined by the table attributes
+	 * @param ids
+	 * @return an SQL where clause
+	 */
+	protected String getSelector(long ... ids) {
+		String idColumn = m_tableInfo.getPrimaryKeyColumn();
+		return idColumn + "=" + ids[0];
+	}
+	
+	public int delete(long ... ids) {
+		String selector = getSelector(ids);
 		String table = m_tableInfo.getTable();
 		return m_database.delete(table, selector);
 	}
 	
 	public int delete(T object) {
-		String selector = getSelector(object.getID());
+		String selector = getSelector(object);
 		String table = m_tableInfo.getTable();
 		return m_database.delete(table, selector);
 	}

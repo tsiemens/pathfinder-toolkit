@@ -6,38 +6,42 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class PTAbilityScore implements Parcelable, PTStorable {
-	private String m_ability;
-	private int m_score;
-
+public class PTAbility implements Parcelable, PTStorable {
+	
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
-	private long m_id;
+	
+	public static final int BASE_ABILITY_SCORE = 10;
+	
+	private long m_abilityId;
+	private int m_score;
+	private int m_tempScore;
+
 	private long m_characterId;
 	
-	public PTAbilityScore(long id, long characterId, String ability, int score) {
-		m_id = id;
+	public PTAbility(long id, long characterId, int score, int temp) {
+		m_abilityId = id;
 		m_characterId = characterId;
-		m_ability = ability;
 		m_score = score;
+		m_tempScore = temp;
 	}
 	
-	public PTAbilityScore(String ability, int score) {
-		this(UNSET_ID, UNSET_ID, ability, score);
+	public PTAbility(int id, int score, int temp) {
+		this(UNSET_ID, UNSET_ID, score, temp);
 	}
 	
-	public PTAbilityScore(Parcel in) {
-		m_ability = in.readString();
+	public PTAbility(Parcel in) {
 		m_score = in.readInt();
-		m_id = in.readLong();
+		m_tempScore = in.readInt();
+		m_abilityId = in.readLong();
 		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(m_ability);
 		out.writeInt(m_score);
-		out.writeLong(m_id);
+		out.writeInt(m_tempScore);
+		out.writeLong(m_abilityId);
 		out.writeLong(m_characterId);
 	}
 	
@@ -45,24 +49,32 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 		return m_score;
 	}
 	
-	public String getAbility() {
-		return m_ability;
-	}
-	
 	public void setScore(int score) {
 		m_score = score;
 	}
 	
-	public void setAbility(String ability) {
-		m_ability = ability;
+	public int getTempScore() {
+		return m_tempScore;
+	}
+
+	public void setTempScore(int tempScore) {
+		m_tempScore = tempScore;
+	}
+
+	public int getAbilityModifier() {
+		return calculateMod(m_score);
 	}
 	
-	public int getModifier() {
-		float temp = (float) ((m_score - 10)/2.0);
-		if (temp < 0) {
-			return (int) (temp - 0.5);
+	public int getTempModifier() {
+		return calculateMod(m_tempScore);
+	}
+	
+	private int calculateMod(int score) {
+		float mod = (float) ((score - 10)/2.0);
+		if (mod < 0) {
+			return (int) (mod - 0.5);
 		} else {
-			return (int) temp;
+			return (int) mod;
 		}
 	}
 	
@@ -97,12 +109,12 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 	
 	@Override
 	public void setID(long id) {
-		m_id = id;
+		m_abilityId = id;
 	}
 
 	@Override
 	public long getID() {
-		return m_id;
+		return m_abilityId;
 	}
 	
 	public void setCharacterID(long id) {
@@ -118,13 +130,13 @@ public class PTAbilityScore implements Parcelable, PTStorable {
 		return 0;
 	}
 	
-	public static final Parcelable.Creator<PTAbilityScore> CREATOR = new Parcelable.Creator<PTAbilityScore>() {
-		public PTAbilityScore createFromParcel(Parcel in) {
-			return new PTAbilityScore(in);
+	public static final Parcelable.Creator<PTAbility> CREATOR = new Parcelable.Creator<PTAbility>() {
+		public PTAbility createFromParcel(Parcel in) {
+			return new PTAbility(in);
 		}
 		
-		public PTAbilityScore[] newArray(int size) {
-			return new PTAbilityScore[size];
+		public PTAbility[] newArray(int size) {
+			return new PTAbility[size];
 		}
 	};
 }

@@ -17,8 +17,7 @@ public class PTCharacterConverter {
 	public static PTCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
 		PTCharacter newCharacter = new PTCharacter("", PTBaseApplication.getAppContext());
 		setFluff(newCharacter.getFluff(), oldCharacter.getFluff());
-		setAbilityScores(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet());
-		setAbilityScores(newCharacter.getTempAbilitySet(), oldCharacter.getTempAbilitySet());
+		setAbilities(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet(), oldCharacter.getTempAbilitySet());
 		setCombatStats(newCharacter.getCombatStatSet(), oldCharacter.getCombatStatSet());
 		setFeats(newCharacter.getFeatList(), oldCharacter.getFeatList());
 		setInventory(newCharacter.getInventory(), oldCharacter.getInventory());
@@ -47,7 +46,8 @@ public class PTCharacterConverter {
 		newFluff.setDescription(oldFluff.getDescription());
 	}
 	
-	private static void setAbilityScores(PTAbilitySet newAbilities, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTAbilitySet oldAbilities) {
+	private static void setAbilities(PTAbilitySet newAbilities, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTAbilitySet oldAbilities,
+			com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTAbilitySet tempAbilities) {
 		// TODO
 	}
 	

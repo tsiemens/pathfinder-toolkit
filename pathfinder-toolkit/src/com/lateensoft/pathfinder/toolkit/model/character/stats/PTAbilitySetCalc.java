@@ -4,7 +4,7 @@ import android.util.Log;
 
 
 public class PTAbilitySetCalc extends PTAbilitySet {
-	private PTAbilityScore[] mAbilitiesPostMods;
+	private PTAbility[] mAbilitiesPostMods;
 	private static final String TAG = "Ability set calc class";
 	
 	public PTAbilitySetCalc() {
@@ -12,18 +12,18 @@ public class PTAbilitySetCalc extends PTAbilitySet {
 		
 		//Resources res = android.content.res.Resources.getSystem();
 		//int base_ability = res.getInteger(R.integer.base_ability_score);
-		mAbilitiesPostMods = new PTAbilityScore[ABILITY_NAMES.length];
+		mAbilitiesPostMods = new PTAbility[ABILITY_NAMES.length];
 		
 		for(int i = 0; i < ABILITY_NAMES.length; i++) {
-			mAbilitiesPostMods[i] = new PTAbilityScore(ABILITY_NAMES[i], BASE_ABILITY_SCORE);
+			mAbilitiesPostMods[i] = new PTAbility(ABILITY_NAMES[i], BASE_ABILITY_SCORE);
 		}
 	}
 	
 	// Returns the point buy cost of the set
 	public int getPointBuyCost() {
 		int total = 0;
-		for(int i = 0; i < super.getLength(); i++) {
-			total += super.getAbilityScore(i).getAbilityPointCost();
+		for(int i = 0; i < super.size(); i++) {
+			total += super.getAbilityAtIndex(i).getAbilityPointCost();
 		}
 			
 		return total;
@@ -32,9 +32,9 @@ public class PTAbilitySetCalc extends PTAbilitySet {
 	// Increments the ability score with the corresponding 
 	// ability string, if it is valid to do so
 	public void incAbilityScore(String ability) {
-		for(int i = 0; i < super.getLength(); i++) {
-			if(ability.equals(super.getAbilityScore(i).getAbility())) {
-				super.getAbilityScore(i).incScore();
+		for(int i = 0; i < super.size(); i++) {
+			if(ability.equals(super.getAbilityAtIndex(i).getAbility())) {
+				super.getAbilityAtIndex(i).incScore();
 				return;
 			}
 		}
@@ -43,9 +43,9 @@ public class PTAbilitySetCalc extends PTAbilitySet {
 	// Increments the ability score with the corresponding 
 	// ability string, if it is valid to do so
 	public void decAbilityScore(String ability) {
-		for(int i = 0; i < super.getLength(); i++) {
-			if(ability.equals(super.getAbilityScore(i).getAbility())) {
-				super.getAbilityScore(i).decScore();
+		for(int i = 0; i < super.size(); i++) {
+			if(ability.equals(super.getAbilityAtIndex(i).getAbility())) {
+				super.getAbilityAtIndex(i).decScore();
 				return;
 			}
 		}
@@ -76,7 +76,7 @@ public class PTAbilitySetCalc extends PTAbilitySet {
 		return mAbilitiesPostMods[index].getScore();
 	}
 	
-	public PTAbilityScore getAbilityScorePostMod(int index) {
+	public PTAbility getAbilityScorePostMod(int index) {
 		return mAbilitiesPostMods[index];
 	}
 	

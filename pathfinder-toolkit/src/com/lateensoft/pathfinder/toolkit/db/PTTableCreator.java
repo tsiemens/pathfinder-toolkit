@@ -14,7 +14,7 @@ public class PTTableCreator {
 		db.execSQL(createSkill());
 		db.execSQL(createSave());
 		db.execSQL(createCombatStatSet());
-		db.execSQL(createAbilityScore());
+		db.execSQL(createAbility());
 		db.execSQL(createItem());
 		db.execSQL(createArmor());
 		db.execSQL(createWeapon());
@@ -91,14 +91,14 @@ public class PTTableCreator {
 	}
 	
 	// TODO: add something for set calc? Do we store that?
-	public String createAbilityScore() {
-		Log.d(TAG, "Creating ability score table");
-		return "CREATE TABLE AbilityScore (" +
-				"ability_score_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+	public String createAbility() {
+		Log.d(TAG, "Creating ability table");
+		return "CREATE TABLE Ability (" +
+				"ability_id INTEGER," +
 				"character_id INTEGER,  " +
-				"Ability TEXT, " +
 				"Score INTEGER, " +
-				"IsTemp INTEGER, " +
+				"Temp INTEGER, " +
+				"PRIMARY KEY (ability_id, character_id) " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

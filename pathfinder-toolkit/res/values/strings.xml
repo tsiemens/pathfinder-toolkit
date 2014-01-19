@@ -85,6 +85,8 @@
     <string name="roller_reset_button">Reset</string>
 
     <!-- Character Stats Strings -->
+    
+    <!-- Abilities -->
     <string-array name="abilities_short">
         <item>STR</item>
         <item>DEX</item>
@@ -93,6 +95,15 @@
         <item>WIS</item>
         <item>CHA</item>
     </string-array>
+    <string-array name="abilities_long">
+        <item>Strength</item>
+        <item>Dexterity</item>
+        <item>Constitution</item>
+        <item>Intelligence</item>
+        <item>Wisdom</item>
+        <item>Charisma</item>
+    </string-array>
+
     <string-array name="save_names">
         <item>Fortitude</item>
         <item>Reflex</item>

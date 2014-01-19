@@ -368,8 +368,8 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 				fluff.setRace(r.getStringArray(R.array.races_array)
 						[m_racesSpinner.getSelectedItemPosition()]);
 				
-				for (int i = 0; i < abilities.getLength(); i++) {
-					m_abilityRepo.update(abilities.getAbilityScore(i));
+				for (int i = 0; i < abilities.size(); i++) {
+					m_abilityRepo.update(abilities.getAbilityAtIndex(i));
 				}
 				m_fluffRepo.update(fluff);
 				
@@ -407,10 +407,10 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		m_abilitySet.applyMods(m_racialModSet);
     	
 		t = (TextView) getRootView().findViewById(modIds[abilityKey]);
-		t.setText(Integer.toString(m_abilitySet.getAbilityScorePostMod(abilityKey).getModifier()));
+		t.setText(Integer.toString(m_abilitySet.getAbilityScorePostMod(abilityKey).getAbilityModifier()));
 		
 		t = (TextView) getRootView().findViewById(baseScoreIds[abilityKey]);
-		t.setText(Integer.toString(m_abilitySet.getAbilityScore(abilityKey).getScore()));
+		t.setText(Integer.toString(m_abilitySet.getAbilityAtIndex(abilityKey).getScore()));
 		
 		t = (TextView) getRootView().findViewById(finalScoreIds[abilityKey]);
 		t.setText(Integer.toString(m_abilitySet.getAbilityScorePostMod(abilityKey).getScore()));
@@ -498,9 +498,9 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			}
 			
 			if (isInc) {
-				m_abilitySet.getAbilityScore(abilityKey).incScore();
+				m_abilitySet.getAbilityAtIndex(abilityKey).incScore();
 			} else {
-				m_abilitySet.getAbilityScore(abilityKey).decScore();
+				m_abilitySet.getAbilityAtIndex(abilityKey).decScore();
 			}
 	    	updateAbilityViews(abilityKey);
 		}
