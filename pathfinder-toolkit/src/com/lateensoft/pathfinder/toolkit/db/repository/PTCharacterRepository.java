@@ -60,7 +60,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			}
 			
 			// AbilityScores
-			PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
+			PTAbilityRepository abScoreRepo = new PTAbilityRepository();
 			PTAbilitySet abilitySet = object.getAbilitySet();
 			for (int i = 0; i < abilitySet.size(); i++) {
 				subCompId = abScoreRepo.insert(abilitySet.getAbilityAtIndex(i));
@@ -168,7 +168,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTFluffInfo fluff = fluffRepo.query(id);
 		
 		// Ability Scores
-		PTAbilityScoreRepository abScoreRepo = new PTAbilityScoreRepository();
+		PTAbilityRepository abScoreRepo = new PTAbilityRepository();
 		PTAbilitySet abilityScores = new PTAbilitySet(abScoreRepo.querySet(id));
 
 		// Combat Stats

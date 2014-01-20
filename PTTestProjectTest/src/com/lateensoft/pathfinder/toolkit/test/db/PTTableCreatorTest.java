@@ -17,7 +17,7 @@ public class PTTableCreatorTest extends AndroidTestCase {
 		Cursor c = m_db.query("sqlite_master", new String[]{"name"}, 
 				"type='table' ORDER BY name ASC");
 		c.moveToFirst();
-		String[] tables = {"AbilityScore", "Armor", "Character", "CombatStatSet",
+		String[] tables = {"Ability", "Armor", "Character", "CombatStatSet",
 				"Feat", "FluffInfo","Item","Party","PartyMember","Save","Skill",
 				"Spell","Weapon"};
 
@@ -32,7 +32,7 @@ public class PTTableCreatorTest extends AndroidTestCase {
 				}
 				c.moveToNext();
 			}
-			assertTrue(tables[i] + "not found", found);
+			assertTrue(tables[i] + " not found ", found);
 		}
 	}
 }

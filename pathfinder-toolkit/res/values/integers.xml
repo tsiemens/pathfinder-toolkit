@@ -6,14 +6,7 @@
     
     <integer name="fluff_dialog_max_lines">6</integer>
     
-    <!-- Keys for set arrays -->
-    <integer name="key_strength">0</integer>
-    <integer name="key_dexterity">1</integer>
-    <integer name="key_constitution">2</integer>
-    <integer name="key_intelligence">3</integer>
-    <integer name="key_wisdom">4</integer>
-    <integer name="key_charisma">5</integer>
-    
+    <!-- Keys for set arrays -->  
     <integer name="key_fort_save">0</integer>
     <integer name="key_ref_save">1</integer>
     <integer name="key_will_save">2</integer>
@@ -27,7 +20,6 @@
         <item >0</item>
         <item >0</item>
     </integer-array>
-    <integer name="calc_custom_option_offset">10</integer>
     
     <integer-array name="DwarfMods">
         <item >0</item>
@@ -63,15 +55,6 @@
         <item >0</item>
         <item >0</item>
         <item >2</item>
-    </integer-array>
-    
-    <integer-array name="HalfElfMods">
-        <item >0</item>
-        <item >0</item>
-        <item >0</item>
-        <item >0</item>
-        <item >0</item>
-        <item >0</item>
     </integer-array>
     
     <integer-array name="skill_ability_keys">

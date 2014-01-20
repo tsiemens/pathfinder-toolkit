@@ -8,13 +8,13 @@ import android.database.Cursor;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
 
-public class PTAbilityScoreRepository extends PTBaseRepository<PTAbility> {
+public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	private static final String TABLE = "Ability";
 	private static final String ABILITY_ID = "ability_id";
 	private static final String SCORE = "Score";
 	private static final String TEMP = "Temp";
 	
-	public PTAbilityScoreRepository() {
+	public PTAbilityRepository() {
 		super();
 		PTTableAttribute id = new PTTableAttribute(ABILITY_ID, SQLDataType.INTEGER, true);
 		PTTableAttribute character_id = new  PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
@@ -40,8 +40,17 @@ public class PTAbilityScoreRepository extends PTBaseRepository<PTAbility> {
 		values.put(ABILITY_ID, object.getID());
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(SCORE, object.getScore());
-		values.put(TEMP, object.getTempScore());
+		values.put(TEMP, object.getTempBonus());
 		return values;
+	}
+	
+	/**
+	 * @param ids must be { ability id, character id }
+	 * @return ability identified by ability id, character id
+	 */
+	@Override
+	public PTAbility query(long ... ids) {
+		return super.query(ids);
 	}
 	
 	/**
@@ -81,7 +90,7 @@ public class PTAbilityScoreRepository extends PTBaseRepository<PTAbility> {
 	@Override
 	protected String getSelector(long ... ids) {
 		if (ids.length >= 2) {
-			return ABILITY_ID + "=" + ids[0] + ", " + 
+			return ABILITY_ID + "=" + ids[0] + " AND " + 
 					CHARACTER_ID + "=" + ids[1];
 		} else {
 			throw new IllegalArgumentException("abilities require character and ability id to be identified");

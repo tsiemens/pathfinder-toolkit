@@ -69,11 +69,11 @@ public class PTWeaponRepository extends PTBaseRepository<PTWeapon> {
 	}
 	
 	@Override
-	public PTWeapon query(long ... id) {
+	public PTWeapon query(long ... ids) {
 		Locale l = null;
 		String selector = String.format(l, "%s.%s=%d AND "
 				+"%s.%s=%s.%s", 
-				TABLE, ID, id,
+				TABLE, ID, ids[0],
 				TABLE, ID, PTItemRepository.TABLE, PTItemRepository.ID);
 		
 		String table = m_tableInfo.getTable()+", "+PTItemRepository.TABLE;

@@ -15,7 +15,7 @@ public class PTAbility implements Parcelable, PTStorable {
 	
 	private long m_abilityId;
 	private int m_score;
-	private int m_tempScore;
+	private int m_tempBonus;
 
 	private long m_characterId;
 	
@@ -23,16 +23,16 @@ public class PTAbility implements Parcelable, PTStorable {
 		m_abilityId = id;
 		m_characterId = characterId;
 		m_score = score;
-		m_tempScore = temp;
+		m_tempBonus = temp;
 	}
 	
 	public PTAbility(int id, int score, int temp) {
-		this(UNSET_ID, UNSET_ID, score, temp);
+		this(id, UNSET_ID, score, temp);
 	}
 	
 	public PTAbility(Parcel in) {
 		m_score = in.readInt();
-		m_tempScore = in.readInt();
+		m_tempBonus = in.readInt();
 		m_abilityId = in.readLong();
 		m_characterId = in.readLong();
 	}
@@ -40,11 +40,14 @@ public class PTAbility implements Parcelable, PTStorable {
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		out.writeInt(m_score);
-		out.writeInt(m_tempScore);
+		out.writeInt(m_tempBonus);
 		out.writeLong(m_abilityId);
 		out.writeLong(m_characterId);
 	}
 	
+	/**
+	 * @return The base score for the ability
+	 */
 	public int getScore() {
 		return m_score;
 	}
@@ -53,20 +56,27 @@ public class PTAbility implements Parcelable, PTStorable {
 		m_score = score;
 	}
 	
-	public int getTempScore() {
-		return m_tempScore;
+	/**
+	 * @return The temporary change to the base score
+	 */
+	public int getTempBonus() {
+		return m_tempBonus;
 	}
 
-	public void setTempScore(int tempScore) {
-		m_tempScore = tempScore;
+	public void setTempBonus(int tempBonus) {
+		m_tempBonus = tempBonus;
 	}
 
 	public int getAbilityModifier() {
 		return calculateMod(m_score);
 	}
 	
+	/**
+	 * The modifier for the base + temp bonus
+	 * @return
+	 */
 	public int getTempModifier() {
-		return calculateMod(m_tempScore);
+		return calculateMod(m_score + m_tempBonus);
 	}
 	
 	private int calculateMod(int score) {
@@ -96,8 +106,9 @@ public class PTAbility implements Parcelable, PTStorable {
 		}
 	}
 	
-	// Takes a raw ability score
-	// Returns the point cost
+	/**
+	 * @return the cost for the base ability score
+	 */
 	public int getAbilityPointCost() {
 		for(int i = 0; i < SCORES.length; i++) {
 			if(m_score == SCORES[i]) {

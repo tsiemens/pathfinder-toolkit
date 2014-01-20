@@ -23,7 +23,7 @@
             android:layout_weight="0.20"
             android:layout_height="fill_parent"/>       
         <TextView
-            android:text="@string/temp_score"
+            android:text="@string/temp_bonus"
             android:padding="3dip"
         	android:gravity="center"
         	android:layout_weight="0.20"

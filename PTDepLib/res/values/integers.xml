@@ -21,7 +21,6 @@
         <item >0</item>
         <item >0</item>
     </integer-array>
-    <integer name="calc_custom_option_offset">10</integer>
     
     <integer-array name="DwarfMods">
         <item >0</item>

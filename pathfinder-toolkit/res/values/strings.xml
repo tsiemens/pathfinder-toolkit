@@ -539,7 +539,7 @@
         <item>Description</item>
     </string-array>
     
-    <string-array name="selectable_values_string">
+    <string-array name="selectable_whole_values_strings">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -582,6 +582,50 @@
         <item>39</item>
         <item>40</item>
     </string-array>
+    
+    <string-array name="selectable_integer_values_strings">
+        <item>-20</item>
+        <item>-19</item>
+        <item>-18</item>
+        <item>-17</item>
+        <item>-16</item>
+        <item>-15</item>
+        <item>-14</item>
+        <item>-13</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
+        <item>+6</item>
+        <item>+7</item>
+        <item>+8</item>
+        <item>+9</item>
+        <item>+10</item>
+        <item>+11</item>
+        <item>+12</item>
+        <item>+13</item>
+        <item>+14</item>
+        <item>+15</item>
+        <item>+16</item>
+        <item>+17</item>
+        <item>+18</item>
+        <item>+19</item>
+        <item>+20</item>
+	</string-array>
     
     <string-array name="spell_level_selectable_values_string">
         <item>0</item>
@@ -652,10 +696,10 @@
     </string-array>
     
     
-
+	<!-- Ability Header Strings -->
     <string name="mod">Mod</string>
     <string name="temp_mod">Temp\nMod</string>
-    <string name="temp_score">Temp\nScore</string>
+    <string name="temp_bonus">Temp\nBonus</string>
 
     <!-- Spellbook Strings -->
     <string name="spellbook_level">Level</string>

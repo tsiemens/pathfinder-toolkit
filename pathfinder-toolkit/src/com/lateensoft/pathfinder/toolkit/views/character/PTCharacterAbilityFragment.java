@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityScoreRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 
 // Untested
@@ -19,14 +19,17 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterAbilityFragment.class.getSimpleName();
 	
-	private final int[] modIds = {R.id.strMod, R.id.dexMod, R.id.conMod, R.id.intMod, 
+	private final int[] baseModViewIds = {R.id.strMod, R.id.dexMod, R.id.conMod, R.id.intMod, 
 			R.id.wisMod, R.id.chaMod};
-	private final int[] tempScoreIds = {R.id.strTempScore, R.id.dexTempScore, R.id.conTempScore, 
+	private final int[] tempBonusSpinnerIds = {R.id.strTempScore, R.id.dexTempScore, R.id.conTempScore, 
 			R.id.intTempScore, R.id.wisTempScore, R.id.chaTempScore};
-	private final int[] baseScoreIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt,
+	private final int[] baseScoreSpinnerIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt,
 			R.id.baseWis, R.id.baseCha};
-	private final int[] tempModIds = {R.id.strTempMod, R.id.dexTempMod, R.id.conTempMod,
+	private final int[] tempModViewIds = {R.id.strTempMod, R.id.dexTempMod, R.id.conTempMod,
 			R.id.intTempMod, R.id.wisTempMod, R.id.chaTempMod};	
+	
+	// selected index - TEMP_SPINNER_INDEX_OFFSET = selected value
+	private final int TEMP_SPINNER_INDEX_OFFSET = 20;
 	
 	private AbilityItemSelectedListener[] m_abilityItemSelectedListeners;
 	private AbilityItemSelectedListener[] m_tempAbilityItemSelectedListeners;
@@ -34,19 +37,19 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	private Spinner[] m_baseScoreSpinners;
 	private Spinner[] m_tempScoreSpinners;
 	
-	private PTAbilityScoreRepository m_abilityRepo;
+	private PTAbilityRepository m_abilityRepo;
 	
 	private PTAbilitySet m_abilityScores;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		m_abilityRepo = new PTAbilityScoreRepository();
+		m_abilityRepo = new PTAbilityRepository();
 		
-		m_baseScoreSpinners = new Spinner[baseScoreIds.length];
-		m_tempScoreSpinners = new Spinner[tempScoreIds.length];
+		m_baseScoreSpinners = new Spinner[baseScoreSpinnerIds.length];
+		m_tempScoreSpinners = new Spinner[tempBonusSpinnerIds.length];
 		
-		m_abilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
-		m_tempAbilityItemSelectedListeners = new AbilityItemSelectedListener[modIds.length];
+		m_abilityItemSelectedListeners = new AbilityItemSelectedListener[baseModViewIds.length];
+		m_tempAbilityItemSelectedListeners = new AbilityItemSelectedListener[baseModViewIds.length];
 	}
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,42 +59,49 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		setRootView(inflater.inflate(R.layout.character_abilities_fragment,
 				container, false));
 		
-		setupSpinners(m_baseScoreSpinners, baseScoreIds, m_abilityItemSelectedListeners, false);
-		setupSpinners(m_tempScoreSpinners, tempScoreIds, m_tempAbilityItemSelectedListeners, true);
+		setupSpinners(m_baseScoreSpinners, baseScoreSpinnerIds, m_abilityItemSelectedListeners, false);
+		setupSpinners(m_tempScoreSpinners, tempBonusSpinnerIds, m_tempAbilityItemSelectedListeners, true);
 		
 		return getRootView();
 	}
 	
 	private void updateSpinners() {
-		for(int i = 0; i < modIds.length; i++) {
+		for(int i = 0; i < baseModViewIds.length; i++) {
 			updateSpinnerValues(i);
 		}
 	}
 		
-	private void updateSpinnerValues(int abilityKey) {
+	private void updateSpinnerValues(int abilityIndex) {
     	Spinner s = new Spinner(getActivity());
     	TextView tv = new TextView(getActivity());
     	
-		tv = (TextView) getRootView().findViewById(modIds[abilityKey]);
-		tv.setText(String.valueOf(m_abilityScores.getAbilityAtIndex(abilityKey).getAbilityModifier()));
+		tv = (TextView) getRootView().findViewById(baseModViewIds[abilityIndex]);
+		tv.setText(String.valueOf(m_abilityScores.getAbilityAtIndex(abilityIndex).getAbilityModifier()));
 		
-		s = (Spinner) getRootView().findViewById(baseScoreIds[abilityKey]);
-		s.setSelection((m_abilityScores.getAbilityAtIndex(abilityKey).getScore()));
+		s = (Spinner) getRootView().findViewById(baseScoreSpinnerIds[abilityIndex]);
+		s.setSelection((m_abilityScores.getAbilityAtIndex(abilityIndex).getScore()));
 		
-		s = (Spinner) getRootView().findViewById(tempScoreIds[abilityKey]);
+		s = (Spinner) getRootView().findViewById(tempBonusSpinnerIds[abilityIndex]);
 		s.setSelection((m_abilityScores
-				.getAbilityAtIndex(abilityKey).getTempScore()));
+				.getAbilityAtIndex(abilityIndex).getTempBonus() + TEMP_SPINNER_INDEX_OFFSET));
 		
-		tv = (TextView) getRootView().findViewById(tempModIds[abilityKey]);
+		tv = (TextView) getRootView().findViewById(tempModViewIds[abilityIndex]);
 		tv.setText(String.valueOf(m_abilityScores
-				.getAbilityAtIndex(abilityKey).getTempModifier()));
+				.getAbilityAtIndex(abilityIndex).getTempModifier()));
     }
 	
 	private void setupSpinners(Spinner[] spinners, int viewIds[], 
 			AbilityItemSelectedListener[] listeners, boolean isTemp) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-				R.array.selectable_values_string, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
+		ArrayAdapter<CharSequence> adapter;
+		if (isTemp) {
+			adapter = ArrayAdapter.createFromResource(getActivity(),
+					R.array.selectable_integer_values_strings, android.R.layout.simple_spinner_item);
+			adapter.setDropDownViewResource(R.layout.spinner_plain);
+		} else {
+			adapter = ArrayAdapter.createFromResource(getActivity(),
+					R.array.selectable_whole_values_strings, android.R.layout.simple_spinner_item);
+			adapter.setDropDownViewResource(R.layout.spinner_plain);
+		}
 		
 		for(int i = 0; i < viewIds.length; i++) {
 			listeners[i] = new AbilityItemSelectedListener(isTemp, i);
@@ -136,14 +146,14 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		        int pos, long id) {
 
 			if(_isTemp) {
-				m_abilityScores.getAbilityAtIndex(_abilityIndex).setTempScore(pos);
+				m_abilityScores.getAbilityAtIndex(_abilityIndex).setTempBonus(pos - TEMP_SPINNER_INDEX_OFFSET);
 			}
 			else {
 				m_abilityScores.getAbilityAtIndex(_abilityIndex).setScore(pos);
 			}
 	
-			updateModsViews(tempModIds, true);
-			updateModsViews(modIds, false);		
+			updateModsViews(tempModViewIds, true);
+			updateModsViews(baseModViewIds, false);		
 			
 		}
 		
@@ -152,8 +162,8 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	@Override
 	public void updateFragmentUI() {
 		updateSpinners();
-		updateModsViews(modIds, false);
-		updateModsViews(tempModIds, true);
+		updateModsViews(baseModViewIds, false);
+		updateModsViews(tempModViewIds, true);
 	}
 	
 	@Override

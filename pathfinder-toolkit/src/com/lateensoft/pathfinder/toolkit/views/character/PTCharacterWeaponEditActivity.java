@@ -49,7 +49,7 @@ public class PTCharacterWeaponEditActivity extends PTParcelableEditorActivity {
 
 		setupSpinner(m_highestAtkSpinner, R.array.weapon_attack_bonus_options,
 				ATK_BONUS_OFFSET, m_spinnerOnTouchListener);
-		setupSpinner(m_ammoSpinner, R.array.selectable_values_string, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_ammoSpinner, R.array.selectable_whole_values_strings, 0, m_spinnerOnTouchListener);
 		setupSpinner(m_sizeSpinner, R.array.size_spinner_options, 0, m_spinnerOnTouchListener);
 		setupSpinner(m_typeSpinner, R.array.weapon_type_options, 0, m_spinnerOnTouchListener);
 		setupSpinner(m_rangeSpinner, R.array.weapon_range_options, 0, m_spinnerOnTouchListener);

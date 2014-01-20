@@ -38,7 +38,7 @@ public class PTAbilitySet implements Parcelable{
 		m_abilities = new PTAbility[ABILITY_IDS.length];
 		
 		for(int i = 0; i < ABILITY_IDS.length; i++) {
-			m_abilities[i] = new PTAbility(ABILITY_IDS[i], PTAbility.BASE_ABILITY_SCORE, PTAbility.BASE_ABILITY_SCORE);
+			m_abilities[i] = new PTAbility(ABILITY_IDS[i], PTAbility.BASE_ABILITY_SCORE, 0);
 		}
 	}
 	
