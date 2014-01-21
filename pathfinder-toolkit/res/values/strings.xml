@@ -103,6 +103,11 @@
         <item>Wisdom</item>
         <item>Charisma</item>
     </string-array>
+    
+    <string name="max_dex_warning">\u26A0 max</string>
+    
+    <string name="select_ability_dialog_title">Select Ability</string>
+    <string name="default_ability_label">\u0020(Default)</string>
 
     <string-array name="save_names">
         <item>Fortitude</item>

@@ -7,89 +7,55 @@ import android.os.Parcelable;
 
 public class PTSkill implements Parcelable, PTStorable {
 	
-	String m_name;
 	boolean m_classSkill;
-	String m_keyAbility;
-	int m_abilityMod;
 	int m_rank;
 	int m_miscMod;
 	int m_armorCheckPenalty;
-	int m_keyAbilityKey;
-	long m_id;
+	long m_abilityId;
+	
+	long m_skillId;
 	long m_characterId;
 	
-	public PTSkill() {
-		m_name = "";
-		m_classSkill = false;
-		m_keyAbility = "";
-		m_abilityMod = 0;
-		m_rank = 0;
-		m_miscMod = 0;
-		m_armorCheckPenalty = 0;
-		m_keyAbilityKey = 0;
+	public PTSkill(long skillId, long abilityKey) {
+		this(skillId, UNSET_ID, false, 0, 0, 0, abilityKey);
 	}
 	
-	public PTSkill(String name, int abilityKey, String abilityString) {
-		this(UNSET_ID, UNSET_ID, name, false, 0, 0, 0, 0, abilityKey, abilityString);
-	}
-	
-	public PTSkill(long id, long characterId, String name, Boolean classSkill, int abilityMod, int rank,
-			int miscMod, int armorCheckPenalty, int abilityKey, String keyAbility) {
-		m_name = name;
+	public PTSkill(long skillId, long characterId, Boolean classSkill, int rank,
+			int miscMod, int armorCheckPenalty, long abilityId) {
 		m_classSkill = classSkill;
-		m_abilityMod = abilityMod;
 		m_rank = rank;
 		m_miscMod = miscMod;
 		m_armorCheckPenalty = armorCheckPenalty;
-		m_keyAbilityKey = abilityKey;
-		m_keyAbility = keyAbility;
-		m_id = id;
+		m_abilityId = abilityId;
+		m_skillId = skillId;
 		m_characterId = characterId;
 	}
 
 	public PTSkill(Parcel in) {
-		m_name = in.readString();
 		boolean[] classSkill = new boolean[1];
 		in.readBooleanArray(classSkill);
 		m_classSkill = classSkill[0];
-		m_keyAbility = in.readString();
-		m_abilityMod = in.readInt();
 		m_rank = in.readInt();
 		m_miscMod = in.readInt();
 		m_armorCheckPenalty = in.readInt();
-		m_keyAbilityKey = in.readInt();
-		m_id = in.readLong();
+		m_abilityId = in.readLong();
+		m_skillId = in.readLong();
 		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(m_name);
 		boolean[] classSkill = new boolean[1];
 		classSkill[0] = m_classSkill;
 		out.writeBooleanArray(classSkill);
-		out.writeString(m_keyAbility);
-		out.writeInt(m_abilityMod);
 		out.writeInt(m_rank);
 		out.writeInt(m_miscMod);
 		out.writeInt(m_armorCheckPenalty);
-		out.writeInt(m_keyAbilityKey);
-		out.writeLong(m_id);
+		out.writeLong(m_abilityId);
+		out.writeLong(m_skillId);
 		out.writeLong(m_characterId);
 	}
 	
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return m_name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		m_name = name;
-	}
 	/**
 	 * @return the classSkill
 	 */
@@ -102,24 +68,15 @@ public class PTSkill implements Parcelable, PTStorable {
 	public void setClassSkill(boolean classSkill) {
 		m_classSkill = classSkill;
 	}
+
 	/**
-	 * @return the keyAbility
+	 * @param abilitySet The ability set of the character shared by the skill set
+	 * @param maxDex maximum dex mod for the character
+	 * @return the total skill mod for the skill
 	 */
-	public String getKeyAbility() {
-		return m_keyAbility;
-	}
-	/**
-	 * @param keyAbility the keyAbility to set
-	 */
-	public void setKeyAbility(String keyAbility) {
-		m_keyAbility = keyAbility;
-	}
-	/**
-	 * @return the total skill Mod
-	 */
-	public int getSkillMod() {
-		int skillMod = 0;
-		skillMod = skillMod + m_abilityMod + m_rank + m_miscMod + m_armorCheckPenalty;
+	public int getSkillMod(PTAbilitySet abilitySet, int maxDex) {
+		int skillMod = getAbilityMod(abilitySet, maxDex) + m_rank 
+			+ m_miscMod + m_armorCheckPenalty;
 		
 		if(m_classSkill && m_rank > 0)
 			skillMod += 3;
@@ -128,17 +85,19 @@ public class PTSkill implements Parcelable, PTStorable {
 	}
 
 	/**
-	 * @return the abilityMod
+	 * @param abilitySet The ability set of the character shared by the skill set
+	 * @param maxDex maximum dex mod for the character
+	 * @return the value of the ability mod for the skill
 	 */
-	public int getAbilityMod() {
-		return m_abilityMod;
+	public int getAbilityMod(PTAbilitySet abilitySet, int maxDex) {
+		int abilityMod = abilitySet.getAbility(m_abilityId).getTempModifier();
+		if (m_abilityId == PTAbilitySet.ID_DEX && abilityMod > maxDex) {
+			return maxDex;
+		} else {
+			return abilityMod;
+		}
 	}
-	/**
-	 * @param abilityMod the abilityMod to set
-	 */
-	public void setAbilityMod(int abilityMod) {
-		m_abilityMod = abilityMod;
-	}
+	
 	/**
 	 * @return the rank
 	 */
@@ -176,22 +135,22 @@ public class PTSkill implements Parcelable, PTStorable {
 		m_armorCheckPenalty = armorCheckPenalty;
 	}
 	
-	public int getKeyAbilityKey() {
-		return m_keyAbilityKey;
+	public long getAbilityId() {
+		return m_abilityId;
 	}
 	
-	public void setKeyAbilityKey(int keyAbilityKey) {
-		m_keyAbilityKey = keyAbilityKey;
+	public void setAbilityId(long abilityId) {
+		m_abilityId = abilityId;
 	}
 
 	@Override
 	public void setID(long id) {
-		m_id = id;
+		m_skillId = id;
 	}
 	
 	@Override
 	public long getID() {
-		return m_id;
+		return m_skillId;
 	}
 	
 	public void setCharacterID(long id) {

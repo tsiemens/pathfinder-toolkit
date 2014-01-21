@@ -36,11 +36,15 @@
                     android:gravity="left|center_vertical"
                     android:text="@string/skills_ability_mod_header" />
 
-                <Spinner
-                    android:id="@+id/spinnerSkillAbility"
+                <TextView
+                    android:id="@+id/tvSkillAbility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
+                    android:layout_margin="5dp"
+                    android:padding="2dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center"
+                    android:minWidth="90dp" />
             </LinearLayout>
 
             <LinearLayout

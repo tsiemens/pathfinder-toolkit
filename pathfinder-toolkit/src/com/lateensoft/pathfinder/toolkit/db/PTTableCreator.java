@@ -28,17 +28,14 @@ public class PTTableCreator {
 	public String createSkill() {
 		Log.d(TAG, "Creating skill table");
 		return "CREATE TABLE Skill (" +
-				"skill_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"skill_id INTEGER, " +
 				"character_id INTEGER, " +
-				"Name TEXT, " +
 				"ClassSkill INTEGER, " +
-				"KeyAbility TEXT, " +
-				"AbilityMod INTEGER, " +
 				"Rank INTEGER, " +
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
-				"KeyAbilityKey INTEGER, " +
-				"UNIQUE (character_id, Name), " +
+				"AbilityId INTEGER, " +
+				"PRIMARY KEY (skill_id, character_id), " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

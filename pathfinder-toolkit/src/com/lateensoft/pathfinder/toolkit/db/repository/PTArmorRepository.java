@@ -160,4 +160,19 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 		}
 		return armors;
 	}
+	
+	/**
+	 * @param characterId
+	 * @return the max dex permitted out of all worn armors
+	 */
+	public int getMaxDex(long characterId) {
+		PTArmor[] armors = querySet(characterId);
+		int maxDex = Integer.MAX_VALUE;
+		for (PTArmor armor : armors) {
+			if (armor.isWorn() && armor.getMaxDex() < maxDex) {
+				maxDex = armor.getMaxDex();
+			}
+		}
+		return maxDex;
+	}
 }

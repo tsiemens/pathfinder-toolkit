@@ -60,7 +60,7 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_id = UNSET_ID;
 		m_abilitySet = new PTAbilitySet();
 		m_combatStatSet = new PTCombatStatSet();
-		m_skillSet = new PTSkillSet(context);
+		m_skillSet = new PTSkillSet();
 		m_saveSet = new PTSaveSet(context);
 		m_fluffInfo = new PTFluffInfo();
 		m_inventory = new PTInventory();

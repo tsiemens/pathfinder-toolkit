@@ -1,40 +1,98 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTSkillSet implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
 	
+	public static final long ACRO = 1;
+    public static final long APPRAISE = 2;
+    public static final long BLUFF = 3;
+    public static final long CLIMB = 4;
+    public static final long CRAFT = 5;
+    public static final long DIPLOM = 6;
+    public static final long DISABLE_DEV = 7;
+    public static final long DISGUISE = 8;
+    public static final long ESCAPE = 9;
+    public static final long FLY = 10;
+    public static final long HANDLE_ANIMAL = 11;
+    public static final long HEAL = 12;
+    public static final long INTIMIDATE = 13;
+    public static final long KNOW_ARCANA = 14;
+    public static final long KNOW_DUNGEON = 15;
+    public static final long KNOW_ENG = 16;
+    public static final long KNOW_GEO = 17;
+    public static final long KNOW_HIST = 18;
+    public static final long KNOW_LOCAL = 19;
+    public static final long KNOW_NATURE = 20;
+    public static final long KNOW_NOBILITY = 21;
+    public static final long KNOW_PLANES = 22;
+    public static final long KNOW_RELIGION = 23;
+    public static final long LING = 24;
+    public static final long PERCEPT = 25;
+    public static final long PERFORM = 26;
+    public static final long PROF = 27;
+    public static final long RIDE = 28;
+    public static final long SENSE_MOTIVE = 29;
+    public static final long SLEIGHT_OF_HAND = 30;
+    public static final long SPELLCRAFT = 31;
+    public static final long STEALTH = 32;
+    public static final long SURVIVAL = 33;
+    public static final long SWIM = 34;
+    public static final long USE_MAGIC_DEVICE = 35;
+    
+    public static final long[] SKILL_IDS = { ACRO, APPRAISE, BLUFF, CLIMB,CRAFT, DIPLOM,
+    	DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
+    	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
+    	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
+    	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
+	
 	PTSkill[] m_skills;
 	
-	public PTSkillSet(Context context) {
-		Resources r = context.getResources();
-		String[] skills = r.getStringArray(R.array.skills);
-		int[] skillAbilityKeys = r.getIntArray(R.array.skill_ability_keys);
-		String[] skillAbilityShortStrings = r.getStringArray(R.array.abilities_short);
+	public PTSkillSet() {
+		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
 		
-		m_skills = new PTSkill[skills.length];
+		m_skills = new PTSkill[SKILL_IDS.length];
 		
-		for(int i = 0; i < skills.length; i++) {
-			m_skills[i] = new PTSkill(skills[i], skillAbilityKeys[i], skillAbilityShortStrings[skillAbilityKeys[i]]);
+		for(int i = 0; i < SKILL_IDS.length; i++) {
+			m_skills[i] = new PTSkill(SKILL_IDS[i], (long) defaultSkillAbilityIds[i]);
 		}
 	}
 	
 	/**
-	 * Sets the skills in the set to skills
-	 * Dangerous; should only be used by database
+	 * Safely populates the skill set with skills, in the correct order.
+	 * Sets skill to default if not found.
 	 * @param skills
 	 */
 	public PTSkillSet(PTSkill[] skills) {
-		m_skills = skills;
+		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
+		m_skills = new PTSkill[SKILL_IDS.length];
+		List<PTSkill> skillsList = new ArrayList<PTSkill>(Arrays.asList(skills));
+		
+		for(int i = 0; i < SKILL_IDS.length; i++) {
+			for (PTSkill skill : skillsList) {
+				if(skill.getID() == SKILL_IDS[i]) {
+					skillsList.remove(skill);
+					m_skills[i] = skill;
+					break;
+				}
+			}
+			if (m_skills[i] == null) {
+				m_skills[i] = new PTSkill(SKILL_IDS[i], (long) defaultSkillAbilityIds[i]);
+			}
+		}
 	}
 	
 	public PTSkillSet(Parcel in) {
@@ -49,7 +107,7 @@ public class PTSkillSet implements Parcelable {
 		out.writeBundle(objectBundle);
 	}
 	
-	public PTSkill getSkill(int index) {
+	public PTSkill getSkillByIndex(int index) {
 		if( index >= 0 && index < m_skills.length )
 			return m_skills[index];
 		else
@@ -94,7 +152,39 @@ public class PTSkillSet implements Parcelable {
 		return trainedSkills.toArray(returnArray);
 	}
 	
-	//can set/get through reff to skill
+	public static int[] getDefaultAbilityIds() {
+		Resources r = PTBaseApplication.getAppContext().getResources();
+		return r.getIntArray(R.array.default_skill_ability_ids);
+	}
+	
+	public static Map<Long, Long> getDefaultAbilityIdMap() {
+		Map<Long, Long> map = new HashMap<Long, Long>(SKILL_IDS.length);
+		int[] abilityIds = getDefaultAbilityIds();
+		for(int i = 0; i < SKILL_IDS.length; i++) {
+			map.put(SKILL_IDS[i], (long) abilityIds[i]);
+		}
+		return map;
+	}
+	
+	/**
+	 * @return the skill names, in the order as defined by SKILL_IDS
+	 */
+	public static String[] getSkillNames() {
+		Resources res = PTBaseApplication.getAppContext().getResources();
+		return res.getStringArray(R.array.skills);
+	}
+	
+	/**
+	 * @return a map of the skill ids to their name
+	 */
+	public static Map<Long, String> getSkillNameMap() {
+		Map<Long, String> map = new HashMap<Long, String>(SKILL_IDS.length);
+		String[] names = getSkillNames();
+		for (int i = 0; i < names.length; i++) {
+			map.put(SKILL_IDS[i], names[i]);
+		}
+		return map;
+	}	
 	
 	@Override
 	public int describeContents() {

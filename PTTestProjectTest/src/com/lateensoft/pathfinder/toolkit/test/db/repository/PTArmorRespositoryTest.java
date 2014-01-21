@@ -60,6 +60,27 @@ public class PTArmorRespositoryTest extends PTBaseRepositoryTest {
 		assertEquals(queriedItems[0], m_armor2);
 		assertEquals(queriedItems[1], m_armor1);
 	}
+	
+	public void testMaxDex() {
+		PTArmor armor1 = new PTArmor();
+		setValues(armor1, armor1.getID(), m_characterId, "Hat",
+				1.0, true, 10, 24, 2, 11, 20, "Hat", "S");	
+		m_repo.insert(armor1);
+		PTArmor armor2 = new PTArmor();
+		setValues(armor2, armor2.getID(), m_characterId, "Hat",
+				1.0, true, 10, 24, 42, 11, 20, "Hat", "S");	
+		m_repo.insert(armor2);
+		
+		assertEquals(2, m_repo.getMaxDex(m_characterId));
+		
+		m_armor1.setWorn(false);
+		m_repo.update(m_armor1);
+		armor1.setWorn(false);
+		m_repo.update(armor1);
+		armor2.setWorn(false);
+		m_repo.update(armor2);
+		assertEquals(Integer.MAX_VALUE, m_repo.getMaxDex(m_characterId));
+	}
 
 	public static void setValues(PTArmor toUpdate, long id, long characterId, String name,
 			double weight, boolean worn, int ACBonus, int checkPen, int maxDex, int spellFail,

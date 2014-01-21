@@ -19,15 +19,19 @@ public class PTAbility implements Parcelable, PTStorable {
 
 	private long m_characterId;
 	
-	public PTAbility(long id, long characterId, int score, int temp) {
-		m_abilityId = id;
+	public PTAbility(long abilityId, long characterId, int score, int temp) {
+		m_abilityId = abilityId;
 		m_characterId = characterId;
 		m_score = score;
 		m_tempBonus = temp;
 	}
 	
-	public PTAbility(int id, int score, int temp) {
-		this(id, UNSET_ID, score, temp);
+	public PTAbility(long abilityId, int score, int temp) {
+		this(abilityId, UNSET_ID, score, temp);
+	}
+	
+	public PTAbility(long abilityId) {
+		this(abilityId, BASE_ABILITY_SCORE, 0);
 	}
 	
 	public PTAbility(Parcel in) {

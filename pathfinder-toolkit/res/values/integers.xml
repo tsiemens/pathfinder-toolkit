@@ -57,42 +57,42 @@
         <item >2</item>
     </integer-array>
     
-    <integer-array name="skill_ability_keys">
-        <item>1</item>
-        <item>3</item>
-        <item>5</item>
-        <item>0</item>
-        <item>3</item>
-        <item>5</item>
-        <item>1</item>
-        <item>5</item>
-        <item>1</item>
-        <item>1</item>
-        <item>5</item>
+    <integer-array name="default_skill_ability_ids">
+        <item>2</item>
         <item>4</item>
-        <item>5</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>4</item>
+        <item>6</item>
         <item>1</item>
         <item>4</item>
-        <item>1</item>
-        <item>3</item>
-        <item>1</item>
-        <item>4</item>
-        <item>0</item>
+        <item>6</item>
+        <item>2</item>
+        <item>6</item>
+        <item>2</item>
+        <item>2</item>
+        <item>6</item>
         <item>5</item>
+        <item>6</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>5</item>
+        <item>2</item>
+        <item>5</item>
+        <item>2</item>
+        <item>4</item>
+        <item>2</item>
+        <item>5</item>
+        <item>1</item>
+        <item>6</item>
     </integer-array>
         
 </resources>

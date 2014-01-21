@@ -3,4 +3,7 @@
     <color name="holoDialogGrey">#282828</color>
     <color name="holo_dialog_dark_grey">#202020</color>
     <color name="holo_dialog_lighter_grey">#323232</color>
+    
+    <color name="white_button_background">#33ffffff</color>
+    <color name="white_button_background_selected">#77ffffff</color>
 </resources>

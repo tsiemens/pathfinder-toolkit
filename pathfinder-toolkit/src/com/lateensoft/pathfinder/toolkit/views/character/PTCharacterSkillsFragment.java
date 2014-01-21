@@ -2,7 +2,10 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTSkillsAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
@@ -32,11 +35,19 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	
 	private PTSkillRepository m_skillRepo;
 	private PTSkillSet m_skillSet;
+	
+	private PTArmorRepository m_armorRepo;
+	private PTAbilityRepository m_abilityRepo;
+	
+	private PTAbilitySet m_abilitySet;
+	private int m_maxDex = Integer.MAX_VALUE;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		m_skillRepo = new PTSkillRepository();
+		m_armorRepo = new PTArmorRepository();
+		m_abilityRepo = new PTAbilityRepository();
 	}
 
 	@Override
@@ -62,7 +73,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 			m_skillSelectedForEdit = m_skillSet.getTrainedSkill(
 					position);
 		} else {
-			m_skillSelectedForEdit = m_skillSet.getSkill(position);
+			m_skillSelectedForEdit = m_skillSet.getSkillByIndex(position);
 		}
 		showSkillEditor(m_skillSelectedForEdit);
 	}
@@ -81,9 +92,9 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		case Activity.RESULT_OK:
 			PTSkill skill = data.getExtras().getParcelable(
 					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Edit skill OK: " + skill.getName());
+			Log.v(TAG, "Edit skill OK: " + skill.getID());
 			if (m_skillSelectedForEdit != null) {
-				m_skillSelectedForEdit.setAbilityMod(skill.getAbilityMod());
+				m_skillSelectedForEdit.setAbilityId(skill.getAbilityId());
 				m_skillSelectedForEdit.setRank(skill.getRank());
 				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
 				m_skillSelectedForEdit.setArmorCheckPenalty(skill.getArmorCheckPenalty());
@@ -125,10 +136,12 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		PTSkillsAdapter adapter = null;
 		if (m_isFiltered) {
 			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, m_skillSet.getTrainedSkills());
+					R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
+					m_maxDex, m_abilitySet);
 		} else {
 			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, m_skillSet.getSkills());
+					R.layout.character_skill_row, m_skillSet.getSkills(),
+					m_maxDex, m_abilitySet);
 		}
 		m_skillsListView.setAdapter(adapter);
 	}
@@ -167,5 +180,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	@Override
 	public void loadFromDatabase() {
 		m_skillSet = new PTSkillSet(m_skillRepo.querySet(getCurrentCharacterID()));
+		
+		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
+		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
 	}
 }

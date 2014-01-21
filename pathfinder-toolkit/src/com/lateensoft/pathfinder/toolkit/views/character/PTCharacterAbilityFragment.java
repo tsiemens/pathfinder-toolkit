@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 
 // Untested
@@ -39,11 +40,15 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	
 	private PTAbilityRepository m_abilityRepo;
 	
+	private PTArmorRepository m_armorRepo;
+	private int m_maxDex = Integer.MAX_VALUE;
+	
 	private PTAbilitySet m_abilityScores;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		m_abilityRepo = new PTAbilityRepository();
+		m_armorRepo = new PTArmorRepository();
 		
 		m_baseScoreSpinners = new Spinner[baseScoreSpinnerIds.length];
 		m_tempScoreSpinners = new Spinner[tempBonusSpinnerIds.length];
@@ -114,12 +119,16 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	
 	public void updateModsViews(int viewIds[], boolean isTemp) {
 		TextView tv;
-		
 		for(int i = 0; i < viewIds.length; i++) {
 			tv = (TextView) getRootView().findViewById(viewIds[i]); 
 			if(isTemp) {
-				tv.setText(Integer.toString(m_abilityScores.getAbilityAtIndex(i)
-					.getTempModifier()));
+				if(m_abilityScores.getAbilityAtIndex(i).getID() == PTAbilitySet.ID_DEX &&
+						m_abilityScores.getAbilityAtIndex(i).getTempModifier() > m_maxDex) {
+					tv.setText(Integer.toString(m_maxDex)+"\n"+getString(R.string.max_dex_warning));
+				} else {
+					tv.setText(Integer.toString(m_abilityScores.getAbilityAtIndex(i)
+						.getTempModifier()));
+				}
 			}
 			else {
 				tv.setText(Integer.toString(m_abilityScores.getAbilityAtIndex(i)
@@ -183,5 +192,6 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	@Override
 	public void loadFromDatabase() {
 		m_abilityScores = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
+		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
 	}
 }
