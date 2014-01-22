@@ -38,7 +38,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	static final int INT_IDX = 3;
 	static final int WIS_IDX = 4;
 	static final int CHA_IDX = 5;
-	static final int NUM_ABILITIES = PTAbilitySet.ABILITY_IDS.length;
+	static final int NUM_ABILITIES = PTAbilitySet.ABILITY_KEYS.length;
 	
 	static final int MENU_ITEM_EXPORT_TO_NEW = 0;
 	private static final int MENU_ITEM_EXPORT_TO_EXISTING = 1;

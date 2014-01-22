@@ -2,14 +2,15 @@ package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
@@ -17,57 +18,59 @@ import com.lateensoft.pathfinder.toolkit.R;
 public class PTSkillSet implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
 	
-	public static final long ACRO = 1;
-    public static final long APPRAISE = 2;
-    public static final long BLUFF = 3;
-    public static final long CLIMB = 4;
-    public static final long CRAFT = 5;
-    public static final long DIPLOM = 6;
-    public static final long DISABLE_DEV = 7;
-    public static final long DISGUISE = 8;
-    public static final long ESCAPE = 9;
-    public static final long FLY = 10;
-    public static final long HANDLE_ANIMAL = 11;
-    public static final long HEAL = 12;
-    public static final long INTIMIDATE = 13;
-    public static final long KNOW_ARCANA = 14;
-    public static final long KNOW_DUNGEON = 15;
-    public static final long KNOW_ENG = 16;
-    public static final long KNOW_GEO = 17;
-    public static final long KNOW_HIST = 18;
-    public static final long KNOW_LOCAL = 19;
-    public static final long KNOW_NATURE = 20;
-    public static final long KNOW_NOBILITY = 21;
-    public static final long KNOW_PLANES = 22;
-    public static final long KNOW_RELIGION = 23;
-    public static final long LING = 24;
-    public static final long PERCEPT = 25;
-    public static final long PERFORM = 26;
-    public static final long PROF = 27;
-    public static final long RIDE = 28;
-    public static final long SENSE_MOTIVE = 29;
-    public static final long SLEIGHT_OF_HAND = 30;
-    public static final long SPELLCRAFT = 31;
-    public static final long STEALTH = 32;
-    public static final long SURVIVAL = 33;
-    public static final long SWIM = 34;
-    public static final long USE_MAGIC_DEVICE = 35;
+	public static final int ACRO = 1;
+    public static final int APPRAISE = 2;
+    public static final int BLUFF = 3;
+    public static final int CLIMB = 4;
+    public static final int CRAFT = 5;
+    public static final int DIPLOM = 6;
+    public static final int DISABLE_DEV = 7;
+    public static final int DISGUISE = 8;
+    public static final int ESCAPE = 9;
+    public static final int FLY = 10;
+    public static final int HANDLE_ANIMAL = 11;
+    public static final int HEAL = 12;
+    public static final int INTIMIDATE = 13;
+    public static final int KNOW_ARCANA = 14;
+    public static final int KNOW_DUNGEON = 15;
+    public static final int KNOW_ENG = 16;
+    public static final int KNOW_GEO = 17;
+    public static final int KNOW_HIST = 18;
+    public static final int KNOW_LOCAL = 19;
+    public static final int KNOW_NATURE = 20;
+    public static final int KNOW_NOBILITY = 21;
+    public static final int KNOW_PLANES = 22;
+    public static final int KNOW_RELIGION = 23;
+    public static final int LING = 24;
+    public static final int PERCEPT = 25;
+    public static final int PERFORM = 26;
+    public static final int PROF = 27;
+    public static final int RIDE = 28;
+    public static final int SENSE_MOTIVE = 29;
+    public static final int SLEIGHT_OF_HAND = 30;
+    public static final int SPELLCRAFT = 31;
+    public static final int STEALTH = 32;
+    public static final int SURVIVAL = 33;
+    public static final int SWIM = 34;
+    public static final int USE_MAGIC_DEVICE = 35;
     
-    public static final long[] SKILL_IDS = { ACRO, APPRAISE, BLUFF, CLIMB,CRAFT, DIPLOM,
+    public static final int[] SKILL_KEYS = { ACRO, APPRAISE, BLUFF, CLIMB, CRAFT, DIPLOM,
     	DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
     	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
     	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
     	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
+    
+    public static final int[] SUBTYPED_SKILLS = {CRAFT, PERFORM, PROF};
 	
 	PTSkill[] m_skills;
 	
 	public PTSkillSet() {
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
 		
-		m_skills = new PTSkill[SKILL_IDS.length];
+		m_skills = new PTSkill[SKILL_KEYS.length];
 		
-		for(int i = 0; i < SKILL_IDS.length; i++) {
-			m_skills[i] = new PTSkill(SKILL_IDS[i], (long) defaultSkillAbilityIds[i]);
+		for(int i = 0; i < SKILL_KEYS.length; i++) {
+			m_skills[i] = new PTSkill(SKILL_KEYS[i], defaultSkillAbilityIds[i]);
 		}
 	}
 	
@@ -77,22 +80,12 @@ public class PTSkillSet implements Parcelable {
 	 * @param skills
 	 */
 	public PTSkillSet(PTSkill[] skills) {
-		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
-		m_skills = new PTSkill[SKILL_IDS.length];
 		List<PTSkill> skillsList = new ArrayList<PTSkill>(Arrays.asList(skills));
 		
-		for(int i = 0; i < SKILL_IDS.length; i++) {
-			for (PTSkill skill : skillsList) {
-				if(skill.getID() == SKILL_IDS[i]) {
-					skillsList.remove(skill);
-					m_skills[i] = skill;
-					break;
-				}
-			}
-			if (m_skills[i] == null) {
-				m_skills[i] = new PTSkill(SKILL_IDS[i], (long) defaultSkillAbilityIds[i]);
-			}
-		}
+		verifySortSkills(skillsList);
+		
+		m_skills = new PTSkill[skillsList.size()];
+		skillsList.toArray(m_skills);
 	}
 	
 	public PTSkillSet(Parcel in) {
@@ -105,6 +98,30 @@ public class PTSkillSet implements Parcelable {
 		Bundle objectBundle = new Bundle();
 		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SKILLS, m_skills);
 		out.writeBundle(objectBundle);
+	}
+	
+	/**
+	 * Ensures that all skills occur at least once in the list.
+	 * If a skill does not appear, add a default version.
+	 * @param valid list of skills, sorted by skill key
+	 */
+	private void verifySortSkills(List<PTSkill> skills) {
+		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
+		boolean found;
+		for(int i = 0; i < SKILL_KEYS.length; i++) {
+			found = false;
+			for (PTSkill skill : skills) {
+				if(skill.getSkillKey() == SKILL_KEYS[i]) {
+					found = true;
+					break;
+				}
+			}
+			if (found == false) {
+				skills.add(new PTSkill(SKILL_KEYS[i], defaultSkillAbilityIds[i]));
+			}
+		}
+		
+		Collections.sort(skills);
 	}
 	
 	public PTSkill getSkillByIndex(int index) {
@@ -141,6 +158,10 @@ public class PTSkillSet implements Parcelable {
 		return m_skills;
 	}
 	
+	public int size() {
+		return m_skills.length;
+	}
+	
 	public PTSkill[] getTrainedSkills(){
 		ArrayList<PTSkill> trainedSkills = new ArrayList<PTSkill>();
 		for (int i = 0; i < m_skills.length; i++) {
@@ -152,16 +173,83 @@ public class PTSkillSet implements Parcelable {
 		return trainedSkills.toArray(returnArray);
 	}
 	
-	public static int[] getDefaultAbilityIds() {
-		Resources r = PTBaseApplication.getAppContext().getResources();
-		return r.getIntArray(R.array.default_skill_ability_ids);
+	public PTSkill addNewSubSkill(int skillKey) {
+		List<PTSkill> skilllist = new ArrayList<PTSkill>(Arrays.asList(m_skills));
+		int abilityKey = getDefaultAbilityKeyMap().get(skillKey);
+		PTSkill newSkill = new PTSkill(skillKey, abilityKey);
+		newSkill.setCharacterID(m_skills[0].getCharacterID());
+		skilllist.add(newSkill);
+		Collections.sort(skilllist);
+		m_skills = new PTSkill[skilllist.size()];
+		skilllist.toArray(m_skills);
+		return newSkill;
 	}
 	
-	public static Map<Long, Long> getDefaultAbilityIdMap() {
-		Map<Long, Long> map = new HashMap<Long, Long>(SKILL_IDS.length);
+	public void deleteSkill(PTSkill skill) {
+		PTSkill skillForDelete = null;
+		for (int i = 0; i < m_skills.length; i++) {
+			if (m_skills[i].getID() == skill.getID()) {
+				skillForDelete = m_skills[i];
+				break;
+			}
+		}
+		
+		if (skillForDelete != null) {
+			List<PTSkill> skilllist = new ArrayList<PTSkill>(Arrays.asList(m_skills));
+			skilllist.remove(skillForDelete);
+			m_skills = new PTSkill[skilllist.size()];
+			skilllist.toArray(m_skills);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param skillKey
+	 * @return
+	 */
+	public boolean hasMultipleOfSkill(int skillKey) {
+		int numOfSkill = 0;
+		for (PTSkill skill : m_skills) {
+			if (skill.getSkillKey() == skillKey) {
+				numOfSkill++;
+			}
+			if (numOfSkill > 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @param skillKey
+	 * @return true if all subtypes of this skill are either trained or named
+	 */
+	public boolean allSubSkillsUsed(int skillKey) {
+		for (int i = 0; i < m_skills.length; i++) {
+			if (m_skills[i].getSkillKey() == skillKey && m_skills[i].getRank() == 0 
+					&& (m_skills[i].getSubType() == null || m_skills[i].getSubType().isEmpty()) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * @return The default abilitykey for the skills, ordered as SKILL_KEYS
+	 */
+	private static int[] getDefaultAbilityIds() {
+		Resources r = PTBaseApplication.getAppContext().getResources();
+		return r.getIntArray(R.array.default_skill_ability_keys);
+	}
+	
+	/**
+	 * @return a map of the skill key to the ability key
+	 */
+	public static SparseIntArray getDefaultAbilityKeyMap() {
+		SparseIntArray map = new SparseIntArray(SKILL_KEYS.length);
 		int[] abilityIds = getDefaultAbilityIds();
-		for(int i = 0; i < SKILL_IDS.length; i++) {
-			map.put(SKILL_IDS[i], (long) abilityIds[i]);
+		for(int i = 0; i < SKILL_KEYS.length; i++) {
+			map.append(SKILL_KEYS[i], abilityIds[i]);
 		}
 		return map;
 	}
@@ -174,14 +262,23 @@ public class PTSkillSet implements Parcelable {
 		return res.getStringArray(R.array.skills);
 	}
 	
+	public static boolean isSubtypedSkill(int skillKey) {
+		for (int key : SUBTYPED_SKILLS) {
+			if (key == skillKey) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
-	 * @return a map of the skill ids to their name
+	 * @return a map of the skill keys to their name
 	 */
-	public static Map<Long, String> getSkillNameMap() {
-		Map<Long, String> map = new HashMap<Long, String>(SKILL_IDS.length);
+	public static SparseArray<String> getSkillNameMap() {
+		SparseArray<String> map = new SparseArray<String>(SKILL_KEYS.length);
 		String[] names = getSkillNames();
 		for (int i = 0; i < names.length; i++) {
-			map.put(SKILL_IDS[i], names[i]);
+			map.append(SKILL_KEYS[i], names[i]);
 		}
 		return map;
 	}	

@@ -265,6 +265,7 @@
     <string name="skills_all_filter">All</string>
     
     <string name="edit_skill_title">Edit Skill</string>
+    <string name="skill_subtype_hint">Type</string>
 
     <!-- Inventory -->
     <string name="inventory_add_item_button">+</string>

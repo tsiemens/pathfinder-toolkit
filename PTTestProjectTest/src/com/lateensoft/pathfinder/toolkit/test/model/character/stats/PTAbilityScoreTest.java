@@ -14,7 +14,7 @@ public class PTAbilityScoreTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		abilityScore = new PTAbility(PTAbilitySet.ID_STR, DEFAULT_SCORE, 0);
+		abilityScore = new PTAbility(PTAbilitySet.KEY_STR, DEFAULT_SCORE, 0);
 	}
 
 	protected void tearDown() throws Exception {

@@ -9,39 +9,45 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 public class PTSkillRepository extends PTBaseRepository<PTSkill> {
-	static final String TABLE = "Skill";
-	static final String SKILL_ID = "skill_id";
-	static final String CLASS_SKILL = "ClassSkill";
-	static final String RANK = "Rank";
-	static final String MISC_MOD = "MiscMod";
-	static final String ARMOR_CHECK_PENALTY = "ArmorCheckPenalty";
-	static final String ABILITY_ID = "AbilityId";
+	private static final String TABLE = "Skill";
+	private static final String SKILL_ID = "skill_id";
+	private static final String SKILL_KEY = "skill_key";
+	private static final String SUB_TYPE = "SubType";
+	private static final String CLASS_SKILL = "ClassSkill";
+	private static final String RANK = "Rank";
+	private static final String MISC_MOD = "MiscMod";
+	private static final String ARMOR_CHECK_PENALTY = "ArmorCheckPenalty";
+	private static final String ABILITY_KEY = "ability_key";
 	
 	public PTSkillRepository() {
 		super();
 		PTTableAttribute id = new PTTableAttribute(SKILL_ID, SQLDataType.INTEGER, true);
+		PTTableAttribute skillKey = new PTTableAttribute(SKILL_KEY, SQLDataType.INTEGER);
 		PTTableAttribute characterId = new PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
+		PTTableAttribute subType = new PTTableAttribute(SUB_TYPE, SQLDataType.TEXT);
 		PTTableAttribute classSkill = new PTTableAttribute(CLASS_SKILL, SQLDataType.INTEGER);
 		PTTableAttribute rank = new PTTableAttribute(RANK, SQLDataType.INTEGER);
 		PTTableAttribute miscMod = new PTTableAttribute(MISC_MOD, SQLDataType.INTEGER);
-		PTTableAttribute keyAbilityKey = new PTTableAttribute(ABILITY_ID, SQLDataType.INTEGER);
+		PTTableAttribute abilityKey = new PTTableAttribute(ABILITY_KEY, SQLDataType.INTEGER);
 		PTTableAttribute armorChk = new PTTableAttribute(ARMOR_CHECK_PENALTY, SQLDataType.INTEGER);
-		PTTableAttribute[] attributes = {id, characterId,  classSkill, rank, miscMod,
-				armorChk, keyAbilityKey};
+		PTTableAttribute[] attributes = {id, skillKey, characterId, subType, classSkill, rank, miscMod,
+				armorChk, abilityKey};
 		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 	
 	@Override
 	protected PTSkill buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int id = ((Long) hashTable.get(SKILL_ID)).intValue();
+		long id = ((Long) hashTable.get(SKILL_ID));
+		int skillKey = ((Long) hashTable.get(SKILL_KEY)).intValue();
 		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
+		String subType = (String) hashTable.get(SUB_TYPE);
 		boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
 		int rank = ((Long) hashTable.get(RANK)).intValue();
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
 		int armorCheckPenalty = ((Long) hashTable.get(ARMOR_CHECK_PENALTY)).intValue();
-		long abilityId = ((Long) hashTable.get(ABILITY_ID));
-		PTSkill skill = new PTSkill(id, characterId, classSkill, rank, 
-				miscMod, armorCheckPenalty, abilityId);
+		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
+		PTSkill skill = new PTSkill(id, characterId, skillKey, subType, classSkill, rank, 
+				miscMod, armorCheckPenalty, abilityKey);
 		return skill;
 	}
 	
@@ -51,12 +57,16 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		if (isIDSet(object)) {
 			values.put(SKILL_ID, object.getID());
 		}
+		values.put(SKILL_KEY, object.getSkillKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
+		if (object.getSubType() != null) {
+			values.put(SUB_TYPE, object.getSubType());
+		}
 		values.put(CLASS_SKILL, object.isClassSkill());
 		values.put(RANK, object.getRank());
 		values.put(MISC_MOD, object.getMiscMod());
 		values.put(ARMOR_CHECK_PENALTY, object.getArmorCheckPenalty());
-		values.put(ABILITY_ID, object.getAbilityId());
+		values.put(ABILITY_KEY, object.getAbilityKey());
 		return values;
 	}
 	
@@ -67,7 +77,7 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	 */
 	public PTSkill[] querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
-		String orderBy = SKILL_ID + " ASC";
+		String orderBy = SKILL_KEY+" ASC, "+SUB_TYPE+" ASC";
 		String table = m_tableInfo.getTable();
 		String[] columns = m_tableInfo.getColumns();
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
@@ -83,24 +93,5 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 			i++;
 		}
 		return skills;
-	}
-	
-	@Override
-	protected String getSelector(PTSkill object) {
-		return getSelector(object.getID(), object.getCharacterID());
-	}
-
-	/**
-	 * Return selector for ability. 
-	 * @param ids must be { skill id, character id }
-	 */
-	@Override
-	protected String getSelector(long ... ids) {
-		if (ids.length >= 2) {
-			return SKILL_ID + "=" + ids[0] + " AND " + 
-					CHARACTER_ID + "=" + ids[1];
-		} else {
-			throw new IllegalArgumentException("skills require skill and character id to be identified");
-		}
 	}
 }

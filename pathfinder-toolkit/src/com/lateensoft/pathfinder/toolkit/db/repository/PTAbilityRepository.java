@@ -10,13 +10,13 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
 
 public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	private static final String TABLE = "Ability";
-	private static final String ABILITY_ID = "ability_id";
+	private static final String ABILITY_KEY = "ability_key";
 	private static final String SCORE = "Score";
 	private static final String TEMP = "Temp";
 	
 	public PTAbilityRepository() {
 		super();
-		PTTableAttribute id = new PTTableAttribute(ABILITY_ID, SQLDataType.INTEGER, true);
+		PTTableAttribute id = new PTTableAttribute(ABILITY_KEY, SQLDataType.INTEGER, true);
 		PTTableAttribute character_id = new  PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
 		PTTableAttribute score = new PTTableAttribute(SCORE, SQLDataType.INTEGER);
 		PTTableAttribute Temp = new PTTableAttribute(TEMP, SQLDataType.INTEGER);
@@ -27,17 +27,17 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	@Override
 	protected PTAbility buildFromHashTable(
 			Hashtable<String, Object> hashTable) {
-		long id = (Long) hashTable.get(ABILITY_ID);
+		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
 		long characterId  = (Long) hashTable.get(CHARACTER_ID);
 		int score = ((Long) hashTable.get(SCORE)).intValue();
 		int temp = ((Long) hashTable.get(TEMP)).intValue();
-		return new PTAbility(id, characterId, score, temp);
+		return new PTAbility(abilityKey, characterId, score, temp);
 	}
 
 	@Override
 	protected ContentValues getContentValues(PTAbility object) {
 		ContentValues values = new ContentValues();
-		values.put(ABILITY_ID, object.getID());
+		values.put(ABILITY_KEY, object.getAbilityKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(SCORE, object.getScore());
 		values.put(TEMP, object.getTempBonus());
@@ -60,7 +60,7 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	 */
 	public PTAbility[] querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId;
-		String orderBy = ABILITY_ID + " ASC";
+		String orderBy = ABILITY_KEY + " ASC";
 		String table = m_tableInfo.getTable();
 		String[] columns = m_tableInfo.getColumns();
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
@@ -85,15 +85,15 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 
 	/**
 	 * Return selector for ability. 
-	 * @param ids must be { ability id, character id }
+	 * @param ids must be { ability key, character id }
 	 */
 	@Override
 	protected String getSelector(long ... ids) {
 		if (ids.length >= 2) {
-			return ABILITY_ID + "=" + ids[0] + " AND " + 
+			return ABILITY_KEY + "=" + ids[0] + " AND " + 
 					CHARACTER_ID + "=" + ids[1];
 		} else {
-			throw new IllegalArgumentException("abilities require character and ability id to be identified");
+			throw new IllegalArgumentException("abilities require ability key and character id to be identified");
 		}
 	}
 	

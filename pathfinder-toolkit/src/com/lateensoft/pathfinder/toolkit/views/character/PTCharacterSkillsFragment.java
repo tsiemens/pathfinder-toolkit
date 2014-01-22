@@ -5,6 +5,7 @@ import com.lateensoft.pathfinder.toolkit.adapters.character.PTSkillsAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
@@ -83,6 +84,9 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 				PTCharacterSkillEditActivity.class);
 		skillEditIntent.putExtra(
 				PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE,skill);
+		skillEditIntent.putExtra(PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_SKILL_DELETABLE_BOOLEAN,
+				(PTSkillSet.isSubtypedSkill(skill.getSkillKey()) 
+				&& m_skillSet.hasMultipleOfSkill(skill.getSkillKey())) );
 		startActivityForResult(skillEditIntent, 0);
 	}
 	
@@ -94,25 +98,33 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
 			Log.v(TAG, "Edit skill OK: " + skill.getID());
 			if (m_skillSelectedForEdit != null) {
-				m_skillSelectedForEdit.setAbilityId(skill.getAbilityId());
+				m_skillSelectedForEdit.setSubType(skill.getSubType());
+				m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
 				m_skillSelectedForEdit.setRank(skill.getRank());
 				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
 				m_skillSelectedForEdit.setArmorCheckPenalty(skill.getArmorCheckPenalty());
 				m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
 				
-				if (m_skillSelectedForEdit.getRank() <= 0) {
-					// Prevent out of bounds exception from removing views
-					// Not terribly costly since very few times will a player save a
-					// skill with no rank
-					setSkillsAdapter();
-				} else {
-					updateSkillsList();
-				}
-				
 				m_skillRepo.update(m_skillSelectedForEdit);
+				addNewSubSkills();
+				updateSkillsList();
+				
 				m_skillSelectedForEdit = null;
 			}		
 			break;
+		case PTCharacterSpellEditActivity.RESULT_DELETE:
+			Log.v(TAG, "Deleting a skill subtype");
+			if (m_skillSelectedForEdit != null && PTSkillSet.isSubtypedSkill(m_skillSelectedForEdit.getSkillKey()) 
+				&& m_skillSet.hasMultipleOfSkill(m_skillSelectedForEdit.getSkillKey())) {
+				if (m_skillRepo.delete(m_skillSelectedForEdit.getID())!= 0) {
+					m_skillSet.deleteSkill(m_skillSelectedForEdit);
+				}
+				// Adding is in case they delete the only unranked skill
+				addNewSubSkills();
+				setSkillsAdapter();
+			}
+			break;
+		
 		case Activity.RESULT_CANCELED:
 			break;
 		default:
@@ -123,7 +135,9 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	}
 
 	private void updateSkillsList() {
-		if (m_isFiltered) {
+		if(m_skillSet.size() !=  m_skillsListView.getAdapter().getCount()) {
+			setSkillsAdapter();
+		} else if (m_isFiltered) {
 			((PTSkillsAdapter) m_skillsListView.getAdapter())
 					.updateList(m_skillSet.getTrainedSkills());
 		} else {
@@ -180,8 +194,18 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	@Override
 	public void loadFromDatabase() {
 		m_skillSet = new PTSkillSet(m_skillRepo.querySet(getCurrentCharacterID()));
-		
+		addNewSubSkills();
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
 		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
+	}
+	
+	private void addNewSubSkills() {
+		PTSkill newSkill;
+		for (int key : PTSkillSet.SUBTYPED_SKILLS) {
+			if (m_skillSet.allSubSkillsUsed(key)) {
+				newSkill = m_skillSet.addNewSubSkill(key);
+				m_skillRepo.insert(newSkill);
+			}
+		}
 	}
 }

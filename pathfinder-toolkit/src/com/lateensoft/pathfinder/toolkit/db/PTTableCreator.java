@@ -28,14 +28,15 @@ public class PTTableCreator {
 	public String createSkill() {
 		Log.d(TAG, "Creating skill table");
 		return "CREATE TABLE Skill (" +
-				"skill_id INTEGER, " +
+				"skill_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+				"skill_key INTEGER, " +
 				"character_id INTEGER, " +
+				"SubType TEXT, " +
 				"ClassSkill INTEGER, " +
 				"Rank INTEGER, " +
 				"MiscMod INTEGER, " +
 				"ArmorCheckPenalty INTEGER, " +
-				"AbilityId INTEGER, " +
-				"PRIMARY KEY (skill_id, character_id), " +
+				"ability_key INTEGER, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";
@@ -87,15 +88,14 @@ public class PTTableCreator {
 				");";
 	}
 	
-	// TODO: add something for set calc? Do we store that?
 	public String createAbility() {
 		Log.d(TAG, "Creating ability table");
 		return "CREATE TABLE Ability (" +
-				"ability_id INTEGER," +
+				"ability_key INTEGER," +
 				"character_id INTEGER,  " +
 				"Score INTEGER, " +
 				"Temp INTEGER, " +
-				"PRIMARY KEY (ability_id, character_id) " +
+				"PRIMARY KEY (ability_key, character_id) " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

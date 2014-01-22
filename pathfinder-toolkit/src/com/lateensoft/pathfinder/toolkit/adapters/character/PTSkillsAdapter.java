@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.adapters.character;
 
-import java.util.Map;
-
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
@@ -9,6 +7,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,8 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 	private Context m_context;
 	private int m_layoutResourceId;
 	private PTSkill[] m_skills = null;
-	private Map<Long, String> m_skillNameMap;
-	private Map<Long, String> m_abilityNameMap;
+	private SparseArray<String> m_skillNameMap;
+	private SparseArray<String> m_abilityNameMap;
 	
 	private PTAbilitySet m_abilitySet;
 	private int m_maxDex;
@@ -62,9 +61,15 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 			holder = (SkillHolder) row.getTag();
 		}
 
-		holder.name.setText(m_skillNameMap.get(m_skills[position].getID()));
+		String name = m_skillNameMap.get(m_skills[position].getSkillKey());
+		if (PTSkillSet.isSubtypedSkill(m_skills[position].getSkillKey()) && 
+				m_skills[position].getSubType() != null && 
+				!m_skills[position].getSubType().isEmpty()) {
+			name = name + " ("+ m_skills[position].getSubType() + ")";
+		}
+		holder.name.setText(name);
 		holder.total.setText(Integer.toString(m_skills[position].getSkillMod(m_abilitySet, m_maxDex)));
-		holder.abilityName.setText(m_abilityNameMap.get(m_skills[position].getAbilityId()));
+		holder.abilityName.setText(m_abilityNameMap.get(m_skills[position].getAbilityKey()));
 		holder.abilityMod.setText(Integer.toString(m_skills[position].getAbilityMod(m_abilitySet, m_maxDex)));
 		holder.rank.setText(Integer.toString(m_skills[position].getRank()));
 		holder.miscMod.setText(Integer.toString(m_skills[position].getMiscMod()));

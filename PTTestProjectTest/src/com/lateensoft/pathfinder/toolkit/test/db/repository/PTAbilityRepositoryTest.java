@@ -22,7 +22,7 @@ public class PTAbilityRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testUpdate() {
-		PTAbility toUpdate = new PTAbility(m_ability.getID(), m_ability.getCharacterID(),
+		PTAbility toUpdate = new PTAbility(m_ability.getAbilityKey(), m_ability.getCharacterID(),
 				8, -2);
 		m_repo.update(toUpdate);
 		PTAbility updated = m_repo.query(m_ability.getID(), m_characterId);
@@ -32,8 +32,8 @@ public class PTAbilityRepositoryTest extends PTBaseRepositoryTest {
 	public void testQuerySet() {
 		PTAbility[] queriedAbilityScores = m_repo.querySet(m_characterId);
 
-		for (int i = 0; i < PTAbilitySet.ABILITY_IDS.length; i++){
-			assertEquals(PTAbilitySet.ABILITY_IDS[i], queriedAbilityScores[i].getID());
+		for (int i = 0; i < PTAbilitySet.ABILITY_KEYS.length; i++){
+			assertEquals(PTAbilitySet.ABILITY_KEYS[i], queriedAbilityScores[i].getID());
 		}
 	}
 	

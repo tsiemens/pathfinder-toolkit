@@ -13,31 +13,31 @@ public class PTAbility implements Parcelable, PTStorable {
 	
 	public static final int BASE_ABILITY_SCORE = 10;
 	
-	private long m_abilityId;
+	private int m_abilityKey;
 	private int m_score;
 	private int m_tempBonus;
 
 	private long m_characterId;
 	
-	public PTAbility(long abilityId, long characterId, int score, int temp) {
-		m_abilityId = abilityId;
+	public PTAbility(int abilityKey, long characterId, int score, int temp) {
+		m_abilityKey = abilityKey;
 		m_characterId = characterId;
 		m_score = score;
 		m_tempBonus = temp;
 	}
 	
-	public PTAbility(long abilityId, int score, int temp) {
-		this(abilityId, UNSET_ID, score, temp);
+	public PTAbility(int abilityKey, int score, int temp) {
+		this(abilityKey, UNSET_ID, score, temp);
 	}
 	
-	public PTAbility(long abilityId) {
-		this(abilityId, BASE_ABILITY_SCORE, 0);
+	public PTAbility(int abilityKey) {
+		this(abilityKey, BASE_ABILITY_SCORE, 0);
 	}
 	
 	public PTAbility(Parcel in) {
 		m_score = in.readInt();
 		m_tempBonus = in.readInt();
-		m_abilityId = in.readLong();
+		m_abilityKey = in.readInt();
 		m_characterId = in.readLong();
 	}
 
@@ -45,7 +45,7 @@ public class PTAbility implements Parcelable, PTStorable {
 	public void writeToParcel(Parcel out, int flags) {
 		out.writeInt(m_score);
 		out.writeInt(m_tempBonus);
-		out.writeLong(m_abilityId);
+		out.writeInt(m_abilityKey);
 		out.writeLong(m_characterId);
 	}
 	
@@ -122,14 +122,25 @@ public class PTAbility implements Parcelable, PTStorable {
 		return 0;
 	}
 	
-	@Override
-	public void setID(long id) {
-		m_abilityId = id;
+	public void setAbilityKey(int abilityKey) {
+		m_abilityKey = abilityKey;
 	}
 
+	public int getAbilityKey() {
+		return m_abilityKey;
+	}
+	
+	@Override
+	public void setID(long id) {
+		m_abilityKey = (int)id;
+	}
+
+	/**
+	 * same as getAbilityKey()
+	 */
 	@Override
 	public long getID() {
-		return m_abilityId;
+		return m_abilityKey;
 	}
 	
 	public void setCharacterID(long id) {

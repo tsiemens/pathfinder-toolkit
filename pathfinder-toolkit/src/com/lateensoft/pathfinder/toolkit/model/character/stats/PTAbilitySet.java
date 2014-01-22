@@ -2,9 +2,7 @@ package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
@@ -13,32 +11,33 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.SparseArray;
 
 public class PTAbilitySet implements Parcelable{
 	@SuppressWarnings("unused")
 	private static final String TAG = PTAbilitySet.class.getSimpleName();
 	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
 	
-	public static final long ID_STR = 1;
-	public static final long ID_DEX = 2;
-	public static final long ID_CON = 3;
-	public static final long ID_INT = 4;
-	public static final long ID_WIS = 5;
-	public static final long ID_CHA = 6;
+	public static final int KEY_STR = 1;
+	public static final int KEY_DEX = 2;
+	public static final int KEY_CON = 3;
+	public static final int KEY_INT = 4;
+	public static final int KEY_WIS = 5;
+	public static final int KEY_CHA = 6;
 	
 	/**
 	* This matches the order for string resources, and how the abilities are stored
 	* in the set.
 	*/
-	public static final long[] ABILITY_IDS = {ID_STR, ID_DEX, ID_CON, ID_INT, ID_WIS, ID_CHA};
+	public static final int[] ABILITY_KEYS = {KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA};
 	
 	private PTAbility[] m_abilities;
 	
 	public PTAbilitySet() {
-		m_abilities = new PTAbility[ABILITY_IDS.length];
+		m_abilities = new PTAbility[ABILITY_KEYS.length];
 		
-		for(int i = 0; i < ABILITY_IDS.length; i++) {
-			m_abilities[i] = new PTAbility(ABILITY_IDS[i], PTAbility.BASE_ABILITY_SCORE, 0);
+		for(int i = 0; i < ABILITY_KEYS.length; i++) {
+			m_abilities[i] = new PTAbility(ABILITY_KEYS[i], PTAbility.BASE_ABILITY_SCORE, 0);
 		}
 	}
 	
@@ -48,19 +47,19 @@ public class PTAbilitySet implements Parcelable{
 	 * @param abilities
 	 */
 	public PTAbilitySet(PTAbility[] abilities) {
-		m_abilities = new PTAbility[ABILITY_IDS.length];
+		m_abilities = new PTAbility[ABILITY_KEYS.length];
 		List<PTAbility> scoresList = new ArrayList<PTAbility>(Arrays.asList(abilities));
 		
-		for(int i = 0; i < ABILITY_IDS.length; i++) {
+		for(int i = 0; i < ABILITY_KEYS.length; i++) {
 			for (PTAbility score : scoresList) {
-				if(score.getID() == ABILITY_IDS[i]) {
+				if(score.getID() == ABILITY_KEYS[i]) {
 					scoresList.remove(score);
 					m_abilities[i] = score;
 					break;
 				}
 			}
 			if (m_abilities[i] == null) {
-				m_abilities[i] = new PTAbility(ABILITY_IDS[i]);
+				m_abilities[i] = new PTAbility(ABILITY_KEYS[i]);
 			}
 		}
 	}
@@ -78,12 +77,12 @@ public class PTAbilitySet implements Parcelable{
 	}
 	
 	/**
-	 * @param abilityId
-	 * @return The ability in the set with abilityId. null if no such ability exists.
+	 * @param abilityKey
+	 * @return The ability in the set with abilityKey. null if no such ability exists.
 	 */
-	public PTAbility getAbility(long abilityId) {
+	public PTAbility getAbility(long abilityKey) {
 		for(int i = 0; i < m_abilities.length; i++) {
-			if(abilityId == m_abilities[i].getID()) {
+			if(abilityKey == m_abilities[i].getID()) {
 				return m_abilities[i];
 			}
 		}
@@ -92,7 +91,7 @@ public class PTAbilitySet implements Parcelable{
 	
 	/**
 	 * @param index
-	 * @return the ability at index. Note: indexes of the set are defined by ABILITY_IDS
+	 * @return the ability at index. Note: indexes of the set are defined by ABILITY_KEYS
 	 */
 	public PTAbility getAbilityAtIndex(int index) {
 		if( index >=0 && index <= m_abilities.length) {
@@ -103,14 +102,14 @@ public class PTAbilitySet implements Parcelable{
 	}
 
 	/**
-	 * @return the long ability names, in the order as defined by ABILITY_IDS
+	 * @return the long ability names, in the order as defined by ABILITY_KEYS
 	 */
 	public static String[] getLongAbilityNames() {
 		return getStringArray(R.array.abilities_long);
 	}
 	
 	/**
-	 * @return the short ability names, in the order as defined by ABILITY_IDS
+	 * @return the short ability names, in the order as defined by ABILITY_KEYS
 	 */
 	public static String[] getShortAbilityNames() {
 		return getStringArray(R.array.abilities_short);
@@ -126,13 +125,13 @@ public class PTAbilitySet implements Parcelable{
 	}
 	
 	/**
-	 * @return a map of the ability ids to their short name
+	 * @return a map of the ability keys to their short name
 	 */
-	public static Map<Long, String> getAbilityShortNameMap() {
-		Map<Long, String> map = new HashMap<Long, String>(ABILITY_IDS.length);
+	public static SparseArray<String> getAbilityShortNameMap() {
+		SparseArray<String> map = new SparseArray<String>(ABILITY_KEYS.length);
 		String[] names = getShortAbilityNames();
 		for (int i = 0; i < names.length; i++) {
-			map.put(ABILITY_IDS[i], names[i]);
+			map.append(ABILITY_KEYS[i], names[i]);
 		}
 		return map;
 	}	

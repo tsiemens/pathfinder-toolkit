@@ -14,38 +14,38 @@ public class PTAbilitySelectionDialog {
 	private OnAbilitySelectedListener m_listener;
 	private AlertDialog.Builder m_builder;
 	
-	public PTAbilitySelectionDialog(Context context, long checkedAbilityId, long defaultAbilityId) {
+	public PTAbilitySelectionDialog(Context context, int checkedAbilityKey, int defaultAbilityKey) {
 		m_builder = new AlertDialog.Builder(context);
 		Resources r = m_builder.getContext().getResources();
 		String[] abilityNames = r.getStringArray(R.array.abilities_short);
 		
 		// Making the default visible to user
-		int defaultAbilityIndex = getIndexForAbilityId(defaultAbilityId);
+		int defaultAbilityIndex = getIndexForAbilityKey(defaultAbilityKey);
 		abilityNames[defaultAbilityIndex] = abilityNames[defaultAbilityIndex] +
 				r.getString(R.string.default_ability_label);
 		
 		OnClickListener clickListener = new OnClickListener() {	
-			private long m_selectedAbilityId = 0;
+			private int m_selectedAbilityKey = 0;
 			
 			@Override public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (m_listener != null) {
-						m_listener.onAbilitySelected(m_selectedAbilityId);
+						m_listener.onAbilitySelected(m_selectedAbilityKey);
 					}
 					break;
 				case DialogInterface.BUTTON_NEGATIVE:
 					break;
 				default:
 					// Set the currently selected ability
-					m_selectedAbilityId = PTAbilitySet.ABILITY_IDS[which];
+					m_selectedAbilityKey = PTAbilitySet.ABILITY_KEYS[which];
 					break;
 
 				}
 			}
 		};
 		m_builder.setSingleChoiceItems(abilityNames, 
-				getIndexForAbilityId(checkedAbilityId), clickListener);
+				getIndexForAbilityKey(checkedAbilityKey), clickListener);
 		m_builder.setTitle(R.string.select_ability_dialog_title);
 		m_builder.setPositiveButton(R.string.ok_button_text, clickListener);
 		m_builder.setNegativeButton(R.string.cancel_button_text, clickListener);
@@ -60,9 +60,9 @@ public class PTAbilitySelectionDialog {
 		m_builder.show();
 	}
 
-	protected int getIndexForAbilityId(long id) {
-		for (int i = 0; i < PTAbilitySet.ABILITY_IDS.length; i++) {
-			if (PTAbilitySet.ABILITY_IDS[i] == id) {
+	protected int getIndexForAbilityKey(int abilityKey) {
+		for (int i = 0; i < PTAbilitySet.ABILITY_KEYS.length; i++) {
+			if (PTAbilitySet.ABILITY_KEYS[i] == abilityKey) {
 				return i;
 			}
 		}
@@ -72,8 +72,8 @@ public class PTAbilitySelectionDialog {
 	public static interface OnAbilitySelectedListener {
 		
 		/**
-		 * @param abilityId the id of the ability selected, or 0 if none selected.
+		 * @param abilityKey the id of the ability selected, or 0 if none selected.
 		 */
-		public void onAbilitySelected(long abilityId);
+		public void onAbilitySelected(int abilityKey);
 	}
 }

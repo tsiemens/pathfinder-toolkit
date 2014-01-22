@@ -5,30 +5,47 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTSkill implements Parcelable, PTStorable {
+public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	
 	boolean m_classSkill;
 	int m_rank;
 	int m_miscMod;
 	int m_armorCheckPenalty;
-	long m_abilityId;
+	int m_abilityKey;
 	
-	long m_skillId;
+	// For use with skills such as craft, professions, perform
+	String m_subType;
+	
+	/** Defines the skill type/name, etc
+	 * These are defined in PTSkillSet
+	 */
+	int m_skillKey;
+	
+	// A unique id for all skills in the database
+	long m_id;
 	long m_characterId;
 	
-	public PTSkill(long skillId, long abilityKey) {
-		this(skillId, UNSET_ID, false, 0, 0, 0, abilityKey);
+	public PTSkill(int skillKey, int abilityKey) {
+		this(UNSET_ID, UNSET_ID, skillKey, false, 0, 0, 0, abilityKey);
 	}
 	
-	public PTSkill(long skillId, long characterId, Boolean classSkill, int rank,
-			int miscMod, int armorCheckPenalty, long abilityId) {
+	public PTSkill(long id, long characterId, int skillId, Boolean classSkill, int rank,
+			int miscMod, int armorCheckPenalty, int abilityId) {
+		this(id, characterId, skillId, null, classSkill, rank, miscMod,
+				armorCheckPenalty, abilityId);
+	}
+	
+	public PTSkill(long id, long characterId, int skillId, String subtype, Boolean classSkill,
+			int rank, int miscMod, int armorCheckPenalty, int abilityId) {
 		m_classSkill = classSkill;
 		m_rank = rank;
 		m_miscMod = miscMod;
 		m_armorCheckPenalty = armorCheckPenalty;
-		m_abilityId = abilityId;
-		m_skillId = skillId;
+		m_abilityKey = abilityId;
+		m_skillKey = skillId;
+		m_id = id;
 		m_characterId = characterId;
+		m_subType = subtype;
 	}
 
 	public PTSkill(Parcel in) {
@@ -38,9 +55,11 @@ public class PTSkill implements Parcelable, PTStorable {
 		m_rank = in.readInt();
 		m_miscMod = in.readInt();
 		m_armorCheckPenalty = in.readInt();
-		m_abilityId = in.readLong();
-		m_skillId = in.readLong();
+		m_abilityKey = in.readInt();
+		m_skillKey = in.readInt();
 		m_characterId = in.readLong();
+		m_id = in.readLong();
+		m_subType = in.readString();
 	}
 
 	@Override
@@ -51,9 +70,11 @@ public class PTSkill implements Parcelable, PTStorable {
 		out.writeInt(m_rank);
 		out.writeInt(m_miscMod);
 		out.writeInt(m_armorCheckPenalty);
-		out.writeLong(m_abilityId);
-		out.writeLong(m_skillId);
+		out.writeInt(m_abilityKey);
+		out.writeInt(m_skillKey);
 		out.writeLong(m_characterId);
+		out.writeLong(m_id);
+		out.writeString(m_subType);
 	}
 	
 	/**
@@ -84,14 +105,22 @@ public class PTSkill implements Parcelable, PTStorable {
 		return skillMod;
 	}
 
+	public String getSubType() {
+		return m_subType;
+	}
+
+	public void setSubType(String subType) {
+		m_subType = subType;
+	}
+
 	/**
 	 * @param abilitySet The ability set of the character shared by the skill set
 	 * @param maxDex maximum dex mod for the character
 	 * @return the value of the ability mod for the skill
 	 */
 	public int getAbilityMod(PTAbilitySet abilitySet, int maxDex) {
-		int abilityMod = abilitySet.getAbility(m_abilityId).getTempModifier();
-		if (m_abilityId == PTAbilitySet.ID_DEX && abilityMod > maxDex) {
+		int abilityMod = abilitySet.getAbility(m_abilityKey).getTempModifier();
+		if (m_abilityKey == PTAbilitySet.KEY_DEX && abilityMod > maxDex) {
 			return maxDex;
 		} else {
 			return abilityMod;
@@ -135,22 +164,33 @@ public class PTSkill implements Parcelable, PTStorable {
 		m_armorCheckPenalty = armorCheckPenalty;
 	}
 	
-	public long getAbilityId() {
-		return m_abilityId;
+	public int getAbilityKey() {
+		return m_abilityKey;
 	}
 	
-	public void setAbilityId(long abilityId) {
-		m_abilityId = abilityId;
+	public void setAbilityKey(int abilityKey) {
+		m_abilityKey = abilityKey;
+	}
+
+	public int getSkillKey() {
+		return m_skillKey;
+	}
+
+	public void setSkillKey(int skillId) {
+		m_skillKey = skillId;
 	}
 
 	@Override
 	public void setID(long id) {
-		m_skillId = id;
+		m_id = id;
 	}
 	
+	/**
+	 * This should not be used for identifying the type of skill, only the instance.
+	 */
 	@Override
 	public long getID() {
-		return m_skillId;
+		return m_id;
 	}
 	
 	public void setCharacterID(long id) {
@@ -175,4 +215,23 @@ public class PTSkill implements Parcelable, PTStorable {
 			return new PTSkill[size];
 		}
 	};
+
+	@Override
+	public int compareTo(PTSkill another) {
+		if (another.getSkillKey() == this.getSkillKey()) {
+			if (this.getSubType() != null) {
+				if (another.getSubType() != null && !another.getSubType().isEmpty()) {
+					return this.getSubType().compareTo(another.getSubType());
+				} else {
+					return -1;
+				}
+			} else {
+				return 1;
+			}
+		} else if (another.getSkillKey() > this.getSkillKey()) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
 }

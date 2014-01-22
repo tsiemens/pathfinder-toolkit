@@ -16,7 +16,15 @@
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
         	android:maxLines="1"
-        	android:textStyle="bold" />
+        	android:textStyle="bold"
+        	android:textSize="@dimen/larger_text_size" />
+        
+        <EditText
+            android:id="@+id/etSkillSubType"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/skill_subtype_hint"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"

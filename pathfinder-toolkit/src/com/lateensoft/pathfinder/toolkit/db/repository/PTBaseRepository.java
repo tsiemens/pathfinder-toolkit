@@ -100,7 +100,9 @@ public abstract class PTBaseRepository<T extends PTStorable> {
 		String[] columns = cursor.getColumnNames();
 		for(int i = 0; i < columns.length; i++) {
 			Object datum = getDatum(cursor, columns[i]);
-			table.put(columns[i], datum);
+			if (datum != null) {
+				table.put(columns[i], datum);
+			}
 		}
 		return table;
 	}
