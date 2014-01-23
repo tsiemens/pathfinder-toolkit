@@ -5,7 +5,6 @@ import com.lateensoft.pathfinder.toolkit.adapters.character.PTSkillsAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;

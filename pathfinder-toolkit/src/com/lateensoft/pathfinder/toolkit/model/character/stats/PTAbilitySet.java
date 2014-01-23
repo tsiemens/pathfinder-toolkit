@@ -80,7 +80,7 @@ public class PTAbilitySet implements Parcelable{
 	 * @param abilityKey
 	 * @return The ability in the set with abilityKey. null if no such ability exists.
 	 */
-	public PTAbility getAbility(long abilityKey) {
+	public PTAbility getAbility(int abilityKey) {
 		for(int i = 0; i < m_abilities.length; i++) {
 			if(abilityKey == m_abilities[i].getID()) {
 				return m_abilities[i];
@@ -100,28 +100,26 @@ public class PTAbilitySet implements Parcelable{
 			throw new IndexOutOfBoundsException("No ability for index "+index);
 		}
 	}
-
+	
 	/**
-	 * @return the long ability names, in the order as defined by ABILITY_KEYS
+	 * @param maxDex maximum dex mod for the character
+	 * @return the final mod value of the ability
 	 */
-	public static String[] getLongAbilityNames() {
-		return getStringArray(R.array.abilities_long);
+	public int getTotalAbilityMod(int abilityKey, int maxDex) {
+		int abilityMod = getAbility(abilityKey).getTempModifier();
+		if (abilityKey == KEY_DEX && abilityMod > maxDex) {
+			return maxDex;
+		} else {
+			return abilityMod;
+		}
 	}
 	
 	/**
 	 * @return the short ability names, in the order as defined by ABILITY_KEYS
 	 */
 	public static String[] getShortAbilityNames() {
-		return getStringArray(R.array.abilities_short);
-	}
-	
-	/**
-	 * @param arrayResId resource id of long or short name array
-	 * @return Array of the names
-	 */
-	private static String[] getStringArray(int arrayResId) {
 		Resources res = PTBaseApplication.getAppContext().getResources();
-		return res.getStringArray(arrayResId);
+		return res.getStringArray(R.array.abilities_short);
 	}
 	
 	/**

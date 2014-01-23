@@ -6,6 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PTCombatStatSet implements Parcelable, PTStorable {
+	public static final int DEFUALT_INIT_ABILITY_KEY = PTAbilitySet.KEY_DEX;
+	public static final int DEFUALT_AC_ABILITY_KEY = PTAbilitySet.KEY_DEX;
+	public static final int DEFUALT_CMB_ABILITY_KEY = PTAbilitySet.KEY_STR;
+	public static final int DEFUALT_CMD_ABILITY_KEY = PTAbilitySet.KEY_DEX;
+	
 	private int m_totalHP;
 	private int m_wounds;
 	private int m_nonLethalDamage;
@@ -13,25 +18,29 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	private int m_baseSpeedFt;
 	//may need other for speed
 	
-	private int m_initDexMod;
+	/** Defaulted to dex */
+	private int m_initAbilityKey;
 	private int m_initMiscMod;
 	
 	private int m_ACArmour;
 	private int m_ACShield;
-	private int m_ACDexMod;
+	/** Defaulted to dex */
+	private int m_ACAbilityKey;
 	private int m_sizeMod;
 	private int m_ACNaturalArmour;
 	private int m_deflectionMod;
 	private int m_ACMiscMod;
 	
+	private int m_spellResist;
+	
 	private int m_BABPrimary;
 	private String m_BABSecondary;
-	private int m_strengthMod;
-	private int m_CMDDexMod;
+	/** Defaulted to strength */
+	private int m_CMBAbilityKey;
 	
+	/** Defaulted to dex */
+	private int m_CMDAbilityKey;
 	private int m_CMDMiscMod;
-	
-	private int m_spellResist;
 	
 	private long m_characterId;
 	
@@ -47,12 +56,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		m_damageReduction = 0;
 		m_baseSpeedFt = 0;
 		
-		m_initDexMod = 0;
+		m_initAbilityKey = DEFUALT_INIT_ABILITY_KEY;
 		m_initMiscMod = 0;
 		
 		m_ACArmour = 0;
 		m_ACShield = 0;
-		m_ACDexMod = 0;
+		m_ACAbilityKey = DEFUALT_AC_ABILITY_KEY;
 		m_sizeMod = 0;
 		m_ACNaturalArmour = 0;
 		m_deflectionMod = 0;
@@ -60,9 +69,9 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		
 		m_BABPrimary = 0;
 		m_BABSecondary = "";
-		m_strengthMod = 0;
-		m_ACDexMod = 0;
+		m_CMBAbilityKey = DEFUALT_CMB_ABILITY_KEY;
 		
+		m_CMDAbilityKey = DEFUALT_CMD_ABILITY_KEY;
 		m_CMDMiscMod = 0;
 		
 		m_spellResist = 0;
@@ -77,12 +86,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		m_damageReduction = in.readInt();
 		m_baseSpeedFt = in.readInt();
 		
-		m_initDexMod = in.readInt();
+		m_initAbilityKey = in.readInt();
 		m_initMiscMod = in.readInt();
 		
 		m_ACArmour = in.readInt();
 		m_ACShield = in.readInt();
-		m_ACDexMod = in.readInt();
+		m_ACAbilityKey = in.readInt();
 		m_sizeMod = in.readInt();
 		m_ACNaturalArmour = in.readInt();
 		m_deflectionMod = in.readInt();
@@ -90,9 +99,9 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		
 		m_BABPrimary = in.readInt();
 		m_BABSecondary = in.readString();
-		m_strengthMod = in.readInt();
-		m_ACDexMod = in.readInt();
+		m_CMBAbilityKey = in.readInt();
 		
+		m_CMDAbilityKey = in.readInt();
 		m_CMDMiscMod = in.readInt();
 		
 		m_spellResist = in.readInt();
@@ -108,12 +117,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		out.writeInt(m_damageReduction);
 		out.writeInt(m_baseSpeedFt);
 		
-		out.writeInt(m_initDexMod);
+		out.writeInt(m_initAbilityKey);
 		out.writeInt(m_initMiscMod);
 		
 		out.writeInt(m_ACArmour);
 		out.writeInt(m_ACShield);
-		out.writeInt(m_ACDexMod);
+		out.writeInt(m_ACAbilityKey);
 		out.writeInt(m_sizeMod);
 		out.writeInt(m_ACNaturalArmour);
 		out.writeInt(m_deflectionMod);
@@ -121,9 +130,9 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		
 		out.writeInt(m_BABPrimary);
 		out.writeString(m_BABSecondary);
-		out.writeInt(m_strengthMod);
-		out.writeInt(m_ACDexMod);
+		out.writeInt(m_CMBAbilityKey);
 		
+		out.writeInt(m_CMDAbilityKey);
 		out.writeInt(m_CMDMiscMod);
 		
 		out.writeInt(m_spellResist);
@@ -175,12 +184,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		return m_baseSpeedFt;
 	}
 	
-	public void setInitDexMod(int dexMod){
-		m_initDexMod = dexMod;
+	public void setInitAbilityKey(int abilityKey){
+		m_initAbilityKey = abilityKey;
 	}
 	
-	public int getInitDexMod(){
-		return m_initDexMod;
+	public int getInitAbilityKey(){
+		return m_initAbilityKey;
 	}
 	
 	public void setInitiativeMiscMod(int initMiscMod){
@@ -191,8 +200,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		return m_initMiscMod;
 	}
 	
-	public int getInitiativeMod(){
-		return m_initDexMod + m_initMiscMod;
+	/**
+	 * @param abilitySet
+	 * @return the totalled initiative mod, using the values in abilitySet
+	 */
+	public int getInitiativeMod(PTAbilitySet abilitySet, int maxDex){
+		return abilitySet.getTotalAbilityMod(m_initAbilityKey, maxDex) + m_initMiscMod;
 	}
 	
 	public void setACArmourBonus(int armourBonus){
@@ -211,12 +224,12 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		return m_ACShield;
 	}
 	
-	public void setACDexMod(int dexMod){
-		m_ACDexMod = dexMod;
+	public void setACAbilityKey(int abilityKey){
+		m_ACAbilityKey = abilityKey;
 	}
 	
-	public int getACDexMod(){
-		return m_ACDexMod;
+	public int getACAbilityKey(){
+		return m_ACAbilityKey;
 	}
 	
 	public void setSizeModifier(int sizeMod){
@@ -255,24 +268,25 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * 
 	 * @return the net AC of the character. This is 10 + armour + shield + dexmod + sizemod + natural + defect + misc
 	 */
-	public int getTotalAC(){
-		return 10 + m_ACArmour + m_ACShield + m_ACDexMod + m_sizeMod + m_ACNaturalArmour + m_deflectionMod + m_ACMiscMod;
+	public int getTotalAC(PTAbilitySet abilitySet, int maxDex){
+		return 10 + m_ACArmour + m_ACShield + abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex) 
+				+ m_sizeMod + m_ACNaturalArmour + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	/**
 	 * 
 	 * @return the touch AC of the character. This is 10 + dexmod + sizemod + defect + misc
 	 */
-	public int getTouchAC(){
-		return 10 + m_ACDexMod + m_sizeMod + m_deflectionMod + m_ACMiscMod;
+	public int getTouchAC(PTAbilitySet abilitySet, int maxDex){
+		return 10 + abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex) + m_sizeMod + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	/**
 	 * 
 	 * @return the touch AC of the character. This is normal AC - dexmod
 	 */
-	public int getFlatFootedAC(){
-		return getTotalAC() - m_ACDexMod;
+	public int getFlatFootedAC(PTAbilitySet abilitySet, int maxDex){
+		return getTotalAC(abilitySet, maxDex) - abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex);
 	}
 	
 	
@@ -302,20 +316,20 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 		return m_BABSecondary;
 	}
 	
-	public void setStrengthMod(int strengthMod){
-		m_strengthMod = strengthMod;
+	public void setCMBAbilityKey(int abilityKey){
+		m_CMBAbilityKey = abilityKey;
 	}
 	
-	public int getStrengthMod(){
-		return m_strengthMod;
+	public int getCMBAbilityKey(){
+		return m_CMBAbilityKey;
 	}
 	
-	public void setCMDDexMod(int dexMod){
-		m_CMDDexMod = dexMod;
+	public void setCMDAbilityKey(int abilityKey){
+		m_CMDAbilityKey = abilityKey;
 	}
 	
-	public int getCMDDexMod(){
-		return m_CMDDexMod;
+	public int getCMDAbilityKey(){
+		return m_CMDAbilityKey;
 	}
 	
 	public void setSpellResistance(int spellResist){
@@ -338,16 +352,17 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	 * 
 	 * @return CMB = BAB + Strength mod - size mod
 	 */
-	public int getCombatManeuverBonus(){
-		return m_BABPrimary + m_strengthMod - m_sizeMod;
+	public int getCombatManeuverBonus(PTAbilitySet abilitySet, int maxDex){
+		return m_BABPrimary + abilitySet.getTotalAbilityMod(m_CMBAbilityKey, maxDex) - m_sizeMod;
 	}
 	
 	/**
 	 * 
 	 * @return CMD = BAB + Strength mod - size mod + dex mod + 10 + misc mod
 	 */
-	public int getCombatManeuverDefense(){
-		return getCombatManeuverBonus() + m_CMDDexMod + m_CMDMiscMod + 10;
+	public int getCombatManeuverDefense(PTAbilitySet abilitySet, int maxDex){
+		return getCombatManeuverBonus(abilitySet, maxDex) 
+				+ abilitySet.getTotalAbilityMod(m_CMDAbilityKey, maxDex) + m_CMDMiscMod + 10;
 	}
 
 	/**

@@ -95,14 +95,6 @@
         <item>WIS</item>
         <item>CHA</item>
     </string-array>
-    <string-array name="abilities_long">
-        <item>Strength</item>
-        <item>Dexterity</item>
-        <item>Constitution</item>
-        <item>Intelligence</item>
-        <item>Wisdom</item>
-        <item>Charisma</item>
-    </string-array>
     
     <string name="max_dex_warning">\u26A0 max</string>
     

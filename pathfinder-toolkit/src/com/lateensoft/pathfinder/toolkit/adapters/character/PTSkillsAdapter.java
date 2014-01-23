@@ -70,7 +70,7 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		holder.name.setText(name);
 		holder.total.setText(Integer.toString(m_skills[position].getSkillMod(m_abilitySet, m_maxDex)));
 		holder.abilityName.setText(m_abilityNameMap.get(m_skills[position].getAbilityKey()));
-		holder.abilityMod.setText(Integer.toString(m_skills[position].getAbilityMod(m_abilitySet, m_maxDex)));
+		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(m_skills[position].getAbilityKey(), m_maxDex)));
 		holder.rank.setText(Integer.toString(m_skills[position].getRank()));
 		holder.miscMod.setText(Integer.toString(m_skills[position].getMiscMod()));
 		holder.armorCheckPenalty.setText(Integer.toString(m_skills[position].getArmorCheckPenalty()));

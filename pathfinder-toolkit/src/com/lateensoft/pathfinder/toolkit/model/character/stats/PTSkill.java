@@ -96,7 +96,7 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	 * @return the total skill mod for the skill
 	 */
 	public int getSkillMod(PTAbilitySet abilitySet, int maxDex) {
-		int skillMod = getAbilityMod(abilitySet, maxDex) + m_rank 
+		int skillMod = abilitySet.getTotalAbilityMod(m_abilityKey, maxDex) + m_rank 
 			+ m_miscMod + m_armorCheckPenalty;
 		
 		if(m_classSkill && m_rank > 0)
@@ -111,20 +111,6 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 
 	public void setSubType(String subType) {
 		m_subType = subType;
-	}
-
-	/**
-	 * @param abilitySet The ability set of the character shared by the skill set
-	 * @param maxDex maximum dex mod for the character
-	 * @return the value of the ability mod for the skill
-	 */
-	public int getAbilityMod(PTAbilitySet abilitySet, int maxDex) {
-		int abilityMod = abilitySet.getAbility(m_abilityKey).getTempModifier();
-		if (m_abilityKey == PTAbilitySet.KEY_DEX && abilityMod > maxDex) {
-			return maxDex;
-		} else {
-			return abilityMod;
-		}
 	}
 	
 	/**

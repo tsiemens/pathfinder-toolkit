@@ -68,19 +68,19 @@ public class PTTableCreator {
 				"NonLethalDamage INTEGER, " +
 				"DamageReduction INTEGER, " +
 				"BaseSpeedFt INTEGER, " +
-				"InitDexMod INTEGER, " +
+				"InitAbilityKey INTEGER, " +
 				"InitMiscMod INTEGER, " +
 				"ACArmor INTEGER, " +
 				"ACShield INTEGER, " +
-				"ACDexMod INTEGER," +
+				"ACAbilityKey INTEGER," +
 				"SizeMod INTEGER, " +
 				"ACNaturalArmor, INTEGER, " +
 				"DeflectionMod INTEGER, " +
 				"ACMiscMod INTEGER, " +
 				"BABPrimary INTEGER, " +
 				"BABSecondary TEXT, " +
-				"StrengthMod INTEGER, " +
-				"CMDDexMod INTEGER, " +
+				"CMBAbilityKey INTEGER, " +
+				"CMDAbilityKey INTEGER, " +
 				"CMDMiscMod INTEGER, " +
 				"SpellResist INTEGER, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
