@@ -86,6 +86,7 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 					R.layout.character_fluff_row, 
 					m_fluffModel.getFluffArray());
 			m_fluffList.setAdapter(adapter);
+			setTitle(m_fluffModel.getName());
 		}
 	}
 	

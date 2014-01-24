@@ -1,12 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.adapters;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.R.array;
-import com.lateensoft.pathfinder.toolkit.R.color;
-import com.lateensoft.pathfinder.toolkit.R.drawable;
-import com.lateensoft.pathfinder.toolkit.R.id;
-import com.lateensoft.pathfinder.toolkit.R.layout;
-import com.lateensoft.pathfinder.toolkit.R.string;
 
 import android.app.Activity;
 import android.content.Context;

@@ -45,15 +45,14 @@ public class PTTableCreator {
 	public String createSave() {
 		Log.d(TAG, "Creating save table");
 		return "CREATE TABLE Save (" +
-				"save_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"save_key INTEGER, " +
 				"character_id INTEGER, " +
-				"Name TEXT, " +
 				"BaseValue INTEGER, " +
-				"Total INTEGER, " +
-				"AbilityMod INTEGER, " +
+				"ability_key INTEGER, " +
 				"MagicMod INTEGER, " +
 				"MiscMod INTEGER, " +
 				"TempMod INTEGER, " +
+				"PRIMARY KEY (save_key, character_id) " +
 				"FOREIGN KEY(character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
 				");";

@@ -26,10 +26,6 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 
 	@SuppressWarnings("unused")
 	private static final String TAG = PTCharacterCombatStatsFragment.class.getSimpleName();
-
-	static final int FORT_KEY = 0;
-	static final int REF_KEY = 1;
-	static final int WILL_KEY = 2;
 	
 	private static enum EAbilityMod { INIT, AC, CMB, CMD, FORT, REF, WILL };
 	private EAbilityMod m_abilityModSelectedForEdit;
@@ -70,21 +66,21 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 
 	private TextView m_fortTextView;
 	private EditText m_fortBaseEditText;
-	private EditText m_fortAbilityModEditText;
+	private TextView m_fortAbilityTv;
 	private EditText m_fortMagicModEditText;
 	private EditText m_fortMiscModEditText;
 	private EditText m_fortTempModEditText;
 
 	private TextView m_refTextView;
 	private EditText m_refBaseEditText;
-	private EditText m_refAbilityModEditText;
+	private TextView m_refAbilityTv;
 	private EditText m_refMagicModEditText;
 	private EditText m_refMiscModEditText;
 	private EditText m_refTempModEditText;
 
 	private TextView m_willTextView;
 	private EditText m_willBaseEditText;
-	private EditText m_willAbilityModEditText;
+	private TextView m_willAbilityTv;
 	private EditText m_willMagicModEditText;
 	private EditText m_willMiscModEditText;
 	private EditText m_willTempModEditText;
@@ -145,8 +141,14 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		} else if (abilityTv == m_CMDAbilityTv) {
 			abilityKey = m_combatStats.getCMDAbilityKey();
 		}
-		
-		// TODO add saves
+		// Saves
+		else if (abilityTv == m_fortAbilityTv) {
+			abilityKey = m_saveSet.getSave(PTSaveSet.KEY_FORT).getAbilityKey();
+		} else if (abilityTv == m_refAbilityTv) {
+			abilityKey = m_saveSet.getSave(PTSaveSet.KEY_REF).getAbilityKey();
+		}else if (abilityTv == m_willAbilityTv) {
+			abilityKey = m_saveSet.getSave(PTSaveSet.KEY_WILL).getAbilityKey();
+		}
 		
 		if (abilityKey != -1) {
 			PTAbilitySet.getAbilityShortNameMap();
@@ -274,27 +276,24 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	}
 
 	private void updateFort() {
-		m_saveSet.getSave(0).setBase(getEditTextInt(m_fortBaseEditText));
-		m_saveSet.getSave(0).setAbilityMod(getEditTextInt(m_fortAbilityModEditText));
-		m_saveSet.getSave(0).setMagicMod(getEditTextInt(m_fortMagicModEditText));
-		m_saveSet.getSave(0).setMiscMod(getEditTextInt(m_fortMiscModEditText));
-		m_saveSet.getSave(0).setTempMod(getEditTextInt(m_fortTempModEditText));
+		m_saveSet.getSaveByIndex(0).setBaseSave(getEditTextInt(m_fortBaseEditText));
+		m_saveSet.getSaveByIndex(0).setMagicMod(getEditTextInt(m_fortMagicModEditText));
+		m_saveSet.getSaveByIndex(0).setMiscMod(getEditTextInt(m_fortMiscModEditText));
+		m_saveSet.getSaveByIndex(0).setTempMod(getEditTextInt(m_fortTempModEditText));
 	}
 
 	private void updateRef() {
-		m_saveSet.getSave(1).setBase(getEditTextInt(m_refBaseEditText));
-		m_saveSet.getSave(1).setAbilityMod(getEditTextInt(m_refAbilityModEditText));
-		m_saveSet.getSave(1).setMagicMod(getEditTextInt(m_refMagicModEditText));
-		m_saveSet.getSave(1).setMiscMod(getEditTextInt(m_refMiscModEditText));
-		m_saveSet.getSave(1).setTempMod(getEditTextInt(m_refTempModEditText));
+		m_saveSet.getSaveByIndex(1).setBaseSave(getEditTextInt(m_refBaseEditText));
+		m_saveSet.getSaveByIndex(1).setMagicMod(getEditTextInt(m_refMagicModEditText));
+		m_saveSet.getSaveByIndex(1).setMiscMod(getEditTextInt(m_refMiscModEditText));
+		m_saveSet.getSaveByIndex(1).setTempMod(getEditTextInt(m_refTempModEditText));
 	}
 
 	private void updateWill() {
-		m_saveSet.getSave(2).setBase(getEditTextInt(m_willBaseEditText));
-		m_saveSet.getSave(2).setAbilityMod(getEditTextInt(m_willAbilityModEditText));
-		m_saveSet.getSave(2).setMagicMod(getEditTextInt(m_willMagicModEditText));
-		m_saveSet.getSave(2).setMiscMod(getEditTextInt(m_willMiscModEditText));
-		m_saveSet.getSave(2).setTempMod(getEditTextInt(m_willTempModEditText));
+		m_saveSet.getSaveByIndex(2).setBaseSave(getEditTextInt(m_willBaseEditText));
+		m_saveSet.getSaveByIndex(2).setMagicMod(getEditTextInt(m_willMagicModEditText));
+		m_saveSet.getSaveByIndex(2).setMiscMod(getEditTextInt(m_willMiscModEditText));
+		m_saveSet.getSaveByIndex(2).setTempMod(getEditTextInt(m_willTempModEditText));
 	}
 
 	/**
@@ -337,30 +336,29 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	}
 
 	private void updateFortSaveViews() {
-		setIntText(m_fortTextView, m_saveSet.getSave(0).getTotal());
-		setIntText(m_fortBaseEditText, m_saveSet.getSave(0).getBase());
-		setIntText(m_fortAbilityModEditText, m_saveSet.getSave(0).getAbilityMod());
-		setIntText(m_fortMagicModEditText, m_saveSet.getSave(0).getMagicMod());
-		setIntText(m_fortMiscModEditText, m_saveSet.getSave(0).getMiscMod());
-		setIntText(m_fortTempModEditText, m_saveSet.getSave(0).getTempMod());
+		updateSaveViews(PTSaveSet.KEY_FORT, m_fortTextView, m_fortBaseEditText, m_fortAbilityTv,
+				m_fortMagicModEditText, m_fortMiscModEditText, m_fortTempModEditText);
 	}
 
 	private void updateRefSaveViews() {
-		setIntText(m_refTextView, m_saveSet.getSave(1).getTotal());
-		setIntText(m_refBaseEditText, m_saveSet.getSave(1).getBase());
-		setIntText(m_refAbilityModEditText, m_saveSet.getSave(1).getAbilityMod());
-		setIntText(m_refMagicModEditText, m_saveSet.getSave(1).getMagicMod());
-		setIntText(m_refMiscModEditText, m_saveSet.getSave(1).getMiscMod());
-		setIntText(m_refTempModEditText, m_saveSet.getSave(1).getTempMod());
+		updateSaveViews(PTSaveSet.KEY_REF, m_refTextView, m_refBaseEditText, m_refAbilityTv,
+				m_refMagicModEditText, m_refMiscModEditText, m_refTempModEditText);
 	}
 
 	private void updateWillSaveViews() {
-		setIntText(m_willTextView, m_saveSet.getSave(2).getTotal());
-		setIntText(m_willBaseEditText, m_saveSet.getSave(2).getBase());
-		setIntText(m_willAbilityModEditText, m_saveSet.getSave(2).getAbilityMod());
-		setIntText(m_willMagicModEditText, m_saveSet.getSave(2).getMagicMod());
-		setIntText(m_willMiscModEditText, m_saveSet.getSave(2).getMiscMod());
-		setIntText(m_willTempModEditText, m_saveSet.getSave(2).getTempMod());
+		updateSaveViews(PTSaveSet.KEY_WILL, m_willTextView, m_willBaseEditText, m_willAbilityTv,
+				m_willMagicModEditText, m_willMiscModEditText, m_willTempModEditText);
+	}
+	
+	private void updateSaveViews(int saveKey, TextView sumView, EditText baseEt, TextView abilityText,
+			EditText magicEt, EditText miscEt, EditText tempEt) {
+		PTSave save = m_saveSet.getSave(saveKey);
+		setIntText(sumView, save.getTotal(m_abilitySet, m_maxDex));
+		setIntText(baseEt, save.getBaseSave());
+		updateAbilityView(abilityText);
+		setIntText(magicEt, save.getMagicMod());
+		setIntText(miscEt, save.getMiscMod());
+		setIntText(tempEt, save.getTempMod());
 	}
 
 	/**
@@ -408,6 +406,18 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 				m_abilityModSelectedForEdit = EAbilityMod.CMD;
 				defaultAbilityKey = PTCombatStatSet.DEFUALT_CMD_ABILITY_KEY;
 				currentAbility = m_combatStats.getCMDAbilityKey();
+			} else if (v == m_fortAbilityTv) {
+				m_abilityModSelectedForEdit = EAbilityMod.FORT;
+				defaultAbilityKey = PTSaveSet.getDefaultAbilityKeyMap().get(PTSaveSet.KEY_FORT);
+				currentAbility = m_saveSet.getSave(PTSaveSet.KEY_FORT).getAbilityKey();
+			} else if (v == m_refAbilityTv) {
+				m_abilityModSelectedForEdit = EAbilityMod.REF;
+				defaultAbilityKey = PTSaveSet.getDefaultAbilityKeyMap().get(PTSaveSet.KEY_REF);
+				currentAbility = m_saveSet.getSave(PTSaveSet.KEY_REF).getAbilityKey();
+			} else if (v == m_willAbilityTv) {
+				m_abilityModSelectedForEdit = EAbilityMod.WILL;
+				defaultAbilityKey = PTSaveSet.getDefaultAbilityKeyMap().get(PTSaveSet.KEY_WILL);
+				currentAbility = m_saveSet.getSave(PTSaveSet.KEY_WILL).getAbilityKey();
 			}
 			
 			if (defaultAbilityKey != -1) {
@@ -438,15 +448,21 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 					m_combatStats.setCMDAbilityKey(abilityKey);
 					viewID = m_CMDAbilityTv.getId();
 					break;
-				case FORT: // TODO
+				case FORT:
+					m_saveSet.getSave(PTSaveSet.KEY_FORT).setAbilityKey(abilityKey);
+					viewID = m_fortAbilityTv.getId();
 					break;
 				case INIT:
 					m_combatStats.setInitAbilityKey(abilityKey);
 					viewID = m_initAbilityTv.getId();
 					break;
-				case REF: // TODO
+				case REF:
+					m_saveSet.getSave(PTSaveSet.KEY_REF).setAbilityKey(abilityKey);
+					viewID = m_refAbilityTv.getId();
 					break;
-				case WILL: // TODO
+				case WILL:
+					m_saveSet.getSave(PTSaveSet.KEY_WILL).setAbilityKey(abilityKey);
+					viewID = m_willAbilityTv.getId();
 					break;
 				default:
 					return;
@@ -562,8 +578,8 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_fortTextView = (TextView) fragmentView.findViewById(R.id.tvFort);
 		m_fortBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortBase);
-		m_fortAbilityModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveFortAbilityMod);
+		m_fortAbilityTv = (TextView) fragmentView
+				.findViewById(R.id.tvFortAbility);
 		m_fortMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortMagicMod);
 		m_fortMiscModEditText = (EditText) fragmentView
@@ -571,7 +587,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_fortTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveFortTempMod);
 		setEditTextListeners(m_fortBaseEditText);
-		setEditTextListeners(m_fortAbilityModEditText);
+		setAbilityTextViewListener(m_fortAbilityTv);
 		setEditTextListeners(m_fortMagicModEditText);
 		setEditTextListeners(m_fortMiscModEditText);
 		setEditTextListeners(m_fortTempModEditText);
@@ -579,8 +595,8 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_refTextView = (TextView) fragmentView.findViewById(R.id.tvRef);
 		m_refBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefBase);
-		m_refAbilityModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveRefAbilityMod);
+		m_refAbilityTv = (TextView) fragmentView
+				.findViewById(R.id.tvReflexAbility);
 		m_refMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefMagicMod);
 		m_refMiscModEditText = (EditText) fragmentView
@@ -588,7 +604,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_refTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveRefTempMod);
 		setEditTextListeners(m_refBaseEditText);
-		setEditTextListeners(m_refAbilityModEditText);
+		setAbilityTextViewListener(m_refAbilityTv);
 		setEditTextListeners(m_refMagicModEditText);
 		setEditTextListeners(m_refMiscModEditText);
 		setEditTextListeners(m_refTempModEditText);
@@ -596,8 +612,8 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_willTextView = (TextView) fragmentView.findViewById(R.id.tvWill);
 		m_willBaseEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillBase);
-		m_willAbilityModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveWillAbilityMod);
+		m_willAbilityTv = (TextView) fragmentView
+				.findViewById(R.id.tvWillAbility);
 		m_willMagicModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillMagicMod);
 		m_willMiscModEditText = (EditText) fragmentView
@@ -605,7 +621,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_willTempModEditText = (EditText) fragmentView
 				.findViewById(R.id.etSaveWillTempMod);
 		setEditTextListeners(m_willBaseEditText);
-		setEditTextListeners(m_willAbilityModEditText);
+		setAbilityTextViewListener(m_willAbilityTv);
 		setEditTextListeners(m_willMagicModEditText);
 		setEditTextListeners(m_willMiscModEditText);
 		setEditTextListeners(m_willTempModEditText);
@@ -656,7 +672,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		}
 
 		else if (viewID == m_fortBaseEditText.getId()
-				|| viewID == m_fortAbilityModEditText.getId()
+				|| viewID == m_fortAbilityTv.getId()
 				|| viewID == m_fortMagicModEditText.getId()
 				|| viewID == m_fortMiscModEditText.getId()
 				|| viewID == m_fortTempModEditText.getId()) {
@@ -665,7 +681,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		}
 
 		else if (viewID == m_refBaseEditText.getId()
-				|| viewID == m_refAbilityModEditText.getId()
+				|| viewID == m_refAbilityTv.getId()
 				|| viewID == m_refMagicModEditText.getId()
 				|| viewID == m_refMiscModEditText.getId()
 				|| viewID == m_refTempModEditText.getId()) {
@@ -674,7 +690,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		}
 
 		else if (viewID == m_willBaseEditText.getId()
-				|| viewID == m_willAbilityModEditText.getId()
+				|| viewID == m_willAbilityTv.getId()
 				|| viewID == m_willMagicModEditText.getId()
 				|| viewID == m_willMiscModEditText.getId()
 				|| viewID == m_willTempModEditText.getId()) {

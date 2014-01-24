@@ -10,43 +10,38 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 
 public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	static final String TABLE = "Save";
-	static final String ID = "save_id";
-	static final String NAME = "Name";
+	static final String SAVE_KEY = "save_key";
 	static final String BASE_VALUE = "BaseValue";
-	static final String TOTAL = "Total";
-	static final String ABILITY_MOD = "AbilityMod";
+	static final String ABILITY_KEY = "ability_key";
 	static final String MAGIC_MOD = "MagicMod";
 	static final String MISC_MOD = "MiscMod";
 	static final String TEMP_MOD = "TempMod";
 	
 	public PTSaveRepository() {
 		super();
-		PTTableAttribute id = new PTTableAttribute(ID, SQLDataType.INTEGER, true);
+		PTTableAttribute saveKey = new PTTableAttribute(SAVE_KEY, SQLDataType.INTEGER, true);
 		PTTableAttribute characterId = new PTTableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
-		PTTableAttribute name = new PTTableAttribute(NAME, SQLDataType.TEXT);
 		PTTableAttribute baseValue = new PTTableAttribute(BASE_VALUE, SQLDataType.INTEGER);
-		PTTableAttribute total = new PTTableAttribute(TOTAL, SQLDataType.INTEGER);
-		PTTableAttribute abilityMod = new PTTableAttribute(ABILITY_MOD, SQLDataType.INTEGER);
+		PTTableAttribute abilityKey = new PTTableAttribute(ABILITY_KEY, SQLDataType.INTEGER);
 		PTTableAttribute magicMod = new PTTableAttribute(MAGIC_MOD, SQLDataType.INTEGER);
 		PTTableAttribute miscMod = new PTTableAttribute(MISC_MOD, SQLDataType.INTEGER);
 		PTTableAttribute tempMod = new PTTableAttribute(TEMP_MOD, SQLDataType.INTEGER);
-		PTTableAttribute[] attributes = {id, characterId, name, baseValue, total, abilityMod,
+		PTTableAttribute[] attributes = {saveKey, characterId, baseValue, abilityKey,
 				magicMod, miscMod, tempMod};
 		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 
 	@Override
 	protected PTSave buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int id = ((Long) hashTable.get(ID)).intValue();
+		int saveKey = ((Long) hashTable.get(SAVE_KEY)).intValue();
 		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
-		String name = (String) hashTable.get(NAME);
 		int baseValue = ((Long) hashTable.get(BASE_VALUE)).intValue();
-		int abilityMod = ((Long) hashTable.get(ABILITY_MOD)).intValue();
+		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
 		int magicMod = ((Long) hashTable.get(MAGIC_MOD)).intValue();
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
 		int tempMod = ((Long) hashTable.get(TEMP_MOD)).intValue();
 		
-		PTSave save = new PTSave(id, characterId, name, baseValue, abilityMod, magicMod, 
+		PTSave save = new PTSave(saveKey, characterId, baseValue, abilityKey, magicMod, 
 				miscMod, tempMod);
 		return save;
 	}
@@ -54,14 +49,10 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	@Override
 	protected ContentValues getContentValues(PTSave object) {
 		ContentValues values = new ContentValues();
-		if(isIDSet(object)) { 
-			values.put(ID, object.getID());
-		}
+		values.put(SAVE_KEY, object.getSaveKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
-		values.put(NAME, object.getName());
-		values.put(BASE_VALUE, object.getBaseValue());
-		values.put(TOTAL, object.getTotal());
-		values.put(ABILITY_MOD, object.getAbilityMod());
+		values.put(BASE_VALUE, object.getBaseSave());
+		values.put(ABILITY_KEY, object.getAbilityKey());
 		values.put(MAGIC_MOD, object.getMagicMod());
 		values.put(MISC_MOD, object.getMiscMod());
 		values.put(TEMP_MOD, object.getTempMod());
@@ -69,13 +60,22 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 	}
 	
 	/**
+	 * @param ids must be { save id, character id }
+	 * @return ability identified by save id, character id
+	 */
+	@Override
+	public PTSave query(long ... ids) {
+		return super.query(ids);
+	}
+	
+	/**
 	 * Returns all saves for the character with characterId
 	 * @param characterId
-	 * @return Array of PTSave, ordered alphabetically by name
+	 * @return Array of PTSave, ordered by saveKey
 	 */
 	public PTSave[] querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
-		String orderBy = NAME + " ASC";
+		String orderBy = SAVE_KEY + " ASC";
 		String table = m_tableInfo.getTable();
 		String[] columns = m_tableInfo.getColumns();
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
@@ -91,5 +91,24 @@ public class PTSaveRepository extends PTBaseRepository<PTSave> {
 			i++;
 		}
 		return saves;
+	}
+	
+	@Override
+	protected String getSelector(PTSave object) {
+		return getSelector(object.getID(), object.getCharacterID());
+	}
+
+	/**
+	 * Return selector for save. 
+	 * @param ids must be { save key, character id }
+	 */
+	@Override
+	protected String getSelector(long ... ids) {
+		if (ids.length >= 2) {
+			return SAVE_KEY + "=" + ids[0] + " AND " + 
+					CHARACTER_ID + "=" + ids[1];
+		} else {
+			throw new IllegalArgumentException("saves require save key and character id to be identified");
+		}
 	}
 }

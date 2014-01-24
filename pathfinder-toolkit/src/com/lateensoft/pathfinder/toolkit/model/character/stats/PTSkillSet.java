@@ -255,7 +255,7 @@ public class PTSkillSet implements Parcelable {
 	}
 	
 	/**
-	 * @return the skill names, in the order as defined by SKILL_IDS
+	 * @return the skill names, in the order as defined by SKILL_KEYS
 	 */
 	public static String[] getSkillNames() {
 		Resources res = PTBaseApplication.getAppContext().getResources();

@@ -5,79 +5,39 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTSave extends PTStat implements Parcelable, PTStorable {
+public class PTSave implements Parcelable, PTStorable {
 	private long m_characterId;
+	
+	private int m_saveKey;
 
-	int m_abilityMod;
-	int m_magicMod;
-	int m_miscMod;
-	int m_tempMod;
+	private int m_baseSave;
+	private int m_abilityKey;
+	private int m_magicMod;
+	private int m_miscMod;
+	private int m_tempMod;
 	
-	public PTSave() {
-		super();
-		m_abilityMod = 0;
-		m_magicMod = 0;
-		m_miscMod = 0;
-		m_tempMod = 0;
-		m_characterId = UNSET_ID;
+	public PTSave(int saveKey, int abilityKey) {
+		this(saveKey, UNSET_ID, abilityKey);
 	}
 	
-	public PTSave(String name) {
-		super(name);
-		m_abilityMod = 0;
-		m_magicMod = 0;
-		m_miscMod = 0;
-		m_tempMod = 0;
-		m_characterId = UNSET_ID;
+	public PTSave(int saveKey, long characterId, int abilityKey) {
+		this(saveKey, characterId, 0, abilityKey, 0, 0, 0);
 	}
 	
-	public PTSave(long id, long characterId, String name, int baseValue, int abilityMod, int magicMod,
+	public PTSave(int saveKey, long characterId, int baseSave, int abilityKey, int magicMod,
 			int miscMod, int tempMod) {
-		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod, id);
 		m_characterId = characterId;
-	}
-	
-	public PTSave(long characterId, String name, int baseValue,
-			int abilityMod, int magicMod, int miscMod, int tempMod) {
-		this(name, baseValue, abilityMod, magicMod, miscMod, tempMod);
-		m_characterId = characterId;
-	}
-	
-	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
-			int miscMod, int tempMod) {
-		super(name, baseValue);
-		m_abilityMod = abilityMod;
+		m_saveKey = saveKey;
+		m_abilityKey = abilityKey;
+		m_baseSave = baseSave;
 		m_magicMod = magicMod;
 		m_miscMod = miscMod;
 		m_tempMod = tempMod;
-		m_characterId = UNSET_ID;
-	}
-	
-	public PTSave(String name, int baseValue, int abilityMod, int magicMod,
-			int miscMod, int tempMod, long id) {
-		super(id, name, baseValue);
-		m_abilityMod = abilityMod;
-		m_magicMod = magicMod;
-		m_miscMod = miscMod;
-		m_tempMod = tempMod;
-		m_characterId = UNSET_ID;
-	}
-	
-	public PTSave(String name, int baseValue, int[] modArray) {
-		super(name, baseValue);
-		
-		if(modArray.length >= 4) {
-			m_abilityMod = modArray[0];
-			m_magicMod = modArray[1];
-			m_miscMod = modArray[2];
-			m_tempMod = modArray[3];
-		}
-		m_characterId = UNSET_ID;
 	}
 	
 	public PTSave(PTSave other) {
-		super(other);
-		m_abilityMod = other.getAbilityMod();
+		m_saveKey = other.getSaveKey();
+		m_abilityKey = other.getAbilityKey();
 		m_magicMod = other.getMagicMod();
 		m_miscMod = other.getMiscMod();
 		m_tempMod = other.getTempMod();
@@ -85,8 +45,9 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 	}
 	
 	public PTSave(Parcel in) {
-		super(in.readLong(), in.readString(), in.readInt());
-		m_abilityMod = in.readInt();
+		m_saveKey = in.readInt();
+		m_baseSave = in.readInt();
+		m_abilityKey = in.readInt();
 		m_magicMod = in.readInt();
 		m_miscMod = in.readInt();
 		m_tempMod = in.readInt();
@@ -95,18 +56,25 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeLong(getID());
-		out.writeString(getName());
-		out.writeInt(getBase());
-		out.writeInt(m_abilityMod);
+		out.writeInt(m_saveKey);
+		out.writeInt(m_baseSave);
+		out.writeInt(m_abilityKey);
 		out.writeInt(m_magicMod);
 		out.writeInt(m_miscMod);
 		out.writeInt(m_tempMod);
 		out.writeLong(m_characterId);
 	}
 	
-	public int getAbilityMod() {
-		return m_abilityMod;
+	public int getBaseSave() {
+		return m_baseSave;
+	}
+
+	public void setBaseSave(int baseSave) {
+		m_baseSave = baseSave;
+	}
+
+	public int getAbilityKey() {
+		return m_abilityKey;
 	}
 	
 	public int getMagicMod() {
@@ -121,26 +89,18 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 		return m_tempMod;
 	}
 	
-	public int getBase() {
-		return super.getBaseValue();
-	}
-	
-	public int getTotal() {
+	public int getTotal(PTAbilitySet abilitySet, int maxDex) {
 		int total = 0;
-		total += super.getBaseValue();
-		total += m_abilityMod;
+		total += m_baseSave;
+		total += abilitySet.getTotalAbilityMod(m_abilityKey, maxDex);
 		total += m_magicMod;
 		total += m_miscMod;
 		total += m_tempMod;
 		return total;
 	}
 	
-	public void setAbilityMod(int abilityMod) {
-		m_abilityMod = abilityMod;
-	}
-	
-	public void setBase(int base) {
-		super.setBaseValue(base);
+	public void setAbilityKey(int abilityKey) {
+		m_abilityKey = abilityKey;
 	}
 	
 	public void setMagicMod(int magicMod) {
@@ -153,6 +113,14 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 	
 	public void setTempMod(int tempMod) {
 		m_tempMod = tempMod;
+	}
+	
+	public int getSaveKey() {
+		return m_saveKey;
+	}
+	
+	public void setSaveKey(int saveKey) {
+		m_saveKey = saveKey;
 	}
 	
 	public void setCharacterID(long id) {
@@ -177,4 +145,14 @@ public class PTSave extends PTStat implements Parcelable, PTStorable {
 			return new PTSave[size];
 		}
 	};
+
+	@Override
+	public void setID(long id) {
+		setSaveKey((int) id);
+	}
+
+	@Override
+	public long getID() {
+		return getSaveKey();
+	}
 }

@@ -52,7 +52,7 @@ public class PTAbilitySet implements Parcelable{
 		
 		for(int i = 0; i < ABILITY_KEYS.length; i++) {
 			for (PTAbility score : scoresList) {
-				if(score.getID() == ABILITY_KEYS[i]) {
+				if(score.getAbilityKey() == ABILITY_KEYS[i]) {
 					scoresList.remove(score);
 					m_abilities[i] = score;
 					break;

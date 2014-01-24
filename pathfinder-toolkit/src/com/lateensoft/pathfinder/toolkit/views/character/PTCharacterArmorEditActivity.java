@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -28,6 +29,7 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
     private EditText m_weightET;
     private EditText m_nameET;
     private EditText m_specialPropertiesET;
+    private CheckBox m_wornCheckbox;
 	private OnTouchListener m_spinnerOnTouchListener;
 	
 	private PTArmor m_armor;
@@ -47,6 +49,7 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
 				R.id.etArmorSpecialProperties);
 		m_nameET = (EditText) findViewById(R.id.armorName);
 		m_maxDexSpinner = (Spinner) findViewById(R.id.spArmorMaxDex);
+		m_wornCheckbox = (CheckBox) findViewById(R.id.checkboxIsWorn);
 		
 		m_spinnerOnTouchListener = new OnTouchListener() {
 			@Override
@@ -68,15 +71,16 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
 		} else {
 			setTitle(R.string.edit_armor_title);
 			m_nameET.setText(m_armor.getName());
-			m_ACSpinner.setSelection(m_armor.getACBonus() + AC_SPINNER_OFFSET);
-			m_ACPSpinner.setSelection(m_armor.getCheckPen());
-			m_sizeSpinner.setSelection(m_armor.getSizeInt());
-			m_maxDexSpinner.setSelection(m_armor.getMaxDex());
-			m_speedSpinner.setSelection(m_armor.getSpeed()/5);
-			m_ASFSpinner.setSelection(m_armor.getSpellFail() / ASF_INCREMENT);
-			m_weightET.setText(Double.toString(m_armor.getWeight()));
-			m_specialPropertiesET.setText(m_armor.getSpecialProperties());
 		}
+		m_ACSpinner.setSelection(m_armor.getACBonus() + AC_SPINNER_OFFSET);
+		m_ACPSpinner.setSelection(m_armor.getCheckPen());
+		m_sizeSpinner.setSelection(m_armor.getSizeInt());
+		m_maxDexSpinner.setSelection(m_armor.getMaxDex());
+		m_speedSpinner.setSelection(m_armor.getSpeed()/5);
+		m_ASFSpinner.setSelection(m_armor.getSpellFail() / ASF_INCREMENT);
+		m_weightET.setText(Double.toString(m_armor.getWeight()));
+		m_specialPropertiesET.setText(m_armor.getSpecialProperties());
+		m_wornCheckbox.setChecked(m_armor.isWorn());
 	}
 
 	@Override
@@ -103,6 +107,7 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
         int ac = m_ACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
         int acp = m_ACPSpinner.getSelectedItemPosition();
         int maxDex = m_maxDexSpinner.getSelectedItemPosition();
+        boolean worn = m_wornCheckbox.isChecked();
         
         m_armor.setName(name);
         m_armor.setSpeed(speed);
@@ -113,6 +118,7 @@ public class PTCharacterArmorEditActivity extends PTParcelableEditorActivity {
         m_armor.setACBonus(ac);
         m_armor.setCheckPen(acp);
         m_armor.setMaxDex(maxDex);
+        m_armor.setWorn(worn);
 	}
 
 	@Override

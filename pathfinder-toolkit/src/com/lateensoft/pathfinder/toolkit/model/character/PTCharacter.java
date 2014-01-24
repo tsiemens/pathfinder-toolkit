@@ -61,7 +61,7 @@ public class PTCharacter implements Parcelable, PTStorable {
 		m_abilitySet = new PTAbilitySet();
 		m_combatStatSet = new PTCombatStatSet();
 		m_skillSet = new PTSkillSet();
-		m_saveSet = new PTSaveSet(context);
+		m_saveSet = new PTSaveSet();
 		m_fluffInfo = new PTFluffInfo();
 		m_inventory = new PTInventory();
 		m_feats = new PTFeatList();
