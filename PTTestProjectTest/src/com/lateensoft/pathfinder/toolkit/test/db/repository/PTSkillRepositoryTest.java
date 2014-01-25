@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
+import java.util.List;
+
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSkillRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
@@ -31,8 +33,9 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 
 	public void testQuerySet() {
 		PTSkill[] queriedSkills = m_repo.querySet(m_characterId);
-		for (int i = 0; i < PTSkillSet.SKILL_KEYS.length; i++){
-			assertEquals(PTSkillSet.SKILL_KEYS[i], queriedSkills[i].getSkillKey()); 
+		List<Integer> constSkillKeys = PTSkillSet.SKILL_KEYS();
+		for (int i = 0; i < constSkillKeys.size(); i++){
+			assertEquals(constSkillKeys.get(i).intValue(), queriedSkills[i].getSkillKey()); 
 		}
 	}
 	

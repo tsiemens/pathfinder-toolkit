@@ -13,6 +13,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
@@ -150,17 +151,31 @@ public class PTCharacterConverter {
 	}
 	
 	private static void setSaves(PTSaveSet newSaves, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTSaveSet oldSaves) {
-		// TODO
+		// This should work, assuming the order does not change
+		for (int i = 0; i < newSaves.size() && i < oldSaves.size(); i++) {
+			setSave(newSaves.getSaveByIndex(i), oldSaves.getSave(i));
+		}
+	}
+	
+	private static void setSave(PTSave newSave, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTSave oldSave) {
+		newSave.setBaseSave(oldSave.getBase());
+		newSave.setMagicMod(oldSave.getMagicMod());
+		newSave.setMiscMod(oldSave.getMiscMod());
+		newSave.setTempMod(oldSave.getTempMod());
 	}
 	
 	private static void setSkills(PTSkillSet newSkills, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTSkillSet oldSkills) {
-		// TODO
+		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTSkill[] oldSkillArray = oldSkills.getSkills();
+		// This should work, assuming the order does not change
+		for (int i = 0; i < newSkills.size() && i < oldSkillArray.length; i++) {
+			setSkill(newSkills.getSkillByIndex(i), oldSkillArray[i]);
+		}
 	}
 	
 	private static void setSkill(PTSkill newSkill, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTSkill oldSkill) {
-		// TODO
 		newSkill.setRank(oldSkill.getRank());
 		newSkill.setMiscMod(oldSkill.getMiscMod());
+		newSkill.setClassSkill(oldSkill.isClassSkill());
 	}
 	
 	private static void setSpells(PTSpellBook newSpells, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTSpellBook oldSpells) {

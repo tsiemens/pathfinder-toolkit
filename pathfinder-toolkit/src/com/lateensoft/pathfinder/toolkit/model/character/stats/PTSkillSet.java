@@ -54,23 +54,29 @@ public class PTSkillSet implements Parcelable {
     public static final int SWIM = 34;
     public static final int USE_MAGIC_DEVICE = 35;
     
-    public static final int[] SKILL_KEYS = { ACRO, APPRAISE, BLUFF, CLIMB, CRAFT, DIPLOM,
-    	DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
-    	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
-    	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
-    	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
-    
     public static final int[] SUBTYPED_SKILLS = {CRAFT, PERFORM, PROF};
 	
 	PTSkill[] m_skills;
 	
+	/**
+	 * @return an unmodifiable list of the skill keys, in order.
+	 */
+	public static List<Integer> SKILL_KEYS() {
+		Integer[] keys = { ACRO, APPRAISE, BLUFF, CLIMB, CRAFT, DIPLOM,
+		    	DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
+		    	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
+		    	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
+		    	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
+		return Collections.unmodifiableList(Arrays.asList(keys));
+	}
+	
 	public PTSkillSet() {
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
+		List<Integer> constSkillKeys = SKILL_KEYS();
+		m_skills = new PTSkill[constSkillKeys.size()];
 		
-		m_skills = new PTSkill[SKILL_KEYS.length];
-		
-		for(int i = 0; i < SKILL_KEYS.length; i++) {
-			m_skills[i] = new PTSkill(SKILL_KEYS[i], defaultSkillAbilityIds[i]);
+		for(int i = 0; i < constSkillKeys.size(); i++) {
+			m_skills[i] = new PTSkill(constSkillKeys.get(i), defaultSkillAbilityIds[i]);
 		}
 	}
 	
@@ -108,16 +114,17 @@ public class PTSkillSet implements Parcelable {
 	private void verifySortSkills(List<PTSkill> skills) {
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
 		boolean found;
-		for(int i = 0; i < SKILL_KEYS.length; i++) {
+		List<Integer> constSkillKeys = SKILL_KEYS();
+		for(int i = 0; i < constSkillKeys.size(); i++) {
 			found = false;
 			for (PTSkill skill : skills) {
-				if(skill.getSkillKey() == SKILL_KEYS[i]) {
+				if(skill.getSkillKey() == constSkillKeys.get(i)) {
 					found = true;
 					break;
 				}
 			}
 			if (found == false) {
-				skills.add(new PTSkill(SKILL_KEYS[i], defaultSkillAbilityIds[i]));
+				skills.add(new PTSkill(constSkillKeys.get(i), defaultSkillAbilityIds[i]));
 			}
 		}
 		
@@ -246,10 +253,11 @@ public class PTSkillSet implements Parcelable {
 	 * @return a map of the skill key to the ability key
 	 */
 	public static SparseIntArray getDefaultAbilityKeyMap() {
-		SparseIntArray map = new SparseIntArray(SKILL_KEYS.length);
+		List<Integer> constSkillKeys = SKILL_KEYS();
+		SparseIntArray map = new SparseIntArray(constSkillKeys.size());
 		int[] abilityIds = getDefaultAbilityIds();
-		for(int i = 0; i < SKILL_KEYS.length; i++) {
-			map.append(SKILL_KEYS[i], abilityIds[i]);
+		for(int i = 0; i < constSkillKeys.size(); i++) {
+			map.append(constSkillKeys.get(i), abilityIds[i]);
 		}
 		return map;
 	}
@@ -275,10 +283,11 @@ public class PTSkillSet implements Parcelable {
 	 * @return a map of the skill keys to their name
 	 */
 	public static SparseArray<String> getSkillNameMap() {
-		SparseArray<String> map = new SparseArray<String>(SKILL_KEYS.length);
+		List<Integer> constSkillKeys = SKILL_KEYS();
+		SparseArray<String> map = new SparseArray<String>(constSkillKeys.size());
 		String[] names = getSkillNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(SKILL_KEYS[i], names[i]);
+			map.append(constSkillKeys.get(i), names[i]);
 		}
 		return map;
 	}	

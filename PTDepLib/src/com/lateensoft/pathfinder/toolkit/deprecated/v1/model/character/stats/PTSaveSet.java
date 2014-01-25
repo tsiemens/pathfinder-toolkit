@@ -18,6 +18,10 @@ public class PTSaveSet {
 		}
 	}
 	
+	public int size() {
+		return mSaves.length;
+	}
+	
 	public PTSave getSave(int index) {
 		return mSaves[index];
 	}
