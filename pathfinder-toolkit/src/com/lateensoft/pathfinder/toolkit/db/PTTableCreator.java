@@ -35,7 +35,6 @@ public class PTTableCreator {
 				"ClassSkill INTEGER, " +
 				"Rank INTEGER, " +
 				"MiscMod INTEGER, " +
-				"ArmorCheckPenalty INTEGER, " +
 				"ability_key INTEGER, " +
 				"FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
 					"ON DELETE CASCADE " +
@@ -142,7 +141,7 @@ public class PTTableCreator {
 				"SpecialProperties TEXT, " +
 				"Ammunition INTEGER, " +
 				"Type TEXT, " +
-				"Size Text, " +
+				"Size TEXT, " +
 				"FOREIGN KEY (item_id) REFERENCES Item(item_id) " +
 					"ON DELETE CASCADE " +
 				");";

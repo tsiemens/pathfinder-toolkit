@@ -30,7 +30,6 @@ public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {
 	private TextView m_abilityTV;
 	private Spinner m_rankSpinner;
 	private Spinner m_miscModSpinner;
-	private Spinner m_armorCheckSpinner;
 	private CheckBox m_classSkillCheckBox;
 	
 	private PTSkill m_skill;
@@ -51,7 +50,6 @@ public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {
 		m_abilityTV = (TextView) findViewById(R.id.tvSkillAbility);
 		m_rankSpinner = (Spinner) findViewById(R.id.spinnerSkillRank);
 		m_miscModSpinner = (Spinner) findViewById(R.id.spinnerSkillMisc);
-		m_armorCheckSpinner = (Spinner) findViewById(R.id.spinnerSkillACP);
 		m_classSkillCheckBox = (CheckBox) findViewById(R.id.checkboxClassSkill);
 
 		m_subtypeET.setVisibility(PTSkillSet.isSubtypedSkill(
@@ -76,8 +74,6 @@ public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {
 				m_skill.getRank() + MOD_SPINNER_OFFSET, null);
 		setupSpinner(m_miscModSpinner, R.array.skills_selectable_values_string,
 				m_skill.getMiscMod() + MOD_SPINNER_OFFSET, null);
-		setupSpinner(m_armorCheckSpinner, R.array.skills_selectable_values_string,
-				m_skill.getArmorCheckPenalty() + MOD_SPINNER_OFFSET, null);
 
 		m_classSkillCheckBox.setChecked(m_skill.isClassSkill());
 	}
@@ -105,8 +101,6 @@ public class PTCharacterSkillEditActivity extends PTParcelableEditorActivity {
 		m_skill.setRank(m_rankSpinner
 				.getSelectedItemPosition() - MOD_SPINNER_OFFSET);
 		m_skill.setMiscMod(m_miscModSpinner
-				.getSelectedItemPosition() - MOD_SPINNER_OFFSET);
-		m_skill.setArmorCheckPenalty(m_armorCheckSpinner
 				.getSelectedItemPosition() - MOD_SPINNER_OFFSET);
 		m_skill.setClassSkill(m_classSkillCheckBox
 				.isChecked());

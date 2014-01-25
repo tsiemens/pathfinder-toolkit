@@ -175,4 +175,27 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 		}
 		return maxDex;
 	}
+	
+	/**
+	 * @param characterId
+	 * @return the total armor check penalty (negative) of all worn armor
+	 */
+	public int getArmorCheckPenalty(long characterId) {
+		String table = PTItemRepository.TABLE + ", " + m_tableInfo.getTable();
+		Locale l = null;
+		String selector = String.format(l, "%s=%d AND %s.%s=%s.%s AND %s<>0",
+				CHARACTER_ID, characterId,
+				TABLE, ID, PTItemRepository.TABLE, PTItemRepository.ID,
+				WORN);
+		String[] columns = {"SUM("+CHECK_PEN+")"};
+		
+		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+				null, null, null, null, null);
+		
+		cursor.moveToFirst();
+		if (!cursor.isAfterLast()) {
+			return cursor.getInt(0);
+		}
+		return 0;
+	}
 }

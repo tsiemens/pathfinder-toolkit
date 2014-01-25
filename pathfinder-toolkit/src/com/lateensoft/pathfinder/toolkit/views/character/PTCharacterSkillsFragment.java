@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
 public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
@@ -30,6 +33,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	private Button m_filterButton;
 	private boolean m_isFiltered = true;
+	
+	private CheckBox m_applyACPCheckBox;
 
 	private PTSkill m_skillSelectedForEdit;
 	
@@ -41,6 +46,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	
 	private PTAbilitySet m_abilitySet;
 	private int m_maxDex = Integer.MAX_VALUE;
+	private int m_armorCheckPenalty = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,17 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 		m_filterButton = (Button) getRootView().findViewById(R.id.buttonFilter);
 		m_filterButton.setOnClickListener(this);
+		
+		m_applyACPCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxApplyACP);
+		m_applyACPCheckBox.setChecked(false);
+		m_applyACPCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (buttonView == m_applyACPCheckBox) {
+					((PTSkillsAdapter) m_skillsListView.getAdapter())
+					.setArmorCheckPenalty(isChecked ? m_armorCheckPenalty : 0);
+				}
+			}
+		});
 
 		m_skillsListView = (ListView) getRootView()
 				.findViewById(R.id.listViewCharacterSkills);
@@ -101,7 +118,6 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 				m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
 				m_skillSelectedForEdit.setRank(skill.getRank());
 				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
-				m_skillSelectedForEdit.setArmorCheckPenalty(skill.getArmorCheckPenalty());
 				m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
 				
 				m_skillRepo.update(m_skillSelectedForEdit);
@@ -150,13 +166,17 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		if (m_isFiltered) {
 			adapter = new PTSkillsAdapter(getActivity(),
 					R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
-					m_maxDex, m_abilitySet);
+					m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
 		} else {
 			adapter = new PTSkillsAdapter(getActivity(),
 					R.layout.character_skill_row, m_skillSet.getSkills(),
-					m_maxDex, m_abilitySet);
+					m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
 		}
 		m_skillsListView.setAdapter(adapter);
+	}
+	
+	private int getAppliedArmorCheckPenalty() {
+		return m_applyACPCheckBox.isChecked() ? m_armorCheckPenalty : 0;
 	}
 
 	private void setFilterButtonText() {
@@ -195,6 +215,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		m_skillSet = new PTSkillSet(m_skillRepo.querySet(getCurrentCharacterID()));
 		addNewSubSkills();
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
+		m_armorCheckPenalty = m_armorRepo.getArmorCheckPenalty(getCurrentCharacterID());
 		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
 	}
 	

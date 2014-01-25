@@ -133,7 +133,7 @@ public class PTArmor extends PTItem {
 		return 1;
 	}
 
-	public void setSize(int size) {
+	public void setSizeInt(int size) {
 		String[] sizeArray = {"S", "M", "L"};
 		m_size = sizeArray[size];
 	}

@@ -105,57 +105,6 @@ public class PTSpell implements Parcelable, PTStorable {
 		m_prepared = prepared;
 	}
 	
-	public void setAsOtherSpell(PTSpell spell) {
-		m_name = spell.getName();
-		m_level = spell.getLevel();
-		m_prepared = spell.getPrepared();
-		m_description = spell.getDescription();
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((m_description == null) ? 0 : m_description.hashCode());
-		result = prime * result + m_level;
-		result = prime * result + ((m_name == null) ? 0 : m_name.hashCode());
-		result = prime * result + m_prepared;
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PTSpell other = (PTSpell) obj;
-		if (m_description == null) {
-			if (other.m_description != null)
-				return false;
-		} else if (!m_description.equals(other.m_description))
-			return false;
-		if (m_level != other.m_level)
-			return false;
-		if (m_name == null) {
-			if (other.m_name != null)
-				return false;
-		} else if (!m_name.equals(other.m_name))
-			return false;
-		if (m_prepared != other.m_prepared)
-			return false;
-		return true;
-	}
-	
 	public void setCharacterID(long characterId) {
 		m_characterId = characterId;
 	}

@@ -15,11 +15,11 @@ public class PTArmorRespositoryTest extends PTBaseRepositoryTest {
 		
 		m_armor1 = new PTArmor();
 		setValues(m_armor1, m_armor1.getID(), m_characterId, "Heavy armor",
-				7.5, true, 1, 2, 3, 4, 5, "armor", "M");
+				7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armor", "M");
 		
 		m_armor2 = new PTArmor();
 		setValues(m_armor2, m_armor2.getID(), m_characterId, "Hat",
-				1.0, false, 10, 24, 100, 11, 20, "Hat", "S");
+				1.0, false, 10, /*ACP*/-4, 100, 11, 20, "Hat", "S");
 		
 		m_repo.insert(m_armor1);
 		m_repo.insert(m_armor2);
@@ -80,6 +80,19 @@ public class PTArmorRespositoryTest extends PTBaseRepositoryTest {
 		armor2.setWorn(false);
 		m_repo.update(armor2);
 		assertEquals(Integer.MAX_VALUE, m_repo.getMaxDex(m_characterId));
+	}
+	
+	public void testArmorCheck() {
+		PTArmor armor1 = new PTArmor();
+		setValues(armor1, armor1.getID(), m_characterId, "Heavy armor",
+				7.5, true, 1, /*ACP*/-5, 3, 4, 5, "armor", "M");
+		m_repo.insert(armor1);
+		assertEquals(-7, m_repo.getArmorCheckPenalty(m_characterId));
+		
+		
+		m_repo.delete(m_armor1);
+		m_repo.delete(armor1);
+		assertEquals(0, m_repo.getArmorCheckPenalty(m_characterId));
 	}
 
 	public static void setValues(PTArmor toUpdate, long id, long characterId, String name,

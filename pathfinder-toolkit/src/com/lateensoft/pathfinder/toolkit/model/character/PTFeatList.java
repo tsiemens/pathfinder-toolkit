@@ -139,7 +139,7 @@ public class PTFeatList implements Parcelable {
 		return -1;
 	}
 	
-	public int getNumberOfFeats(){
+	public int size(){
 		return m_feats.size();
 	}
 	

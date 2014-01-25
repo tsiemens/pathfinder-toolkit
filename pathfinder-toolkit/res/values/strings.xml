@@ -123,6 +123,8 @@
     <string name="modifier">Mod.</string>
     <string name="points">Points:</string>
 
+    <string name="apply_armor_check">Apply Armor Check Penalty</string>
+    
     <string-array name="skills">
         <item>Acrobatics</item>
         <item>Appraise</item>
@@ -338,19 +340,6 @@
         <item>20</item>
 	</string-array>
 
-    <string-array name="acp_spinner_options">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
     <string-array name="size_spinner_options">
         <item>S</item>
         <item>M</item>
@@ -536,6 +525,30 @@
         <item>Hair</item>
         <item>Languages</item>
         <item>Description</item>
+    </string-array>
+    
+    <string-array name="selectable_negative_values_strings">
+        <item>-20</item>
+        <item>-19</item>
+        <item>-18</item>
+        <item>-17</item>
+        <item>-16</item>
+        <item>-15</item>
+        <item>-14</item>
+        <item>-13</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
     </string-array>
     
     <string-array name="selectable_whole_values_strings">

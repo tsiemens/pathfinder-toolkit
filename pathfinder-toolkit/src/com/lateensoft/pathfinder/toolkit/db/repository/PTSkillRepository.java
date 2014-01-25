@@ -16,7 +16,6 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	private static final String CLASS_SKILL = "ClassSkill";
 	private static final String RANK = "Rank";
 	private static final String MISC_MOD = "MiscMod";
-	private static final String ARMOR_CHECK_PENALTY = "ArmorCheckPenalty";
 	private static final String ABILITY_KEY = "ability_key";
 	
 	public PTSkillRepository() {
@@ -29,9 +28,7 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		PTTableAttribute rank = new PTTableAttribute(RANK, SQLDataType.INTEGER);
 		PTTableAttribute miscMod = new PTTableAttribute(MISC_MOD, SQLDataType.INTEGER);
 		PTTableAttribute abilityKey = new PTTableAttribute(ABILITY_KEY, SQLDataType.INTEGER);
-		PTTableAttribute armorChk = new PTTableAttribute(ARMOR_CHECK_PENALTY, SQLDataType.INTEGER);
-		PTTableAttribute[] attributes = {id, skillKey, characterId, subType, classSkill, rank, miscMod,
-				armorChk, abilityKey};
+		PTTableAttribute[] attributes = {id, skillKey, characterId, subType, classSkill, rank, miscMod, abilityKey};
 		m_tableInfo = new PTTableInfo(TABLE, attributes);
 	}
 	
@@ -44,10 +41,9 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
 		int rank = ((Long) hashTable.get(RANK)).intValue();
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
-		int armorCheckPenalty = ((Long) hashTable.get(ARMOR_CHECK_PENALTY)).intValue();
 		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
 		PTSkill skill = new PTSkill(id, characterId, skillKey, subType, classSkill, rank, 
-				miscMod, armorCheckPenalty, abilityKey);
+				miscMod, abilityKey);
 		return skill;
 	}
 	
@@ -65,7 +61,6 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		values.put(CLASS_SKILL, object.isClassSkill());
 		values.put(RANK, object.getRank());
 		values.put(MISC_MOD, object.getMiscMod());
-		values.put(ARMOR_CHECK_PENALTY, object.getArmorCheckPenalty());
 		values.put(ABILITY_KEY, object.getAbilityKey());
 		return values;
 	}

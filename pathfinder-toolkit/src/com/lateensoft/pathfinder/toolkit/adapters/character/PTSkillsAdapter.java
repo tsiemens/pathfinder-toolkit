@@ -23,9 +23,10 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 	
 	private PTAbilitySet m_abilitySet;
 	private int m_maxDex;
+	private int m_armorCheckPenalty;
 
 	public PTSkillsAdapter(Context context, int layoutResourceId,
-			PTSkill[] skills, int maxDex, PTAbilitySet characterAbilities) {
+			PTSkill[] skills, int maxDex, PTAbilitySet characterAbilities, int armorCheckPenalty) {
 		super(context, layoutResourceId, skills);
 		m_layoutResourceId = layoutResourceId;
 		m_context = context;
@@ -34,6 +35,7 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		m_abilityNameMap = PTAbilitySet.getAbilityShortNameMap();
 		m_abilitySet = characterAbilities;
 		m_maxDex = maxDex;
+		m_armorCheckPenalty = armorCheckPenalty;
 	}
 
 	@Override
@@ -53,7 +55,6 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 			holder.abilityMod = (TextView) row.findViewById(R.id.tvSkillAbilityMod);
 			holder.rank = (TextView) row.findViewById(R.id.tvSkillRank);
 			holder.miscMod = (TextView) row.findViewById(R.id.tvSkillMisc);
-			holder.armorCheckPenalty = (TextView) row.findViewById(R.id.tvSkillACP);
 			holder.classSkill = (TextView) row.findViewById(R.id.tvClassSkill);
 			
 			row.setTag(holder);
@@ -68,12 +69,11 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 			name = name + " ("+ m_skills[position].getSubType() + ")";
 		}
 		holder.name.setText(name);
-		holder.total.setText(Integer.toString(m_skills[position].getSkillMod(m_abilitySet, m_maxDex)));
+		holder.total.setText(Integer.toString(m_skills[position].getSkillMod(m_abilitySet, m_maxDex, m_armorCheckPenalty)));
 		holder.abilityName.setText(m_abilityNameMap.get(m_skills[position].getAbilityKey()));
 		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(m_skills[position].getAbilityKey(), m_maxDex)));
 		holder.rank.setText(Integer.toString(m_skills[position].getRank()));
 		holder.miscMod.setText(Integer.toString(m_skills[position].getMiscMod()));
-		holder.armorCheckPenalty.setText(Integer.toString(m_skills[position].getArmorCheckPenalty()));
 		
 		if(m_skills[position].isClassSkill() && m_skills[position].getRank() > 0)
 			holder.classSkill.setText(new String("3"));
@@ -87,6 +87,16 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		m_skills = updatedSkills;
 		notifyDataSetChanged();
 	}
+	
+	/**
+	 * Applied to the total skill mod.
+	 * List is refreshed when called.
+	 * @param acp
+	 */
+	public void setArmorCheckPenalty(int acp) {
+		m_armorCheckPenalty = acp;
+		notifyDataSetChanged();
+	}
 
 
 	static class SkillHolder {
@@ -96,7 +106,6 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		TextView abilityMod;
 		TextView rank;
 		TextView miscMod;
-		TextView armorCheckPenalty;
 		TextView classSkill;
 	}
 

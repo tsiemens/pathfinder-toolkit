@@ -10,7 +10,6 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	boolean m_classSkill;
 	int m_rank;
 	int m_miscMod;
-	int m_armorCheckPenalty;
 	int m_abilityKey;
 	
 	// For use with skills such as craft, professions, perform
@@ -26,21 +25,19 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	long m_characterId;
 	
 	public PTSkill(int skillKey, int abilityKey) {
-		this(UNSET_ID, UNSET_ID, skillKey, false, 0, 0, 0, abilityKey);
+		this(UNSET_ID, UNSET_ID, skillKey, false, 0, 0, abilityKey);
 	}
 	
 	public PTSkill(long id, long characterId, int skillId, Boolean classSkill, int rank,
-			int miscMod, int armorCheckPenalty, int abilityId) {
-		this(id, characterId, skillId, null, classSkill, rank, miscMod,
-				armorCheckPenalty, abilityId);
+			int miscMod, int abilityId) {
+		this(id, characterId, skillId, null, classSkill, rank, miscMod, abilityId);
 	}
 	
 	public PTSkill(long id, long characterId, int skillId, String subtype, Boolean classSkill,
-			int rank, int miscMod, int armorCheckPenalty, int abilityId) {
+			int rank, int miscMod, int abilityId) {
 		m_classSkill = classSkill;
 		m_rank = rank;
 		m_miscMod = miscMod;
-		m_armorCheckPenalty = armorCheckPenalty;
 		m_abilityKey = abilityId;
 		m_skillKey = skillId;
 		m_id = id;
@@ -54,7 +51,6 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 		m_classSkill = classSkill[0];
 		m_rank = in.readInt();
 		m_miscMod = in.readInt();
-		m_armorCheckPenalty = in.readInt();
 		m_abilityKey = in.readInt();
 		m_skillKey = in.readInt();
 		m_characterId = in.readLong();
@@ -69,7 +65,6 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 		out.writeBooleanArray(classSkill);
 		out.writeInt(m_rank);
 		out.writeInt(m_miscMod);
-		out.writeInt(m_armorCheckPenalty);
 		out.writeInt(m_abilityKey);
 		out.writeInt(m_skillKey);
 		out.writeLong(m_characterId);
@@ -93,14 +88,19 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	/**
 	 * @param abilitySet The ability set of the character shared by the skill set
 	 * @param maxDex maximum dex mod for the character
+	 * @param armorCheckPenalty a negative value to be applied when DEX or STR based
 	 * @return the total skill mod for the skill
 	 */
-	public int getSkillMod(PTAbilitySet abilitySet, int maxDex) {
+	public int getSkillMod(PTAbilitySet abilitySet, int maxDex, int armorCheckPenalty) {
 		int skillMod = abilitySet.getTotalAbilityMod(m_abilityKey, maxDex) + m_rank 
-			+ m_miscMod + m_armorCheckPenalty;
+			+ m_miscMod;
 		
 		if(m_classSkill && m_rank > 0)
 			skillMod += 3;
+		
+		if (m_abilityKey == PTAbilitySet.KEY_DEX || m_abilityKey == PTAbilitySet.KEY_STR) {
+			skillMod += armorCheckPenalty;
+		}
 		
 		return skillMod;
 	}
@@ -136,18 +136,6 @@ public class PTSkill implements Parcelable, PTStorable, Comparable<PTSkill> {
 	 */
 	public void setMiscMod(int miscMod) {
 		m_miscMod = miscMod;
-	}
-	/**
-	 * @return the armorCheckPenalty
-	 */
-	public int getArmorCheckPenalty() {
-		return m_armorCheckPenalty;
-	}
-	/**
-	 * @param armorCheckPenalty the armorCheckPenalty to set
-	 */
-	public void setArmorCheckPenalty(int armorCheckPenalty) {
-		m_armorCheckPenalty = armorCheckPenalty;
 	}
 	
 	public int getAbilityKey() {

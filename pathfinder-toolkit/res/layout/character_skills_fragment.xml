@@ -11,13 +11,21 @@
         android:orientation="horizontal"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:weightSum="15" >
+        android:weightSum="1" >
+        
+        <CheckBox 
+            android:id="@+id/checkboxApplyACP"
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left|center_vertical"
+            android:text="@string/apply_armor_check"/>
                 
         <TextView
             android:id="@+id/tvFilter"
             android:layout_width="0px"
             android:layout_height="fill_parent"
-            android:layout_weight="10"
+            android:layout_weight="0.2"
             android:gravity="right|center_vertical"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -28,7 +36,7 @@
             android:id="@+id/buttonFilter"
             android:layout_width="0px"
             android:layout_height="fill_parent"
-            android:layout_weight="5"
+            android:layout_weight="0.3"
             android:gravity="center" />
          
     </LinearLayout>
@@ -38,7 +46,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:weightSum="7" >
+        android:weightSum="6" >
 
         <TextView
             android:id="@+id/tvSkillsTotalHeader"
@@ -75,15 +83,6 @@
             android:gravity="center"
             android:maxLines="2"
             android:text="@string/skills_misc_header" />
-            
-        <TextView
-            android:id="@+id/tvSkillsACPHeader"
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:maxLines="2"
-            android:text="@string/skills_acp_header" />
         
         <TextView
             android:id="@+id/tvSkillsClassHeader"

@@ -22,7 +22,7 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 	
 	public void testUpdate() {
 		PTSkill toUpdate = new PTSkill(m_skill.getID(), m_skill.getCharacterID(), m_skill.getSkillKey(),
-				"derp", true, 3, 4, 5, m_skill.getAbilityKey());
+				"derp", true, 3, 4, m_skill.getAbilityKey());
 	
 		m_repo.update(toUpdate);
 		PTSkill queried = m_repo.query(m_skill.getID(), m_skill.getCharacterID());
@@ -44,6 +44,5 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 		assertEquals(expected.isClassSkill(), actual.isClassSkill());
 		assertEquals(expected.getAbilityKey(), actual.getAbilityKey());
 		assertEquals(expected.getMiscMod(), actual.getMiscMod());
-		assertEquals(expected.getArmorCheckPenalty(), actual.getArmorCheckPenalty());
 	}
 }
