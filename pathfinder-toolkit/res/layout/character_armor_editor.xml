@@ -160,6 +160,13 @@
                     android:inputType="number" />
             </LinearLayout>
         </LinearLayout>
+        
+        <CheckBox 
+            android:id="@+id/checkboxIsWorn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="@string/armor_is_worn"/>
 
         <EditText
             android:id="@+id/etArmorSpecialProperties"

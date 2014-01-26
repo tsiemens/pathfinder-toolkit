@@ -1,7 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 import android.os.Parcelable;
@@ -43,7 +43,7 @@ public class PTCharacterSpellEditActivity extends PTParcelableEditorActivity {
 		};
 
 		setupSpinner(m_levelSpinner, R.array.spell_level_selectable_values_string, m_spell.getLevel(), m_spinnerOnTouchListener);
-		setupSpinner(m_preparedSpinner, R.array.selectable_values_string, m_spell.getPrepared(), m_spinnerOnTouchListener);
+		setupSpinner(m_preparedSpinner, R.array.selectable_whole_values_strings, m_spell.getPrepared(), m_spinnerOnTouchListener);
 
 		if(m_spellIsNew) {
 			setTitle(R.string.new_spell_title);

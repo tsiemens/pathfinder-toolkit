@@ -2,6 +2,8 @@ package com.lateensoft.pathfinder.toolkit;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class PTBaseApplication extends Application{
@@ -33,5 +35,35 @@ public class PTBaseApplication extends Application{
 	 */
 	static public Context getAppContext() {
 		return s_context;
+	}
+	
+	/**
+	 * @return: The the human readable app version, or null in the event of an error.
+	 */
+	public static String getAppVersionName() {
+		Context context = PTBaseApplication.getAppContext();
+		PackageInfo pInfo;
+		try{
+			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * @return: The the incremental app version code, or -1 in the event of an error.
+	 */
+	public static int getAppVersionCode() {
+		Context context = PTBaseApplication.getAppContext();
+		PackageInfo pInfo;
+		try{
+			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return pInfo.versionCode;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }

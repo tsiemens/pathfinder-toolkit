@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit;
 
-import com.lateensoft.pathfinder.toolkit.settings.PTSettingsActivity;
+import com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity;
 
 import android.app.Activity;
 import android.content.Context;

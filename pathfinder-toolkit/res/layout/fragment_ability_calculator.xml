@@ -12,13 +12,15 @@
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
             android:gravity="center" />
-        <TextView
+        <View
+            android:layout_height="0dp"
             android:layout_weight="0.5"/>
         <TextView
             android:text="@string/score"
-           android:layout_width="wrap_content"
+           	android:layout_width="wrap_content"
             android:gravity="center" />       
-        <TextView
+        <View
+            android:layout_height="0dp"
             android:layout_weight="0.5"/>
         <TextView
             android:text="@string/racial_mod" 
@@ -49,22 +51,20 @@
             android:gravity="center"
             android:layout_height="fill_parent"/>
         <Button
-            android:text="@string/plus"
-            android:id="@+id/butIncStr"
-            android:onClick="incStr"
+            android:id="@+id/btnIncStr"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseStr"
             android:layout_height="fill_parent" />       
         <Button
-           android:text="@string/minus" 
-            android:id="@+id/butDecStr"
-            android:onClick="decStr"
+            android:id="@+id/btnDecStr"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus" />
         <TextView
             android:id="@+id/raceStr" 
             android:padding="@dimen/ability_calc_padding"
@@ -93,20 +93,20 @@
              android:gravity="center"
             android:layout_height="fill_parent" />
         <Button
-            android:text="@string/plus"
-            android:onClick="incDex"
+            android:id="@+id/btnIncDex"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseDex"
             android:layout_height="fill_parent" />       
         <Button
-            android:text="@string/minus"
-            android:onClick="decDex"
+            android:id="@+id/btnDecDex"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceDex"
             android:padding="@dimen/ability_calc_padding"
@@ -135,20 +135,20 @@
              android:gravity="center"
             android:layout_height="fill_parent" />
         <Button
-            android:text="@string/plus"
-            android:onClick="incCon"
+            android:id="@+id/btnIncCon"
             android:layout_height="fill_parent" 
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseCon" 
             android:layout_height="fill_parent"/>       
         <Button
-            android:text="@string/minus"
-            android:onClick="decCon"
+            android:id="@+id/btnDecCon"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceCon"
             android:padding="@dimen/ability_calc_padding"
@@ -177,20 +177,20 @@
              android:gravity="center"
             android:layout_height="fill_parent" />
         <Button
-            android:text="@string/plus" 
-            android:onClick="incInt"
+            android:id="@+id/btnIncInt"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center" 
             android:id="@+id/baseInt"
             android:layout_height="fill_parent"/>       
         <Button
-            android:text="@string/minus"
-            android:onClick="decInt"
+            android:id="@+id/btnDecInt"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceInt"
             android:padding="@dimen/ability_calc_padding"
@@ -221,20 +221,20 @@
              android:gravity="center"
             android:layout_height="fill_parent" />
         <Button
-            android:text="@string/plus"
-            android:onClick="incWis"
+            android:id="@+id/btnIncWis"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center" 
             android:id="@+id/baseWis"
             android:layout_height="fill_parent"/>       
         <Button
-            android:text="@string/minus"
-            android:onClick="decWis" 
+            android:id="@+id/btnDecWis"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceWis"
             android:padding="@dimen/ability_calc_padding"
@@ -263,20 +263,20 @@
              android:gravity="center"
             android:layout_height="fill_parent"/>
         <Button
-            android:text="@string/plus"
-            android:onClick="incCha"
+            android:id="@+id/btnIncCha"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseCha" 
             android:layout_height="fill_parent"/>       
         <Button
-            android:text="@string/minus"
-            android:onClick="decCha"
+            android:id="@+id/btnDecCha"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceCha"
             android:padding="@dimen/ability_calc_padding"

@@ -1,5 +1,6 @@
 <resources>    
-    <dimen name="std_text_size">14dp</dimen>
+    <dimen name="std_text_size">14sp</dimen>
+    <dimen name="larger_text_size">18sp</dimen>
     
     <dimen name="dice_roller_button_text_larger">14sp</dimen>
     <dimen name="dice_roller_button_text_smaller">12sp</dimen>
@@ -26,4 +27,6 @@
     <dimen name="ability_calc_dialog_row_height">50sp</dimen>
     
     <dimen name="small_divider">1dp</dimen>
+    
+    <dimen name="button_background_corner_radius">2dp</dimen>
 </resources>

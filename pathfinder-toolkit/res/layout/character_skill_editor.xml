@@ -16,7 +16,15 @@
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
         	android:maxLines="1"
-        	android:textStyle="bold" />
+        	android:textStyle="bold"
+        	android:textSize="@dimen/larger_text_size" />
+        
+        <EditText
+            android:id="@+id/etSkillSubType"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/skill_subtype_hint"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,11 +44,14 @@
                     android:gravity="left|center_vertical"
                     android:text="@string/skills_ability_mod_header" />
 
-                <Spinner
-                    android:id="@+id/spinnerSkillAbility"
+                <TextView
+                    android:id="@+id/tvSkillAbility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
+                    android:layout_margin="5dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center"
+                    android:minWidth="90dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,26 +91,6 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/skills_acp_header" />
-
-                <Spinner
-                    android:id="@+id/spinnerSkillACP"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
-            
             
         </LinearLayout>
 

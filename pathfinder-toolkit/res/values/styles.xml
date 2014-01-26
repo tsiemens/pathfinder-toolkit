@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Holo"/>
     
@@ -16,6 +16,13 @@
   	    <item name="android:layout_width">fill_parent</item>
   	    <item name="android:layout_height">1dp</item>
   	    <item name="android:background">#10FFFFFF</item>
+  	</style>
+  	
+  	<style name="clickable_text_view">
+  	    <item name="android:clickable">true</item>
+  	    <item name="android:enabled">true</item>
+  	    <item name="android:background">@drawable/clickable_text_background</item>
+  	    <item name="android:padding">3dp</item>
   	</style>
 
 </resources>

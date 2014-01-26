@@ -164,27 +164,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/combat_stats_equals" />
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextInitDexMod"
-                    android:layout_width="fill_parent"
+            <TextView
+                    android:id="@+id/tvInitAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:maxLines="1" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/combat_stats_dex_mod"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -308,27 +295,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/plus" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
+                <TextView
+                    android:id="@+id/tvACAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextACDexMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_dex_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -630,27 +604,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/plus" />
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextCMBStrengthMod"
-                    android:layout_width="fill_parent"
+			<TextView
+                    android:id="@+id/tvCMBAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:maxLines="1" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/combat_stats_str_mod"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -706,27 +667,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/combat_stats_cmd_equals" />
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextCMDDex"
-                    android:layout_width="fill_parent"
+            <TextView
+                    android:id="@+id/tvCMDAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:maxLines="1" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/combat_stats_dex_mod"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -824,27 +772,14 @@
                     android:paddingTop="5dp"
                     android:text="@string/plus" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
+                <TextView
+                    android:id="@+id/tvFortAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveFortAbilityMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_ability_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -993,27 +928,14 @@
                     android:paddingTop="5dp"
                     android:text="@string/plus" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
+                <TextView
+                    android:id="@+id/tvReflexAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveRefAbilityMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_ability_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -1162,27 +1084,14 @@
                     android:paddingTop="5dp"
                     android:text="@string/plus" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
+                <TextView
+                    android:id="@+id/tvWillAbility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveWillAbilityMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_ability_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:minWidth="60dp"
+                    android:layout_margin="3dp"
+                    style="@style/clickable_text_view"
+                    android:gravity="center" />
 
                 <TextView
                     android:layout_width="wrap_content"

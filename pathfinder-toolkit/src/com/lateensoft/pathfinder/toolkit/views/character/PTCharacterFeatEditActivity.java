@@ -4,7 +4,7 @@ import android.os.Parcelable;
 import android.widget.EditText;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.character.PTFeat;
+import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterFeatEditActivity extends PTParcelableEditorActivity {
