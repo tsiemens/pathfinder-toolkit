@@ -164,8 +164,8 @@
     </string-array>
 
     <!-- Point buy calc strings -->
-    <string name="export_to_new_character">Export to new char</string>
-    <string name="export_to_existing_character">Export to existing char</string>
+    <string name="export_to_new_character">Export to new character</string>
+    <string name="export_to_existing_character">Export to existing character</string>
     <string-array name="races_array">
         <item>Human</item>
         <item>Dwarf</item>
@@ -727,7 +727,6 @@
     <string name="menu_item_reset_encounter">Reset</string>
     <string name="menu_item_add_encounter_member">Add Encounter Member</string>
     <string name="initiative_tracker_roll_button">Roll for Initiative!</string>
-    <string name="new_encounter_member_dialog_title">New Character</string>
     <string name="new_encounter_member_dialog_text">Add a new character or NPC to this encounter?</string>
     <string name="reset_encounter_dialog_title">Reset Encounter</string>
     <string name="reset_encounter_dialog_text">Reset the encounter? Tap \"Use Default\" to completely reset to the current party as it is shown in the Party Manager.</string>
@@ -749,13 +748,14 @@
     <!-- Party Manager Strings -->
     <string name="menu_item_party_list">Parties</string>
     <string name="menu_item_new_party">New Party</string>
+    <string name="menu_item_new_member">New Member</string>
     <string name="menu_item_delete_party">Delete Party</string>
     <string name="party_name_header">Party Name:</string>
     <string name="party_name_hint">Party name</string>
     <string name="party_member_name_header">Character Name:</string>
     <string name="party_member_name_hint">Character name</string>
     <string name="party_member_stat_hint">Value</string>
-    <string name="new_party_member_dialog_title">New Party Member</string>
+    <string name="new_party_dialog_text">Create new party?</string>
     <string name="new_party_member_dialog_text">Add a new member to this party?</string>
 
     <string-array name="party_member_stats">

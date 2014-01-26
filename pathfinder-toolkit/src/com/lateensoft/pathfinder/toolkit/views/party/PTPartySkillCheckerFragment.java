@@ -10,8 +10,6 @@ import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -72,17 +70,6 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		resetPartyRolls();
 		
 		return getRootView();
-    }
-	
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
-	}
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		return super.onCreateOptionsMenu(menu);
     }
     
     /**

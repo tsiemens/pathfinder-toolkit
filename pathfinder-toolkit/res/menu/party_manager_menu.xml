@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/mi_party_list"
+        android:title="@string/menu_item_party_list"
+       	android:icon="@drawable/ic_action_group"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/mi_new_member"
+        android:title="@string/menu_item_new_member"
+        android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/mi_new_party"
+        android:title="@string/menu_item_new_party"
+        android:showAsAction="never" />
+    <item 
+        android:id="@+id/mi_delete_party"
+        android:title="@string/menu_item_delete_party"
+        android:showAsAction="never" />
+</menu>

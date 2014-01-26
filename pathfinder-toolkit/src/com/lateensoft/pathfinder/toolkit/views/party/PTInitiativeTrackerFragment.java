@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		OnClickListener, OnItemClickListener,
 		android.content.DialogInterface.OnClickListener {
 	private static final String TAG = PTInitiativeTrackerFragment.class.getSimpleName();
-
-	private static final int MENU_ITEM_RESET = 0;
-	private static final int MENU_ITEM_ADD_MEMBER = 1;
 
 	public PTParty m_party;
 
@@ -81,12 +79,12 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		case MENU_ITEM_RESET: // Tapped party list button
-			m_dialogMode = MENU_ITEM_RESET;
+		case R.id.mi_reset:
+			m_dialogMode = R.id.mi_reset;
 			showPartyDialog();
 			break;
-		case MENU_ITEM_ADD_MEMBER:
-			m_dialogMode = MENU_ITEM_ADD_MEMBER;
+		case R.id.mi_new_member:
+			m_dialogMode = R.id.mi_new_member;
 			showPartyDialog();
 			break;
 		}
@@ -98,14 +96,10 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem partyListItem = menu.add(Menu.NONE, MENU_ITEM_RESET,
-				Menu.NONE, R.string.menu_item_reset_encounter);
-		partyListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-		MenuItem addMemberListItem = menu.add(Menu.NONE, MENU_ITEM_ADD_MEMBER,
-				Menu.NONE, R.string.menu_item_add_encounter_member);
-		addMemberListItem.setIcon(R.drawable.ic_action_new);
-		addMemberListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		MenuInflater inflater = getMenuInflater();
+		if (inflater != null) {
+			inflater.inflate(R.menu.initiative_tracker_menu, menu);
+		}
 
 		super.onCreateOptionsMenu(menu);
 		return true;
@@ -116,7 +110,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		switch (m_dialogMode) {
-		case MENU_ITEM_RESET:
+		case R.id.mi_reset:
 			builder.setTitle(getString(R.string.reset_encounter_dialog_title));
 			builder.setMessage(getString(R.string.reset_encounter_dialog_text))
 					.setPositiveButton(R.string.ok_button_text, this)
@@ -125,8 +119,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 							getString(R.string.use_defualt_party_button), this);
 			break;
 
-		case MENU_ITEM_ADD_MEMBER:
-			builder.setTitle(getString(R.string.new_encounter_member_dialog_title));
+		case R.id.mi_new_member:
 			builder.setMessage(
 					getString(R.string.new_encounter_member_dialog_text))
 					.setPositiveButton(R.string.ok_button_text, this)
@@ -157,11 +150,11 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 */
 	private void performPositiveDialogAction() {
 		switch (m_dialogMode) {
-		case MENU_ITEM_RESET:
+		case R.id.mi_reset:
 			resetPartyRolls();
 			break;
 
-		case MENU_ITEM_ADD_MEMBER:
+		case R.id.mi_new_member:
 			m_partyMemberSelectedForEdit = -1;
 			showPartyMemberEditor(null);
 			break;

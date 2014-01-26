@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,6 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	static final int WIS_IDX = 4;
 	static final int CHA_IDX = 5;
 	static final int NUM_ABILITIES = PTAbilitySet.ABILITY_KEYS.length;
-	
-	static final int MENU_ITEM_EXPORT_TO_NEW = 0;
-	private static final int MENU_ITEM_EXPORT_TO_EXISTING = 1;
 	
 	static final int CUSTOM_RACE_INDEX = 7;
 	
@@ -149,15 +147,10 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem exportAbilitySetToNew = menu.add(Menu.NONE,
-				MENU_ITEM_EXPORT_TO_NEW, Menu.NONE,
-				R.string.export_to_new_character);
-		exportAbilitySetToNew.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		
-		MenuItem exportAbilitySetToExisting = menu.add(Menu.NONE,
-				MENU_ITEM_EXPORT_TO_EXISTING, Menu.NONE,
-				R.string.export_to_existing_character);
-		exportAbilitySetToExisting.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		MenuInflater inflater = getMenuInflater();
+		if (inflater != null) {
+			inflater.inflate(R.menu.pointbuy_menu, menu);
+		}
 		
 		super.onCreateOptionsMenu(menu);
 		return true;
@@ -281,7 +274,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		case MENU_ITEM_EXPORT_TO_NEW:
+		case R.id.mi_export_to_new:
 			PTCharacter character = new PTCharacter("From calc", getActivity());
 			m_abilityCalc.setCalculatedAbilityScores(character.getAbilitySet());
 			Resources r = getResources();
@@ -294,7 +287,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
 			}
 			break;
-		case MENU_ITEM_EXPORT_TO_EXISTING:
+		case R.id.mi_export_to_existing:
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(getString(R.string.select_character_dialog_header));
 			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();

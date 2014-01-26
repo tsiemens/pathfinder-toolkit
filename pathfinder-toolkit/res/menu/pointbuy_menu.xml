@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/mi_export_to_new"
+        android:title="@string/export_to_new_character"
+       	android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/mi_export_to_existing"
+        android:title="@string/export_to_existing_character"
+        android:icon="@drawable/ic_action_merge"
+        android:showAsAction="ifRoom" />
+</menu>

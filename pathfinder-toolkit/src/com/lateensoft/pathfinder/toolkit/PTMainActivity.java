@@ -181,13 +181,12 @@ public class PTMainActivity extends Activity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Initialize the global menu items
 		if (m_currentFragment != null) {
 			m_currentFragment.onCreateOptionsMenu(menu);
 		}
-		PTSharedMenu.onCreateOptionsMenu(menu, getApplicationContext());
-
-		// Add aditional menu items
+		
+		// Add menu items which are visible for all fragments
+		PTSharedMenu.onCreateOptionsMenu(menu, this);
 		return true;
 	}
 

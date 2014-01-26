@@ -5,6 +5,7 @@ import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -29,23 +30,32 @@ public class PTBasePageFragment extends Fragment{
 		return false;
 	}
 	
-	protected void setTitle(String title) {
+	public void setTitle(String title) {
 		getActivity().getActionBar().setTitle(title);
 	}
 	
-	protected void setTitle(int resId) {
+	public void setTitle(int resId) {
 		getActivity().getActionBar().setTitle(resId);
 	}
 	
-	protected void setSubtitle(String subtitle) {
+	public void setSubtitle(String subtitle) {
 		getActivity().getActionBar().setSubtitle(subtitle);
 	}
 	
-	protected View getRootView() {
+	public View getRootView() {
 		return m_rootView;
 	}
 	
 	protected void setRootView(View rootView) {
 		m_rootView = rootView;
+	}
+	
+	public MenuInflater getMenuInflater() {
+		Activity a = getActivity();
+		if (a != null) {
+			return a.getMenuInflater();
+		} else {
+			return null;
+		}
 	}
 }

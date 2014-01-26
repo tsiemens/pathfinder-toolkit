@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +36,6 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		OnClickListener, OnItemClickListener {
 	private static final String TAG = PTPartyManagerFragment.class.getSimpleName();
 	
-	private final int MENU_ITEM_PARTY_LIST = 0;
-	private final int MENU_ITEM_ADD_MEMBER = 1;
-	private final int MENU_ITEM_NEW_PARTY = 2;
-	private final int MENU_ITEM_DELETE_PARTY = 3;
-	private final int DIALOG_MODE_ADD_MEMBER = 4;
-
 	public PTParty m_party;
 
 	private int m_dialogMode;
@@ -180,22 +175,22 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		updateDatabase();
 
 		switch (item.getItemId()) {
-		case MENU_ITEM_PARTY_LIST: // Tapped party list button
-			m_dialogMode = MENU_ITEM_PARTY_LIST;
+		case R.id.mi_party_list:
+			m_dialogMode = R.id.mi_party_list;
 			showPartyDialog();
 			break;
-		case MENU_ITEM_ADD_MEMBER:
-			m_dialogMode = DIALOG_MODE_ADD_MEMBER;
+		case R.id.mi_new_member:
+			m_dialogMode = R.id.mi_new_member;
 			showPartyDialog();
 			break;
-		case MENU_ITEM_NEW_PARTY:
+		case R.id.mi_new_party:
 			// Add new party
-			m_dialogMode = MENU_ITEM_NEW_PARTY;
+			m_dialogMode = R.id.mi_new_party;
 			showPartyDialog();
 			break;
-		case MENU_ITEM_DELETE_PARTY:
+		case R.id.mi_delete_party:
 			// Delete party
-			m_dialogMode = MENU_ITEM_DELETE_PARTY;
+			m_dialogMode = R.id.mi_delete_party;
 			showPartyDialog();
 			break;
 		}
@@ -207,23 +202,10 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		MenuItem partyListItem = menu.add(Menu.NONE, MENU_ITEM_PARTY_LIST,
-				Menu.NONE, R.string.menu_item_party_list);
-		partyListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-		MenuItem addMemberListItem = menu.add(Menu.NONE, MENU_ITEM_ADD_MEMBER,
-				Menu.NONE, R.string.menu_item_party_list);
-		addMemberListItem.setIcon(R.drawable.ic_action_new);
-		addMemberListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-		MenuItem newPartyItem = menu.add(Menu.NONE, MENU_ITEM_NEW_PARTY,
-				Menu.NONE, R.string.menu_item_new_party);
-		newPartyItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-		MenuItem deletePartyItem = menu.add(Menu.NONE, MENU_ITEM_DELETE_PARTY,
-				Menu.NONE, R.string.menu_item_delete_party);
-		deletePartyItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		MenuInflater inflater = getMenuInflater();
+		if (inflater != null) {
+			inflater.inflate(R.menu.party_manager_menu, menu);
+		}
 
 		super.onCreateOptionsMenu(menu);
 		return true;
@@ -235,7 +217,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		switch (m_dialogMode) {
-		case MENU_ITEM_PARTY_LIST:
+		case R.id.mi_party_list:
 			builder.setTitle("Select Party");
 
 			List<Entry<Long, String>> partyIDs = m_partyRepo.queryList();
@@ -252,14 +234,13 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 					.setNegativeButton(R.string.cancel_button_text, this);
 			break;
 
-		case MENU_ITEM_NEW_PARTY:
-			builder.setTitle(getString(R.string.menu_item_new_party));
-			builder.setMessage("Create new party?")
+		case R.id.mi_new_party:
+			builder.setMessage(R.string.new_party_dialog_text)
 					.setPositiveButton(R.string.ok_button_text, this)
 					.setNegativeButton(R.string.cancel_button_text, this);
 			break;
 
-		case MENU_ITEM_DELETE_PARTY:
+		case R.id.mi_delete_party:
 			builder.setTitle(getString(R.string.menu_item_delete_party));
 			builder.setMessage(
 					getString(R.string.delete_character_dialog_message_1)
@@ -269,8 +250,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 					.setNegativeButton(R.string.cancel_button_text, this);
 			break;
 
-		case DIALOG_MODE_ADD_MEMBER:
-			builder.setTitle(getString(R.string.new_party_member_dialog_title));
+		case R.id.mi_new_member:
 			builder.setMessage(getString(R.string.new_party_member_dialog_text))
 					.setPositiveButton(R.string.ok_button_text, this)
 					.setNegativeButton(R.string.cancel_button_text, this);
@@ -303,7 +283,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	 */
 	private void performPositiveDialogAction() {
 		switch (m_dialogMode) {
-		case MENU_ITEM_PARTY_LIST:
+		case R.id.mi_party_list:
 			// Check if "currently selected" party is the same as saved one
 			if (m_partyIDSelectedInDialog != m_party.getID()) {
 				updateDatabase(); // Ensures any data changed on the party
@@ -314,16 +294,16 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			}
 			break;
 
-		case MENU_ITEM_NEW_PARTY:
+		case R.id.mi_new_party:
 			updateDatabase();
 			addNewParty();
 			break;
 
-		case MENU_ITEM_DELETE_PARTY:
+		case R.id.mi_delete_party:
 			deleteCurrentParty();
 			break;
 
-		case DIALOG_MODE_ADD_MEMBER:
+		case R.id.mi_new_member:
 			m_partyMemberIndexSelectedForEdit = -1;
 			showPartyMemberEditor(null);
 			break;

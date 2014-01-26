@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,22 +29,6 @@ import android.widget.Toast;
 //This is a base class for all fragments in the character sheet activity
 public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	private static final String TAG = PTCharacterSheetFragment.class.getSimpleName();
-	
-	private final int MENU_ITEM_CHARACTER_LIST = 0;
-	private final int MENU_ITEM_NEW_CHARACTER = 1;
-	private final int MENU_ITEM_DELETE_CHARACTER = 2;
-	private final int MENU_ITEM_AUTOFILL = 3;
-	
-	public static final int STR_KEY = 0;
-	public static final int DEX_KEY = 1;
-	public static final int CON_KEY = 2;
-	public static final int INT_KEY = 3;
-	public static final int WIS_KEY = 4;
-	public static final int CHA_KEY = 5;
-	
-	public static final int FORT_KEY = 0;
-	public static final int REF_KEY = 1;
-	public static final int WILL_KEY = 2;
 	
 	public static final int TAB_INDEX_FLUFF = 0;
 	public static final int TAB_INDEX_ABILITIES = 2;
@@ -172,25 +157,21 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
-
-			case MENU_ITEM_CHARACTER_LIST: // Tapped character list button
-				m_dialogMode = MENU_ITEM_CHARACTER_LIST;
-				showCharacterDialog();
-				break;
-			case MENU_ITEM_NEW_CHARACTER:
-				// Add new character
-				m_dialogMode = MENU_ITEM_NEW_CHARACTER;
-				showCharacterDialog();
-				break;
-			case MENU_ITEM_DELETE_CHARACTER:
-				// Delete character
-				m_dialogMode = MENU_ITEM_DELETE_CHARACTER;
-				showCharacterDialog();
-				break;
-
-			case MENU_ITEM_AUTOFILL:
-				updateFragmentUI();
-				break;
+				case R.id.mi_character_list: 
+					// Character list button
+					m_dialogMode = R.id.mi_character_list;
+					showCharacterDialog();
+					break;
+				case R.id.mi_new_character:
+					// Add new character
+					m_dialogMode = R.id.mi_new_character;
+					showCharacterDialog();
+					break;
+				case R.id.mi_delete_character:
+					// Delete character
+					m_dialogMode = R.id.mi_delete_character;
+					showCharacterDialog();
+					break;
 			}
 		
 
@@ -199,29 +180,11 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Initialize the global menu items
-
-		MenuItem characterListItem = menu.add(Menu.NONE,
-				MENU_ITEM_CHARACTER_LIST, Menu.NONE,
-				R.string.menu_item_character_list);
-		characterListItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		characterListItem.setIcon(R.drawable.ic_menu_character_list);
-
-		MenuItem newCharacterItem = menu.add(Menu.NONE,
-				MENU_ITEM_NEW_CHARACTER, Menu.NONE,
-				R.string.menu_item_new_character);
-		newCharacterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-		MenuItem deleteCharacterItem = menu.add(Menu.NONE,
-				MENU_ITEM_DELETE_CHARACTER, Menu.NONE,
-				R.string.menu_item_delete_character);
-		deleteCharacterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-		MenuItem autoFillItem = menu.add(Menu.NONE, MENU_ITEM_AUTOFILL,
-				Menu.NONE, R.string.auto_fill);
-		autoFillItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		autoFillItem.setIcon(R.drawable.ic_menu_autofill);
-
+		MenuInflater inflater = getMenuInflater();
+		if (inflater != null) {
+			inflater.inflate(R.menu.character_sheet_menu, menu);
+		}
+		
 		super.onCreateOptionsMenu(menu);
 		return true;
 	}
@@ -233,7 +196,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		
 
 		switch (m_dialogMode) {
-		case MENU_ITEM_CHARACTER_LIST:
+		case R.id.mi_character_list:
 			builder.setTitle(getString(R.string.select_character_dialog_header));
 
 			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
@@ -251,14 +214,14 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
 			break;
 
-		case MENU_ITEM_NEW_CHARACTER:
+		case R.id.mi_new_character:
 			builder.setTitle(getString(R.string.menu_item_new_character));
 			builder.setMessage(getString(R.string.new_character_dialog_message))
 					.setPositiveButton(R.string.ok_button_text, m_characterClickListener)
 					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
 			break;
 
-		case MENU_ITEM_DELETE_CHARACTER:
+		case R.id.mi_delete_character:
 			builder.setTitle(getString(R.string.menu_item_delete_character));
 			builder.setMessage(
 					getString(R.string.delete_character_dialog_message_1)
@@ -299,7 +262,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public void performPositiveDialogAction() {
 		switch (m_dialogMode) {
-		case MENU_ITEM_CHARACTER_LIST:
+		case R.id.mi_character_list:
 			// Check if "currently selected" character is the same as saved one
 			if (m_characterSelectedInDialog != m_currentCharacterID) {
 				performUpdateReset();
@@ -310,12 +273,12 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			}
 			break;
 
-		case MENU_ITEM_NEW_CHARACTER:
+		case R.id.mi_new_character:
 			performUpdateReset();
 			addNewCharacter();
 			break;
 
-		case MENU_ITEM_DELETE_CHARACTER:
+		case R.id.mi_delete_character:
 			deleteCurrentCharacter();
 			break;
 
