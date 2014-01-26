@@ -283,10 +283,10 @@ public class PTCombatStatSet implements Parcelable, PTStorable {
 	
 	/**
 	 * 
-	 * @return the touch AC of the character. This is normal AC - dexmod
+	 * @return the touch AC of the character. This is normal AC without dex
 	 */
-	public int getFlatFootedAC(PTAbilitySet abilitySet, int maxDex){
-		return getTotalAC(abilitySet, maxDex) - abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex);
+	public int getFlatFootedAC(){
+		return 10 + m_ACArmour + m_ACShield + m_sizeMod + m_ACNaturalArmour + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	
