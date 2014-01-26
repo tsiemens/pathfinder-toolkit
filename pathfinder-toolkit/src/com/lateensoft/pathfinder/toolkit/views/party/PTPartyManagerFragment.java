@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PTPartyMember;
+import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSpellEditActivity;
 
@@ -100,9 +103,9 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			m_party = m_partyRepo.query(currentPartyID);
 			if (m_party == null) {
 				// Recovery for some kind of catastrophic failure.
-				IDNamePair[] ids = m_partyRepo.queryList();
-				for (int i = 0; i < ids.length; i++) {
-					m_party = m_partyRepo.query(ids[i].getID());
+				List<Entry<Long, String>> ids = m_partyRepo.queryList();
+				for (int i = 0; i < ids.size(); i++) {
+					m_party = m_partyRepo.query(ids.get(i).getKey().longValue());
 					if (m_party != null) {
 						PTSharedPreferences.getInstance().putLong(
 								PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
@@ -136,22 +139,22 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
 		long currentPartyID = m_party.getID();
-		IDNamePair[] partyIDs = m_partyRepo.queryList();
+		List<Entry<Long, String>> partyIDs = m_partyRepo.queryList();
 
-		for (int i = 0; i < partyIDs.length; i++) {
-			if (currentPartyID == partyIDs[i].getID())
+		for (int i = 0; i < partyIDs.size(); i++) {
+			if (currentPartyID == partyIDs.get(i).getKey().longValue())
 				currentPartyIndex = i;
 		}
 
-		if (partyIDs.length == 1) {
+		if (partyIDs.size() == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
 			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[1].getID());
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey().longValue());
 			loadCurrentParty();
 		} else {
 			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs[0].getID());
+					PTSharedPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey().longValue());
 			loadCurrentParty();
 		}
 
@@ -235,12 +238,12 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		case MENU_ITEM_PARTY_LIST:
 			builder.setTitle("Select Party");
 
-			IDNamePair[] partyIDs = m_partyRepo.queryList();
-			String[] partyList = IDNamePair.toNameArray(partyIDs);
+			List<Entry<Long, String>> partyIDs = m_partyRepo.queryList();
+			String[] partyList = EntryUtils.valueArray(partyIDs);
 			int currentPartyIndex = 0;
 
-			for (int i = 0; i < partyIDs.length; i++) {
-				if (m_partyIDSelectedInDialog == partyIDs[i].getID())
+			for (int i = 0; i < partyIDs.size(); i++) {
+				if (m_partyIDSelectedInDialog == partyIDs.get(i).getKey().longValue())
 					currentPartyIndex = i;
 			}
 
@@ -289,7 +292,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 			break;
 		default:
 			// Set the currently selected party in the dialog
-			m_partyIDSelectedInDialog = m_partyRepo.queryList()[selection].getID();
+			m_partyIDSelectedInDialog = m_partyRepo.queryList().get(selection).getKey().longValue();
 			break;
 
 		}

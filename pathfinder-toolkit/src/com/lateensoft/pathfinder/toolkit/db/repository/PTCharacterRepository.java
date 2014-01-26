@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
@@ -245,7 +248,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	 * Returns all characters
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
-	public IDNamePair[] queryList() {
+	public List<Entry<Long, String>> queryList() {
 		Locale l = null;
 		String selector = String.format(l, "%s.%s=%s.%s", 
 				TABLE, CHARACTER_ID,
@@ -257,15 +260,13 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		IDNamePair[] characters = new IDNamePair[cursor.getCount()];
+		ArrayList<Entry<Long, String>> characters = new ArrayList<Entry<Long, String>>(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			characters[i] = new IDNamePair((Long)hashTable.get(CHARACTER_ID), 
-					(String)hashTable.get(PTFluffInfoRepository.NAME));
+			characters.add(new SimpleEntry<Long, String>((Long)hashTable.get(CHARACTER_ID), 
+					(String)hashTable.get(PTFluffInfoRepository.NAME)));
 			cursor.moveToNext();
-			i++;
 		}
 		return characters;
 	}

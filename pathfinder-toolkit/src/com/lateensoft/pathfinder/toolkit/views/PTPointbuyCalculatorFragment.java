@@ -1,5 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.views;
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -21,13 +24,13 @@ import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
-import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTFluffInfoRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
+import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.utils.PTAbilitySetCalculator;
 
 public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
@@ -294,13 +297,13 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		case MENU_ITEM_EXPORT_TO_EXISTING:
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(getString(R.string.select_character_dialog_header));
-			IDNamePair[] characterIDs = m_characterRepo.queryList();
-			String[] characterList = IDNamePair.toNameArray(characterIDs);
+			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
+			String[] characterNames = EntryUtils.valueArray(characterEntries);
 
 			OnCharacterExportSelectListener exportListener = 
-					new OnCharacterExportSelectListener(characterIDs);
+					new OnCharacterExportSelectListener(characterEntries);
 
-			builder.setSingleChoiceItems(characterList, -1,
+			builder.setSingleChoiceItems(characterNames, -1,
 					exportListener).setPositiveButton(R.string.ok_button_text, exportListener)
 					.setNegativeButton(R.string.cancel_button_text, exportListener);
 
@@ -314,9 +317,9 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 	private class OnCharacterExportSelectListener implements DialogInterface.OnClickListener {
 		long _characterIdSelectedInDialog;
-		IDNamePair[] _characterList;
+		List<Entry<Long, String>> _characterList;
 		
-		public OnCharacterExportSelectListener(IDNamePair[] characterIds) {
+		public OnCharacterExportSelectListener(List<Entry<Long, String>> characterIds) {
 			_characterList = characterIds;
 			_characterIdSelectedInDialog = 0;
 		}
@@ -347,7 +350,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 				break;
 			default:
 				// Set the currently selected character in the dialog
-				_characterIdSelectedInDialog = _characterList[selection].getID();
+				_characterIdSelectedInDialog = _characterList.get(selection).getKey();
 				break;
 
 			}

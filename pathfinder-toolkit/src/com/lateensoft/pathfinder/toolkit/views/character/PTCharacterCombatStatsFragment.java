@@ -230,7 +230,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 	private void updateACViews() {
 		setIntText(m_ACTextView, m_combatStats.getTotalAC(m_abilitySet, m_maxDex));
 		setIntText(m_ACTouchTextView, m_combatStats.getTouchAC(m_abilitySet, m_maxDex));
-		setIntText(m_ACFFTextView, m_combatStats.getFlatFootedAC(m_abilitySet, m_maxDex));
+		setIntText(m_ACFFTextView, m_combatStats.getFlatFootedAC());
 		setIntText(m_armourBonusEditText, m_combatStats.getACArmourBonus());
 		setIntText(m_shieldBonusEditText, m_combatStats.getACShieldBonus());
 		updateAbilityView(m_ACAbilityTv);

@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
-import com.lateensoft.pathfinder.toolkit.db.IDNamePair;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
+import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
 
 import android.app.AlertDialog;
@@ -143,22 +146,22 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 */
 	public void deleteCurrentCharacter() {
 		int currentCharacterIndex = 0;
-		IDNamePair[] characters = m_characterRepo.queryList();
+		List<Entry<Long, String>> characters = m_characterRepo.queryList();
 		long characterForDeletion = m_currentCharacterID;
 
-		for (int i = 0; i < characters.length; i++) {
-			if (characterForDeletion == characters[i].getID()){
+		for (int i = 0; i < characters.size(); i++) {
+			if (characterForDeletion == characters.get(i).getKey().longValue()){
 				currentCharacterIndex = i;
 				break;
 			}
 		}
 
-		if (characters.length == 1) {
+		if (characters.size() == 1) {
 			addNewCharacter();
 		} else {
 			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
 			PTSharedPreferences.getInstance().putLong(
-					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characters[charToSelect].getID());
+					PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characters.get(charToSelect).getKey().longValue());
 			loadCurrentCharacter();
 		}
 
@@ -233,16 +236,16 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		case MENU_ITEM_CHARACTER_LIST:
 			builder.setTitle(getString(R.string.select_character_dialog_header));
 
-			IDNamePair[] characters = m_characterRepo.queryList();
-			String[] characterList = IDNamePair.toNameArray(characters);
+			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
+			String[] characterNames = EntryUtils.valueArray(characterEntries);
 			int currentCharacterIndex = 0;
 
-			for (int i = 0; i < characters.length; i++) {
-				if (m_characterSelectedInDialog == characters[i].getID())
+			for (int i = 0; i < characterEntries.size(); i++) {
+				if (m_characterSelectedInDialog == characterEntries.get(i).getKey().longValue())
 					currentCharacterIndex = i;
 			}
 
-			builder.setSingleChoiceItems(characterList, currentCharacterIndex,
+			builder.setSingleChoiceItems(characterNames, currentCharacterIndex,
 					m_characterClickListener)
 					.setPositiveButton(R.string.ok_button_text, m_characterClickListener)
 					.setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
@@ -282,7 +285,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 					break;
 				default:
 					// Set the currently selected character in the dialog
-					m_characterSelectedInDialog = m_characterRepo.queryList()[selection].getID();
+					m_characterSelectedInDialog = m_characterRepo.queryList().get(selection).getKey();
 					Log.v(TAG, "Selected character " + m_characterSelectedInDialog);
 					break;
 
