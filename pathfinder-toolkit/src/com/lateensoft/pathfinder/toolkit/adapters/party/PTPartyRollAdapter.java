@@ -2,7 +2,6 @@ package com.lateensoft.pathfinder.toolkit.adapters.party;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;

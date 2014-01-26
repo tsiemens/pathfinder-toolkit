@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit.views.party;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PTPartyRollAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;

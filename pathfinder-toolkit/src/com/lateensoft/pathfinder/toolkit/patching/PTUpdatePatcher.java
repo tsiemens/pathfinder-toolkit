@@ -82,6 +82,9 @@ public class PTUpdatePatcher {
 		oldPrefsManager.remove(com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER);
 		oldPrefsManager.remove(com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY);
 		
+		// Give user a week before they are asked to rate again.
+		oldPrefsManager.remove(PTSharedPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME);
+		
 		int[] oldCharIDs = oldDBManager.getCharacterIDs();
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldChar;
 		PTCharacter newChar;

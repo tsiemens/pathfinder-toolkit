@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 
 public class PTSharedPreferences {
-	@SuppressWarnings("unused")
 	private final String TAG = PTSharedPreferences.class.getSimpleName();
 	
 	private final long MILISECONDS_BETWEEN_RATE_PROMPT = 604800000L; //One week
@@ -114,8 +114,10 @@ public class PTSharedPreferences {
 		if( lastRateTime == 0L ){
 			this.putLong(KEY_LONG_LAST_RATE_PROMPT_TIME, currentUnixTime);
 			return false;
-		}else
-			return (currentUnixTime - lastRateTime) > MILISECONDS_BETWEEN_RATE_PROMPT;	
+		} else {
+			Log.v(TAG, ""+(currentUnixTime = lastRateTime)+" ms since last rate prompt");
+			return (currentUnixTime - lastRateTime) > MILISECONDS_BETWEEN_RATE_PROMPT;
+		}
 	}
 	
 	/**
@@ -150,6 +152,13 @@ public class PTSharedPreferences {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	/**
+	 * Removes a preference for key
+	 */
+	public void remove(String key) {
+		m_editor.remove(key);
 	}
 	
 }

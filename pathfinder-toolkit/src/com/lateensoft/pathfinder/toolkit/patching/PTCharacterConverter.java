@@ -22,6 +22,7 @@ public class PTCharacterConverter {
 
 	public static PTCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
 		PTCharacter newCharacter = new PTCharacter("", PTBaseApplication.getAppContext());
+		newCharacter.setGold(oldCharacter.mGold);
 		setFluff(newCharacter.getFluff(), oldCharacter.getFluff());
 		setAbilities(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet(), oldCharacter.getTempAbilitySet());
 		setCombatStats(newCharacter.getCombatStatSet(), oldCharacter.getCombatStatSet());
@@ -37,7 +38,7 @@ public class PTCharacterConverter {
 		newFluff.setName(oldFluff.getName());
 		newFluff.setAlignment(oldFluff.getAlignment());
 		newFluff.setXP(oldFluff.getXP());
-		newFluff.setNextLevelXP(oldFluff.getXPChange());
+		newFluff.setNextLevelXP(oldFluff.getNextLevelXP());
 		newFluff.setPlayerClass(oldFluff.getPlayerClass());
 		newFluff.setRace(oldFluff.getRace());
 		newFluff.setDeity(oldFluff.getDeity());
@@ -56,7 +57,7 @@ public class PTCharacterConverter {
 			com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.stats.PTAbilitySet tempAbilities) {
 		for (int i = 0; i < newAbilities.size(); i++) {
 			newAbilities.getAbilityAtIndex(i).setScore(oldAbilities.getAbilityScore(i).getScore());
-			newAbilities.getAbilityAtIndex(i).setTempBonus(tempAbilities.getAbilityScore(i).getScore());
+			newAbilities.getAbilityAtIndex(i).setTempBonus(tempAbilities.getAbilityScore(i).getScore() - 10);
 		}
 	}
 	
@@ -139,7 +140,7 @@ public class PTCharacterConverter {
 	}
 	
 	private static void setArmor(PTArmor newArmor, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTArmor oldArmor) {
-		setArmor(newArmor, oldArmor);
+		setItem(newArmor, oldArmor);
 		newArmor.setACBonus(oldArmor.getACBonus());
 		newArmor.setCheckPen(0 - oldArmor.getCheckPen()); // Changes this to negatives
 		newArmor.setMaxDex(oldArmor.getMaxDex());

@@ -89,7 +89,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			updateTitle();
 		}
 		m_isWaitingForResult = false;
-		Log.d(TAG, "resume");
 	}
 	
 	@Override
@@ -111,7 +110,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			Log.v(TAG, "Default character add");
 			addNewCharacter();
 		} else {
-			Log.v(TAG, "Loading character");
 			m_currentCharacterID = currentCharacterID;
 			loadFromDatabase();
 			if (getRootView() != null) {
@@ -119,8 +117,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			}
 
 		}
-		
-		Log.v(TAG, "Loaded character: " + m_currentCharacterID);
 	}
 
 	/**
@@ -190,67 +186,12 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 				break;
 
 			case MENU_ITEM_AUTOFILL:
-				autoFill();
 				updateFragmentUI();
 				break;
 			}
 		
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void autoFill() {
-		// TODO this may become obsolete
-//		m_character.getCombatStatSet().setACDexMod(
-//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
-//						.getModifier());
-//		m_character.getCombatStatSet().setInitDexMod(
-//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
-//						.getModifier());
-//		m_character.getCombatStatSet().setCMDDexMod(
-//				m_character.getAbilitySet().getAbilityScore(DEX_KEY)
-//						.getModifier());
-//		m_character
-//				.getSaveSet()
-//				.getSave(REF_KEY)
-//				.setAbilityMod(
-//						m_character.getAbilitySet().getAbilityScore(DEX_KEY)
-//								.getModifier());
-//
-//		m_character.getCombatStatSet().setStrengthMod(
-//				m_character.getAbilitySet().getAbilityScore(STR_KEY)
-//						.getModifier());
-//
-//		m_character
-//				.getSaveSet()
-//				.getSave(FORT_KEY)
-//				.setAbilityMod(
-//						m_character.getAbilitySet().getAbilityScore(CON_KEY)
-//								.getModifier());
-//
-//		m_character
-//				.getSaveSet()
-//				.getSave(WILL_KEY)
-//				.setAbilityMod(
-//						m_character.getAbilitySet().getAbilityScore(WIS_KEY)
-//								.getModifier());
-//
-//		int key;
-//
-//		for (int i = 0; i < m_character.getSkillSet().getSkills().length; i++) {
-//			key = m_character.getSkillSet().getSkill(i).getKeyAbilityKey();
-//			m_character
-//					.getSkillSet()
-//					.getSkill(i)
-//					.setAbilityMod(
-//							m_character.getAbilitySet().getAbilityScore(key)
-//									.getModifier());
-//		}
-		
-		Toast.makeText(getActivity(), 
-				getString(R.string.autofill_toast_text),
-				Toast.LENGTH_SHORT).show();
-
 	}
 
 	@Override

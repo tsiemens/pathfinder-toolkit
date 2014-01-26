@@ -133,6 +133,14 @@ public class PTCharacterFluffInfo {
 		mXP = XP;
 	}
 	
+	public String getNextLevelXP() {
+		return mNextLevelXP;
+	}
+
+	public void setNextLevelXP(String mNextLevelXP) {
+		this.mNextLevelXP = mNextLevelXP;
+	}
+
 	public String getXPChange() {
 		return mXPChange;
 	}
