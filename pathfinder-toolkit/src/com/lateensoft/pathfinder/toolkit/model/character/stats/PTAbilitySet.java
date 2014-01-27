@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
@@ -25,19 +26,23 @@ public class PTAbilitySet implements Parcelable{
 	public static final int KEY_WIS = 5;
 	public static final int KEY_CHA = 6;
 	
-	/**
-	* This matches the order for string resources, and how the abilities are stored
-	* in the set.
-	*/
-	public static final int[] ABILITY_KEYS = {KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA};
-	
 	private PTAbility[] m_abilities;
 	
+	/**
+	 * @return an unmodifiable list of the skill keys, in order. This matches the order for string resources, and how the abilities are stored
+	 * in the set.
+	 */
+	public static List<Integer> ABILITY_KEYS() {
+		Integer[] keys = {KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA};
+		return Collections.unmodifiableList(Arrays.asList(keys));
+	}
+	
 	public PTAbilitySet() {
-		m_abilities = new PTAbility[ABILITY_KEYS.length];
+		List<Integer> constAbilityKeys = ABILITY_KEYS();
+		m_abilities = new PTAbility[constAbilityKeys.size()];
 		
-		for(int i = 0; i < ABILITY_KEYS.length; i++) {
-			m_abilities[i] = new PTAbility(ABILITY_KEYS[i], PTAbility.BASE_ABILITY_SCORE, 0);
+		for(int i = 0; i < constAbilityKeys.size(); i++) {
+			m_abilities[i] = new PTAbility(constAbilityKeys.get(i), PTAbility.BASE_ABILITY_SCORE, 0);
 		}
 	}
 	
@@ -47,19 +52,20 @@ public class PTAbilitySet implements Parcelable{
 	 * @param abilities
 	 */
 	public PTAbilitySet(PTAbility[] abilities) {
-		m_abilities = new PTAbility[ABILITY_KEYS.length];
+		List<Integer> constAbilityKeys = ABILITY_KEYS();
+		m_abilities = new PTAbility[constAbilityKeys.size()];
 		List<PTAbility> scoresList = new ArrayList<PTAbility>(Arrays.asList(abilities));
 		
-		for(int i = 0; i < ABILITY_KEYS.length; i++) {
+		for(int i = 0; i < constAbilityKeys.size(); i++) {
 			for (PTAbility score : scoresList) {
-				if(score.getAbilityKey() == ABILITY_KEYS[i]) {
+				if(score.getAbilityKey() == constAbilityKeys.get(i).intValue()) {
 					scoresList.remove(score);
 					m_abilities[i] = score;
 					break;
 				}
 			}
 			if (m_abilities[i] == null) {
-				m_abilities[i] = new PTAbility(ABILITY_KEYS[i]);
+				m_abilities[i] = new PTAbility(constAbilityKeys.get(i));
 			}
 		}
 	}
@@ -126,10 +132,11 @@ public class PTAbilitySet implements Parcelable{
 	 * @return a map of the ability keys to their short name
 	 */
 	public static SparseArray<String> getAbilityShortNameMap() {
-		SparseArray<String> map = new SparseArray<String>(ABILITY_KEYS.length);
+		List<Integer> constAbilityKeys = ABILITY_KEYS();
+		SparseArray<String> map = new SparseArray<String>(constAbilityKeys.size());
 		String[] names = getShortAbilityNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(ABILITY_KEYS[i], names[i]);
+			map.append(constAbilityKeys.get(i).intValue(), names[i]);
 		}
 		return map;
 	}	

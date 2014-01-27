@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
+import java.util.List;
+
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
@@ -31,9 +33,10 @@ public class PTAbilityRepositoryTest extends PTBaseRepositoryTest {
 	
 	public void testQuerySet() {
 		PTAbility[] queriedAbilityScores = m_repo.querySet(m_characterId);
-
-		for (int i = 0; i < PTAbilitySet.ABILITY_KEYS.length; i++){
-			assertEquals(PTAbilitySet.ABILITY_KEYS[i], queriedAbilityScores[i].getID());
+		List<Integer> constAbilityKeys = PTAbilitySet.ABILITY_KEYS();
+		
+		for (int i = 0; i < constAbilityKeys.size(); i++){
+			assertEquals(constAbilityKeys.get(i).intValue(), queriedAbilityScores[i].getID());
 		}
 	}
 	

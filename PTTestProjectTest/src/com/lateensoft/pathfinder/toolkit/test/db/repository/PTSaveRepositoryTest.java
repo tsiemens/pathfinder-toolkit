@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
+import java.util.List;
+
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSaveRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
@@ -60,8 +62,10 @@ public class PTSaveRepositoryTest extends PTBaseRepositoryTest {
 	
 	public void testQuerySet() {
 		PTSave[] queriedSaves = m_repo.querySet(m_characterId);
-		for (int i = 0; i < PTSaveSet.SAVE_KEYS.length; i++){
-			assertEquals(queriedSaves[i].getSaveKey(), PTSaveSet.SAVE_KEYS[i]);
+		List<Integer> constSaveKeys = PTSaveSet.SAVE_KEYS();
+		
+		for (int i = 0; i < constSaveKeys.size(); i++){
+			assertEquals(queriedSaves[i].getSaveKey(), constSaveKeys.get(i).intValue());
 		}
 	}
 }

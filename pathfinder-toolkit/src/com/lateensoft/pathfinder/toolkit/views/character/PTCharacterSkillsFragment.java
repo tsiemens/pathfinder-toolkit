@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
+import java.util.List;
+
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.PTSkillsAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTAbilityRepository;
@@ -221,7 +223,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	
 	private void addNewSubSkills() {
 		PTSkill newSkill;
-		for (int key : PTSkillSet.SUBTYPED_SKILLS) {
+		List<Integer> constSubSkills = PTSkillSet.SUBTYPED_SKILLS();
+		for (int key : constSubSkills) {
 			if (m_skillSet.allSubSkillsUsed(key)) {
 				newSkill = m_skillSet.addNewSubSkill(key);
 				m_skillRepo.insert(newSkill);

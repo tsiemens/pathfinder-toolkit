@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
@@ -21,17 +22,31 @@ public class PTSaveSet implements Parcelable {
 	public static final int KEY_REF = 2;
 	public static final int KEY_WILL = 3;
 	
-	public static final int[] SAVE_KEYS = {KEY_FORT, KEY_REF, KEY_WILL};
-	public static final int[] DEFAULT_ABILITIES = 
-		{PTAbilitySet.KEY_CON, PTAbilitySet.KEY_DEX, PTAbilitySet.KEY_WIS}; 
-	
 	PTSave[] m_saves;
 	
+	/**
+	 * @return an unmodifiable list of saves in order.
+	 */
+	public static List<Integer> SAVE_KEYS() {
+		Integer[] keys = {KEY_FORT, KEY_REF, KEY_WILL};
+		return Collections.unmodifiableList(Arrays.asList(keys));
+	}
+	
+	/**
+	 * @return an unmodifiable list of default keys for saves in order.
+	 */
+	public static List<Integer> DEFAULT_ABILITIES() {
+		Integer[] keys = {PTAbilitySet.KEY_CON, PTAbilitySet.KEY_DEX, PTAbilitySet.KEY_WIS};
+		return Collections.unmodifiableList(Arrays.asList(keys));
+	}
+	
 	public PTSaveSet() {
-		m_saves = new PTSave[SAVE_KEYS.length];
+		List<Integer> constSaveKeys = SAVE_KEYS();
+		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
+		m_saves = new PTSave[constSaveKeys.size()];
 		
-		for(int i = 0; i < SAVE_KEYS.length; i++) {
-			m_saves[i] = new PTSave(SAVE_KEYS[i], DEFAULT_ABILITIES[i]);
+		for(int i = 0; i < constSaveKeys.size(); i++) {
+			m_saves[i] = new PTSave(constSaveKeys.get(i), constDefaultAbilities.get(i));
 		}
 	}
 	
@@ -41,19 +56,21 @@ public class PTSaveSet implements Parcelable {
 	 * @param saves
 	 */
 	public PTSaveSet(PTSave[] saves) {
-		m_saves = new PTSave[SAVE_KEYS.length];
+		List<Integer> constSaveKeys = SAVE_KEYS();
+		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
+		m_saves = new PTSave[constSaveKeys.size()];
 		List<PTSave> savesList = new ArrayList<PTSave>(Arrays.asList(saves));
 		
-		for(int i = 0; i < SAVE_KEYS.length; i++) {
+		for(int i = 0; i < constSaveKeys.size(); i++) {
 			for (PTSave save : savesList) {
-				if(save.getSaveKey() == SAVE_KEYS[i]) {
+				if(save.getSaveKey() == constSaveKeys.get(i).intValue()) {
 					savesList.remove(save);
 					m_saves[i] = save;
 					break;
 				}
 			}
 			if (m_saves[i] == null) {
-				m_saves[i] = new PTSave(SAVE_KEYS[i], DEFAULT_ABILITIES[i]);
+				m_saves[i] = new PTSave(constSaveKeys.get(i), constDefaultAbilities.get(i));
 			}
 		}
 	}
@@ -95,9 +112,11 @@ public class PTSaveSet implements Parcelable {
 	 * @return a map of the save key to the ability key
 	 */
 	public static SparseIntArray getDefaultAbilityKeyMap() {
-		SparseIntArray map = new SparseIntArray(SAVE_KEYS.length);
-		for(int i = 0; i < SAVE_KEYS.length; i++) {
-			map.append(SAVE_KEYS[i], DEFAULT_ABILITIES[i]);
+		List<Integer> constSaveKeys = SAVE_KEYS();
+		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
+		SparseIntArray map = new SparseIntArray(constSaveKeys.size());
+		for(int i = 0; i < constSaveKeys.size(); i++) {
+			map.append(constSaveKeys.get(i), constDefaultAbilities.get(i));
 		}
 		return map;
 	}
@@ -114,10 +133,11 @@ public class PTSaveSet implements Parcelable {
 	 * @return a map of the save keys to their name
 	 */
 	public static SparseArray<String> getSaveNameMap() {
-		SparseArray<String> map = new SparseArray<String>(SAVE_KEYS.length);
+		List<Integer> constSaveKeys = SAVE_KEYS();
+		SparseArray<String> map = new SparseArray<String>(constSaveKeys.size());
 		String[] names = getSaveNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(SAVE_KEYS[i], names[i]);
+			map.append(constSaveKeys.get(i), names[i]);
 		}
 		return map;
 	}	

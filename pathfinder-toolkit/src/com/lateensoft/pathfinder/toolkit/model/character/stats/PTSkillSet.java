@@ -54,8 +54,6 @@ public class PTSkillSet implements Parcelable {
     public static final int SWIM = 34;
     public static final int USE_MAGIC_DEVICE = 35;
     
-    public static final int[] SUBTYPED_SKILLS = {CRAFT, PERFORM, PROF};
-	
 	PTSkill[] m_skills;
 	
 	/**
@@ -67,6 +65,14 @@ public class PTSkillSet implements Parcelable {
 		    	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
 		    	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
 		    	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
+		return Collections.unmodifiableList(Arrays.asList(keys));
+	}
+	
+	/**
+	 * @return an unmodifiable list skill keys which can be subtyped.
+	 */
+	public static List<Integer> SUBTYPED_SKILLS() {
+		Integer[] keys = {CRAFT, PERFORM, PROF};
 		return Collections.unmodifiableList(Arrays.asList(keys));
 	}
 	
@@ -271,7 +277,8 @@ public class PTSkillSet implements Parcelable {
 	}
 	
 	public static boolean isSubtypedSkill(int skillKey) {
-		for (int key : SUBTYPED_SKILLS) {
+		List<Integer> subtypedSkills = SUBTYPED_SKILLS();
+		for (int key : subtypedSkills) {
 			if (key == skillKey) {
 				return true;
 			}

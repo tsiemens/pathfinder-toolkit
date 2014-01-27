@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -61,6 +62,8 @@ public class PTMainActivity extends Activity implements
 	private ActionBarDrawerToggle m_drawerToggle;
 	private ExpandableListView m_drawerList;
 	
+	private OnBackStackChangedListener m_backstackListener;
+	
 	private PTBasePageFragment m_currentFragment;
 	private long m_currentFragmentId = 0;
 
@@ -73,6 +76,13 @@ public class PTMainActivity extends Activity implements
 		}
 
 		setContentView(R.layout.activity_drawer_main);
+		m_backstackListener = new OnBackStackChangedListener() {
+			
+			@Override public void onBackStackChanged() {
+				invalidateOptionsMenu();
+			}
+		};
+		getFragmentManager().addOnBackStackChangedListener(m_backstackListener);
 		
 		setupNavDrawer();
 
@@ -98,7 +108,7 @@ public class PTMainActivity extends Activity implements
 			task.execute(patchListener);
 
 		} else {
-			PTMainActivity.this.showStartupFragment();
+			showStartupFragment();
 		}
 		
 		showRateDialogIfRequired();
@@ -306,9 +316,9 @@ public class PTMainActivity extends Activity implements
 			
 			fragmentTransaction.replace(R.id.content_frame, newFragment);
 			fragmentTransaction.commit();
+
 			m_currentFragment = newFragment;
 			m_currentFragmentId = id;
-			invalidateOptionsMenu();
 		}
 	}
 
