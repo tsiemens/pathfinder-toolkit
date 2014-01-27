@@ -12,16 +12,15 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 
 public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
-	Context mContext;
-	int mLayoutResourceId;
-	PTWeapon[] mWeapons = null;
-	static final String TAG = "PTWeaponAdapter";
+	Context m_context;
+	int m_layoutResourceId;
+	PTWeapon[] m_weapons = null;
 	
 	public PTWeaponAdapter(Context context, int layoutResourceId, PTWeapon[] weapons) {
 		super(context, layoutResourceId, weapons);
-		mLayoutResourceId = layoutResourceId;
-		mContext = context;
-		mWeapons = weapons;
+		m_layoutResourceId = layoutResourceId;
+		m_context = context;
+		m_weapons = weapons;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -29,9 +28,9 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 		WeaponHolder holder;
 		
 		if(row == null) {
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+			LayoutInflater inflater = ((Activity)m_context).getLayoutInflater();
 			
-			row = inflater.inflate(mLayoutResourceId, parent, false);
+			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new WeaponHolder();
 			
 			holder.name = (TextView)row.findViewById(R.id.weaponName);
@@ -44,22 +43,23 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 			holder.type = (TextView)row.findViewById(R.id.weaponType);
 			holder.size = (TextView)row.findViewById(R.id.weaponSize);
 			holder.critical = (TextView)row.findViewById(R.id.weaponCrit);
+			holder.ammo = (TextView)row.findViewById(R.id.weaponAmmo);
 			
 			row.setTag(holder);
 		} else {
 			holder = (WeaponHolder)row.getTag();
 		}
 		
-		holder.name.setText(mWeapons[position].getName());
-		holder.weight.setText(Double.toString(mWeapons[position].getWeight()));
-		holder.totalAttackBonus.setText(Integer.toString(mWeapons[position].getTotalAttackBonus()));
-		holder.damage.setText(mWeapons[position].getDamage());
-		holder.range.setText(Integer.toString(mWeapons[position].getRange()));
-		holder.specialProperties.setText(mWeapons[position].getSpecialProperties());
-		holder.type.setText(mWeapons[position].getType());
-		holder.size.setText(mWeapons[position].getSize());
-		holder.critical.setText(mWeapons[position].getCritical());
-		//holder.name.setText(mWeapons[position].getName());
+		holder.name.setText(m_weapons[position].getName());
+		holder.weight.setText(Double.toString(m_weapons[position].getWeight()));
+		holder.totalAttackBonus.setText(Integer.toString(m_weapons[position].getTotalAttackBonus()));
+		holder.damage.setText(m_weapons[position].getDamage());
+		holder.range.setText(Integer.toString(m_weapons[position].getRange()));
+		holder.specialProperties.setText(m_weapons[position].getSpecialProperties());
+		holder.type.setText(m_weapons[position].getType());
+		holder.size.setText(m_weapons[position].getSize());
+		holder.critical.setText(m_weapons[position].getCritical());
+		holder.ammo.setText(Integer.toString(m_weapons[position].getAmmunition()));
 		
 		return row;
 	}
@@ -75,5 +75,6 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 		TextView type;
 		TextView size;
 		TextView critical;
+		TextView ammo;
 	}
 }
