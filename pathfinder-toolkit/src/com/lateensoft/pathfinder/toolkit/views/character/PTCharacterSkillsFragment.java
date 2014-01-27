@@ -20,23 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
 public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
-		implements OnItemClickListener,
-		android.view.View.OnClickListener {
+		implements OnItemClickListener {
 	private static final String TAG = PTCharacterSkillsFragment.class.getSimpleName();
 
 	private ListView m_skillsListView;
 
-	private Button m_filterButton;
-	private boolean m_isFiltered = true;
-	
 	private CheckBox m_applyACPCheckBox;
+	private CheckBox m_trainedFilterCheckBox;
 
 	private PTSkill m_skillSelectedForEdit;
 	
@@ -65,9 +61,6 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		setRootView(inflater.inflate(
 				R.layout.character_skills_fragment, container, false));
 
-		m_filterButton = (Button) getRootView().findViewById(R.id.buttonFilter);
-		m_filterButton.setOnClickListener(this);
-		
 		m_applyACPCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxApplyACP);
 		m_applyACPCheckBox.setChecked(false);
 		m_applyACPCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -76,6 +69,14 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 					((PTSkillsAdapter) m_skillsListView.getAdapter())
 					.setArmorCheckPenalty(isChecked ? m_armorCheckPenalty : 0);
 				}
+			}
+		});
+		
+		m_trainedFilterCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxFilterTrained);
+		m_trainedFilterCheckBox.setChecked(true);
+		m_trainedFilterCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				updateFragmentUI();
 			}
 		});
 
@@ -88,9 +89,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		if (m_isFiltered) {
-			m_skillSelectedForEdit = m_skillSet.getTrainedSkill(
-					position);
+		if (m_trainedFilterCheckBox.isChecked()) {
+			m_skillSelectedForEdit = m_skillSet.getTrainedSkill(position);
 		} else {
 			m_skillSelectedForEdit = m_skillSet.getSkillByIndex(position);
 		}
@@ -154,7 +154,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	private void updateSkillsList() {
 		if(m_skillSet.size() !=  m_skillsListView.getAdapter().getCount()) {
 			setSkillsAdapter();
-		} else if (m_isFiltered) {
+		} else if (m_trainedFilterCheckBox.isChecked()) {
 			((PTSkillsAdapter) m_skillsListView.getAdapter())
 					.updateList(m_skillSet.getTrainedSkills());
 		} else {
@@ -165,7 +165,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	private void setSkillsAdapter() {
 		PTSkillsAdapter adapter = null;
-		if (m_isFiltered) {
+		if (m_trainedFilterCheckBox.isChecked()) {
 			adapter = new PTSkillsAdapter(getActivity(),
 					R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
 					m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
@@ -181,24 +181,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		return m_applyACPCheckBox.isChecked() ? m_armorCheckPenalty : 0;
 	}
 
-	private void setFilterButtonText() {
-		if (m_isFiltered) {
-			m_filterButton.setText(R.string.skills_trained_filter);
-		} else {
-			m_filterButton.setText(R.string.skills_all_filter);
-		}
-	}
-
-	@Override
-	public void onClick(View arg0) {
-		m_isFiltered = !m_isFiltered;
-		updateFragmentUI();
-
-	}
-
 	@Override
 	public void updateFragmentUI() {
-		setFilterButtonText();
 		setSkillsAdapter();
 	}
 

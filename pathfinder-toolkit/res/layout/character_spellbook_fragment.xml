@@ -16,11 +16,12 @@
             android:gravity="center"
             android:text="@string/spellbook_prepared"/>
         
-        <TextView android:id="@+id/levelText"
-        android:layout_width="@dimen/spell_level_width"
-        android:layout_height="fill_parent"
-        android:text="@string/spellbook_level"
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/levelText"
+            android:layout_width="@dimen/spell_level_width"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/spellbook_level" />
                 
         <TextView
             android:id="@+id/nameHeader"
@@ -40,7 +41,7 @@
     
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dip"
+        android:layout_height="1dp"
         android:background="#FF909090" />
     
     <ListView
