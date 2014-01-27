@@ -2,11 +2,13 @@ package com.lateensoft.pathfinder.toolkit.model.character;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
@@ -16,9 +18,9 @@ public class PTInventory implements Parcelable {
 	private static final String PARCEL_BUNDLE_KEY_ARMOR = "armor";
 	private static final String PARCEL_BUNDLE_KEY_WEAPONS = "weapons";
 	
-	private ArrayList<PTItem> m_items;
-	private ArrayList<PTArmor> m_armor;
-	private ArrayList<PTWeapon> m_weapons;
+	private List<PTItem> m_items;
+	private List<PTArmor> m_armor;
+	private List<PTWeapon> m_weapons;
 	
 	public PTInventory(){
 		m_items = new ArrayList<PTItem>();
@@ -36,9 +38,9 @@ public class PTInventory implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS, m_items);
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR, m_armor);
-		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, m_weapons);
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ITEMS, Lists.newArrayList(m_items));
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_ARMOR, Lists.newArrayList(m_armor));
+		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, Lists.newArrayList(m_weapons));
 		out.writeBundle(objectBundle);
 	}
 	
@@ -57,7 +59,6 @@ public class PTInventory implements Parcelable {
 			}
 			
 			for(i = 0; i < m_items.size(); i++){
-				//Places in alphabetical position
 				if(newItem.getName().compareToIgnoreCase(getItem(i).getName()) < 0 ){
 					m_items.add(i, newItem);
 					return;
@@ -70,14 +71,26 @@ public class PTInventory implements Parcelable {
 	
 	public void addArmor(PTArmor newArmor) {
 		if( newArmor != null ){
-
+			for(int i = 0; i < m_armor.size(); i++){
+				if(newArmor.getName().compareToIgnoreCase(getArmor(i).getName()) < 0 ){
+					m_armor.add(i, newArmor);
+					return;
+				}
+			}
+			//If item is to go at the end of the list
 			m_armor.add(newArmor);
 		}
 	}
 	
 	public void addWeapon(PTWeapon newWeapon) {
 		if( newWeapon != null ){
-
+			for(int i = 0; i < m_weapons.size(); i++){
+				if(newWeapon.getName().compareToIgnoreCase(getWeapon(i).getName()) < 0 ){
+					m_weapons.add(i, newWeapon);
+					return;
+				}
+			}
+			//If item is to go at the end of the list
 			m_weapons.add(newWeapon);
 		}
 	}

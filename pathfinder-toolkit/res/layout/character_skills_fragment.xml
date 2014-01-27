@@ -7,37 +7,27 @@
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:gravity="center_vertical"
+        android:padding="5dp"
         android:weightSum="1" >
         
         <CheckBox 
             android:id="@+id/checkboxApplyACP"
             android:layout_width="0px"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="left|center_vertical"
             android:text="@string/apply_armor_check"/>
-                
-        <TextView
-            android:id="@+id/tvFilter"
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.2"
-            android:gravity="right|center_vertical"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:maxLines="1"
-            android:text="@string/skills_filter_label"/>
         
-         <Button
-            android:id="@+id/buttonFilter"
+        <CheckBox 
+            android:id="@+id/checkboxFilterTrained"
             android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.3"
-            android:gravity="center" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="left|center_vertical"
+            android:text="@string/skills_filter_label"/>
          
     </LinearLayout>
     
@@ -101,6 +91,7 @@
 
     <ListView
         android:id="@+id/listViewCharacterSkills"
+        style="@style/dividerless_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 

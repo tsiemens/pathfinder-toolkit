@@ -254,7 +254,7 @@
     <string name="skills_class_skill_header">Class Skill</string>
     <string name="skills_acp_header">Armor Check Penalty</string>
     
-    <string name="skills_filter_label">Filter:</string>
+    <string name="skills_filter_label">Show trained only</string>
     <string name="skills_trained_filter">Trained</string>
     <string name="skills_all_filter">All</string>
     
@@ -285,13 +285,14 @@
     <string name="armor_name_header">Name: \u0020</string>
     <string name="armor_weight_header">Weight: \u0020</string>
     <string name="armor_size_header">Size: \u0020</string>
-    <string name="armor_check_penalty_header">ACP: \u0020</string>
-    <string name="armor_spell_failure_header">ASF: \u0020</string>
+    <string name="armor_check_penalty_header">Armor Check Penalty: \u0020</string>
+    <string name="armor_spell_failure_header">Spell Failure: \u0020</string>
     <string name="armor_special_properties">Special Properties:\u0020</string>
     <string name="armor_special_properties_hint">Special Properties</string>
     <string name="armor_class_header">AC: \u0020</string>
     <string name="armor_speed">Speed: \u0020</string>
     <string name="armor_is_worn">Currently Worn</string>
+    <string name="armor_is_worn_flag">Worn</string>
     <string name="armor_max_dex">Max Dex: \u0020</string>
     <string name="new_armor_title">New Armor</string>
     <string name="edit_armor_title">Edit Armor</string>
