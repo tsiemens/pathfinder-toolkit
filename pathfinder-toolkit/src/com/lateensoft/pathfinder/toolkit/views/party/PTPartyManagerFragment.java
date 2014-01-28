@@ -200,18 +200,13 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		if (inflater != null) {
-			inflater.inflate(R.menu.party_manager_menu, menu);
-		}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.party_manager_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-		super.onCreateOptionsMenu(menu);
-		return true;
-	}
-
-	private void showPartyDialog() {
+    private void showPartyDialog() {
 		m_partyIDSelectedInDialog = m_party.getID(); // actual current party
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

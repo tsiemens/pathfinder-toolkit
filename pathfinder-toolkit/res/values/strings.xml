@@ -9,10 +9,9 @@
     <string name="title_activity_party_manager">Party Manager</string>
     <string name="title_activity_party_member_editor">Party Member Editor</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="auto_fill">Autofill</string>
-    
-    <string name="autofill_toast_text">Character stats autofilled</string>
-    
+
+    <string name="updating_dialog_message">Updating…</string>
+
     <string name="main_menu_icons_description">Icon for main menu item</string>
 
     <!-- Global menu item strings -->

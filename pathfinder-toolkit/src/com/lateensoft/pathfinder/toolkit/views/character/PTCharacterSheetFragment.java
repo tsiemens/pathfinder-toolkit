@@ -179,14 +179,9 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		if (inflater != null) {
-			inflater.inflate(R.menu.character_sheet_menu, menu);
-		}
-		
-		super.onCreateOptionsMenu(menu);
-		return true;
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.character_sheet_menu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	private void showCharacterDialog() {

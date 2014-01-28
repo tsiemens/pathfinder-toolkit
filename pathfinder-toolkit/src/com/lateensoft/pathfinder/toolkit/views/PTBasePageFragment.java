@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views;
 
+import android.os.Bundle;
 import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 
 import android.app.Activity;
@@ -13,7 +14,13 @@ public class PTBasePageFragment extends Fragment{
 
 	private View m_rootView;
 
-	@Override
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
 	public void onResume() {
 		super.onResume();
 		Activity a = getActivity();
@@ -21,15 +28,7 @@ public class PTBasePageFragment extends Fragment{
 			((PTMainActivity) a).hideKeyboardDelayed(100);
 		}
 	}
-	
-	public boolean onCreateOptionsMenu(Menu menu) {		
-		return true;
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return false;
-	}
-	
+
 	public void setTitle(String title) {
 		getActivity().getActionBar().setTitle(title);
 	}

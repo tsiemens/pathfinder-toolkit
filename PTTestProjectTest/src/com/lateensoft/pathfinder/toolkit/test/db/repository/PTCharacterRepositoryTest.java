@@ -36,7 +36,7 @@ public class PTCharacterRepositoryTest extends PTBaseRepositoryTest {
 	
 	public void testQueryList() {
 		List<Entry<Long, String>> names = m_repo.queryList();
-		assertEquals(names.get(0).getValue(), m_char1.getName());
-		assertEquals(names.get(1).getValue(), CHARACTER_NAME);
+		assertEquals(m_char1.getName(), names.get(0).getValue());
+		assertEquals(CHARACTER_NAME, names.get(1).getValue());
 	}
 }

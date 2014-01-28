@@ -94,18 +94,13 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		if (inflater != null) {
-			inflater.inflate(R.menu.initiative_tracker_menu, menu);
-		}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.initiative_tracker_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-		super.onCreateOptionsMenu(menu);
-		return true;
-	}
-
-	private void showPartyDialog() {
+    private void showPartyDialog() {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -237,9 +232,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
 	/**
 	 * launches the party member editor
-	 * 
-	 * @param index
-	 *            (the actual index, not the roll value index)
+	 * @param member the member to send to the editor
 	 */
 	private void showPartyMemberEditor(PTPartyMember member) {
 		Intent intent = new Intent(getActivity(),

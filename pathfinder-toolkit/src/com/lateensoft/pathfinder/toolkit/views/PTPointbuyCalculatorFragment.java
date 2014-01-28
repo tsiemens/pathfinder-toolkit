@@ -144,17 +144,12 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 		return getRootView();
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		if (inflater != null) {
-			inflater.inflate(R.menu.pointbuy_menu, menu);
-		}
-		
-		super.onCreateOptionsMenu(menu);
-		return true;
-	}
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.pointbuy_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 	
 	private class RaceItemSelectedListener implements OnItemSelectedListener {
 		@Override public void onItemSelected(AdapterView<?> parent, View view, 

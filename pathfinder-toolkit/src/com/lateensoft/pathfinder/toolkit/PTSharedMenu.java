@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import android.view.MenuInflater;
 import com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity;
 
 import android.app.Activity;
@@ -9,8 +10,8 @@ import android.view.MenuItem;
 
 public class PTSharedMenu {
 
-	public static void onCreateOptionsMenu(Menu menu, Activity activity) {
-		activity.getMenuInflater().inflate(R.menu.shared_menu, menu);
+	public static void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.shared_menu, menu);
 	}
 
 	public static boolean onOptionsItemSelected(MenuItem item, Activity activity) {

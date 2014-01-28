@@ -62,8 +62,6 @@ public class PTMainActivity extends Activity implements
 	private ActionBarDrawerToggle m_drawerToggle;
 	private ExpandableListView m_drawerList;
 	
-	private OnBackStackChangedListener m_backstackListener;
-	
 	private PTBasePageFragment m_currentFragment;
 	private long m_currentFragmentId = 0;
 
@@ -76,13 +74,6 @@ public class PTMainActivity extends Activity implements
 		}
 
 		setContentView(R.layout.activity_drawer_main);
-		m_backstackListener = new OnBackStackChangedListener() {
-			
-			@Override public void onBackStackChanged() {
-				invalidateOptionsMenu();
-			}
-		};
-		getFragmentManager().addOnBackStackChangedListener(m_backstackListener);
 		
 		setupNavDrawer();
 
@@ -95,7 +86,7 @@ public class PTMainActivity extends Activity implements
 			final ProgressDialog progDialog = new ProgressDialog(this);
 			progDialog.setCancelable(false);
 			progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progDialog.setTitle("Updating...");
+			progDialog.setTitle(getString(R.string.updating_dialog_message));
 			progDialog.show();
 
 			PatcherTask task = new PatcherTask();
@@ -191,12 +182,8 @@ public class PTMainActivity extends Activity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (m_currentFragment != null) {
-			m_currentFragment.onCreateOptionsMenu(menu);
-		}
-		
 		// Add menu items which are visible for all fragments
-		PTSharedMenu.onCreateOptionsMenu(menu, this);
+		PTSharedMenu.onCreateOptionsMenu(menu, getMenuInflater());
 		return true;
 	}
 
@@ -220,16 +207,12 @@ public class PTMainActivity extends Activity implements
 			}
 		}
 
-		if (PTSharedMenu.onOptionsItemSelected(item, this) == false) {
-			if (m_currentFragment != null) {
-				m_currentFragment.onOptionsItemSelected(item);
-			}
-		}
-
+		PTSharedMenu.onOptionsItemSelected(item, this);
 		return super.onOptionsItemSelected(item);
 	}
 
 	// For dialog
+    @Override
 	public void onClick(DialogInterface dialogInterface, int selection) {
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
 		
