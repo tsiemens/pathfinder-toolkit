@@ -211,7 +211,21 @@ public class PTMainActivity extends Activity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	// For dialog
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.confirm_exit_dialog_title)
+        .setMessage(R.string.confirm_exit_dialog_message)
+        .setPositiveButton(R.string.ok_button_text, new OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        })
+        .setNegativeButton(R.string.cancel_button_text, null)
+        .show();
+    }
+
+    // For dialog
     @Override
 	public void onClick(DialogInterface dialogInterface, int selection) {
 		PTSharedPreferences sharedPrefs = PTSharedPreferences.getInstance();
