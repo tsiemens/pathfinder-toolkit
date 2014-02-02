@@ -6,7 +6,8 @@ Pathfinder Toolkit is an Android application for use with the Pathfinder Rolepla
 - This app is publicly release on Google Play, so all contributions must not disrupt the data of current users.
  issues, and comment so we can keep track of issues being worked on.
 - Feel free to fork, submit pull requests, and submit issues. **Please check for duplicates first**.
-- The working branch for public release is master. All release versions will have their own branch for reference.
+- The working branch for public release is master. 
+- All release versions have tags for reference, and their release APKs are available for testing updates.
 - General refactoring is appreciated as much as feature implementation.
 
 ## Features:
