@@ -1,8 +1,15 @@
 # Pathfinder Toolkit App [![Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.lateensoft.pathfinder.toolkit)
 
-Pathfinder Toolkit is an application for use with the Pathfinder Roleplaying Game
+Pathfinder Toolkit is an Android application for use with the Pathfinder Roleplaying Game
 
-## Features include:
+## Contribution Guidelines
+- This app is publicly release on Google Play, so all contributions must not disrupt the data of current users.
+ issues, and comment so we can keep track of issues being worked on.
+- Feel free to fork, submit pull requests, and submit issues. **Please check for duplicates first**.
+- The working branch for public release is master. All release versions will have their own branch for reference.
+- General refactoring is appreciated as much as feature implementation.
+
+## Features:
 - Complete character sheet manager for all your characters.
 - Campaign party manager for GMs to keep track of their party members’ stats.
 - Integrated initiative/encounter tracker to quickly make instances for your party.
@@ -10,8 +17,12 @@ Pathfinder Toolkit is an application for use with the Pathfinder Roleplaying Gam
 - Character ability score calculator
 - Emergency virtual dice set (for when you forget your dice set at home!)
 
-## Community Use Policy
+## Background
+This started as a private project, just as we were starting to program. Mistakes were made, but as we learned, we tried to fix the project as much as we could. 
 
+Once it was in better condition, we open sourced, because the community is a really big part of Pathfinder, and without its help, we won't be able to satisfy as many players.
+
+## Community Use Policy
 This application uses trademarks and/or copyrights owned by Paizo Publishing, LLC, which are used under Paizo's Community Use Policy. We are expressly prohibited from charging you to use or access this content. This application is not published, endorsed, or specifically approved by Paizo Publishing. For more information about Paizo's Community Use Policy, please visit [paizo.com/communityuse](http://paizo.com/paizo/about/communityuse). For more information about Paizo Publishing and Paizo products, please visit [paizo.com](http://paizo.com/paizo).
 
 ## License
