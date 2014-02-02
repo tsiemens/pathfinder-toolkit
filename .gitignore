@@ -5,6 +5,9 @@
 *.apk
 *.ap_
 
+# Signing
+*.keystore
+
 # files for the dex VM
 *.dex
 
