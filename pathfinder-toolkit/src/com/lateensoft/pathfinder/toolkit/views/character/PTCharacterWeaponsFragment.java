@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterWeaponsFragment extends PTCharacterSheetFragment implements
 OnClickListener, OnItemClickListener{
@@ -93,27 +94,25 @@ OnClickListener, OnItemClickListener{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTWeapon weapon = data.getExtras().getParcelable(
-					PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.i(TAG, "Add.edit weapon OK: " + weapon.getName());
-			if(m_weaponSelectedForEdit < 0) {
-				Log.v(TAG, "Adding a weapon");
-				if(weapon != null) {
-					weapon.setCharacterID(getCurrentCharacterID());
-					if (m_weaponRepo.insert(weapon) != -1) {
-						m_inventory.addWeapon(weapon);
-						refreshWeaponsListView();
-					}
-				}
-			} else {
-				Log.v(TAG, "Editing a weapon");
-				if (m_weaponRepo.update(weapon) != 0) {
-					m_inventory.setWeapon(weapon, m_weaponSelectedForEdit);
-					refreshWeaponsListView();
-				}
-			}
-			
-			break;
+			PTWeapon weapon = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (weapon != null) {
+                if(m_weaponSelectedForEdit < 0) {
+                    Log.v(TAG, "Adding a weapon");
+                    weapon.setCharacterID(getCurrentCharacterID());
+                    if (m_weaponRepo.insert(weapon) != -1) {
+                        m_inventory.addWeapon(weapon);
+                        refreshWeaponsListView();
+                    }
+                } else {
+                    Log.v(TAG, "Editing a weapon");
+                    if (m_weaponRepo.update(weapon) != 0) {
+                        m_inventory.setWeapon(weapon, m_weaponSelectedForEdit);
+                        refreshWeaponsListView();
+                    }
+                }
+            }
+
+            break;
 		
 		case PTCharacterWeaponEditActivity.RESULT_DELETE:
 			Log.i(TAG, "Deleting a weapon");

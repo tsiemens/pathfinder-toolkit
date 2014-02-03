@@ -49,10 +49,11 @@ public abstract class PTParcelableEditorActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+		    actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 		
-		setParcelableToEdit(getIntent().getExtras()
-				.getParcelable(INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE));
+		setParcelableToEdit(getParcelableFromIntent(getIntent()));
 		
 		setupContentView();
 		invalidateOptionsMenu();
@@ -180,6 +181,18 @@ public abstract class PTParcelableEditorActivity extends Activity {
 	 * @return True if when the activity can return RESULT_DELETE as a result code, and show a delete button. False otherwise.
 	 */
 	protected abstract boolean isParcelableDeletable();
+
+    /**
+     * Convenience method for safely extracting the edited parcelable from a returned intent
+     * @return parcelable contained in extras of the intent
+     */
+    public static <T extends Parcelable> T getParcelableFromIntent(Intent data) {
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            return extras.getParcelable(INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
+        }
+        return null;
+    }
 	
 	
 	public static class InvalidValueException extends Exception {

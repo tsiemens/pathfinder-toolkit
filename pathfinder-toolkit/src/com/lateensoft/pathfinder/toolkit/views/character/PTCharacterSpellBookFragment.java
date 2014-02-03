@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment implements
 	OnClickListener, OnItemClickListener {
@@ -90,27 +91,25 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTSpell spell = data.getExtras().getParcelable(
-					PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add/edit spell OK: " + spell.getName());
-			if(m_spellSelectedForEdit < 0) {
-				Log.v(TAG, "Adding a spell");
-				if(spell != null) {
-					spell.setCharacterID(getCurrentCharacterID());
-					if (m_spellRepo.insert(spell) != -1 ) {
-						m_spellBook.addSpell(spell);
-						refreshSpellListView(); 
-					}
-				}
-			} else {
-				Log.v(TAG, "Editing a spell");
-				if (m_spellRepo.update(spell) != 0 ) {
-					m_spellBook.setSpell(m_spellSelectedForEdit, spell);
-					refreshSpellListView();
-				}
-			}
-			
-			break;
+			PTSpell spell = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (spell != null) {
+                if(m_spellSelectedForEdit < 0) {
+                    Log.v(TAG, "Adding a spell");
+                    spell.setCharacterID(getCurrentCharacterID());
+                    if (m_spellRepo.insert(spell) != -1 ) {
+                        m_spellBook.addSpell(spell);
+                        refreshSpellListView();
+                    }
+                } else {
+                    Log.v(TAG, "Editing a spell");
+                    if (m_spellRepo.update(spell) != 0 ) {
+                        m_spellBook.setSpell(m_spellSelectedForEdit, spell);
+                        refreshSpellListView();
+                    }
+                }
+            }
+
+            break;
 		
 		case PTCharacterSpellEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a spell");

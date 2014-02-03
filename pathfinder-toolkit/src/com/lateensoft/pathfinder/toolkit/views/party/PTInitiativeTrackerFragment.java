@@ -10,6 +10,7 @@ import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PTPartyMember;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
 import com.lateensoft.pathfinder.toolkit.views.PTBasePageFragment;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterSpellEditActivity;
 
 import android.os.Bundle;
@@ -246,33 +247,31 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTPartyMember member = data.getExtras().getParcelable(
-					PTPartyMemberEditorActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add/edit member OK: " + member.getName());
-			if(m_partyMemberSelectedForEdit < 0) {
-				Log.v(TAG, "Adding a member");
-				if(member != null) {
-					if (m_party.getID() == PTStorable.UNSET_ID) {
-						// Party has not yet been added to database
-						m_party.addPartyMember(member);
-						m_partyRepo.insert(m_party);
-					} else {
-						member.setPartyID(m_party.getID());
-						if (m_memberRepo.insert(member) != -1) {
-							m_party.addPartyMember(member);
-						}
-					}
-					refreshPartyView(); 
-				}
-			} else {
-				Log.v(TAG, "Editing a member");
-				if (m_memberRepo.update(member) != 0) {
-					m_party.setPartyMember(m_partyMemberSelectedForEdit, member);
-					refreshPartyView();
-				}
-			}
-			
-			break;
+			PTPartyMember member = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (member != null) {
+                if(m_partyMemberSelectedForEdit < 0) {
+                    Log.v(TAG, "Adding a member");
+                    if (m_party.getID() == PTStorable.UNSET_ID) {
+                        // Party has not yet been added to database
+                        m_party.addPartyMember(member);
+                        m_partyRepo.insert(m_party);
+                    } else {
+                        member.setPartyID(m_party.getID());
+                        if (m_memberRepo.insert(member) != -1) {
+                            m_party.addPartyMember(member);
+                        }
+                    }
+                    refreshPartyView();
+                } else {
+                    Log.v(TAG, "Editing a member");
+                    if (m_memberRepo.update(member) != 0) {
+                        m_party.setPartyMember(m_partyMemberSelectedForEdit, member);
+                        refreshPartyView();
+                    }
+                }
+            }
+
+            break;
 		
 		case PTPartyMemberEditorActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a member");

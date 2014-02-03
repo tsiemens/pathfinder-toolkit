@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterInventoryFragment extends PTCharacterSheetFragment implements 
 	OnItemClickListener, OnClickListener, OnFocusChangeListener{
@@ -114,28 +115,27 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTItem item = data.getExtras().getParcelable(
-					PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			if(m_itemIndexSelectedForEdit < 0) {
-				Log.i(TAG, "Adding item "+item.getName());
-				if(item != null) {
-					item.setCharacterID(getCurrentCharacterID());
-					if (m_itemRepo.insert(item) != -1) {
-						m_character.getInventory().addItem(item);
-						refreshItemsListView();
-						updateTotalWeight();
-					}
-				}
-			} else {
-				Log.v(TAG, "Editing an item "+item.getName());
-				if (m_itemRepo.update(item) != 0) {
-					m_character.getInventory().setItem(item, m_itemIndexSelectedForEdit);
-					refreshItemsListView();
-					updateTotalWeight();
-				}
-			}
-			
-			break;
+			PTItem item = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (item != null) {
+                if(m_itemIndexSelectedForEdit < 0) {
+                    Log.i(TAG, "Adding item "+item.getName());
+                    item.setCharacterID(getCurrentCharacterID());
+                    if (m_itemRepo.insert(item) != -1) {
+                        m_character.getInventory().addItem(item);
+                        refreshItemsListView();
+                        updateTotalWeight();
+                    }
+                } else {
+                    Log.v(TAG, "Editing an item "+item.getName());
+                    if (m_itemRepo.update(item) != 0) {
+                        m_character.getInventory().setItem(item, m_itemIndexSelectedForEdit);
+                        refreshItemsListView();
+                        updateTotalWeight();
+                    }
+                }
+            }
+
+            break;
 		
 		case PTCharacterInventoryEditActivity.RESULT_DELETE:
 			PTItem itemToDelete = m_character.getInventory().getItem(m_itemIndexSelectedForEdit);

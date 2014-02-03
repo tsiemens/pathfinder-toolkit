@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		implements OnItemClickListener {
@@ -112,10 +113,8 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTSkill skill = data.getExtras().getParcelable(
-					PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Edit skill OK: " + skill.getID());
-			if (m_skillSelectedForEdit != null) {
+			PTSkill skill = PTParcelableEditorActivity.getParcelableFromIntent(data);
+			if (m_skillSelectedForEdit != null && skill != null) {
 				m_skillSelectedForEdit.setSubType(skill.getSubType());
 				m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
 				m_skillSelectedForEdit.setRank(skill.getRank());

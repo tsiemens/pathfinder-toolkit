@@ -18,6 +18,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTFeatRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		implements OnClickListener, OnItemClickListener {
@@ -90,25 +91,23 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTFeat feat = data.getExtras().getParcelable(
-					PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add/edit feat OK: " + feat.getName());
-			if(m_featSelectedForEdit < 0) {
-				Log.v(TAG, "Adding a feat");
-				if(feat != null) {
-					feat.setCharacterID(getCurrentCharacterID());
-					if(m_featRepo.insert(feat) != -1) {
-						m_featList.addFeat(feat);
-						refreshFeatsListView();
-					}
-				}
-			} else {
-				Log.v(TAG, "Editing a feat");
-				if(m_featRepo.update(feat) != 0) {
-					m_featList.setFeat(feat, m_featSelectedForEdit);
-					refreshFeatsListView();
-				}
-			}
+			PTFeat feat = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (feat != null && m_featList != null) {
+                if(m_featSelectedForEdit < 0) {
+                    Log.v(TAG, "Adding a feat");
+                    feat.setCharacterID(getCurrentCharacterID());
+                    if(m_featRepo.insert(feat) != -1) {
+                        m_featList.addFeat(feat);
+                        refreshFeatsListView();
+                    }
+                } else {
+                    Log.v(TAG, "Editing a feat");
+                    if(m_featRepo.update(feat) != 0) {
+                        m_featList.setFeat(feat, m_featSelectedForEdit);
+                        refreshFeatsListView();
+                    }
+                }
+            }
 			
 			break;
 		

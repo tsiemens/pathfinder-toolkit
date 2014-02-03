@@ -18,6 +18,7 @@ import com.lateensoft.pathfinder.toolkit.adapters.character.PTArmorAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTInventory;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
+import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
 public class PTCharacterArmorFragment extends PTCharacterSheetFragment implements
 	OnItemClickListener, OnClickListener {
@@ -93,27 +94,25 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case Activity.RESULT_OK:
-			PTArmor armor = data.getExtras().getParcelable(
-					PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE);
-			Log.v(TAG, "Add.edit armor OK: " + armor.getName());
-			if(m_armorSelectedForEdit < 0) {
-				Log.v(TAG, "Adding an armor");
-				if(armor != null) {
-					armor.setCharacterID(getCurrentCharacterID());
-					if (m_armorRepo.insert(armor) != -1) {
-						m_inventory.addArmor(armor);
-						refreshArmorListView();
-					}
-				}
-			} else {
-				Log.v(TAG, "Editing an armor");
-				if (m_armorRepo.update(armor) != 0 ){
-					m_inventory.setArmor(armor, m_armorSelectedForEdit);
-					refreshArmorListView();
-				}
-			}
-			
-			break;
+            PTArmor armor = PTParcelableEditorActivity.getParcelableFromIntent(data);
+            if (armor != null) {
+                if(m_armorSelectedForEdit < 0) {
+                    Log.v(TAG, "Adding an armor");
+                    armor.setCharacterID(getCurrentCharacterID());
+                    if (m_armorRepo.insert(armor) != -1) {
+                        m_inventory.addArmor(armor);
+                        refreshArmorListView();
+                    }
+                } else {
+                    Log.v(TAG, "Editing an armor");
+                    if (m_armorRepo.update(armor) != 0 ){
+                        m_inventory.setArmor(armor, m_armorSelectedForEdit);
+                        refreshArmorListView();
+                    }
+                }
+            }
+
+            break;
 		
 		case PTCharacterArmorEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an armor");
