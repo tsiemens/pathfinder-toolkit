@@ -8,38 +8,44 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp" >
+        android:padding="5dp">
 
         <!-- HP section -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:text="@string/combat_stats_current_hp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewCurrentHP"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingRight="10dp"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal" >
+            style="@style/combat_stats_horizontal_scroll" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/combat_stats_side_padding"
+                android:paddingRight="@dimen/combat_stats_side_padding"
                 android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/combat_stats_current_hp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewCurrentHP"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:paddingRight="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,23 +108,21 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
         <!-- Speed section -->
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
             android:orientation="horizontal" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/combat_stats_base_speed"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <EditText
@@ -131,18 +135,12 @@
                 android:maxLines="1" />
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
-        <!-- Init section -->
+        <!-- Initiative section -->
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="5dp" >
+            style="@style/row_header_bar">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -158,20 +156,25 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
+                android:id="@+id/tvInitAbility"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/combat_stats_equals" />
-
-            <TextView
-                    android:id="@+id/tvInitAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
+                android:minWidth="60dp"
+                android:layout_margin="3dp"
+                style="@style/clickable_text_view"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -201,45 +204,87 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
         <!-- AC section -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="@string/combat_stats_ac"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewAC"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:text="@string/combat_stats_touch"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textViewTouchAC"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingRight="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:text="@string/combat_stats_flat_footed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textViewFlatFootedAC"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingRight="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal" >
+            style="@style/combat_stats_horizontal_scroll" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingLeft="@dimen/combat_stats_side_padding"
+                android:paddingRight="@dimen/combat_stats_side_padding"
                 android:paddingTop="5dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="@string/combat_stats_ac"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewAC"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/combat_stats_ac_equals" />
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -417,50 +462,18 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/combat_stats_touch"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textViewTouchAC"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:paddingRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/combat_stats_flat_footed"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textViewFlatFootedAC"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:paddingRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="@string/combat_stats_spell_resist"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/editTextSpellResist"
@@ -472,26 +485,24 @@
                 android:maxLines="1" />
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
         <!-- BAB section -->
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar"
+            android:text="@string/combat_stats_bab"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="5dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/combat_stats_bab"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -544,18 +555,12 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
         <!-- Combat Maneuver section -->
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="5dp" >
+            style="@style/row_header_bar" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -572,10 +577,16 @@
                 android:maxLines="1"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/combat_stats_equals" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" >
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -641,11 +652,13 @@
             </LinearLayout>
         </LinearLayout>
 
+
+        <!-- Combat Maneuver Defence -->
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="5dp" >
+            style="@style/row_header_bar" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -661,6 +674,16 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/combat_stats_side_padding"
+            android:paddingRight="@dimen/combat_stats_side_padding"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -704,45 +727,42 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#FF909090" />
-
         <!-- Fort Save -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="@string/combat_stats_fort"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFort"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal" >
+            style="@style/combat_stats_horizontal_scroll" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingLeft="@dimen/combat_stats_side_padding"
+                android:paddingRight="@dimen/combat_stats_side_padding"
                 android:paddingTop="5dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="@string/combat_stats_fort"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvFort"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/combat_stats_equals" />
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -867,38 +887,39 @@
 
         <!-- Reflex Save -->
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="@string/combat_stats_ref"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRef"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal" >
+            style="@style/combat_stats_horizontal_scroll" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingLeft="@dimen/combat_stats_side_padding"
+                android:paddingRight="@dimen/combat_stats_side_padding"
                 android:paddingTop="5dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="@string/combat_stats_ref"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvRef"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/combat_stats_equals" />
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1023,38 +1044,40 @@
 
         <!-- Will Save -->
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/row_header_bar" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="@string/combat_stats_will"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvWill"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout>
+
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal" >
+            style="@style/combat_stats_horizontal_scroll" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingLeft="@dimen/combat_stats_side_padding"
+                android:paddingRight="@dimen/combat_stats_side_padding"
                 android:paddingTop="5dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="@string/combat_stats_will"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvWill"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/combat_stats_equals" />
 
                 <LinearLayout
                     android:layout_width="60dp"

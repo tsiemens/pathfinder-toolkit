@@ -37,4 +37,13 @@
   	    <item name="android:divider">@null</item>
   	    <item name="android:dividerHeight">0dp</item>
   	</style>
+
+    <style name="combat_stats_horizontal_scroll">
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbarStyle">insideInset</item>
+        <item name="android:scrollbars">horizontal</item>
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:requiresFadingEdge">horizontal</item>
+        <item name="android:fadingEdgeLength">50dp</item>
+    </style>
 </resources>

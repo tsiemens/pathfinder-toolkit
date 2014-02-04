@@ -245,7 +245,7 @@
     <string name="combat_stats_cmb_bab">BAB</string>
     <string name="combat_stats_str_mod">Strength Mod</string>
     <string name="combat_stats_cmd">CMD:</string>
-    <string name="combat_stats_cmd_equals">= 10 + CMB +</string>
+    <string name="combat_stats_cmd_equals">10 + CMB +</string>
 
     <!-- Skills -->
     <string name="skills_total_header">Total</string>
