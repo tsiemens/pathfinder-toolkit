@@ -23,8 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
-public class PTCharacterInventoryFragment extends PTCharacterSheetFragment implements 
-	OnItemClickListener, OnClickListener, OnFocusChangeListener{
+public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 	private static final String TAG = PTCharacterInventoryFragment.class.getSimpleName();
 	
 	private ListView m_itemsListView;
@@ -52,28 +51,33 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 				container, false));
 		
 		m_addButton = (Button) getRootView().findViewById(R.id.buttonAddItem);
-		m_addButton.setOnClickListener(this);
+		m_addButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View v) {
+                m_itemIndexSelectedForEdit = -1;
+                showItemEditor(null);
+            }
+        });
 		
 		m_goldEditText = (EditText) getRootView().findViewById(R.id.editTextGold);
-		m_goldEditText.setOnFocusChangeListener(this);
+		m_goldEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    updateGoldFromInput();
+                }
+            }
+        });
 		
 		m_totalWeightText = (TextView)  getRootView().findViewById(R.id.tvWeightTotal);
 		
 		m_itemsListView = (ListView) getRootView().findViewById(R.id.listViewInventory);
-		m_itemsListView.setOnItemClickListener(this);
+		m_itemsListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                m_itemIndexSelectedForEdit = position;
+                showItemEditor(m_character.getInventory().getItem(position));
+            }
+        });
 		
 		return getRootView();
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
-		super.onPause();
 	}
 
 	private void refreshItemsListView(){
@@ -89,18 +93,6 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		
 		m_totalWeightText.setText(getActivity().getString(R.string.inventory_total_weight_header)
 				+" "+ totalWeight);
-	}
-
-	//An items has been clicked in the list
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		m_itemIndexSelectedForEdit = position;
-		showItemEditor(m_character.getInventory().getItem(position));
-	}
-
-	//The add button was clicked
-	public void onClick(View view) {
-		m_itemIndexSelectedForEdit = -1;
-		showItemEditor(null);
 	}
 	
 	private void showItemEditor(PTItem item) {
@@ -157,11 +149,14 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	//Gold Edit text
-	public void onFocusChange(View view, boolean isInFocus) {
-		if(!isInFocus)
-			m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
-	}
+    private void updateGoldFromInput() {
+        try {
+            m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
+        } catch (NumberFormatException e) {
+            // Invalid input for gold. Keep old value, to be safe.
+            m_goldEditText.setText(Double.toString(m_character.getGold()));
+        }
+    }
 
 	@Override
 	public void updateFragmentUI() {
@@ -178,7 +173,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment imple
 	@Override
 	public void updateDatabase() {
 		if (m_character != null) {
-			m_character.setGold(Double.parseDouble(m_goldEditText.getText().toString()));
+            updateGoldFromInput();
 			getCharacterRepo().update(m_character);
 		}
 	}
