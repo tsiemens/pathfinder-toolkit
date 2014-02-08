@@ -62,7 +62,6 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 			Bundle savedInstanceState) {
 
 		setRootView(inflater.inflate(R.layout.fragment_initiative_tracker, container, false));
-		setTitle(R.string.title_activity_initiative_tracker);
 
 		m_rollInitiativeButton = (Button) getRootView().findViewById(R.id.buttonRollInitiative);
 		m_rollInitiativeButton.setOnClickListener(this);
@@ -99,6 +98,16 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.initiative_tracker_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void updateTitle() {
+        setTitle(R.string.title_activity_initiative_tracker);
+        if (m_party != null) {
+            setSubtitle(m_party.getName());
+        } else {
+            setSubtitle(null);
+        }
     }
 
     private void showPartyDialog() {
@@ -227,8 +236,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 				R.layout.party_roll_row, memberNames, memberRollValues, null);
 		m_partyMemberList.setAdapter(adapter);
 		m_rollInitiativeButton.setEnabled(!m_hasRolled);
-		setTitle(R.string.title_activity_initiative_tracker);
-		setSubtitle(m_party.getName());
+        updateTitle();
 	}
 
 	/**

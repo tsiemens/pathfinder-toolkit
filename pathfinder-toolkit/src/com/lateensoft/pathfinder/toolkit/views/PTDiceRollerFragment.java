@@ -47,8 +47,6 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 			Bundle savedInstanceState) {
 
 		setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
-		setTitle(R.string.title_activity_ptdice_roller);
-		setSubtitle(null);
 		
 		setupContent();
 		mRollMode = ROLLMODE_SINGLE;
@@ -57,9 +55,13 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 		return getRootView();
 	}
 
+    @Override
+    public void updateTitle() {
+        setTitle(R.string.title_activity_ptdice_roller);
+        setSubtitle(null);
+    }
 
-
-	// Responds to roll type radio toggle buttons
+    // Responds to roll type radio toggle buttons
 	public void rollTypeClicked(View view) {
 		ToggleButton toggleButton = (ToggleButton) view;
 

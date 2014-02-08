@@ -89,8 +89,6 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			Bundle savedInstanceState) {
 
 		setRootView(inflater.inflate(R.layout.fragment_ability_calculator, container, false));
-		setTitle(R.string.title_activity_ability_calc);
-		setSubtitle(null);
 
 		m_isHuman = true;
 
@@ -150,8 +148,14 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
         inflater.inflate(R.menu.pointbuy_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-	
-	private class RaceItemSelectedListener implements OnItemSelectedListener {
+
+    @Override
+    public void updateTitle() {
+        setTitle(R.string.title_activity_ability_calc);
+        setSubtitle(null);
+    }
+
+    private class RaceItemSelectedListener implements OnItemSelectedListener {
 		@Override public void onItemSelected(AdapterView<?> parent, View view, 
 		        int pos, long id) {
 		    // An item was selected. You can retrieve the selected item using

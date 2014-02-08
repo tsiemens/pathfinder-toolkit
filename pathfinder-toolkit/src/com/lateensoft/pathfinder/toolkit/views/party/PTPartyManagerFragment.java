@@ -64,8 +64,6 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 
 		setRootView(inflater.inflate(R.layout.fragment_party_manager,
 				container, false));
-		setTitle(R.string.title_activity_party_manager);
-		setSubtitle(null);
 
 		m_partyNameEditText = (EditText) getRootView()
 				.findViewById(R.id.editTextPartyName);
@@ -83,6 +81,12 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 		updateDatabase();
 		super.onPause();
 	}
+
+    @Override
+    public void updateTitle() {
+        setTitle(R.string.title_activity_party_manager);
+        setSubtitle(null);
+    }
 
 	/**
 	 * Load the currently set party in shared prefs If there is no party set in

@@ -48,9 +48,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 			Bundle savedInstanceState) {
 
 		setRootView(inflater.inflate(R.layout.fragment_skill_checker, container, false));
-		setTitle(R.string.title_activity_skill_checker);
-		setSubtitle(null);
-		
+
 		m_skillSelectedForRoll = 0;
 		
 		m_rollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
@@ -70,6 +68,16 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		resetPartyRolls();
 		
 		return getRootView();
+    }
+
+    @Override
+    public void updateTitle() {
+        setTitle(R.string.title_activity_skill_checker);
+        if (m_party != null) {
+            setSubtitle(m_party.getName());
+        } else {
+            setSubtitle(null);
+        }
     }
     
     /**
@@ -133,8 +141,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		}
 		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
 		m_partyMemberList.setAdapter(adapter);
-		setTitle(R.string.title_activity_skill_checker);
-		setSubtitle(m_party.getName());
+		updateTitle();
 	}
 	
 	public void resetPartyRolls(){

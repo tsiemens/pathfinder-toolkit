@@ -57,7 +57,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			Bundle savedInstanceState) {
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
-	
+
+    @Override
 	public void updateTitle() {
 		setTitle(m_characterRepo.queryName(m_currentCharacterID));
 		setSubtitle(getFragmentTitle());

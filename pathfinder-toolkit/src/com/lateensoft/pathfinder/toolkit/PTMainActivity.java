@@ -2,12 +2,8 @@ package com.lateensoft.pathfinder.toolkit;
 
 import java.util.Calendar;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.FragmentManager;
+import android.app.*;
 import android.app.FragmentManager.OnBackStackChangedListener;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -132,11 +128,19 @@ public class PTMainActivity extends Activity implements
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
+                if (m_currentFragment != null) {
+                    m_currentFragment.updateTitle();
+                }
 				invalidateOptionsMenu();
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
+                ActionBar ab = getActionBar();
+                if (ab != null) {
+                    ab.setTitle(R.string.app_name);
+                    ab.setSubtitle(null);
+                }
 				invalidateOptionsMenu();
 				hideKeyboard();
 			}
@@ -191,8 +195,8 @@ public class PTMainActivity extends Activity implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		for (int i = 0; i < menu.size(); i++) {
-			menu.getItem(i).setVisible(!drawerOpen);
-
+			menu.getItem(i).setVisible(!drawerOpen
+                    || menu.getItem(i).getItemId() == R.id.mi_app_settings);
 		}
 		return super.onPrepareOptionsMenu(menu);
 	}

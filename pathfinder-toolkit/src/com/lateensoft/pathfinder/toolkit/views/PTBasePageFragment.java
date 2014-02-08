@@ -10,7 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class PTBasePageFragment extends Fragment{
+public abstract class PTBasePageFragment extends Fragment{
 
 	private View m_rootView;
 
@@ -23,6 +23,7 @@ public class PTBasePageFragment extends Fragment{
     @Override
 	public void onResume() {
 		super.onResume();
+        updateTitle();
 		Activity a = getActivity();
 		if (a instanceof PTMainActivity) {
 			((PTMainActivity) a).hideKeyboardDelayed(100);
@@ -40,6 +41,11 @@ public class PTBasePageFragment extends Fragment{
 	public void setSubtitle(String subtitle) {
 		getActivity().getActionBar().setSubtitle(subtitle);
 	}
+
+    /**
+     * Sets the default title and subtitle for the fragment
+     */
+    public abstract void updateTitle();
 	
 	public View getRootView() {
 		return m_rootView;
