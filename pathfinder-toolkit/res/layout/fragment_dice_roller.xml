@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,16 +7,19 @@
 
     <RadioGroup
         android:id="@+id/toggleGroupRollType"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/holo_dialog_grey"
         android:layout_marginTop="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="8" >
+        android:orientation="horizontal" >
 
         <ToggleButton
             android:id="@+id/radiotoggleSingleRoll"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/radio_button_background"
             android:layout_weight="1"
             android:checked="true"
             android:tag="roll_type_toggle"
@@ -28,6 +31,8 @@
             android:id="@+id/radiotoggleMultiRoll"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/radio_button_background"
             android:layout_weight="1"
             android:tag="roll_type_toggle"
             android:textOff="@string/roller_mode_multi"
@@ -38,6 +43,8 @@
             android:id="@+id/radiotoggleSumRoll"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/radio_button_background"
             android:layout_weight="1"
             android:tag="roll_type_toggle"
             android:textOff="@string/roller_mode_sum"

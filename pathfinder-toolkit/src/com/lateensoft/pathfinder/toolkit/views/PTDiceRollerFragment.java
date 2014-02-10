@@ -17,6 +17,8 @@ import android.widget.ToggleButton;
 
 public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickListener,
 		RadioGroup.OnCheckedChangeListener {
+    @SuppressWarnings("unused")
+    private static final String TAG = PTDiceRollerFragment.class.getSimpleName();
 
 	int mCurrentDie = 4;
 	int mDieQuantity = 1;
@@ -28,8 +30,6 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 			mDieQuantityDownButton;
 	TextView mDieQuantityLabel, mRollResultLabel, mRollSumLabel;
 	ListView mRollResultList;
-
-	final String TAG = "PTDiceRollerActivity";
 
 	final int ROLLMODE_SINGLE = 0;
 	final int ROLLMODE_MULTI = 1;

@@ -193,7 +193,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 				mSelectedItem >= FLUFF_ID && !isExpanded)) {
 			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holoDialogGrey));
+			row.setBackgroundColor(mContext.getResources().getColor(R.color.holo_dialog_grey));
 		}
 		
 		return row;

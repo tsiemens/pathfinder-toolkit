@@ -71,9 +71,9 @@
     
     <!-- Dice Roller Strings -->
     <string name="title_activity_ptdice_roller">Dice Roller</string>
-    <string name="roller_mode_single">Single Roll Mode</string>
-    <string name="roller_mode_multi">XdY Roll Mode</string>
-    <string name="roller_mode_sum">Cumulative Rolls Mode</string>
+    <string name="roller_mode_single">Single Roll</string>
+    <string name="roller_mode_multi">XdY Roll</string>
+    <string name="roller_mode_sum">Cumulative Rolls</string>
     <string name="roller_die_d4">d4</string>
     <string name="roller_die_d6">d6</string>
     <string name="roller_die_d8">d8</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="holoDialogGrey">#282828</color>
+    <color name="holo_dialog_grey">#282828</color>
     <color name="holo_dialog_dark_grey">#202020</color>
     <color name="holo_dialog_lighter_grey">#323232</color>
     
