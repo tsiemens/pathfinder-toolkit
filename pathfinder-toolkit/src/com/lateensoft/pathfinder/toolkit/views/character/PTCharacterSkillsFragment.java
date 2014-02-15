@@ -116,7 +116,12 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 			PTSkill skill = PTParcelableEditorActivity.getParcelableFromIntent(data);
 			if (m_skillSelectedForEdit != null && skill != null) {
 				m_skillSelectedForEdit.setSubType(skill.getSubType());
-				m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
+                if (PTAbilitySet.isValidAbility(skill.getAbilityKey())) {
+				    m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
+                } else {
+                    m_skillSelectedForEdit.setAbilityKey(
+                            PTSkillSet.getDefaultAbilityKeyMap().get(m_skillSelectedForEdit.getSkillKey()));
+                }
 				m_skillSelectedForEdit.setRank(skill.getRank());
 				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
 				m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
@@ -163,7 +168,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	}
 
 	private void setSkillsAdapter() {
-		PTSkillsAdapter adapter = null;
+		PTSkillsAdapter adapter;
 		if (m_trainedFilterCheckBox.isChecked()) {
 			adapter = new PTSkillsAdapter(getActivity(),
 					R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
@@ -197,12 +202,23 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	@Override
 	public void loadFromDatabase() {
-		m_skillSet = new PTSkillSet(m_skillRepo.querySet(getCurrentCharacterID()));
+		m_skillSet = new PTSkillSet(validateSkills(m_skillRepo.querySet(getCurrentCharacterID())));
 		addNewSubSkills();
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
 		m_armorCheckPenalty = m_armorRepo.getArmorCheckPenalty(getCurrentCharacterID());
 		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
 	}
+
+    private PTSkill[] validateSkills(PTSkill[] skills) {
+        for (PTSkill skill : skills) {
+            if (!PTAbilitySet.isValidAbility(skill.getAbilityKey())) {
+                skill.setAbilityKey(
+                        PTSkillSet.getDefaultAbilityKeyMap().get(skill.getSkillKey()));
+                m_skillRepo.update(skill);
+            }
+        }
+        return skills;
+    }
 	
 	private void addNewSubSkills() {
 		PTSkill newSkill;

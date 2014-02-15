@@ -86,13 +86,13 @@ public class PTAbilitySet implements Parcelable{
 	 * @param abilityKey
 	 * @return The ability in the set with abilityKey. null if no such ability exists.
 	 */
-	public PTAbility getAbility(int abilityKey) {
+	public PTAbility getAbility(int abilityKey) throws IllegalArgumentException {
 		for(int i = 0; i < m_abilities.length; i++) {
-			if(abilityKey == m_abilities[i].getID()) {
+			if(abilityKey == m_abilities[i].getAbilityKey()) {
 				return m_abilities[i];
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("Invalid ability key: "+abilityKey);
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class PTAbilitySet implements Parcelable{
 		SparseArray<String> map = new SparseArray<String>(constAbilityKeys.size());
 		String[] names = getShortAbilityNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(constAbilityKeys.get(i).intValue(), names[i]);
+			map.append(constAbilityKeys.get(i), names[i]);
 		}
 		return map;
 	}	
@@ -166,4 +166,12 @@ public class PTAbilitySet implements Parcelable{
 			return new PTAbilitySet[size];
 		}
 	};
+
+    public static boolean isValidAbility(int abilityKey) {
+        List<Integer> constAbilityKeys = ABILITY_KEYS();
+        for (int key : constAbilityKeys) {
+            if (key == abilityKey) return true;
+        }
+        return false;
+    }
 }

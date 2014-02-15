@@ -115,9 +115,15 @@ public class PTSkillSet implements Parcelable {
 	/**
 	 * Ensures that all skills occur at least once in the list.
 	 * If a skill does not appear, add a default version.
-	 * @param valid list of skills, sorted by skill key
+     * Also verifies that all skills have valid skill keys
 	 */
 	private void verifySortSkills(List<PTSkill> skills) {
+        for (PTSkill skill : skills) {
+            if (!isValidSkill(skill.getSkillKey())) {
+                skills.remove(skill);
+            }
+        }
+
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
 		boolean found;
 		List<Integer> constSkillKeys = SKILL_KEYS();
@@ -129,7 +135,7 @@ public class PTSkillSet implements Parcelable {
 					break;
 				}
 			}
-			if (found == false) {
+			if (!found) {
 				skills.add(new PTSkill(constSkillKeys.get(i), defaultSkillAbilityIds[i]));
 			}
 		}
@@ -313,6 +319,10 @@ public class PTSkillSet implements Parcelable {
 			return new PTSkillSet[size];
 		}
 	};
+
+    public static boolean isValidSkill(int skillKey) {
+        return (skillKey > 0 && skillKey <= SKILL_KEYS().size());
+    }
 }
 
 
