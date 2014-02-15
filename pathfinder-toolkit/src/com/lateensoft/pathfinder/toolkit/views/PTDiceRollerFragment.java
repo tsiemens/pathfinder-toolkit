@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views;
 
+import android.content.Context;
+import android.widget.*;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
 
@@ -8,50 +10,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
-public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickListener,
-		RadioGroup.OnCheckedChangeListener {
+public class PTDiceRollerFragment extends PTBasePageFragment {
     @SuppressWarnings("unused")
     private static final String TAG = PTDiceRollerFragment.class.getSimpleName();
+    private static final int[] DIE_VALUES = {4, 6, 8, 10, 12, 20, 100};
+    private static final int MAX_ROLL_SUM = 9999;
 
-	int mCurrentDie = 4;
-	int mDieQuantity = 1;
-	int mRollSum = 0;
-	int mRollMode;
-	PTDiceSet mDiceSet;
-	RadioGroup mRollTypeRadioGroup, mDieTypeRadioGroup;
-	Button mRollButton, mResetButton, mDieQuantityUpButton,
-			mDieQuantityDownButton;
-	TextView mDieQuantityLabel, mRollResultLabel, mRollSumLabel;
-	ListView mRollResultList;
+    private int m_rollSum = 0;
+    private RollMode m_rollMode;
+    private PTDiceSet m_diceSet;
+    
+    private RadioGroup m_rollTypeRadioGroup;
+    private Spinner m_dieTypeSpinner, m_dieQuantitySpinner;
+    private Button m_rollButton, m_resetButton;
+    private TextView m_dieQuantityTv, m_rollResultTv, m_rollSumTv;
+    private ListView m_rollResultList;
 
-	final int ROLLMODE_SINGLE = 0;
-	final int ROLLMODE_MULTI = 1;
-	final int ROLLMODE_SUM = 2;
+    private static enum RollMode {SINGLE, XDY, CUMULATIVE}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mDiceSet = new PTDiceSet();
+		m_diceSet = new PTDiceSet();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
 		setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
 		
 		setupContent();
-		mRollMode = ROLLMODE_SINGLE;
-		setRollTypeView(R.id.radiotoggleSingleRoll);
-	
+        setRollMode(RollMode.SINGLE);
 		return getRootView();
 	}
 
@@ -61,169 +51,128 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
         setSubtitle(null);
     }
 
-    // Responds to roll type radio toggle buttons
-	public void rollTypeClicked(View view) {
-		ToggleButton toggleButton = (ToggleButton) view;
+    private void setupContent() {
+        m_rollTypeRadioGroup = (RadioGroup) getRootView().findViewById(R.id.toggleGroupRollType);
 
-		if (toggleButton.isChecked()) {
-			mRollTypeRadioGroup.check(view.getId());
-			setRollTypeView(view.getId());
-		} else
-			toggleButton.setChecked(true);
-	}
+        RollTypeClickListener rollTypeClickListener = new RollTypeClickListener();
+        for (int i = 0; i < m_rollTypeRadioGroup.getChildCount(); i++) {
+            m_rollTypeRadioGroup.getChildAt(i).setOnClickListener(rollTypeClickListener);
+        }
 
-	// Takes the id of a roll type radio button (usually the one just pressed)
-	// and sets the rest of the layout accordingly
-	public void setRollTypeView(int rollTypeButtonId) {
-		switch (rollTypeButtonId) {
-		case R.id.radiotoggleSingleRoll:
-			mRollMode = ROLLMODE_SINGLE;
-			mResetButton.setEnabled(false);
-			mDieQuantityUpButton.setEnabled(false);
-			mDieQuantityDownButton.setEnabled(false);
-			mDieQuantityLabel.setEnabled(false);
-			mRollSumLabel.setVisibility(View.INVISIBLE);
-			mRollResultList.setVisibility(View.INVISIBLE);
+        m_dieTypeSpinner = (Spinner) getRootView().findViewById(R.id.spinnerDieType);
+        setupSpinner(m_dieTypeSpinner, R.array.roller_die_types, 0);
+
+        m_dieQuantityTv = (TextView) getRootView().findViewById(R.id.tvDieQuantity);
+        m_dieQuantitySpinner = (Spinner) getRootView().findViewById(R.id.spinnerDieQuantity);
+        setupSpinner(m_dieQuantitySpinner, R.array.roller_die_quantities, 0);
+
+        m_rollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
+        m_rollButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View v) {
+                rollDice();
+            }
+        });
+
+        m_resetButton = (Button) getRootView().findViewById(R.id.buttonReset);
+        m_resetButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View v) {
+                resetRolls();
+            }
+        });
+
+        m_rollResultTv = (TextView) getRootView().findViewById(R.id.textViewRollResult);
+        m_rollSumTv = (TextView) getRootView().findViewById(R.id.textViewRollSum);
+        m_rollResultList = (ListView) getRootView().findViewById(R.id.rollResultListView);
+
+        resetRolls();
+    }
+
+	public void setRollMode(RollMode rollMode) {
+		switch (rollMode) {
+		case SINGLE:
+			m_rollMode = RollMode.SINGLE;
+			m_resetButton.setEnabled(false);
+            m_dieQuantitySpinner.setEnabled(false);
+            m_dieQuantityTv.setEnabled(false);
+			m_rollSumTv.setVisibility(View.INVISIBLE);
+			m_rollResultList.setVisibility(View.GONE);
 			break;
-		case R.id.radiotoggleMultiRoll:
-			mRollMode = ROLLMODE_MULTI;
-			mResetButton.setEnabled(true);
-			mDieQuantityUpButton.setEnabled(true);
-			mDieQuantityDownButton.setEnabled(true);
-			mDieQuantityLabel.setEnabled(true);
-			mRollSumLabel.setVisibility(View.INVISIBLE);
-			mRollResultList.setVisibility(View.VISIBLE);
+		case XDY:
+			m_rollMode = RollMode.XDY;
+			m_resetButton.setEnabled(true);
+            m_dieQuantitySpinner.setEnabled(true);
+            m_dieQuantityTv.setEnabled(true);
+			m_rollSumTv.setVisibility(View.INVISIBLE);
+			m_rollResultList.setVisibility(View.VISIBLE);
 			break;
-		case R.id.radiotoggleSumRoll:
-			mRollMode = ROLLMODE_SUM;
-			mResetButton.setEnabled(true);
-			mDieQuantityUpButton.setEnabled(true);
-			mDieQuantityDownButton.setEnabled(true);
-			mDieQuantityLabel.setEnabled(true);
-			mRollSumLabel.setVisibility(View.VISIBLE);
-			mRollResultList.setVisibility(View.VISIBLE);
+		case CUMULATIVE:
+			m_rollMode = RollMode.CUMULATIVE;
+			m_resetButton.setEnabled(true);
+			m_dieQuantitySpinner.setEnabled(true);
+            m_dieQuantityTv.setEnabled(true);
+			m_rollSumTv.setVisibility(View.VISIBLE);
+			m_rollResultList.setVisibility(View.VISIBLE);
 			break;
-		}
-	}
-
-	// Responds to die type radio toggle buttons
-	public void dieTypeClicked(View view) {
-		ToggleButton toggleButton = (ToggleButton) view;
-
-		if (toggleButton.isChecked()) {
-			mDieTypeRadioGroup.check(view.getId());
-			switch (view.getId()) {
-			case R.id.radiotoggleD4Die:
-				mCurrentDie = 4;
-				break;
-			case R.id.radiotoggleD6Die:
-				mCurrentDie = 6;
-				break;
-			case R.id.radiotoggleD8Die:
-				mCurrentDie = 8;
-				break;
-			case R.id.radiotoggleD10Die:
-				mCurrentDie = 10;
-				break;
-			case R.id.radiotoggleD12Die:
-				mCurrentDie = 12;
-				break;
-			case R.id.radiotoggleD20Die:
-				mCurrentDie = 20;
-				break;
-			case R.id.radiotoggleD100Die:
-				mCurrentDie = 100;
-				break;
-			}
-		} else
-			toggleButton.setChecked(true);
-	}
-
-	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		ToggleButton toggleButton;
-		for (int j = 0; j < group.getChildCount(); j++) {
-			toggleButton = (ToggleButton) group.getChildAt(j);
-			toggleButton.setChecked(toggleButton.getId() == checkedId);
 		}
 	}
 
 	public void resetRolls() {
-		mRollSum = 0;
-		mRollSumLabel.setText(getString(R.string.roller_sum_label) + " "
-				+ mRollSum);
-		mDieQuantity = 1;
-		mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
+		m_rollSum = 0;
+		m_rollSumTv.setText(getString(R.string.roller_sum_label) + " "
+                + m_rollSum);
+		m_dieQuantitySpinner.setSelection(0);
 		refreshRollsListView(null);
 	}
 
-	// Rolls the dice according to the current settings and updates the screen
 	public void rollDice() {
 		int rollResult;
-		int[] rolls = null;
-		
-		switch (mRollMode) {
-		case ROLLMODE_SINGLE:
-			mRollResultLabel.setText(Integer.toString(mDiceSet
-					.singleRoll(mCurrentDie)));
-			break;
-		case ROLLMODE_MULTI:
-			rolls = mDiceSet.multiRollWithResults(mDieQuantity, mCurrentDie);
-			rollResult = getMultiRollSum(rolls);
-			mRollResultLabel.setText(Integer.toString(rollResult));
-			refreshRollsListView(rolls);
-			break;
-		case ROLLMODE_SUM:
-			rolls = mDiceSet.multiRollWithResults(mDieQuantity, mCurrentDie);
-			rollResult = getMultiRollSum(rolls);
-			mRollSum += rollResult;
-			if (mRollSum > getResources().getInteger(R.integer.max_roll_sum))
-				mRollSum = getResources().getInteger(R.integer.max_roll_sum);
-			mRollSumLabel.setText(getString(R.string.roller_sum_label) + " "
-					+ mRollSum);
-			mRollResultLabel.setText(Integer.toString(rollResult));
-			refreshRollsListView(rolls);
-			break;
-		}
-	}
+		int[] rolls;
 
-	public void onClick(View view) {
+        switch (m_rollMode) {
+            case SINGLE:
+                m_rollResultTv.setText(Integer.toString(m_diceSet
+                        .singleRoll(getDieType())));
+                break;
+            case XDY:
+                rolls = m_diceSet.multiRollWithResults(getDieQuantity(), getDieType());
+                rollResult = sumIntArray(rolls);
+                m_rollResultTv.setText(Integer.toString(rollResult));
+                refreshRollsListView(rolls);
+                break;
+            case CUMULATIVE:
+                rolls = m_diceSet.multiRollWithResults(getDieQuantity(), getDieType());
+                rollResult = sumIntArray(rolls);
+                m_rollSum += rollResult;
+                if (m_rollSum > MAX_ROLL_SUM)
+                    m_rollSum = MAX_ROLL_SUM;
+                m_rollSumTv.setText(getString(R.string.roller_sum_label) + " "
+                        + m_rollSum);
+                m_rollResultTv.setText(Integer.toString(rollResult));
+                refreshRollsListView(rolls);
+                break;
+            default:
+                throw new IllegalStateException("Invalid roll mode: "+m_rollMode);
+        }
+    }
 
-		switch (view.getId()) {
-		case R.id.buttonRoll:
-			rollDice();
-			break;
-		case R.id.buttonReset:
-			resetRolls();
-			break;
-		case R.id.buttonPlusDiceNumber:
-			if (mDieQuantity < getResources().getInteger(
-					R.integer.max_dice_per_roll)) {
-				mDieQuantity++;
-				mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
-			}
-			break;
-		case R.id.buttonMinusDiceNumber:
-			if (mDieQuantity > 1) {
-				mDieQuantity--;
-				mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
-			}
-			break;
-		default:
-			if ("roll_type_toggle".equals(view.getTag())) {
-				rollTypeClicked(view);
-			} else if ("die_type_toggle".equals(view.getTag())) {
-				dieTypeClicked(view);
-			}
-			break;
-		}
+    private int getDieQuantity() {
+        return m_dieQuantitySpinner.getSelectedItemPosition() + 1;
+    }
 
-	}
-	
-	private int getMultiRollSum(int[] rollResults){
+    private int getDieType() {
+        int position = m_dieTypeSpinner.getSelectedItemPosition();
+        if (position < DIE_VALUES.length) {
+           return DIE_VALUES[position];
+        } else {
+            throw new IllegalStateException("Illegal die selected at spinner position "+position);
+        }
+    }
+
+	private int sumIntArray(int[] rollResults){
 		int rollSum = 0;
 		if(rollResults != null){
-			for(int i = 0; i < rollResults.length; i++){
-				rollSum += rollResults[i];
+			for(int i : rollResults){
+				rollSum += i;
 			}
 		}
 		return rollSum;
@@ -236,49 +185,44 @@ public class PTDiceRollerFragment extends PTBasePageFragment implements OnClickL
 				rollResultStrings[i] = Integer.toString(rollResults[i]);
 				
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, rollResultStrings);
-			mRollResultList.setAdapter(adapter);
-		}
-		else{
+			m_rollResultList.setAdapter(adapter);
+		} else{
 			String[] emptyArray = new String[0];
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, emptyArray);
-			mRollResultList.setAdapter(adapter);
+			m_rollResultList.setAdapter(adapter);
 		}
 	}
 
-	private void setupContent() {
-		mRollTypeRadioGroup = (RadioGroup) getRootView().findViewById(R.id.toggleGroupRollType);
-		mRollTypeRadioGroup.setOnCheckedChangeListener(this);
-		
-		for (int i = 0; i < mRollTypeRadioGroup.getChildCount(); i++) {
-			mRollTypeRadioGroup.getChildAt(i).setOnClickListener(this);
-		}
+    private class RollTypeClickListener implements OnClickListener {
+        @Override public void onClick(View view) {
+            ToggleButton toggleButton;
+            for (int i = 0; i < m_rollTypeRadioGroup.getChildCount(); i++) {
+                toggleButton = (ToggleButton) m_rollTypeRadioGroup.getChildAt(i);
+                toggleButton.setChecked(toggleButton.getId() == view.getId());
+            }
+            switch (view.getId()) {
+                case R.id.radiotoggleSingleRoll:
+                    setRollMode(RollMode.SINGLE);
+                    break;
+                case R.id.radiotoggleMultiRoll:
+                    setRollMode(RollMode.XDY);
+                    break;
+                case R.id.radiotoggleSumRoll:
+                    setRollMode(RollMode.CUMULATIVE);
+                    break;
+            }
+        }
+    }
 
-		mDieTypeRadioGroup = (RadioGroup) getRootView().findViewById(R.id.toggleGroupDieType);
-		mDieTypeRadioGroup.setOnCheckedChangeListener(this);
-		
-		for (int i = 0; i < mDieTypeRadioGroup.getChildCount(); i++) {
-			mDieTypeRadioGroup.getChildAt(i).setOnClickListener(this);
-		}
+    private void setupSpinner(Spinner spinner, int optionResourceId, int defaultSelection) {
+        Context context = getActivity();
+        if (context != null) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                    optionResourceId, android.R.layout.simple_spinner_item);
 
-		mDieQuantityUpButton = (Button) getRootView().findViewById(R.id.buttonPlusDiceNumber);
-		mDieQuantityUpButton.setOnClickListener(this);
-		mDieQuantityDownButton = (Button) getRootView().findViewById(R.id.buttonMinusDiceNumber);
-		mDieQuantityDownButton.setOnClickListener(this);
-
-		mRollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
-		mRollButton.setOnClickListener(this);
-		mResetButton = (Button) getRootView().findViewById(R.id.buttonReset);
-		mResetButton.setOnClickListener(this);
-
-		mDieQuantityLabel = (TextView) getRootView().findViewById(R.id.textViewDiceNumberPicker);
-		mDieQuantityLabel.setText(Integer.toString(mDieQuantity));
-
-		mRollResultLabel = (TextView) getRootView().findViewById(R.id.textViewRollResult);
-
-		mRollSumLabel = (TextView) getRootView().findViewById(R.id.textViewRollSum);
-		
-		mRollResultList = (ListView) getRootView().findViewById(R.id.rollResultListView);
-		
-		resetRolls();
-	}
+            adapter.setDropDownViewResource(R.layout.spinner_plain);
+            spinner.setAdapter(adapter);
+            spinner.setSelection(defaultSelection);
+        }
+    }
 }
