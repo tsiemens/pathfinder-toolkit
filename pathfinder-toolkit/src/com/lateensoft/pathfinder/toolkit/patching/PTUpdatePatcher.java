@@ -11,6 +11,7 @@ import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.db.PTDatabase;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTCharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTPartyRepository;
+import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.model.character.PTCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.PTParty;
 
@@ -71,16 +72,30 @@ public class PTUpdatePatcher {
 		PTCharacterRepository characterRepo = new PTCharacterRepository();
 		PTPartyRepository partyRepo = new PTPartyRepository();
 		PTSharedPreferences newSharedPrefs = PTSharedPreferences.getInstance();
-		com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager oldPrefsManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager(appContext);
+		PTUserPrefsManager oldPrefsManager = new PTUserPrefsManager(appContext);
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager oldDBManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager(appContext);
 		boolean completeSuccess = true;
 		
-		int oldSelectedCharacterID = oldPrefsManager.getSelectedCharacter();
-		int oldSelectedPartyID = oldPrefsManager.getSelectedParty();
+		int oldSelectedCharacterID;
+        try {
+            oldSelectedCharacterID = oldPrefsManager.getSelectedCharacter();
+        } catch (ClassCastException e) {
+            // Cases in which this has become a long in preferences for unknown reason.
+            oldSelectedCharacterID =
+                    Long.valueOf(newSharedPrefs.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER, -1)).intValue();
+        }
+
+        int oldSelectedPartyID;
+        try {
+            oldSelectedPartyID = oldPrefsManager.getSelectedParty();
+        } catch (ClassCastException e) {
+            oldSelectedPartyID =
+                    Long.valueOf(newSharedPrefs.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY, -1)).intValue();
+        }
 		
 		// Delete, because need to convert to long later
-		oldPrefsManager.remove(com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER);
-		oldPrefsManager.remove(com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY);
+		oldPrefsManager.remove(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER);
+		oldPrefsManager.remove(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY);
 		
 		// Give user a week before they are asked to rate again.
 		oldPrefsManager.remove(PTSharedPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME);
