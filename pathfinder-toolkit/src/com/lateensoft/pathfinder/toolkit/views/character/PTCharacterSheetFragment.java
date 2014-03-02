@@ -104,8 +104,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			if (getRootView() != null) {
 				updateFragmentUI();
 			}
-
 		}
+		updateTitle();
 	}
 
 	/**
@@ -266,7 +266,6 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 				PTSharedPreferences.getInstance().putLong(
 						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, m_characterSelectedInDialog);
 				loadCurrentCharacter();
-				updateTitle();
 			}
 			break;
 
