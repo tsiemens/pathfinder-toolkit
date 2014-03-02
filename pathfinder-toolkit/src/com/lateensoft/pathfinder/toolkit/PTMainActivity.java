@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit;
 import java.util.Calendar;
 
 import android.app.*;
-import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +25,8 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.patching.PTUpdatePatcher;
 import com.lateensoft.pathfinder.toolkit.patching.PTUpdatePatcher.PatcherListener;
@@ -46,6 +47,7 @@ import com.lateensoft.pathfinder.toolkit.views.character.PTCharacterWeaponsFragm
 import com.lateensoft.pathfinder.toolkit.views.party.PTInitiativeTrackerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PTPartyManagerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PTPartySkillCheckerFragment;
+import com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity;
 
 public class PTMainActivity extends Activity implements
 		OnClickListener, OnChildClickListener, OnGroupClickListener,
@@ -55,7 +57,7 @@ public class PTMainActivity extends Activity implements
 	private static final String KEY_CURRENT_FRAGMENT = "fragment_id";
 	
 	private DrawerLayout m_drawerLayout;
-	private ActionBarDrawerToggle m_drawerToggle;
+    private RelativeLayout m_leftDrawer;
 	private ExpandableListView m_drawerList;
 	
 	private PTBasePageFragment m_currentFragment;
@@ -119,7 +121,8 @@ public class PTMainActivity extends Activity implements
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		m_drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-		m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+        m_leftDrawer = (RelativeLayout) findViewById(R.id.left_drawer);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 				m_drawerLayout, /* DrawerLayout object */
 				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
 				R.string.app_name, /* "open drawer" description */
@@ -145,12 +148,12 @@ public class PTMainActivity extends Activity implements
 				hideKeyboard();
 			}
 		};
-		m_drawerToggle.syncState();
+		drawerToggle.syncState();
 
 		// Set the drawer toggle as the DrawerListener
-		m_drawerLayout.setDrawerListener(m_drawerToggle);
+		m_drawerLayout.setDrawerListener(drawerToggle);
 
-		m_drawerList = (ExpandableListView) findViewById(R.id.left_drawer);
+		m_drawerList = (ExpandableListView) findViewById(R.id.drawer_exp_lv);
 
 		// Set the adapter for the list view
 		m_drawerList.setAdapter(new PTNavDrawerAdapter(this));
@@ -161,6 +164,13 @@ public class PTMainActivity extends Activity implements
 		m_drawerList.setOnGroupClickListener(this);
 		m_drawerList.setOnGroupExpandListener(this);
 		m_drawerList.setOnGroupCollapseListener(this);
+
+        ImageView settingsButton = (ImageView) findViewById(R.id.iv_settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                startActivity(new Intent(PTMainActivity.this, PTSettingsActivity.class));
+            }
+        });
 	}
 
 	private void showRateDialogIfRequired() {
@@ -185,18 +195,10 @@ public class PTMainActivity extends Activity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Add menu items which are visible for all fragments
-		PTSharedMenu.onCreateOptionsMenu(menu, getMenuInflater());
-		return true;
-	}
-
-	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
+		boolean drawerOpen = isDrawerOpen();
 		for (int i = 0; i < menu.size(); i++) {
-			menu.getItem(i).setVisible(!drawerOpen
-                    || menu.getItem(i).getItemId() == R.id.mi_app_settings);
+			menu.getItem(i).setVisible(!drawerOpen);
 		}
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -204,14 +206,9 @@ public class PTMainActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
-				m_drawerLayout.closeDrawer(m_drawerList);
-			} else {
-				m_drawerLayout.openDrawer(m_drawerList);
-			}
+            setDrawerOpen(!isDrawerOpen());
 		}
 
-		PTSharedMenu.onOptionsItemSelected(item, this);
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -341,7 +338,7 @@ public class PTMainActivity extends Activity implements
 			if (id != ((PTNavDrawerAdapter)list.getExpandableListAdapter()).getSelectedItem()) {
 				showView(id);		
 			}
-			m_drawerLayout.closeDrawer(m_drawerList);
+            setDrawerOpen(false);
 		}
 		return false;
 	}
@@ -355,9 +352,21 @@ public class PTMainActivity extends Activity implements
 			list.invalidateViews();
 			showView(id);
 		}
-		m_drawerLayout.closeDrawer(m_drawerList);	
+        setDrawerOpen(false);
 		return false;
 	}
+
+    private void setDrawerOpen(boolean open) {
+        if (open) {
+            m_drawerLayout.openDrawer(m_leftDrawer);
+        } else {
+            m_drawerLayout.closeDrawer(m_leftDrawer);
+        }
+    }
+
+    private boolean isDrawerOpen() {
+        return m_drawerLayout.isDrawerOpen(m_leftDrawer);
+    }
 	
 	public void hideKeyboardDelayed(long delayMs) {
 		new Handler().postDelayed(new Runnable() {
