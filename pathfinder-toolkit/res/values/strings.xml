@@ -515,31 +515,6 @@
         <item>S\/P</item>
         <item>S\/P\/B</item>
     </string-array>
-    
-    <string-array name="weapon_range_options">
-        <item>0 ft\.</item>
-        <item>5 ft\.</item>
-        <item>10 ft\.</item>
-        <item>15 ft\.</item>
-        <item>20 ft\.</item>
-        <item>25 ft\.</item>
-        <item>30 ft\.</item>
-        <item>35 ft\.</item>
-        <item>40 ft\.</item>
-        <item>45 ft\.</item>
-        <item>50 ft\.</item>
-        <item>55 ft\.</item>
-        <item>60 ft\.</item>
-        <item>65 ft\.</item>
-        <item>70 ft\.</item>
-        <item>75 ft\.</item>
-        <item>80 ft\.</item>
-        <item>85 ft\.</item>
-        <item>90 ft\.</item>
-        <item>95 ft\.</item>
-        <item>100 ft\.</item>
-	</string-array>
-    
 
     <!-- Feats/Special Abilities -->
     <string name="feats_add_button">Add Feat or Special Ability</string>
