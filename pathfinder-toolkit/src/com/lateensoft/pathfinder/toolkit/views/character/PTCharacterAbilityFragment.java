@@ -100,12 +100,12 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 		ArrayAdapter<CharSequence> adapter;
 		if (isTemp) {
 			adapter = ArrayAdapter.createFromResource(getActivity(),
-					R.array.selectable_integer_values_strings, android.R.layout.simple_spinner_item);
-			adapter.setDropDownViewResource(R.layout.spinner_plain);
+					R.array.selectable_integer_values_strings, R.layout.spinner_centered);
+			adapter.setDropDownViewResource(R.layout.spinner_centered);
 		} else {
 			adapter = ArrayAdapter.createFromResource(getActivity(),
-					R.array.selectable_whole_values_strings, android.R.layout.simple_spinner_item);
-			adapter.setDropDownViewResource(R.layout.spinner_plain);
+					R.array.selectable_whole_values_strings, R.layout.spinner_centered);
+			adapter.setDropDownViewResource(R.layout.spinner_centered);
 		}
 
 		for(int i = 0; i < viewIds.length; i++) {
