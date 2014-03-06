@@ -184,6 +184,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="@string/plus" />
 
             <LinearLayout
@@ -318,6 +319,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -346,6 +348,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <TextView
@@ -360,6 +363,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -388,6 +392,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -416,6 +421,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -444,6 +450,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -543,7 +550,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
+                android:paddingTop="10dp"
                 android:text="@string/combat_stats_slash" />
 
             <LinearLayout
@@ -629,6 +636,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="@string/plus" />
 
 			<TextView
@@ -643,6 +651,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="@string/minus" />
 
             <LinearLayout
@@ -705,6 +714,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="@string/combat_stats_cmd_equals" />
 
             <TextView
@@ -719,6 +729,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="@string/plus" />
 
             <LinearLayout
@@ -808,7 +819,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <TextView
@@ -823,7 +834,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -852,6 +863,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -880,6 +892,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -969,7 +982,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <TextView
@@ -984,7 +997,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -1013,6 +1026,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -1041,6 +1055,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -1131,7 +1146,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <TextView
@@ -1146,7 +1161,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -1175,7 +1190,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
@@ -1204,7 +1219,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
+                    android:paddingTop="10dp"
                     android:text="@string/plus" />
 
                 <LinearLayout
