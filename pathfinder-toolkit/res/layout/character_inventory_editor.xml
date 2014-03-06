@@ -14,6 +14,7 @@
             android:id="@+id/etItemName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:hint="@string/weapon_name_header" />
 
         <LinearLayout
