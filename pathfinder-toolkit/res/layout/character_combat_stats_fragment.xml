@@ -59,6 +59,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -74,6 +75,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -89,6 +91,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -104,6 +107,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
             </LinearLayout>
         </HorizontalScrollView>
@@ -132,6 +136,7 @@
                 android:hint="@string/combat_stats_empty_field"
                 android:imeOptions="actionDone"
                 android:inputType="numberSigned"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -193,6 +198,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -298,6 +304,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -325,6 +332,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -366,6 +374,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -393,6 +402,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -420,6 +430,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -447,6 +458,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -482,6 +494,7 @@
                 android:hint="@string/combat_stats_empty_field"
                 android:imeOptions="actionDone"
                 android:inputType="numberSigned"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -516,6 +529,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -544,6 +558,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -600,6 +615,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -641,6 +657,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -716,6 +733,7 @@
                     android:hint="@string/combat_stats_empty_field"
                     android:imeOptions="actionDone"
                     android:inputType="numberSigned"
+                    android:gravity="center"
                     android:maxLines="1" />
 
                 <TextView
@@ -776,6 +794,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -819,6 +838,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -846,6 +866,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -873,6 +894,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -933,6 +955,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -976,6 +999,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1003,6 +1027,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1030,6 +1055,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1091,6 +1117,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1134,6 +1161,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1162,6 +1190,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
@@ -1190,6 +1219,7 @@
                         android:hint="@string/combat_stats_empty_field"
                         android:imeOptions="actionDone"
                         android:inputType="numberSigned"
+                        android:gravity="center"
                         android:maxLines="1" />
 
                     <TextView
