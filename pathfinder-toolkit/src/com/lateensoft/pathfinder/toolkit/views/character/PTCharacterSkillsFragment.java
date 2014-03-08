@@ -106,11 +106,14 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		skillEditIntent.putExtra(PTCharacterSkillEditActivity.INTENT_EXTRAS_KEY_SKILL_DELETABLE_BOOLEAN,
 				(PTSkillSet.isSubtypedSkill(skill.getSkillKey()) 
 				&& m_skillSet.hasMultipleOfSkill(skill.getSkillKey())) );
-		startActivityForResult(skillEditIntent, 0);
+		startActivityForResult(skillEditIntent, PTParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != PTParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+            return;
+        }
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTSkill skill = PTParcelableEditorActivity.getParcelableFromIntent(data);

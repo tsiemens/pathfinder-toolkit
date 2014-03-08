@@ -87,11 +87,15 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 				PTCharacterArmorEditActivity.class);
 		armorEditIntent.putExtra(
 				PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, armor);
-		startActivityForResult(armorEditIntent, 0);
+		startActivityForResult(armorEditIntent, PTParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != PTParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+            return;
+        }
+
 		switch (resultCode) {
 		case Activity.RESULT_OK:
             PTArmor armor = PTParcelableEditorActivity.getParcelableFromIntent(data);

@@ -248,11 +248,14 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 				PTPartyMemberEditorActivity.class);
 		intent.putExtra(
 				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);
-		startActivityForResult(intent, 0);
+		startActivityForResult(intent, PTParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != PTParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+            return;
+        }
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTPartyMember member = PTParcelableEditorActivity.getParcelableFromIntent(data);

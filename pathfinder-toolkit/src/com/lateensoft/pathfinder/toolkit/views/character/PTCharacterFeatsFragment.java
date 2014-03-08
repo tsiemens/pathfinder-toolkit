@@ -84,11 +84,14 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 				PTCharacterFeatEditActivity.class);
 		featEditIntent.putExtra(
 				PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);
-		startActivityForResult(featEditIntent, 0);
+		startActivityForResult(featEditIntent, PTParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != PTParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+            return;
+        }
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTFeat feat = PTParcelableEditorActivity.getParcelableFromIntent(data);

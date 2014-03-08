@@ -84,11 +84,14 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment imple
 				PTCharacterSpellEditActivity.class);
 		spellEditIntent.putExtra(
 				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, spell);
-		startActivityForResult(spellEditIntent, 0);
+		startActivityForResult(spellEditIntent, PTParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != PTParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+            return;
+        }
 		switch (resultCode) {
 		case Activity.RESULT_OK:
 			PTSpell spell = PTParcelableEditorActivity.getParcelableFromIntent(data);

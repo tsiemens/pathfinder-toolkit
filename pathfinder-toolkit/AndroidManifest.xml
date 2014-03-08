@@ -7,6 +7,8 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name="com.lateensoft.pathfinder.toolkit.PTBaseApplication"
         android:icon="@drawable/ic_launcher"
