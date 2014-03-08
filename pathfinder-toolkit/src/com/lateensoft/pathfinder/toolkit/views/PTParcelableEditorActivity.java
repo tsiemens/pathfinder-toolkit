@@ -133,6 +133,8 @@ public abstract class PTParcelableEditorActivity extends Activity {
 				optionResourceId, android.R.layout.simple_spinner_item);
 
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
+		// Set gravity to 'center'
+		spinner.setGravity(17);
 		spinner.setAdapter(adapter);
 		spinner.setOnTouchListener(touchListener);
 		spinner.setSelection(defaultSelection, false);
