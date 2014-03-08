@@ -181,11 +181,10 @@
                 style="@style/clickable_text_view"
                 android:gravity="center" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/plus" />
+            <include
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 layout="@layout/character_combat_stats_plus"/>
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -316,11 +315,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -345,11 +343,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
                     android:id="@+id/tvACAbility"
@@ -360,11 +357,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -389,11 +385,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -418,11 +413,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -447,11 +441,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -633,13 +626,12 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/plus" />
+            <include
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 layout="@layout/character_combat_stats_plus"/>
 
-			<TextView
+            <TextView
                     android:id="@+id/tvCMBAbility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -648,11 +640,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/minus" />
+            <include
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 layout="@layout/character_combat_stats_minus"/>
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -726,11 +717,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-            <TextView
+            <include
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/plus" />
+                layout="@layout/character_combat_stats_plus"/>
 
             <LinearLayout
                 android:layout_width="60dp"
@@ -816,11 +806,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
                     android:id="@+id/tvFortAbility"
@@ -831,11 +820,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -860,11 +848,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -889,11 +876,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -979,11 +965,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
                     android:id="@+id/tvReflexAbility"
@@ -994,11 +979,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1023,11 +1007,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1052,11 +1035,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1143,11 +1125,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
                     android:id="@+id/tvWillAbility"
@@ -1158,11 +1139,10 @@
                     style="@style/clickable_text_view"
                     android:gravity="center" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1187,11 +1167,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -1216,11 +1195,10 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plus" />
+                <include
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
