@@ -10,13 +10,15 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/dialog_name_height"
         android:hint="@string/feats_name_hint"
-        android:maxLines="2" />
-    
+        android:maxLines="2"
+        android:paddingBottom="5dp" />
+
     <EditText
         android:id="@+id/etFeatDescription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/feats_description_hint"
-        android:gravity="left" />
+        android:gravity="left"
+        android:paddingTop="5dp" />
 
 </LinearLayout>
