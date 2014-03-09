@@ -185,7 +185,7 @@ public class PTCharacterConverter {
 		for (int i = 0; i < oldSpellArray.length; i++) {
 			newSpell = new PTSpell();
 			setSpell(newSpell, oldSpellArray[i]);
-			newSpells.addSpell(newSpell);
+			newSpells.add(newSpell);
 		}
 	}
 	

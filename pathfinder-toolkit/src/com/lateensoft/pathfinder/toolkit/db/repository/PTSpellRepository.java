@@ -1,10 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 
@@ -37,8 +39,7 @@ public class PTSpellRepository extends PTBaseRepository<PTSpell> {
 		int level = ((Long) hashTable.get(LEVEL)).intValue();
 		String desc = (String) hashTable.get(DESC);
 		
-		PTSpell spell = new PTSpell(id, characterId, name, level, prepared, desc);
-		return spell;
+		return new PTSpell(id, characterId, name, level, prepared, desc);
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class PTSpellRepository extends PTBaseRepository<PTSpell> {
 	 * @param characterId
 	 * @return Array of PTSpell, ordered by level, then alphabetically by name
 	 */
-	public PTSpell[] querySet(long characterId) {
+	public List<PTSpell> querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = LEVEL+" ASC, "+NAME +" ASC";
 		String table = m_tableInfo.getTable();
@@ -68,14 +69,12 @@ public class PTSpellRepository extends PTBaseRepository<PTSpell> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTSpell[] spells = new PTSpell[cursor.getCount()];
+		List<PTSpell> spells = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			spells[i] = buildFromHashTable(hashTable);
+			spells.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return spells;
 	}

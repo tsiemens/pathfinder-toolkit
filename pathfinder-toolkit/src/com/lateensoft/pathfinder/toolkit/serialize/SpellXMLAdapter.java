@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -36,10 +37,10 @@ public class SpellXMLAdapter extends XMLObjectAdapter<PTSpell> {
     protected PTSpell convertToObject(Element element) {
         PTSpell spell = new PTSpell();
         spell.setName(getStringAttribute(element, NAME_ATTR, ""));
-        spell.setLevel(getIntAttribute(element, LEVEL_ATTR, 0));
-        spell.setPrepared(getIntAttribute(element, PREPARED_ATTR, 0));
+        spell.setLevel(getBoundedIntAttribute(element, LEVEL_ATTR, 0, 10, 0));
+        spell.setPrepared(getBoundedIntAttribute(element, PREPARED_ATTR, 0, 40, 0));
         spell.setDescription(getSubElementContent(element, DESC_ELEMENT, ""));
-        return null;
+        return spell;
     }
 
 

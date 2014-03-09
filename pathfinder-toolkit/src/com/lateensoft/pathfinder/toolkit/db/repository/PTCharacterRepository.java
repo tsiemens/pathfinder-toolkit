@@ -149,7 +149,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Spells
 			PTSpellRepository spellRepo = new PTSpellRepository();
-			PTSpell[] spells = object.getSpellBook().getSpells();
+			PTSpellBook spells = object.getSpellBook();
 			for (PTSpell spell : spells) {
 				subCompId = spellRepo.insert(spell);
 				if (subCompId == -1) {

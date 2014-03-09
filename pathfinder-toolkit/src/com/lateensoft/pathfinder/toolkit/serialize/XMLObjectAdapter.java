@@ -1,7 +1,10 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
+import com.google.common.collect.Lists;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
+
+import java.util.List;
 
 /**
  * @author trevsiemens
@@ -29,8 +32,19 @@ public abstract class XMLObjectAdapter<E> {
     }
 
     public static int getIntAttribute(Element element, String attrName, int defaultVal) {
+        return getBoundedIntAttribute(element, attrName, Integer.MIN_VALUE, Integer.MAX_VALUE, defaultVal);
+    }
+
+    public static int getBoundedIntAttribute(Element element, String attrName, int lowestVal, int highestVal, int defaultVal) {
         try {
-            return Integer.parseInt(element.attributeValue(attrName));
+            int val = Integer.parseInt(element.attributeValue(attrName));
+            if (val < lowestVal) {
+                return lowestVal;
+            } else if (val > highestVal) {
+                return highestVal;
+            } else {
+                return val;
+            }
         } catch (NumberFormatException e) {
             return defaultVal;
         }
@@ -49,6 +63,13 @@ public abstract class XMLObjectAdapter<E> {
         return (val != null) ? val : defaultVal;
     }
 
+    public static boolean getBooleanAttribute(Element element, String attrName, boolean defaultVal) {
+        String boolString = element.attributeValue(attrName);
+        if ("true".equalsIgnoreCase(boolString)) return true;
+        else if ("false".equalsIgnoreCase(boolString)) return false;
+        else return defaultVal;
+    }
+
     public static String getSubElementContent(Element element, String subElementName, String defaultVal) {
         Element subElement = element.element(subElementName);
         if (subElement != null && subElement.getText() != null) {
@@ -56,5 +77,14 @@ public abstract class XMLObjectAdapter<E> {
         } else {
             return defaultVal;
         }
+    }
+
+    public static <T> List<T> getSubObjects(Element element, XMLObjectAdapter<T> adapter) {
+        List<Element> subElements = element.elements(adapter.getElementName());
+        List<T> subObjects = Lists.newArrayListWithCapacity(subElements.size());
+        for (Element subElement : subElements) {
+            subObjects.add(adapter.toObject(subElement));
+        }
+        return subObjects;
     }
 }

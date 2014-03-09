@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTSpell implements Parcelable, PTStorable {
+public class PTSpell implements Parcelable, PTStorable, Comparable<PTSpell> {
 	@SuppressWarnings("unused")
 	private static final String TAG = PTSpell.class.getSimpleName();
 	
@@ -137,5 +137,10 @@ public class PTSpell implements Parcelable, PTStorable {
 			return new PTSpell[size];
 		}
 	};
-	
+
+    @Override
+    public int compareTo(PTSpell another) {
+        int comparison = this.getLevel() - another.getLevel();
+        return (comparison != 0) ? comparison : this.getName().compareTo(another.getName());
+    }
 }
