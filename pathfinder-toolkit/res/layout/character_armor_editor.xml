@@ -14,25 +14,27 @@
             android:id="@+id/armorName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/armor_name_header" />
+            android:hint="@string/armor_name_header"
+            android:paddingBottom="5dp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_class_header" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_class_header" />
 
                 <Spinner
                     android:id="@+id/spArmorClass"
@@ -40,18 +42,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_size_header" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_size_header" />
 
                 <Spinner
                     android:id="@+id/spArmorSize"
@@ -59,18 +69,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_max_dex" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_max_dex" />
 
                 <Spinner
                     android:id="@+id/spArmorMaxDex"
@@ -78,18 +96,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_speed" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_speed" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
 
                 <Spinner
                     android:id="@+id/spArmorSpeed"
@@ -97,21 +123,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
-            
-            
-            
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_check_penalty_header" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_check_penalty_header" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
 
                 <Spinner
                     android:id="@+id/spArmorCheckPenalty"
@@ -119,18 +150,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_spell_failure_header" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_spell_failure_header" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
 
                 <Spinner
                     android:id="@+id/spArmorSpellFailure"
@@ -138,18 +177,26 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp" />
             </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/armor_weight_header" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/armor_weight_header" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
 
                 <EditText
                     android:id="@+id/etArmorWeight"
@@ -157,23 +204,28 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp"
                     android:maxWidth="100dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:selectAllOnFocus="true" />
             </LinearLayout>
         </LinearLayout>
-        
+
         <CheckBox 
             android:id="@+id/checkboxIsWorn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
-            android:text="@string/armor_is_worn"/>
+            android:text="@string/armor_is_worn"
+            android:padding="5dp"/>
 
         <EditText
             android:id="@+id/etArmorSpecialProperties"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/armor_special_properties_hint"
-            android:imeOptions="normal" />
+            android:imeOptions="normal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
     </LinearLayout>
 
 </ScrollView>
