@@ -8,7 +8,7 @@ import android.widget.Toast;
 /**
  * Created by trevsiemens on 04/03/14.
  */
-public class FileUtil {
+public class FileUtils {
 
     public static final String XML_MIME = "text/xml";
 
