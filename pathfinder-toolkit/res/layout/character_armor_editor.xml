@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp"
                     android:maxWidth="100dp"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:gravity="center"
                     android:selectAllOnFocus="true" />
             </LinearLayout>
