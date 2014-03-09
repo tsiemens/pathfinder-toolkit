@@ -15,7 +15,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="@string/weapon_name_header" />
+            android:hint="@string/weapon_name_header"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -42,14 +45,17 @@
                     android:minWidth="100dp"
                     android:maxWidth="100dp"
                     android:inputType="number"
-                    android:hint="@null" />
+                    android:hint="@null"
+                    android:selectAllOnFocus="true"
+                    android:gravity="center" />
             </LinearLayout>
             
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,7 +70,9 @@
                     android:minWidth="100dp"
                     android:maxWidth="100dp"
                     android:hint="@null"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:selectAllOnFocus="true"
+                    android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
 
