@@ -442,7 +442,7 @@
     <string name="weapon_weight_header">Weight: \u0020</string>
     <string name="weapon_size_header">Size: \u0020</string>
     <string name="weapon_critical_header">Critical: \u0020</string>
-    <string name="weapon_range_header">Range: </string>
+    <string name="weapon_range_header">Range: \u0020</string>
     <string name="Weapon_special_properties">Special Properties:\u0020</string>
     <string name="weapon_ammunition_header">Ammo: \u0020</string>
     <string name="weapon_damage_header">Damage: \u0020</string>
