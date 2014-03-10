@@ -12,6 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -132,9 +133,8 @@ public abstract class PTParcelableEditorActivity extends Activity {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 				optionResourceId, android.R.layout.simple_spinner_item);
 
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
-		// Set gravity to 'center'
-		spinner.setGravity(17);
+		adapter.setDropDownViewResource(R.layout.spinner_centered_wrapped);
+		spinner.setGravity(Gravity.CENTER);
 		spinner.setAdapter(adapter);
 		spinner.setOnTouchListener(touchListener);
 		spinner.setSelection(defaultSelection, false);
