@@ -20,6 +20,7 @@
         android:orientation="horizontal"
         android:baselineAligned="false" >
 
+        <!-- First column -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -78,6 +79,7 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Second column -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -136,12 +138,14 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Third column -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1" >
 
+            <!-- null entry to leave blank first entry in 3rd col -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
