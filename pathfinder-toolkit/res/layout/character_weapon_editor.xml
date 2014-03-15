@@ -155,7 +155,8 @@
                     android:layout_height="wrap_content"
                     android:minWidth="100dp"
                     android:inputType="numberDecimal"
-                    android:hint="@null" />
+                    android:hint="@null"
+                    android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 
