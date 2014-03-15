@@ -20,6 +20,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
+import java.util.Collections;
+import java.util.List;
+
 public class PTCharacterWeaponsFragment extends PTCharacterSheetFragment implements
 OnClickListener, OnItemClickListener{
 	private static final String TAG = PTCharacterWeaponsFragment.class.getSimpleName();
@@ -58,12 +61,11 @@ OnClickListener, OnItemClickListener{
 	}
 
 	private void refreshWeaponsListView() {
+        List<PTWeapon> weapons = m_inventory.getWeapons();
+        Collections.sort(weapons);
+
 		PTWeaponAdapter adapter = new PTWeaponAdapter(getActivity(),
-				R.layout.character_weapon_row,
-				m_inventory.getWeaponArray());
-		
-		Log.d(TAG, "Called refreshWeaponsListView");
-		
+				R.layout.character_weapon_row, weapons);
 		m_listView.setAdapter(adapter);
 	}
 	
@@ -71,7 +73,7 @@ OnClickListener, OnItemClickListener{
 		Log.v(TAG, "Item clicked: " + position);
 		m_weaponSelectedForEdit = position;
 		//showWeaponDialog(mCharacter.getInventory().getWeapon(position));
-		showWeaponEditor(m_inventory.getWeapon(position));
+		showWeaponEditor(m_inventory.getWeapons().get(position));
 	}
 
 
@@ -103,13 +105,13 @@ OnClickListener, OnItemClickListener{
                     Log.v(TAG, "Adding a weapon");
                     weapon.setCharacterID(getCurrentCharacterID());
                     if (m_weaponRepo.insert(weapon) != -1) {
-                        m_inventory.addWeapon(weapon);
+                        m_inventory.getWeapons().add(weapon);
                         refreshWeaponsListView();
                     }
                 } else {
                     Log.v(TAG, "Editing a weapon");
                     if (m_weaponRepo.update(weapon) != 0) {
-                        m_inventory.setWeapon(weapon, m_weaponSelectedForEdit);
+                        m_inventory.getWeapons().set(m_weaponSelectedForEdit, weapon);
                         refreshWeaponsListView();
                     }
                 }
@@ -119,9 +121,9 @@ OnClickListener, OnItemClickListener{
 		
 		case PTCharacterWeaponEditActivity.RESULT_DELETE:
 			Log.i(TAG, "Deleting a weapon");
-			PTWeapon weaponToDelete = m_inventory.getWeapon(m_weaponSelectedForEdit);
+			PTWeapon weaponToDelete = m_inventory.getWeapons().get(m_weaponSelectedForEdit);
 			if (weaponToDelete != null && m_weaponRepo.delete(weaponToDelete) != 0) {
-				m_inventory.deleteWeapon(m_weaponSelectedForEdit);
+				m_inventory.getWeapons().remove(m_weaponSelectedForEdit);
 				refreshWeaponsListView();
 			}
 			break;
@@ -153,6 +155,7 @@ OnClickListener, OnItemClickListener{
 
 	@Override
 	public void loadFromDatabase() {
-		m_inventory.setWeapons(m_weaponRepo.querySet(getCurrentCharacterID()));
+        m_inventory.getWeapons().clear();
+		m_inventory.getWeapons().addAll(m_weaponRepo.querySet(getCurrentCharacterID()));
 	}
 }

@@ -1,10 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 
@@ -52,7 +54,7 @@ public class PTFeatRepository extends PTBaseRepository<PTFeat> {
 	 * @param characterId
 	 * @return Array of PTFeat, ordered alphabetically by name
 	 */
-	public PTFeat[] querySet(long characterId) {
+	public List<PTFeat> querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = NAME + " ASC";
 		String table = m_tableInfo.getTable();
@@ -60,14 +62,12 @@ public class PTFeatRepository extends PTBaseRepository<PTFeat> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTFeat[] feats = new PTFeat[cursor.getCount()];
-		cursor.moveToFirst();
-		int i = 0;
+		List<PTFeat> feats = Lists.newArrayListWithCapacity(cursor.getCount());
+        cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			feats[i] = buildFromHashTable(hashTable);
+			feats.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return feats;
 	}

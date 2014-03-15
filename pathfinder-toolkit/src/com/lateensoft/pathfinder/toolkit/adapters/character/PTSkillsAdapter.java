@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 	private Context m_context;
 	private int m_layoutResourceId;
-	private PTSkill[] m_skills = null;
 	private SparseArray<String> m_skillNameMap;
 	private SparseArray<String> m_abilityNameMap;
 	
@@ -26,11 +27,10 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 	private int m_armorCheckPenalty;
 
 	public PTSkillsAdapter(Context context, int layoutResourceId,
-			PTSkill[] skills, int maxDex, PTAbilitySet characterAbilities, int armorCheckPenalty) {
+			List<PTSkill> skills, int maxDex, PTAbilitySet characterAbilities, int armorCheckPenalty) {
 		super(context, layoutResourceId, skills);
 		m_layoutResourceId = layoutResourceId;
 		m_context = context;
-		m_skills = skills;
 		m_skillNameMap = PTSkillSet.getSkillNameMap();
 		m_abilityNameMap = PTAbilitySet.getAbilityShortNameMap();
 		m_abilitySet = characterAbilities;
@@ -62,30 +62,25 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 			holder = (SkillHolder) row.getTag();
 		}
 
-		String name = m_skillNameMap.get(m_skills[position].getSkillKey());
-		if (PTSkillSet.isSubtypedSkill(m_skills[position].getSkillKey()) && 
-				m_skills[position].getSubType() != null && 
-				!m_skills[position].getSubType().isEmpty()) {
-			name = name + " ("+ m_skills[position].getSubType() + ")";
+		String name = m_skillNameMap.get(getItem(position).getSkillKey());
+		if (PTSkillSet.isSubtypedSkill(getItem(position).getSkillKey()) && 
+				getItem(position).getSubType() != null && 
+				!getItem(position).getSubType().isEmpty()) {
+			name = name + " ("+ getItem(position).getSubType() + ")";
 		}
 		holder.name.setText(name);
-		holder.total.setText(Integer.toString(m_skills[position].getSkillMod(m_abilitySet, m_maxDex, m_armorCheckPenalty)));
-		holder.abilityName.setText(m_abilityNameMap.get(m_skills[position].getAbilityKey()));
-		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(m_skills[position].getAbilityKey(), m_maxDex)));
-		holder.rank.setText(Integer.toString(m_skills[position].getRank()));
-		holder.miscMod.setText(Integer.toString(m_skills[position].getMiscMod()));
+		holder.total.setText(Integer.toString(getItem(position).getSkillMod(m_abilitySet, m_maxDex, m_armorCheckPenalty)));
+		holder.abilityName.setText(m_abilityNameMap.get(getItem(position).getAbilityKey()));
+		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(getItem(position).getAbilityKey(), m_maxDex)));
+		holder.rank.setText(Integer.toString(getItem(position).getRank()));
+		holder.miscMod.setText(Integer.toString(getItem(position).getMiscMod()));
 		
-		if(m_skills[position].isClassSkill() && m_skills[position].getRank() > 0)
+		if(getItem(position).isClassSkill() && getItem(position).getRank() > 0)
 			holder.classSkill.setText(new String("3"));
 		else
 			holder.classSkill.setText(new String("0"));
 
 		return row;
-	}
-	
-	public void updateList(PTSkill[] updatedSkills){
-		m_skills = updatedSkills;
-		notifyDataSetChanged();
 	}
 	
 	/**

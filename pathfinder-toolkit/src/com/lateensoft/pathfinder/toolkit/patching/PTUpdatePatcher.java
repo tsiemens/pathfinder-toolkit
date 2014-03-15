@@ -40,7 +40,7 @@ public class PTUpdatePatcher {
 				applyPreV5Patch();
 			}
 			if (prevVer < 6) {
-				if (!applyV5ToV6Patch()) {
+				if (!applyV5ToCurrentPatch()) {
 					completeSuccess = false;
 				}
 			}
@@ -66,7 +66,7 @@ public class PTUpdatePatcher {
 	 * 
 	 * @return false if was not 100% successful, and the user can expect some data loss.
 	 */
-	private static boolean applyV5ToV6Patch() {
+	private static boolean applyV5ToCurrentPatch() {
 		Log.i(TAG, "Applying v5 patches...");
 		Context appContext = PTBaseApplication.getAppContext();
 		PTCharacterRepository characterRepo = new PTCharacterRepository();

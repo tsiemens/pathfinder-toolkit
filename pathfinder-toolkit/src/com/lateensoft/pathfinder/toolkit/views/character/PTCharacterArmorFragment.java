@@ -20,6 +20,9 @@ import com.lateensoft.pathfinder.toolkit.model.character.PTInventory;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
+import java.util.Collections;
+import java.util.List;
+
 public class PTCharacterArmorFragment extends PTCharacterSheetFragment implements
 	OnItemClickListener, OnClickListener {
 	private static final String TAG = PTCharacterArmorFragment.class.getSimpleName();
@@ -59,21 +62,18 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	}
 	
 	private void refreshArmorListView() {
+        List<PTArmor> armorList = m_inventory.getArmors();
+        Collections.sort(armorList);
+
 		PTArmorAdapter adapter = new PTArmorAdapter(getActivity(),
-				R.layout.character_armor_row,
-				m_inventory.getArmorArray());
-		for (PTArmor a : m_inventory.getArmorArray())
-		Log.d(TAG, ""+a);
-		
-		Log.d(TAG, "Called refreshArmorListView");
-		
+				R.layout.character_armor_row, armorList);
 		m_listView.setAdapter(adapter);
 	}
 	
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.v(TAG, "Item clicked: " + position);
 		m_armorSelectedForEdit = position;
-		showArmorEditor(m_inventory.getArmor(position));
+		showArmorEditor(m_inventory.getArmors().get(position));
 	}
 
 	public void onClick(View v) {
@@ -104,13 +104,13 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
                     Log.v(TAG, "Adding an armor");
                     armor.setCharacterID(getCurrentCharacterID());
                     if (m_armorRepo.insert(armor) != -1) {
-                        m_inventory.addArmor(armor);
+                        m_inventory.getArmors().add(armor);
                         refreshArmorListView();
                     }
                 } else {
                     Log.v(TAG, "Editing an armor");
                     if (m_armorRepo.update(armor) != 0 ){
-                        m_inventory.setArmor(armor, m_armorSelectedForEdit);
+                        m_inventory.getArmors().set(m_armorSelectedForEdit, armor);
                         refreshArmorListView();
                     }
                 }
@@ -120,9 +120,9 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 		
 		case PTCharacterArmorEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an armor");
-			PTArmor armorToDelete = m_inventory.getArmor(m_armorSelectedForEdit);
+			PTArmor armorToDelete = m_inventory.getArmors().get(m_armorSelectedForEdit);
 			if (armorToDelete != null && m_armorRepo.delete(armorToDelete) != 0) {
-				m_inventory.deleteArmor(m_armorSelectedForEdit);
+				m_inventory.getArmors().remove(m_armorSelectedForEdit);
 				refreshArmorListView();
 			}
 			break;
@@ -154,6 +154,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 
 	@Override
 	public void loadFromDatabase() {
-		m_inventory.setArmor(m_armorRepo.querySet(getCurrentCharacterID()));
+		m_inventory.getArmors().clear();
+        m_inventory.getArmors().addAll(m_armorRepo.querySet(getCurrentCharacterID()));
 	}
 }

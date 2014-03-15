@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTFeatRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 
+import java.util.List;
+
 public class PTFeatRepositoryTest extends PTBaseRepositoryTest {
 	
 	private PTFeat m_feat1;
@@ -44,9 +46,9 @@ public class PTFeatRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTFeat[] queriedFeats = m_repo.querySet(m_characterId);
-		assertEquals(queriedFeats[0], m_feat1);
-		assertEquals(queriedFeats[1], m_feat2);
+		List<PTFeat> queriedFeats = m_repo.querySet(m_characterId);
+		assertEquals(queriedFeats.get(0), m_feat1);
+		assertEquals(queriedFeats.get(1), m_feat2);
 	}
 	
 	private static void assertEquals(PTFeat feat1, PTFeat feat2) {

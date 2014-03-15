@@ -1,7 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 
@@ -67,10 +69,11 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	
 	/**
 	 * Returns all skills for the character with characterId
-	 * @param characterId
-	 * @return Array of PTSkill, ordered alphabetically by name
+	 *
+     * @param characterId
+     * @return Array of PTSkill, ordered alphabetically by name
 	 */
-	public PTSkill[] querySet(long characterId) {
+	public List<PTSkill> querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = SKILL_KEY+" ASC, "+SUB_TYPE+" ASC";
 		String table = m_tableInfo.getTable();
@@ -78,14 +81,12 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTSkill[] skills = new PTSkill[cursor.getCount()];
-		cursor.moveToFirst();
-		int i = 0;
+		List<PTSkill> skills = Lists.newArrayListWithCapacity(cursor.getCount());
+        cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			skills[i] = buildFromHashTable(hashTable);
+			skills.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return skills;
 	}

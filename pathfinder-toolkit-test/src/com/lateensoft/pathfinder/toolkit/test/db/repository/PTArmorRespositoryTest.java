@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTArmorRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 
+import java.util.List;
+
 public class PTArmorRespositoryTest extends PTBaseRepositoryTest {	
 	private PTArmor m_armor1;
 	private PTArmor m_armor2;
@@ -56,9 +58,9 @@ public class PTArmorRespositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTArmor[] queriedItems = m_repo.querySet(m_characterId);
-		assertEquals(queriedItems[0], m_armor2);
-		assertEquals(queriedItems[1], m_armor1);
+		List<PTArmor> queriedItems = m_repo.querySet(m_characterId);
+		assertEquals(queriedItems.get(0), m_armor2);
+		assertEquals(queriedItems.get(1), m_armor1);
 	}
 	
 	public void testMaxDex() {

@@ -2,11 +2,13 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 
@@ -74,7 +76,7 @@ public class PTItemRepository extends PTBaseRepository<PTItem> {
 	 * @param characterId
 	 * @return Array of PTItem, ordered alphabetically by name
 	 */
-	public PTItem[] querySet(long characterId) {
+	public List<PTItem> querySet(long characterId) {
 		// TODO replace with constants from those tables
 		String table = m_tableInfo.getTable();
 		Locale l = null;
@@ -91,14 +93,12 @@ public class PTItemRepository extends PTBaseRepository<PTItem> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTItem[] items = new PTItem[cursor.getCount()];
+		List<PTItem> items = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			items[i] = buildFromHashTable(hashTable);
+			items.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return items;
 	}

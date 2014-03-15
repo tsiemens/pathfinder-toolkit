@@ -10,20 +10,20 @@ import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 
+import java.util.List;
+
 public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
 	@SuppressWarnings("unused")
 	private static final String TAG = PTArmorAdapter.class.getSimpleName();
 	
 	private Activity m_activity;
 	private int m_layoutResourceId;
-	private PTArmor[] m_armorArray = null;
-	
+
 	public PTArmorAdapter(Activity activity, int textViewResourceId,
-			PTArmor[] objects) {
+			List<PTArmor> objects) {
 		super(activity, textViewResourceId, objects);
 		m_layoutResourceId = textViewResourceId;
 		m_activity = activity;
-		m_armorArray = objects;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,16 +52,16 @@ public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
 			holder = (ArmorHolder)row.getTag();
 		}
 		
-		holder.name.setText(m_armorArray[position].getName());
-		holder.worn.setVisibility(m_armorArray[position].isWorn() ? View.VISIBLE : View.GONE);
-		holder.weight.setText(Double.toString(m_armorArray[position].getWeight()));
-		holder.ACBonus.setText(Integer.toString(m_armorArray[position].getACBonus()));
-		holder.checkPen.setText(Integer.toString(m_armorArray[position].getCheckPen()));
-		holder.maxDex.setText(Integer.toString(m_armorArray[position].getMaxDex()));
-		holder.specialProperties.setText(m_armorArray[position].getSpecialProperties());
-		holder.speed.setText(m_armorArray[position].getSpeedString());
-		holder.size.setText((m_armorArray[position].getSize()));
-		holder.spellFail.setText(Integer.toString(m_armorArray[position].getSpellFail()) + "%");
+		holder.name.setText(getItem(position).getName());
+		holder.worn.setVisibility(getItem(position).isWorn() ? View.VISIBLE : View.GONE);
+		holder.weight.setText(Double.toString(getItem(position).getWeight()));
+		holder.ACBonus.setText(Integer.toString(getItem(position).getACBonus()));
+		holder.checkPen.setText(Integer.toString(getItem(position).getCheckPen()));
+		holder.maxDex.setText(Integer.toString(getItem(position).getMaxDex()));
+		holder.specialProperties.setText(getItem(position).getSpecialProperties());
+		holder.speed.setText(getItem(position).getSpeedString());
+		holder.size.setText((getItem(position).getSize()));
+		holder.spellFail.setText(Integer.toString(getItem(position).getSpellFail()) + "%");
 		
 		return row;
 	}

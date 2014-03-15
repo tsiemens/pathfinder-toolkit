@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.os.Bundle;
@@ -21,11 +19,13 @@ public class PTInventory implements Parcelable {
 	private List<PTItem> m_items;
 	private List<PTArmor> m_armor;
 	private List<PTWeapon> m_weapons;
-	
-	public PTInventory(){
-		m_items = new ArrayList<PTItem>();
-		m_armor = new ArrayList<PTArmor>();
-		m_weapons = new ArrayList<PTWeapon>();
+
+
+
+    public PTInventory(){
+		m_items = Lists.newArrayList();
+		m_armor = Lists.newArrayList();
+		m_weapons = Lists.newArrayList();
 	}
 	
 	public PTInventory(Parcel in) {
@@ -43,254 +43,33 @@ public class PTInventory implements Parcelable {
 		objectBundle.putParcelableArrayList(PARCEL_BUNDLE_KEY_WEAPONS, Lists.newArrayList(m_weapons));
 		out.writeBundle(objectBundle);
 	}
-	
-	/**
-	 * Adds the item into the inventory. It is placed such that the list is alphabetically listed.
-	 * @param newItem
-	 */
-	public void addItem(PTItem newItem){
-		if( newItem != null ){
-			//If the item already exists in inventory, add to its quantity
-			int i = getIndexOf(newItem.getName());
-			if(i >= 0){
-				int quantity = newItem.getQuantity() + getItem(i).getQuantity();
-				setQuantity(i, quantity);
-				return;
-			}
-			
-			for(i = 0; i < m_items.size(); i++){
-				if(newItem.getName().compareToIgnoreCase(getItem(i).getName()) < 0 ){
-					m_items.add(i, newItem);
-					return;
-				}
-			}
-			//If item is to go at the end of the list
-			m_items.add(newItem);
-		}
-	}
-	
-	public void addArmor(PTArmor newArmor) {
-		if( newArmor != null ){
-			for(int i = 0; i < m_armor.size(); i++){
-				if(newArmor.getName().compareToIgnoreCase(getArmor(i).getName()) < 0 ){
-					m_armor.add(i, newArmor);
-					return;
-				}
-			}
-			//If item is to go at the end of the list
-			m_armor.add(newArmor);
-		}
-	}
-	
-	public void addWeapon(PTWeapon newWeapon) {
-		if( newWeapon != null ){
-			for(int i = 0; i < m_weapons.size(); i++){
-				if(newWeapon.getName().compareToIgnoreCase(getWeapon(i).getName()) < 0 ){
-					m_weapons.add(i, newWeapon);
-					return;
-				}
-			}
-			//If item is to go at the end of the list
-			m_weapons.add(newWeapon);
-		}
-	}
-	
-	/**
-	 * Add an alphabetically sorted array of PTItems
-	 * For use of database for population
-	 * @param items
-	 */
-	public void setItems(PTItem[] items) {
-		m_items =  new ArrayList<PTItem>(Arrays.asList(items));
-	}
-	
-	/**
-	 * Add an alphabetically sorted array of PTWeapons
-	 * For use of database for population
-	 * @param weapons
-	 */
-	public void setWeapons(PTWeapon[] weapons) {
-		m_weapons =  new ArrayList<PTWeapon>(Arrays.asList(weapons));
-	}
-	
-	/**
-	 * Add an alphabetically sorted array of PTArmors
-	 * For use of database for population
-	 * @param armors
-	 */
-	public void setArmor(PTArmor[] armors) {
-		m_armor = new ArrayList<PTArmor>(Arrays.asList(armors));
-	}
-		
-	/**
-	 * Deletes the item at index.
-	 * @param index
-	 */
-	public void deleteItem(int index){
-		if(index >= 0 && index < m_items.size())
-			m_items.remove(index);
-	}
-	
-	public void deleteArmor(int index) {
-		if(index >=0 && index < m_armor.size())
-			m_armor.remove(index);
-	}
-	
-	public void deleteWeapon(int index) {
-		if(index >= 0 && index < m_weapons.size())
-			m_weapons.remove(index);
-	}
-	
-	/**
-	 * 
-	 * @param index
-	 * @return the item at index
-	 */
-	public PTItem getItem(int index){
-		if(index >= 0 && index < m_items.size())
-			return m_items.get(index);
-		else return null; 
-	}
-	
-	public PTArmor getArmor(int index) {
-		if(index>= 0 && index < m_armor.size())
-			return m_armor.get(index);
-		else return null;
-	}
-	
-	public PTWeapon getWeapon(int index) {
-		if(index >= 0 && index < m_weapons.size())
-			return m_weapons.get(index);
-		else return null;
-	}	
-	
-	/**
-	 * 
-	 * @return new array of armor
-	 */
-	public PTArmor[] getArmorArray() {
-		PTArmor[] armorArray = new PTArmor[m_armor.size()];
-		return (PTArmor[]) m_armor.toArray(armorArray);
-	}
-	
-	public PTWeapon[] getWeaponArray() {
-		PTWeapon[] weaponArray = new PTWeapon[m_weapons.size()];
-		return (PTWeapon[]) m_weapons.toArray(weaponArray);
-	}
-	
-	/**
-	 * Replaces the item at index with newItem. If index is outside the bounds of this, or null, it will do nothing. Resorts the inventory alphabetically
-	 * @param newItem
-	 * @param index
-	 */
-	public void setItem(PTItem newItem, int index){
-		if(index >= 0 && index < m_items.size() && newItem != null){
-			deleteItem(index);
-			addItem(newItem);
-		}
-	}
-	
-	public void setArmor(PTArmor newArmor, int index) {
-		if(index >= 0 && index < m_armor.size() && newArmor != null) {
-			deleteArmor(index);
-			addArmor(newArmor);
-		}
-	}
-	
-	public void setWeapon(PTWeapon newWeapon, int index) {
-		if(index >= 0 && index < m_weapons.size() && newWeapon != null) {
-			deleteWeapon(index);
-			addWeapon(newWeapon);
-		}
-	}
-	
-	/**
-	 * returns an array of all the objects in the inventory
-	 * @return an array of PTItem objects
-	 */
-	public PTItem[] getItems(){
-		return m_items.toArray(new PTItem[m_items.size()]);		
-	}
-	
-	/**
-	 * Sets the weight of the item at index
-	 * @param index
-	 * @param weight
-	 */
-	public void setWeight(int index, int weight){
-		if(index >= 0 && index < m_items.size())
-			m_items.get(index).setWeight(weight);
-	}
-	
-	/**
-	 * Sets the quantity of the item at index
-	 * @param index
-	 * @param quantity
-	 */
-	public void setQuantity(int index, int quantity){
-		if(index >= 0 && index < m_items.size())
-			m_items.get(index).setQuantity(quantity);
-	}
-	
-	/**
-	 * Sets the item flag of the item at index if it is contained by another container 
-	 * @param index
-	 * @param isContained
-	 */
-	public void setContained(int index, boolean isContained){
-		if(index >= 0 && index < m_items.size())
-			m_items.get(index).setIsContained(isContained);
-	}
-	
-	/**
-	 * 
-	 * @param itemName
-	 * @return the index of the object with itemName. returns -1 if the item is not in the inventory.
-	 */
-	public int getIndexOf(String itemName){
-		for(int i = 0; i < m_items.size(); i++){
-			if(itemName.contentEquals(m_items.get(i).getName())){
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	public int getIndexOfArmor(String itemName){
-		for(int i = 0; i < m_armor.size(); i++){
-			if(itemName.contentEquals(m_armor.get(i).getName())){
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	public int getNumberOfItems(){
-		return m_items.size();
-	}
-	
-	public int getNumberOfArmor() {
-		return m_armor.size();
-	}
-	
-	public int getNumberofWeapons() {
-		return m_weapons.size();
-	}
-	
-	public double getTotalWeight() {
+
+    public List<PTItem> getItems() {
+        return m_items;
+    }
+
+    public List<PTArmor> getArmors() {
+        return m_armor;
+    }
+
+    public List<PTWeapon> getWeapons() {
+        return m_weapons;
+    }
+
+    public double getTotalWeight() {
 		double totalWeight = 0;
-		for(int i = 0; i < m_items.size(); i++) {
-			if(!m_items.get(i).isContained())
-				totalWeight += (m_items.get(i).getWeight())*(m_items.get(i).getQuantity());
-		}
-		for(int i = 0; i < m_weapons.size(); i++) {
-			if(!m_weapons.get(i).isContained())
-				totalWeight += (m_weapons.get(i).getWeight())*(m_weapons.get(i).getQuantity());
-		}
-		for(int i = 0; i < m_armor.size(); i++) {
-			if(!m_armor.get(i).isContained())
-				totalWeight += (m_armor.get(i).getWeight())*(m_armor.get(i).getQuantity());
-		}
+        for (PTItem item : m_items) {
+            if (!item.isContained())
+                totalWeight += (item.getWeight()) * (item.getQuantity());
+        }
+        for (PTWeapon weapon : m_weapons) {
+            if (!weapon.isContained())
+                totalWeight += (weapon.getWeight()) * (weapon.getQuantity());
+        }
+        for (PTArmor armor : m_armor) {
+            if (!armor.isContained())
+                totalWeight += (armor.getWeight()) * (armor.getQuantity());
+        }
 		
 		return totalWeight;
 	}

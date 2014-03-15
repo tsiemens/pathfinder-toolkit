@@ -94,7 +94,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Skills
 			PTSkillRepository skillRepo = new PTSkillRepository();
-			PTSkill[] skills = object.getSkillSet().getSkills();
+			List<PTSkill> skills = object.getSkillSet().getSkills();
 			for (PTSkill skill : skills) {
 				subCompId = skillRepo.insert(skill);
 				if (subCompId == -1) {
@@ -105,7 +105,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 
 			// Items
 			PTItemRepository itemRepo = new PTItemRepository();
-			PTItem[] items = object.getInventory().getItems();
+			List<PTItem> items = object.getInventory().getItems();
 			for (PTItem item : items) {
 				subCompId = itemRepo.insert(item);
 				if (subCompId == -1) {
@@ -116,7 +116,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Weapons
 			PTWeaponRepository weaponRepo = new PTWeaponRepository();
-			PTWeapon[] weapons = object.getInventory().getWeaponArray();
+			List<PTWeapon> weapons = object.getInventory().getWeapons();
 			for (PTWeapon weapon : weapons) {
 				subCompId = weaponRepo.insert(weapon);
 				if (subCompId == -1) {
@@ -127,7 +127,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Armor
 			PTArmorRepository armorRepo = new PTArmorRepository();
-			PTArmor[] armors = object.getInventory().getArmorArray();
+			List<PTArmor> armors = object.getInventory().getArmors();
 			for (PTArmor armor : armors) {
 				subCompId = armorRepo.insert(armor);
 				if (subCompId == -1) {
@@ -138,8 +138,8 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 			
 			// Feats
 			PTFeatRepository featRepo = new PTFeatRepository();
-			PTFeat[] feats = object.getFeatList().getFeats();
-			for (PTFeat feat : feats) {
+			PTFeatList featList = object.getFeatList();
+			for (PTFeat feat : featList) {
 				subCompId = featRepo.insert(feat);
 				if (subCompId == -1) {
 					delete(id);
@@ -189,15 +189,15 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTInventory inventory = new PTInventory();
 		// Items
 		PTItemRepository itemRepo = new PTItemRepository();
-		inventory.setItems(itemRepo.querySet(id));
+		inventory.getItems().addAll(itemRepo.querySet(id));
 		
 		// Weapons
 		PTWeaponRepository weaponRepo = new PTWeaponRepository();
-		inventory.setWeapons(weaponRepo.querySet(id));
+		inventory.getWeapons().addAll(weaponRepo.querySet(id));
 		
 		// Armor
 		PTArmorRepository armorRepo = new PTArmorRepository();
-		inventory.setArmor(armorRepo.querySet(id));
+		inventory.getArmors().addAll(armorRepo.querySet(id));
 		
 		// Feats
 		PTFeatRepository featRepo = new PTFeatRepository();

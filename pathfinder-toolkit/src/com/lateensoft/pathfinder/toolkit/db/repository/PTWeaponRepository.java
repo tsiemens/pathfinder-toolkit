@@ -1,11 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 
@@ -136,7 +138,7 @@ public class PTWeaponRepository extends PTBaseRepository<PTWeapon> {
 	 * @param characterId
 	 * @return Array of PTItem, ordered alphabetically by name
 	 */
-	public PTWeapon[] querySet(long characterId) {
+	public List<PTWeapon> querySet(long characterId) {
 		String table = PTItemRepository.TABLE + ", " + m_tableInfo.getTable();
 		Locale l = null;
 		String selector = String.format(l, "%s=%d AND %s.%s=%s.%s",
@@ -148,15 +150,13 @@ public class PTWeaponRepository extends PTBaseRepository<PTWeapon> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTWeapon[] weapons = new PTWeapon[cursor.getCount()];
+		List<PTWeapon> weapons = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  m_itemRepo.getTableOfValues(cursor);
 			hashTable.putAll(getTableOfValues(cursor));
-			weapons[i] = buildFromHashTable(hashTable);
+			weapons.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return weapons;
 	}

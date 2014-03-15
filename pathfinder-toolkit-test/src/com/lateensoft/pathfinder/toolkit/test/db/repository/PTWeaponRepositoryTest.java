@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTWeaponRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 
+import java.util.List;
+
 public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {	
 	private PTWeapon m_weapon1;
 	private PTWeapon m_weapon2;
@@ -56,9 +58,9 @@ public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTWeapon[] queriedItems = m_repo.querySet(m_characterId);
-		assertEquals(queriedItems[0], m_weapon1);
-		assertEquals(queriedItems[1], m_weapon2);
+		List<PTWeapon> queriedItems = m_repo.querySet(m_characterId);
+		assertEquals(queriedItems.get(0), m_weapon1);
+		assertEquals(queriedItems.get(1), m_weapon2);
 	}
 
 	public static void setValues(PTWeapon toUpdate, long id, long characterId, String name,
@@ -67,8 +69,8 @@ public class PTWeaponRepositoryTest extends PTBaseRepositoryTest {
 		toUpdate.setID(id);
 		toUpdate.setCharacterID(characterId);
 		toUpdate.setName(name);
-		toUpdate.setWeight(5.0);
-		toUpdate.setTotalAttackBonus(3);
+		toUpdate.setWeight(weight);
+		toUpdate.setTotalAttackBonus(totalAttackB);
 		toUpdate.setDamage(dmg);
 		toUpdate.setCritical(crit);
 		toUpdate.setRange(range);

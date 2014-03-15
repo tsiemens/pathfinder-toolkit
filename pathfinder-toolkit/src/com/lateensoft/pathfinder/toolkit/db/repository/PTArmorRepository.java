@@ -1,11 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 
@@ -136,7 +138,7 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 	 * @param characterId
 	 * @return Array of PTItem, ordered alphabetically by name
 	 */
-	public PTArmor[] querySet(long characterId) {
+	public List<PTArmor> querySet(long characterId) {
 		String table = PTItemRepository.TABLE + ", " + m_tableInfo.getTable();
 		Locale l = null;
 		String selector = String.format(l, "%s=%d AND %s.%s=%s.%s",
@@ -148,15 +150,13 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTArmor[] armors = new PTArmor[cursor.getCount()];
+		List<PTArmor> armors = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  m_itemRepo.getTableOfValues(cursor);
 			hashTable.putAll(getTableOfValues(cursor));
-			armors[i] = buildFromHashTable(hashTable);
+			armors.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return armors;
 	}
@@ -166,7 +166,7 @@ public class PTArmorRepository extends PTBaseRepository<PTArmor> {
 	 * @return the max dex permitted out of all worn armors
 	 */
 	public int getMaxDex(long characterId) {
-		PTArmor[] armors = querySet(characterId);
+		List<PTArmor> armors = querySet(characterId);
 		int maxDex = Integer.MAX_VALUE;
 		for (PTArmor armor : armors) {
 			if (armor.isWorn() && armor.getMaxDex() < maxDex) {

@@ -145,7 +145,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 				}
 				// Adding is in case they delete the only unranked skill
 				addNewSubSkills();
-				setSkillsAdapter();
+				updateSkillsList();
 			}
 			break;
 		
@@ -159,29 +159,17 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 	}
 
 	private void updateSkillsList() {
-		if(m_skillSet.size() !=  m_skillsListView.getAdapter().getCount()) {
-			setSkillsAdapter();
-		} else if (m_trainedFilterCheckBox.isChecked()) {
-			((PTSkillsAdapter) m_skillsListView.getAdapter())
-					.updateList(m_skillSet.getTrainedSkills());
-		} else {
-			((PTSkillsAdapter) m_skillsListView.getAdapter())
-					.updateList(m_skillSet.getSkills());
-		}
-	}
-
-	private void setSkillsAdapter() {
-		PTSkillsAdapter adapter;
-		if (m_trainedFilterCheckBox.isChecked()) {
-			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
-					m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
-		} else {
-			adapter = new PTSkillsAdapter(getActivity(),
-					R.layout.character_skill_row, m_skillSet.getSkills(),
-					m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
-		}
-		m_skillsListView.setAdapter(adapter);
+        PTSkillsAdapter adapter;
+        if (m_trainedFilterCheckBox.isChecked()) {
+            adapter = new PTSkillsAdapter(getActivity(),
+                    R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
+                    m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
+        } else {
+            adapter = new PTSkillsAdapter(getActivity(),
+                    R.layout.character_skill_row, m_skillSet.getSkills(),
+                    m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
+        }
+        m_skillsListView.setAdapter(adapter);
 	}
 	
 	private int getAppliedArmorCheckPenalty() {
@@ -190,7 +178,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 
 	@Override
 	public void updateFragmentUI() {
-		setSkillsAdapter();
+		updateSkillsList();
 	}
 
 	@Override
@@ -212,7 +200,7 @@ public class PTCharacterSkillsFragment extends PTCharacterSheetFragment
 		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
 	}
 
-    private PTSkill[] validateSkills(PTSkill[] skills) {
+    private List<PTSkill> validateSkills(List<PTSkill> skills) {
         for (PTSkill skill : skills) {
             if (!PTAbilitySet.isValidAbility(skill.getAbilityKey())) {
                 skill.setAbilityKey(

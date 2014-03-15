@@ -90,34 +90,34 @@ public class PTCharacterConverter {
 			newFeat = new PTFeat();
 			newFeat.setName(oldFeatList.getFeat(i).getName());
 			newFeat.setDescription(oldFeatList.getFeat(i).getDescription());
-			newFeatList.addFeat(newFeat);
+			newFeatList.add(newFeat);
 		}
 	}
 	
 	private static void setInventory(PTInventory newInv, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacterInventory oldInv) {
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTItem[] oldItems = oldInv.getItems();
 		PTItem newItem;
-		for (int i = 0; i < oldItems.length; i++) {
-			newItem = new PTItem();
-			setItem(newItem, oldItems[i]);
-			newInv.addItem(newItem);
-		}
+        for (com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTItem oldItem : oldItems) {
+            newItem = new PTItem();
+            setItem(newItem, oldItem);
+            newInv.getItems().add(newItem);
+        }
 		
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTWeapon[] oldWeapons = oldInv.getWeaponArray();
 		PTWeapon newWeapon;
-		for (int i = 0; i < oldWeapons.length; i++) {
-			newWeapon = new PTWeapon();
-			setWeapon(newWeapon, oldWeapons[i]);
-			newInv.addWeapon(newWeapon);
-		}
+        for (com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTWeapon oldWeapon : oldWeapons) {
+            newWeapon = new PTWeapon();
+            setWeapon(newWeapon, oldWeapon);
+            newInv.getWeapons().add(newWeapon);
+        }
 		
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTArmor[] oldArmors = oldInv.getArmorArray();
 		PTArmor newArmor;
-		for (int i = 0; i < oldArmors.length; i++) {
-			newArmor = new PTArmor();
-			setArmor(newArmor, oldArmors[i]);
-			newInv.addArmor(newArmor);
-		}
+        for (com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTArmor oldArmor : oldArmors) {
+            newArmor = new PTArmor();
+            setArmor(newArmor, oldArmor);
+            newInv.getArmors().add(newArmor);
+        }
 	}
 	
 	private static void setItem(PTItem newItem, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTItem oldItem) {
@@ -182,11 +182,11 @@ public class PTCharacterConverter {
 	private static void setSpells(PTSpellBook newSpells, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTSpellBook oldSpells) {
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTSpell[] oldSpellArray = oldSpells.getSpells();
 		PTSpell newSpell;
-		for (int i = 0; i < oldSpellArray.length; i++) {
-			newSpell = new PTSpell();
-			setSpell(newSpell, oldSpellArray[i]);
-			newSpells.add(newSpell);
-		}
+        for (com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTSpell anOldSpellArray : oldSpellArray) {
+            newSpell = new PTSpell();
+            setSpell(newSpell, anOldSpellArray);
+            newSpells.add(newSpell);
+        }
 	}
 	
 	private static void setSpell(PTSpell newSpell, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTSpell oldSpell) {

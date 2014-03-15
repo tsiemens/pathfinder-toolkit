@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTSpellRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 
+import java.util.List;
+
 public class PTSpellRepositoryTest extends PTBaseRepositoryTest {
 	
 	private PTSpell m_spell1;
@@ -44,9 +46,9 @@ public class PTSpellRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTSpell[] queriedSpells = m_repo.querySet(m_characterId);
-		assertEquals(queriedSpells[0], m_spell1);
-		assertEquals(queriedSpells[1], m_spell2);
+		List<PTSpell> queriedSpells = m_repo.querySet(m_characterId);
+		assertEquals(queriedSpells.get(0), m_spell1);
+		assertEquals(queriedSpells.get(1), m_spell2);
 	}
 	
 	private static void assertEquals(PTSpell spell1, PTSpell spell2) {

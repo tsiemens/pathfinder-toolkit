@@ -1,9 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,12 +9,11 @@ import android.os.Parcelable;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTSkillSet implements Parcelable {
-	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
-	
 	public static final int ACRO = 1;
     public static final int APPRAISE = 2;
     public static final int BLUFF = 3;
@@ -54,7 +50,7 @@ public class PTSkillSet implements Parcelable {
     public static final int SWIM = 34;
     public static final int USE_MAGIC_DEVICE = 35;
     
-	PTSkill[] m_skills;
+	List<PTSkill> m_skills;
 	
 	/**
 	 * @return an unmodifiable list of the skill keys, in order.
@@ -79,10 +75,10 @@ public class PTSkillSet implements Parcelable {
 	public PTSkillSet() {
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
 		List<Integer> constSkillKeys = SKILL_KEYS();
-		m_skills = new PTSkill[constSkillKeys.size()];
+		m_skills = Lists.newArrayListWithCapacity(constSkillKeys.size());
 		
 		for(int i = 0; i < constSkillKeys.size(); i++) {
-			m_skills[i] = new PTSkill(constSkillKeys.get(i), defaultSkillAbilityIds[i]);
+			m_skills.add(new PTSkill(constSkillKeys.get(i), defaultSkillAbilityIds[i]));
 		}
 	}
 	
@@ -91,25 +87,18 @@ public class PTSkillSet implements Parcelable {
 	 * Sets skill to default if not found.
 	 * @param skills
 	 */
-	public PTSkillSet(PTSkill[] skills) {
-		List<PTSkill> skillsList = new ArrayList<PTSkill>(Arrays.asList(skills));
-		
-		verifySortSkills(skillsList);
-		
-		m_skills = new PTSkill[skillsList.size()];
-		skillsList.toArray(m_skills);
+	public PTSkillSet(Collection<? extends PTSkill> skills) {
+        m_skills = Lists.newArrayList(skills);
+		verifySortSkills(m_skills);
 	}
 	
 	public PTSkillSet(Parcel in) {
-		Bundle objectBundle = in.readBundle();
-		m_skills = (PTSkill[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SKILLS);
+        in.readTypedList(m_skills, PTSkill.CREATOR);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SKILLS, m_skills);
-		out.writeBundle(objectBundle);
+        out.writeTypedList(m_skills);
 	}
 	
 	/**
@@ -144,8 +133,8 @@ public class PTSkillSet implements Parcelable {
 	}
 	
 	public PTSkill getSkillByIndex(int index) {
-		if( index >= 0 && index < m_skills.length )
-			return m_skills[index];
+		if( index >= 0 && index < m_skills.size() )
+			return m_skills.get(index);
 		else
 			return null;
 	}
@@ -161,10 +150,10 @@ public class PTSkillSet implements Parcelable {
 	 */
 	public PTSkill getTrainedSkill(int index){
 		int trainedSkillIndex = 0;
-		for (int i = 0; i < m_skills.length; i++) {
-			if (m_skills[i].getRank() > 0) {
+		for (int i = 0; i < m_skills.size(); i++) {
+			if (m_skills.get(i).getRank() > 0) {
 				if (trainedSkillIndex == index){
-					return m_skills[i];
+					return m_skills.get(i);
 				} else {
 					trainedSkillIndex++;
 				}
@@ -173,52 +162,36 @@ public class PTSkillSet implements Parcelable {
 		return null;
 	}
 	
-	public PTSkill[] getSkills(){
+	public List<PTSkill> getSkills(){
 		return m_skills;
 	}
 	
 	public int size() {
-		return m_skills.length;
+		return m_skills.size();
 	}
 	
-	public PTSkill[] getTrainedSkills(){
+	public ArrayList<PTSkill> getTrainedSkills(){
 		ArrayList<PTSkill> trainedSkills = new ArrayList<PTSkill>();
-		for (int i = 0; i < m_skills.length; i++) {
-			if (m_skills[i].getRank() > 0) {
-				trainedSkills.add(m_skills[i]);
+		for (int i = 0; i < m_skills.size(); i++) {
+			if (m_skills.get(i).getRank() > 0) {
+				trainedSkills.add(m_skills.get(i));
 			}
 		}
-		PTSkill[] returnArray = new PTSkill[trainedSkills.size()];
-		return trainedSkills.toArray(returnArray);
+
+        return trainedSkills;
 	}
 	
 	public PTSkill addNewSubSkill(int skillKey) {
-		List<PTSkill> skilllist = new ArrayList<PTSkill>(Arrays.asList(m_skills));
 		int abilityKey = getDefaultAbilityKeyMap().get(skillKey);
 		PTSkill newSkill = new PTSkill(skillKey, abilityKey);
-		newSkill.setCharacterID(m_skills[0].getCharacterID());
-		skilllist.add(newSkill);
-		Collections.sort(skilllist);
-		m_skills = new PTSkill[skilllist.size()];
-		skilllist.toArray(m_skills);
+		newSkill.setCharacterID(m_skills.get(0).getCharacterID());
+		m_skills.add(newSkill);
+		Collections.sort(m_skills);
 		return newSkill;
 	}
 	
 	public void deleteSkill(PTSkill skill) {
-		PTSkill skillForDelete = null;
-		for (int i = 0; i < m_skills.length; i++) {
-			if (m_skills[i].getID() == skill.getID()) {
-				skillForDelete = m_skills[i];
-				break;
-			}
-		}
-		
-		if (skillForDelete != null) {
-			List<PTSkill> skilllist = new ArrayList<PTSkill>(Arrays.asList(m_skills));
-			skilllist.remove(skillForDelete);
-			m_skills = new PTSkill[skilllist.size()];
-			skilllist.toArray(m_skills);
-		}
+		m_skills.remove(skill);
 	}
 	
 	/**
@@ -244,9 +217,9 @@ public class PTSkillSet implements Parcelable {
 	 * @return true if all subtypes of this skill are either trained or named
 	 */
 	public boolean allSubSkillsUsed(int skillKey) {
-		for (int i = 0; i < m_skills.length; i++) {
-			if (m_skills[i].getSkillKey() == skillKey && m_skills[i].getRank() == 0 
-					&& (m_skills[i].getSubType() == null || m_skills[i].getSubType().isEmpty()) ) {
+		for (int i = 0; i < m_skills.size(); i++) {
+			if (m_skills.get(i).getSkillKey() == skillKey && m_skills.get(i).getRank() == 0
+					&& (m_skills.get(i).getSubType() == null || m_skills.get(i).getSubType().isEmpty()) ) {
 				return false;
 			}
 		}

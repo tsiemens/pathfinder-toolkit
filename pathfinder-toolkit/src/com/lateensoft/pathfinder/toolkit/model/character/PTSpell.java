@@ -141,6 +141,6 @@ public class PTSpell implements Parcelable, PTStorable, Comparable<PTSpell> {
     @Override
     public int compareTo(PTSpell another) {
         int comparison = this.getLevel() - another.getLevel();
-        return (comparison != 0) ? comparison : this.getName().compareTo(another.getName());
+        return (comparison != 0) ? comparison : this.getName().compareToIgnoreCase(another.getName());
     }
 }

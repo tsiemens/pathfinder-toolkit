@@ -11,16 +11,16 @@ import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
 
+import java.util.List;
+
 public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 	Context m_context;
 	int m_layoutResourceId;
-	PTWeapon[] m_weapons = null;
 	
-	public PTWeaponAdapter(Context context, int layoutResourceId, PTWeapon[] weapons) {
+	public PTWeaponAdapter(Context context, int layoutResourceId, List<PTWeapon> weapons) {
 		super(context, layoutResourceId, weapons);
 		m_layoutResourceId = layoutResourceId;
 		m_context = context;
-		m_weapons = weapons;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -50,16 +50,16 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 			holder = (WeaponHolder)row.getTag();
 		}
 		
-		holder.name.setText(m_weapons[position].getName());
-		holder.weight.setText(Double.toString(m_weapons[position].getWeight()));
-		holder.totalAttackBonus.setText(Integer.toString(m_weapons[position].getTotalAttackBonus()));
-		holder.damage.setText(m_weapons[position].getDamage());
-		holder.range.setText(Integer.toString(m_weapons[position].getRange()));
-		holder.specialProperties.setText(m_weapons[position].getSpecialProperties());
-		holder.type.setText(m_weapons[position].getType());
-		holder.size.setText(m_weapons[position].getSize());
-		holder.critical.setText(m_weapons[position].getCritical());
-		holder.ammo.setText(Integer.toString(m_weapons[position].getAmmunition()));
+		holder.name.setText(getItem(position).getName());
+		holder.weight.setText(Double.toString(getItem(position).getWeight()));
+		holder.totalAttackBonus.setText(Integer.toString(getItem(position).getTotalAttackBonus()));
+		holder.damage.setText(getItem(position).getDamage());
+		holder.range.setText(Integer.toString(getItem(position).getRange()));
+		holder.specialProperties.setText(getItem(position).getSpecialProperties());
+		holder.type.setText(getItem(position).getType());
+		holder.size.setText(getItem(position).getSize());
+		holder.critical.setText(getItem(position).getCritical());
+		holder.ammo.setText(Integer.toString(getItem(position).getAmmunition()));
 		
 		return row;
 	}

@@ -12,17 +12,16 @@ import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 
+import java.util.List;
+
 public class PTInventoryAdapter extends ArrayAdapter<PTItem>{
 	Context mContext;
 	int mLayoutResourceId;
-	PTItem[] mItems = null;
-	String TAG = "PTInventoryAdapter";
-	
-	public PTInventoryAdapter(Context context, int layoutResourceId, PTItem[] items) {
+
+	public PTInventoryAdapter(Context context, int layoutResourceId, List<PTItem> items) {
 		super(context, layoutResourceId, items);
 		mLayoutResourceId = layoutResourceId;
 		mContext = context;
-		mItems = items;		
 	}
 	
 	@Override
@@ -47,13 +46,13 @@ public class PTInventoryAdapter extends ArrayAdapter<PTItem>{
 			holder = (SkillHolder)row.getTag();
 		}
 		
-		holder.quantity.setText(Integer.toString(mItems[position].getQuantity()));
+		holder.quantity.setText(Integer.toString(getItem(position).getQuantity()));
 	
-		holder.name.setText(mItems[position].getName());
+		holder.name.setText(getItem(position).getName());
 
-		holder.weight.setText(Double.toString(mItems[position].getWeight()));
+		holder.weight.setText(Double.toString(getItem(position).getWeight()));
 		
-		if(mItems[position].isContained())
+		if(getItem(position).isContained())
 			holder.contained.setText("\u2713"); //Check mark
 		else holder.contained.setText("");
 		
@@ -66,10 +65,4 @@ public class PTInventoryAdapter extends ArrayAdapter<PTItem>{
 		TextView weight;
 		TextView contained;
 	}
-	
-	public void refill(PTItem[] items){
-		mItems = items;
-		notifyDataSetChanged();
-	}
-
 }

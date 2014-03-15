@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.test.db.repository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 
+import java.util.List;
+
 public class PTItemRepositoryTest extends PTBaseRepositoryTest {	
 	private PTItem m_item1;
 	private PTItem m_item2;
@@ -46,9 +48,9 @@ public class PTItemRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTItem[] queriedItems = m_repo.querySet(m_characterId);
-		assertEquals(queriedItems[0], m_item1);
-		assertEquals(queriedItems[1], m_item2);
+		List<PTItem> queriedItems = m_repo.querySet(m_characterId);
+		assertEquals(queriedItems.get(0), m_item1);
+		assertEquals(queriedItems.get(1), m_item2);
 	}
 	
 	public static void assertEquals(PTItem item1, PTItem item2) {

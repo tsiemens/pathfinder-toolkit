@@ -20,6 +20,8 @@ import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
+import java.util.Collections;
+
 public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		implements OnClickListener, OnItemClickListener {
 
@@ -57,12 +59,12 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	}
 
 	private void refreshFeatsListView() {
+        Collections.sort(m_featList);
 		String[] featNames = m_featList.getFeatNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_list_item_1,
 				featNames);
 		m_featsListView.setAdapter(adapter);
-
 	}
 
 	// Add Feat button was tapped
@@ -75,7 +77,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		m_featSelectedForEdit = position;
-		showFeatEditor(m_featList.getFeat(position));
+		showFeatEditor(m_featList.get(position));
 
 	}
 	
@@ -100,13 +102,13 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
                     Log.v(TAG, "Adding a feat");
                     feat.setCharacterID(getCurrentCharacterID());
                     if(m_featRepo.insert(feat) != -1) {
-                        m_featList.addFeat(feat);
+                        m_featList.add(feat);
                         refreshFeatsListView();
                     }
                 } else {
                     Log.v(TAG, "Editing a feat");
                     if(m_featRepo.update(feat) != 0) {
-                        m_featList.setFeat(feat, m_featSelectedForEdit);
+                        m_featList.set(m_featSelectedForEdit, feat);
                         refreshFeatsListView();
                     }
                 }
@@ -116,9 +118,9 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 		
 		case PTCharacterFeatEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting an item");
-			PTFeat featToDelete = m_featList.getFeat(m_featSelectedForEdit);
+			PTFeat featToDelete = m_featList.get(m_featSelectedForEdit);
 			if(featToDelete != null && m_featRepo.delete(featToDelete) != 0) {
-				m_featList.deleteFeat(m_featSelectedForEdit);
+				m_featList.remove(m_featSelectedForEdit);
 				refreshFeatsListView();
 			}
 			break;

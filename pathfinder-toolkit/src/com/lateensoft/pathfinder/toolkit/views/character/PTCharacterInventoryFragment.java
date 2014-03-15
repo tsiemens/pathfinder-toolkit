@@ -23,6 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.views.PTParcelableEditorActivity;
 
+import java.util.Collections;
+import java.util.List;
+
 public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 	private static final String TAG = PTCharacterInventoryFragment.class.getSimpleName();
 	
@@ -73,7 +76,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 		m_itemsListView.setOnItemClickListener(new OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 m_itemIndexSelectedForEdit = position;
-                showItemEditor(m_character.getInventory().getItem(position));
+                showItemEditor(m_character.getInventory().getItems().get(position));
             }
         });
 		
@@ -81,7 +84,8 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 	}
 
 	private void refreshItemsListView(){
-		PTItem[] items = m_character.getInventory().getItems();	
+		List<PTItem> items = m_character.getInventory().getItems();
+        Collections.sort(items);
 	
 		PTInventoryAdapter adapter = new PTInventoryAdapter(getActivity(), R.layout.character_inventory_row, items);
 		m_itemsListView.setAdapter(adapter);
@@ -116,14 +120,14 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
                     Log.i(TAG, "Adding item "+item.getName());
                     item.setCharacterID(getCurrentCharacterID());
                     if (m_itemRepo.insert(item) != -1) {
-                        m_character.getInventory().addItem(item);
+                        m_character.getInventory().getItems().add(item);
                         refreshItemsListView();
                         updateTotalWeight();
                     }
                 } else {
                     Log.v(TAG, "Editing an item "+item.getName());
                     if (m_itemRepo.update(item) != 0) {
-                        m_character.getInventory().setItem(item, m_itemIndexSelectedForEdit);
+                        m_character.getInventory().getItems().set(m_itemIndexSelectedForEdit, item);
                         refreshItemsListView();
                         updateTotalWeight();
                     }
@@ -133,10 +137,10 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
             break;
 		
 		case PTCharacterInventoryEditActivity.RESULT_DELETE:
-			PTItem itemToDelete = m_character.getInventory().getItem(m_itemIndexSelectedForEdit);
+			PTItem itemToDelete = m_character.getInventory().getItems().get(m_itemIndexSelectedForEdit);
 			Log.i(TAG, "Deleting item "+itemToDelete.getName());
 			if(itemToDelete != null && m_itemRepo.delete(itemToDelete) != 0 ) {
-				m_character.getInventory().deleteItem(m_itemIndexSelectedForEdit);
+				m_character.getInventory().getItems().remove(m_itemIndexSelectedForEdit);
 				refreshItemsListView();
 				updateTotalWeight();
 			}

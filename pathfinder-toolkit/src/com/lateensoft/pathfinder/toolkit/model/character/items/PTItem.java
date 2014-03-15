@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PTStorable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PTItem implements Parcelable, PTStorable {
+public class PTItem implements Parcelable, PTStorable, Comparable<PTItem> {
 	String m_name;
 	double m_weight;
 	int m_quantity;
@@ -136,4 +136,9 @@ public class PTItem implements Parcelable, PTStorable {
 			return new PTItem[size];
 		}
 	};
+
+    @Override
+    public int compareTo(PTItem another) {
+        return this.getName().compareToIgnoreCase(another.getName());
+    }
 }

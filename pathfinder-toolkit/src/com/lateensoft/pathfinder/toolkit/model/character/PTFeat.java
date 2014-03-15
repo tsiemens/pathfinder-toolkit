@@ -11,7 +11,7 @@ import android.os.Parcelable;
  * @author trevsiemens
  *
  */
-public class PTFeat implements Parcelable, PTStorable {
+public class PTFeat implements Parcelable, PTStorable, Comparable<PTFeat> {
 	private String m_name;
 	private String m_description;
 	
@@ -29,13 +29,13 @@ public class PTFeat implements Parcelable, PTStorable {
 	public PTFeat(long id, long characterId, String name, String description){
 		m_id = id;
 		m_characterId = characterId;
-		m_name = new String(name);
-		m_description = new String (description);
+		m_name = name;
+		m_description = description;
 	}
 	
 	public PTFeat(PTFeat otherFeat){
-		m_name = new String(otherFeat.getName());
-		m_description = new String (otherFeat.getDescription());
+		m_name = otherFeat.getName();
+		m_description = otherFeat.getDescription();
 		m_id = otherFeat.getID();
 		m_characterId = otherFeat.getCharacterID();
 	}
@@ -108,4 +108,8 @@ public class PTFeat implements Parcelable, PTStorable {
 		}
 	};
 
+    @Override
+    public int compareTo(PTFeat another) {
+        return this.getName().compareToIgnoreCase(another.getName());
+    }
 }
