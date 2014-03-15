@@ -27,7 +27,8 @@
     <dimen name="ability_calc_dialog_row_height">50sp</dimen>
     
     <dimen name="small_divider">1dp</dimen>
-    
+    <dimen name="large_divider">2dp</dimen>
+
     <dimen name="button_background_corner_radius">2dp</dimen>
     <dimen name="combat_stats_side_padding">10dp</dimen>
 </resources>

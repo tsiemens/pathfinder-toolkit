@@ -10,7 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ExpandableListView 
+    <RelativeLayout
         android:id="@+id/left_drawer"
-        style="@style/navDrawerStyle"/>
+        style="@style/navDrawerListStyle" >
+
+        <LinearLayout
+            android:id="@+id/bottom_bar"
+            style="@style/navDrawerBottomBarStyle"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:clickable="true" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/large_divider"
+                android:background="@android:color/holo_blue_light"/>
+
+            <LinearLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/iv_settings_button"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="?android:attr/actionButtonStyle"
+                    android:src="@drawable/ic_action_settings"
+                    android:clickable="true"
+                    android:contentDescription="@null"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ExpandableListView
+            android:id="@+id/drawer_exp_lv"
+            android:layout_above="@id/bottom_bar"
+            style="@style/navDrawerListStyle" />
+
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

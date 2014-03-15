@@ -104,8 +104,8 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			if (getRootView() != null) {
 				updateFragmentUI();
 			}
-
 		}
+		updateTitle();
 	}
 
 	/**
@@ -261,7 +261,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 		case R.id.mi_character_list:
 			// Check if "currently selected" character is the same as saved one
 			if (m_characterSelectedInDialog != m_currentCharacterID) {
-				performUpdateReset();
+				updateDatabase();
 
 				PTSharedPreferences.getInstance().putLong(
 						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, m_characterSelectedInDialog);
