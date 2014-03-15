@@ -62,7 +62,7 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 		holder.level.setText(Integer.toString(mSpells[position].getLevel()));
 		holder.name.setText(mSpells[position].getName());
 		holder.prepared.setText(Integer.toString(mSpells[position].getPrepared()));
-		holder.description.setText(mSpells[position].getDescription());
+		holder.description.setText(mSpells[position].getDescription().split("\\r?\\n")[0]);
 
 		Log.v(TAG, "Finishing getView"); //TODO:Debug log
 		return row;

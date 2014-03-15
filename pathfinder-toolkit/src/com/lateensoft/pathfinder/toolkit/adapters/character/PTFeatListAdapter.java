@@ -48,7 +48,7 @@ public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
 		}
 
 		holder.name.setText(mFeats[position].getName());
-		holder.description.setText(mFeats[position].getDescription());
+		holder.description.setText(mFeats[position].getDescription().split("\\r?\\n")[0]);
 
 		Log.v(TAG, "Finishing getView"); //TODO:Debug log
 		return row;
