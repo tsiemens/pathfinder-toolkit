@@ -10,11 +10,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.adapters.character.PTFeatListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTFeatRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
@@ -57,10 +57,13 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	}
 
 	private void refreshFeatsListView() {
-		String[] featNames = m_featList.getFeatNames();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getActivity(), android.R.layout.simple_list_item_1,
-				featNames);
+
+		PTFeatListAdapter adapter = new PTFeatListAdapter(getActivity(),
+				R.layout.character_feats_row,
+				m_featList.getFeats());
+
+		Log.v(TAG, "Called refreshFeatsListView");
+
 		m_featsListView.setAdapter(adapter);
 
 	}
@@ -69,16 +72,14 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	public void onClick(View button) {
 		m_featSelectedForEdit = -1;
 		showFeatEditor(null);
-
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		m_featSelectedForEdit = position;
 		showFeatEditor(m_featList.getFeat(position));
-
 	}
-	
+
 	private void showFeatEditor(PTFeat feat) {
 		Intent featEditIntent = new Intent(getActivity(),
 				PTCharacterFeatEditActivity.class);
