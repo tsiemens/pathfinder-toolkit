@@ -17,7 +17,7 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 	int mLayoutResourceId;
 	PTSpell[] mSpells = null;
 	String TAG = "PTSpellBookAdapter";
-	
+
 	public PTSpellBookAdapter(Context context, int layoutResourceId,
 			PTSpell[] spells) {
 		super(context, layoutResourceId, spells);
@@ -39,9 +39,9 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 	        row = ((LayoutInflater)((Activity) parent.getContext()).getLayoutInflater())
 	        .inflate(mLayoutResourceId,null);
 		}*/
-		
+
 		SpellItemHolder holder;
-		
+
 		if(row == null) {
 			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
 			
@@ -51,24 +51,27 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 			holder.level = (TextView)row.findViewById(R.id.spellLevel);
 			holder.name = (TextView)row.findViewById(R.id.spellName);
 			holder.prepared = (TextView)row.findViewById(R.id.spellPrepared);
-			
+			holder.description = (TextView)row.findViewById(R.id.spellDescription);
+
 			row.setTag(holder);
 		}
 		else {
 			holder = (SpellItemHolder)row.getTag();
 		}
-		
+
 		holder.level.setText(Integer.toString(mSpells[position].getLevel()));
 		holder.name.setText(mSpells[position].getName());
 		holder.prepared.setText(Integer.toString(mSpells[position].getPrepared()));
-		
+		holder.description.setText(mSpells[position].getDescription());
+
 		Log.v(TAG, "Finishing getView"); //TODO:Debug log
 		return row;
 	}
-	
+
 	static class SpellItemHolder {
 		TextView prepared;
 		TextView name;
 		TextView level;
+		TextView description;
 	}
 }

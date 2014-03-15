@@ -34,7 +34,6 @@
         android:gravity="right|center_vertical"
         android:maxLines="1"
         android:paddingRight="15dp"
-        android:textColor="@color/subtle_text"
-        android:visibility="gone"/>
+        android:textColor="@color/subtle_text" />
 
 </LinearLayout>
