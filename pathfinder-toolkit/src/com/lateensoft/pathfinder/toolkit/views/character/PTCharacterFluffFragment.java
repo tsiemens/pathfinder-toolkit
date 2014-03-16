@@ -1,13 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -55,21 +53,17 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		m_fluffSelectedForEdit = position;
 		showItemDialog(position);
 	}
-	
-	/**
-	 * Shows a dialog to edit fluff field.
-	 * @param item
-	 */
+
 	private void showItemDialog(int fluffIndex) {
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		//Set up dialog layout
-		LayoutInflater inflater = getActivity().getLayoutInflater();
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 
 		View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
 		m_dialogET = (EditText) dialogView.findViewById(R.id.dialogFluffText);
 		
-		builder.setTitle(m_fluffModel.getFluffFields(getActivity())[fluffIndex]);
+		builder.setTitle(m_fluffModel.getFluffFields(getContext())[fluffIndex]);
 		m_dialogET.setText(m_fluffModel.getFluffArray()[fluffIndex]);
 		
 		builder.setView(dialogView)
@@ -82,7 +76,7 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 	
 	private void refreshFluffListView() {
 		if (m_fluffModel != null) {
-			PTFluffAdapter adapter = new PTFluffAdapter(getActivity(),
+			PTFluffAdapter adapter = new PTFluffAdapter(getContext(),
 					R.layout.character_fluff_row, 
 					m_fluffModel.getFluffArray());
 			m_fluffList.setAdapter(adapter);
@@ -110,15 +104,11 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		}
 		
 		//Close keyboard
-		InputMethodManager iMM = (InputMethodManager)getActivity().
-				getSystemService(Context.INPUT_METHOD_SERVICE);
-		if(m_dialogET.hasFocus())
-			iMM.hideSoftInputFromInputMethod(m_dialogET.getWindowToken(), 0);
+		hideKeyboardDelayed(0);
 	}
 	
 	private String getFluffValueFromDialog() {
-		String fluffValue = new String(m_dialogET.getText().toString());
-		return fluffValue;
+		return m_dialogET.getText().toString();
 	}
 
 	@Override

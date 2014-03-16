@@ -113,7 +113,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * the fragments.
 	 */
 	public void addNewCharacter() {
-		PTCharacter newChar = new PTCharacter("New Adventurer", getActivity());
+		PTCharacter newChar = new PTCharacter("New Adventurer", getContext());
 		long id = m_characterRepo.insert(newChar);
 		if (id != -1) {
 			PTSharedPreferences.getInstance().putLong(
@@ -121,7 +121,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 			Log.i(TAG, "Added new character");
 		} else {
 			Log.e(TAG, "Error occurred creating new character");
-			Toast.makeText(getActivity(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getContext(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
 		}
 		performUpdateReset();
 	}
@@ -188,7 +188,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	private void showCharacterDialog() {
 		m_characterSelectedInDialog = m_currentCharacterID; // current character
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		
 
 		switch (m_dialogMode) {
@@ -287,7 +287,7 @@ public abstract class PTCharacterSheetFragment extends PTBasePageFragment {
 	 * mCharacter, and updates them. Ends with current tab set to Fluff.
 	 */
 	public void performUpdateReset() {
-		((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.FLUFF_ID);
+        switchToPage(PTNavDrawerAdapter.FLUFF_ID);
 	}
 
 	public long getCurrentCharacterID() {

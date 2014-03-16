@@ -65,7 +65,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
         List<PTArmor> armorList = m_inventory.getArmors();
         Collections.sort(armorList);
 
-		PTArmorAdapter adapter = new PTArmorAdapter(getActivity(),
+		PTArmorAdapter adapter = new PTArmorAdapter(getContext(),
 				R.layout.character_armor_row, armorList);
 		m_listView.setAdapter(adapter);
 	}
@@ -83,7 +83,7 @@ public class PTCharacterArmorFragment extends PTCharacterSheetFragment implement
 	}
 
 	private void showArmorEditor(PTArmor armor) {
-		Intent armorEditIntent = new Intent(getActivity(),
+		Intent armorEditIntent = new Intent(getContext(),
 				PTCharacterArmorEditActivity.class);
 		armorEditIntent.putExtra(
 				PTCharacterArmorEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, armor);

@@ -9,6 +9,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
 public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 	private static final String TABLE = "Skill";
@@ -73,7 +74,7 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
      * @param characterId
      * @return Array of PTSkill, ordered alphabetically by name
 	 */
-	public List<PTSkill> querySet(long characterId) {
+	public List<PTSkill> queryAllForCharacter(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = SKILL_KEY+" ASC, "+SUB_TYPE+" ASC";
 		String table = m_tableInfo.getTable();
@@ -90,4 +91,24 @@ public class PTSkillRepository extends PTBaseRepository<PTSkill> {
 		}
 		return skills;
 	}
+
+    public PTSkillSet querySet(long characterId) {
+        return PTSkillSet.newValidatedSkillSet(queryAllForCharacter(characterId),
+                new PTSkillSet.CorrectionListener() {
+                    @Override
+                    public void onInvalidSkillRemoved(PTSkill removedSkill) {
+                        PTSkillRepository.this.delete(removedSkill);
+                    }
+
+                    @Override
+                    public void onMissingSkillAdded(PTSkill addedSkill) {
+                        PTSkillRepository.this.insert(addedSkill);
+                    }
+
+                    @Override
+                    public void onSkillModified(PTSkill modifiedSkill) {
+                        PTSkillRepository.this.update(modifiedSkill);
+                    }
+                });
+    }
 }

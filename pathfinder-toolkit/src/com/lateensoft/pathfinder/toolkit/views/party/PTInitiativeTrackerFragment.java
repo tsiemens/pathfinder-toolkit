@@ -112,7 +112,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 
     private void showPartyDialog() {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
 		switch (m_dialogMode) {
 		case R.id.mi_reset:
@@ -232,7 +232,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	private void refreshPartyView() {
 		String[] memberNames = m_party.getNamesByRollValue();
 		int[] memberRollValues = m_party.getRollValuesByRollValue();
-		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(),
+		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getContext(),
 				R.layout.party_roll_row, memberNames, memberRollValues, null);
 		m_partyMemberList.setAdapter(adapter);
 		m_rollInitiativeButton.setEnabled(!m_hasRolled);
@@ -244,7 +244,7 @@ public class PTInitiativeTrackerFragment extends PTBasePageFragment implements
 	 * @param member the member to send to the editor
 	 */
 	private void showPartyMemberEditor(PTPartyMember member) {
-		Intent intent = new Intent(getActivity(),
+		Intent intent = new Intent(getContext(),
 				PTPartyMemberEditorActivity.class);
 		intent.putExtra(
 				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);

@@ -184,11 +184,11 @@ public class PTDiceRollerFragment extends PTBasePageFragment {
 			for(int i = 0; i < rollResults.length; i++)
 				rollResultStrings[i] = Integer.toString(rollResults[i]);
 				
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, rollResultStrings);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, rollResultStrings);
 			m_rollResultList.setAdapter(adapter);
 		} else{
 			String[] emptyArray = new String[0];
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, emptyArray);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, emptyArray);
 			m_rollResultList.setAdapter(adapter);
 		}
 	}
@@ -215,7 +215,7 @@ public class PTDiceRollerFragment extends PTBasePageFragment {
     }
 
     private void setupSpinner(Spinner spinner, int optionResourceId, int defaultSelection) {
-        Context context = getActivity();
+        Context context = getContext();
         if (context != null) {
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                     optionResourceId, android.R.layout.simple_spinner_item);

@@ -64,7 +64,7 @@ OnClickListener, OnItemClickListener{
         List<PTWeapon> weapons = m_inventory.getWeapons();
         Collections.sort(weapons);
 
-		PTWeaponAdapter adapter = new PTWeaponAdapter(getActivity(),
+		PTWeaponAdapter adapter = new PTWeaponAdapter(getContext(),
 				R.layout.character_weapon_row, weapons);
 		m_listView.setAdapter(adapter);
 	}
@@ -85,7 +85,7 @@ OnClickListener, OnItemClickListener{
 	}
 	
 	private void showWeaponEditor(PTWeapon weapon) {
-		Intent weaponEditIntent = new Intent(getActivity(),
+		Intent weaponEditIntent = new Intent(getContext(),
 				PTCharacterWeaponEditActivity.class);
 		weaponEditIntent.putExtra(
 				PTCharacterWeaponEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, weapon);

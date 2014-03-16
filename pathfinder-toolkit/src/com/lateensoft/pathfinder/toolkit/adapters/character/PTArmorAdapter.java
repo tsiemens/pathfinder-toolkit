@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.adapters.character;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +16,14 @@ public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
 	@SuppressWarnings("unused")
 	private static final String TAG = PTArmorAdapter.class.getSimpleName();
 	
-	private Activity m_activity;
+	private Context m_context;
 	private int m_layoutResourceId;
 
-	public PTArmorAdapter(Activity activity, int textViewResourceId,
+	public PTArmorAdapter(Context context, int textViewResourceId,
 			List<PTArmor> objects) {
-		super(activity, textViewResourceId, objects);
+		super(context, textViewResourceId, objects);
 		m_layoutResourceId = textViewResourceId;
-		m_activity = activity;
+		m_context = context;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -31,7 +31,7 @@ public class PTArmorAdapter extends ArrayAdapter<PTArmor> {
 		ArmorHolder holder;
 		
 		if(row == null) {
-			LayoutInflater inflater = m_activity.getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 			
 			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new ArmorHolder();

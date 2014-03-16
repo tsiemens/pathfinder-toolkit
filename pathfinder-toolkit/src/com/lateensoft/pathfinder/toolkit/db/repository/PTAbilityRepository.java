@@ -1,12 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.PTTableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbility;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 
 public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	private static final String TABLE = "Ability";
@@ -55,10 +58,9 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	
 	/**
 	 * Returns all abilities for the character with characterId
-	 * @param characterId
-	 * @return Array of PTAbility, ordered by id
+	 * @return List of PTAbility, ordered by id
 	 */
-	public PTAbility[] querySet(long characterId) {
+	public List<PTAbility> queryAllForCharacter(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId;
 		String orderBy = ABILITY_KEY + " ASC";
 		String table = m_tableInfo.getTable();
@@ -66,17 +68,30 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PTAbility[] scores = new PTAbility[cursor.getCount()];
+		List<PTAbility> abilities = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			scores[i] = buildFromHashTable(hashTable);
+			abilities.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
-		return scores;
+		return abilities;
 	}
+
+    public PTAbilitySet querySet(long characterId) {
+        return PTAbilitySet.newValidAbilitySet(queryAllForCharacter(characterId),
+                new PTAbilitySet.CorrectionListener() {
+                    @Override
+                    public void onInvalidAbilityRemoved(PTAbility removedAbility) {
+                        PTAbilityRepository.this.delete(removedAbility);
+                    }
+
+                    @Override
+                    public void onMissingAbilityAdded(PTAbility addedAbility) {
+                        PTAbilityRepository.this.insert(addedAbility);
+                    }
+                });
+    }
 
 	@Override
 	protected String getSelector(PTAbility object) {

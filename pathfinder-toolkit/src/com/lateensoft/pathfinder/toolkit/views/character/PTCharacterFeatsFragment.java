@@ -62,7 +62,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
         Collections.sort(m_featList);
 		String[] featNames = m_featList.getFeatNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getActivity(), android.R.layout.simple_list_item_1,
+				getContext(), android.R.layout.simple_list_item_1,
 				featNames);
 		m_featsListView.setAdapter(adapter);
 	}
@@ -82,7 +82,7 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 	}
 	
 	private void showFeatEditor(PTFeat feat) {
-		Intent featEditIntent = new Intent(getActivity(),
+		Intent featEditIntent = new Intent(getContext(),
 				PTCharacterFeatEditActivity.class);
 		featEditIntent.putExtra(
 				PTCharacterFeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);

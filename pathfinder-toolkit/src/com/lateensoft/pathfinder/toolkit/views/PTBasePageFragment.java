@@ -1,13 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.views;
 
+import android.app.ActionBar;
+import android.content.Context;
 import android.os.Bundle;
+import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 public abstract class PTBasePageFragment extends Fragment{
@@ -24,22 +24,37 @@ public abstract class PTBasePageFragment extends Fragment{
 	public void onResume() {
 		super.onResume();
         updateTitle();
-		Activity a = getActivity();
-		if (a instanceof PTMainActivity) {
-			((PTMainActivity) a).hideKeyboardDelayed(100);
-		}
+		hideKeyboardDelayed(100);
 	}
 
 	public void setTitle(String title) {
-		getActivity().getActionBar().setTitle(title);
+        Activity a = getActivity();
+        if (a != null) {
+            ActionBar ab = a.getActionBar();
+            if (ab != null) {
+                ab.setTitle(title);
+            }
+        }
 	}
 	
 	public void setTitle(int resId) {
-		getActivity().getActionBar().setTitle(resId);
+        Activity a = getActivity();
+        if (a != null) {
+            ActionBar ab = a.getActionBar();
+            if (ab != null) {
+                ab.setTitle(resId);
+            }
+        }
 	}
 	
 	public void setSubtitle(String subtitle) {
-		getActivity().getActionBar().setSubtitle(subtitle);
+        Activity a = getActivity();
+        if (a != null) {
+            ActionBar ab = a.getActionBar();
+            if (ab != null) {
+                ab.setSubtitle(subtitle);
+            }
+        }
 	}
 
     /**
@@ -54,13 +69,42 @@ public abstract class PTBasePageFragment extends Fragment{
 	protected void setRootView(View rootView) {
 		m_rootView = rootView;
 	}
-	
-	public MenuInflater getMenuInflater() {
-		Activity a = getActivity();
-		if (a != null) {
-			return a.getMenuInflater();
-		} else {
-			return null;
-		}
-	}
+
+    public Context getContext() {
+        Activity a = getActivity();
+        if (a != null) {
+            return a;
+        } else {
+            return PTBaseApplication.getAppContext();
+        }
+    }
+
+    public void switchToPage(final long pageId) {
+        new MainActivityAction() {
+            @Override public void performOnMainActivity(PTMainActivity activity) {
+                activity.showView(pageId);
+            }
+        }.performAction();
+    }
+
+    public void hideKeyboardDelayed(final long delay) {
+        new MainActivityAction() {
+            @Override public void performOnMainActivity(PTMainActivity activity) {
+                activity.hideKeyboardDelayed(delay);
+            }
+        }.performAction();
+    }
+
+    private abstract class MainActivityAction {
+        public abstract void performOnMainActivity(PTMainActivity activity);
+
+        public void performAction() {
+            Activity a = PTBasePageFragment.this.getActivity();
+            if (a instanceof PTMainActivity) {
+                performOnMainActivity((PTMainActivity) a);
+            }
+        }
+    }
+
+
 }

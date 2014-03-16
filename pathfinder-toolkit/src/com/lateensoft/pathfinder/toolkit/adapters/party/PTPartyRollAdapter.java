@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.adapters.party;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -16,13 +15,12 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 	public static final int NO_CRIT = 0;
 	public static final int CRIT = 1;
 	
-	Context mContext;
-	int mLayoutResourceId;
-	int[] mRollValues = null;
-	int[] mCritValues = null;
-	String[] mCharacterNames = null;
-	String TAG = "PTPartyMemberStatAdapter";
-	
+	Context m_context;
+	int m_layoutResourceId;
+	int[] m_rollValues = null;
+	int[] m_critValues = null;
+	String[] m_characterNames = null;
+
 	/**
 	 * 
 	 * @param context
@@ -32,13 +30,13 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 	 * @param critValues CRUIT_FUMBLE, NO_CRIT, CRIT. if null, all considered NO_CRIT
 	 */
 	public PTPartyRollAdapter(Context context, int layoutResourceId, String[] characterNames, 
-			int[] rollValues, int[]critValues) {
+			int[] rollValues, int[] critValues) {
 		super(context, layoutResourceId, characterNames);
-		mLayoutResourceId = layoutResourceId;
-		mContext = context;
-		mRollValues = rollValues;	
-		mCharacterNames = characterNames;
-		mCritValues = critValues;
+		m_layoutResourceId = layoutResourceId;
+		m_context = context;
+		m_rollValues = rollValues;
+		m_characterNames = characterNames;
+		m_critValues = critValues;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -46,8 +44,8 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 		CharacterRollHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
-			row = inflater.inflate(mLayoutResourceId, parent, false);	
+			LayoutInflater inflater = LayoutInflater.from(m_context);
+			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new CharacterRollHolder();
 			
 			holder.name = (TextView)row.findViewById(R.id.textViewRollName);
@@ -59,14 +57,14 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 			holder = (CharacterRollHolder)row.getTag();
 		}
 		
-		holder.name.setText(mCharacterNames[position]);
-		holder.rollValue.setText(Integer.toString(mRollValues[position]));
+		holder.name.setText(m_characterNames[position]);
+		holder.rollValue.setText(Integer.toString(m_rollValues[position]));
 		
-		if(mCritValues != null){
-			if(mCritValues[position] == CRIT_FUMBLE){
+		if(m_critValues != null){
+			if(m_critValues[position] == CRIT_FUMBLE){
 				holder.rollValue.setTextColor(Color.RED);
 			}
-			else if(mCritValues[position] == CRIT){
+			else if(m_critValues[position] == CRIT){
 				holder.rollValue.setTextColor(Color.GREEN);
 			}
 		}
@@ -80,7 +78,7 @@ public class PTPartyRollAdapter extends ArrayAdapter<String>{
 	}
 	
 	public void updateRollValues(int[] newRollValues){
-		mRollValues = newRollValues;
+		m_rollValues = newRollValues;
 		notifyDataSetChanged();
 	}
 }

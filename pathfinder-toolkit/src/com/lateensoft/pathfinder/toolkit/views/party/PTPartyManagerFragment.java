@@ -169,7 +169,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	private void refreshPartyView() {
 		m_partyNameEditText.setText(m_party.getName());
 		String[] memberNames = m_party.getPartyMemberNames();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
 				android.R.layout.simple_list_item_1, memberNames);
 		m_partyMemberList.setAdapter(adapter);
 	}
@@ -214,7 +214,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
     private void showPartyDialog() {
 		m_partyIDSelectedInDialog = m_party.getID(); // actual current party
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
 		switch (m_dialogMode) {
 		case R.id.mi_party_list:
@@ -322,7 +322,7 @@ public class PTPartyManagerFragment extends PTBasePageFragment implements
 	}
 
 	private void showPartyMemberEditor(PTPartyMember member) {
-		Intent intent = new Intent(getActivity(),
+		Intent intent = new Intent(getContext(),
 				PTPartyMemberEditorActivity.class);
 		intent.putExtra(
 				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);

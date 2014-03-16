@@ -87,7 +87,7 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 		List<PTItem> items = m_character.getInventory().getItems();
         Collections.sort(items);
 	
-		PTInventoryAdapter adapter = new PTInventoryAdapter(getActivity(), R.layout.character_inventory_row, items);
+		PTInventoryAdapter adapter = new PTInventoryAdapter(getContext(), R.layout.character_inventory_row, items);
 		m_itemsListView.setAdapter(adapter);
 	
 	}
@@ -95,12 +95,12 @@ public class PTCharacterInventoryFragment extends PTCharacterSheetFragment {
 	private void updateTotalWeight(){
 		double totalWeight = m_character.getInventory().getTotalWeight();
 		
-		m_totalWeightText.setText(getActivity().getString(R.string.inventory_total_weight_header)
+		m_totalWeightText.setText(getContext().getString(R.string.inventory_total_weight_header)
 				+" "+ totalWeight);
 	}
 	
 	private void showItemEditor(PTItem item) {
-		Intent itemEditIntent = new Intent(getActivity(),
+		Intent itemEditIntent = new Intent(getContext(),
 				PTCharacterInventoryEditActivity.class);
 		itemEditIntent.putExtra(
 				PTCharacterInventoryEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, item);

@@ -14,7 +14,7 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 		super.setUp();
 		m_repo = new PTSkillRepository();
 		
-		m_skill = m_repo.querySet(m_characterId)[0];
+		m_skill = m_repo.queryAllForCharacter(m_characterId).get(0);
 	}
 	
 	public void testQuery() {
@@ -32,10 +32,10 @@ public class PTSkillRepositoryTest extends PTBaseRepositoryTest {
 	}
 
 	public void testQuerySet() {
-		PTSkill[] queriedSkills = m_repo.querySet(m_characterId);
+		List<PTSkill> queriedSkills = m_repo.queryAllForCharacter(m_characterId);
 		List<Integer> constSkillKeys = PTSkillSet.SKILL_KEYS();
 		for (int i = 0; i < constSkillKeys.size(); i++){
-			assertEquals(constSkillKeys.get(i).intValue(), queriedSkills[i].getSkillKey()); 
+			assertEquals(constSkillKeys.get(i).intValue(), queriedSkills.get(i).getSkillKey());
 		}
 	}
 	

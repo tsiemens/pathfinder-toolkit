@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit.adapters.character;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,7 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 		SpellItemHolder holder;
 		
 		if(row == null) {
-			LayoutInflater inflater = ((Activity) m_context).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 			
 			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new SpellItemHolder();

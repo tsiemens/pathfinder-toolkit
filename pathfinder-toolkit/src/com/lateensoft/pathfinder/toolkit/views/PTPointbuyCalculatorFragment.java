@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.lateensoft.pathfinder.toolkit.PTMainActivity;
 import com.lateensoft.pathfinder.toolkit.PTSharedPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.PTNavDrawerAdapter;
@@ -122,7 +121,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		m_abilityCalc = new PTAbilitySetCalculator();
 
 		m_racesSpinner = (Spinner) getRootView().findViewById(R.id.races_spinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
 				R.array.races_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
@@ -161,8 +160,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		    // An item was selected. You can retrieve the selected item using
 		    // parent.getItemAtPosition(pos)
 			if(parent.getSelectedItemPosition() != CUSTOM_RACE_INDEX) {
-				m_isHuman = m_abilityCalc.setRacialMods((int) parent.getSelectedItemId(),
-						getActivity());
+				m_isHuman = m_abilityCalc.setRacialMods((int) parent.getSelectedItemId(), getContext());
 			
 				updateAbilityViews();
 			} else {
@@ -175,9 +173,9 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	}
 	
 	private void showCustomRaceDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		
-		LayoutInflater inflater = getActivity().getLayoutInflater();
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		
 		View dialogView = inflater.inflate(R.layout.calculator_custom_race_dialog, null);
 		m_dialogStrSpinner = (Spinner) dialogView.findViewById(R.id.spCustomStrMod);
@@ -227,7 +225,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	}
 
 	private void setupCustomRaceSpinner(Spinner spinner) {
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
 				R.array.calc_custom_race_mod_options, android.R.layout.simple_spinner_item);
 		
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
@@ -239,28 +237,28 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 		public void onClick(View v) {
 			int id = v.getId();
 			
-			if(m_isHuman == false) {
+			if(!m_isHuman) {
 				return;
 			}
 			
 			switch (id) {
 			case R.id.raceStr:
-				m_abilityCalc.setHumanRacialMods(STR_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(STR_IDX, getContext());
 				break;
 			case R.id.raceDex:
-				m_abilityCalc.setHumanRacialMods(DEX_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(DEX_IDX, getContext());
 				break;
 			case R.id.raceCon:
-				m_abilityCalc.setHumanRacialMods(CON_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(CON_IDX, getContext());
 				break;
 			case R.id.raceInt:
-				m_abilityCalc.setHumanRacialMods(INT_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(INT_IDX, getContext());
 				break;
 			case R.id.raceWis:
-				m_abilityCalc.setHumanRacialMods(WIS_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(WIS_IDX, getContext());
 				break;
 			case R.id.raceCha:
-				m_abilityCalc.setHumanRacialMods(CHA_IDX, getActivity());
+				m_abilityCalc.setHumanRacialMods(CHA_IDX, getContext());
 				break;
 			}
 			
@@ -274,7 +272,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 		switch (item.getItemId()) {
 		case R.id.mi_export_to_new:
-			PTCharacter character = new PTCharacter("From calc", getActivity());
+			PTCharacter character = new PTCharacter("From calc", getContext());
 			m_abilityCalc.setCalculatedAbilityScores(character.getAbilitySet());
 			Resources r = getResources();
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)
@@ -283,11 +281,11 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			if (m_characterRepo.insert(character) != -1) {
 				PTSharedPreferences.getInstance().putLong(
 						PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
-				((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
+				switchToPage(PTNavDrawerAdapter.ABILITIES_ID);
 			}
 			break;
 		case R.id.mi_export_to_existing:
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 			builder.setTitle(getString(R.string.select_character_dialog_header));
 			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
 			String[] characterNames = EntryUtils.valueArray(characterEntries);
@@ -321,7 +319,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 			case DialogInterface.BUTTON_POSITIVE:
 				if (_characterIdSelectedInDialog > 0) {
 					PTFluffInfo fluff = m_fluffRepo.query(_characterIdSelectedInDialog);
-					PTAbilitySet abilities = new PTAbilitySet(m_abilityRepo.querySet(_characterIdSelectedInDialog));
+					PTAbilitySet abilities = m_abilityRepo.querySet(_characterIdSelectedInDialog);
 					m_abilityCalc.setCalculatedAbilityScores(abilities);
 
 					Resources r = getResources();
@@ -335,7 +333,7 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 					PTSharedPreferences.getInstance().putLong(
 							PTSharedPreferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterIdSelectedInDialog);
-					((PTMainActivity) getActivity()).showView(PTNavDrawerAdapter.ABILITIES_ID);
+                    switchToPage(PTNavDrawerAdapter.ABILITIES_ID);
 				}
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
@@ -350,27 +348,27 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 	}
     
     private void updateAbilityViews() {
-    	TextView t = new TextView(getActivity());
+    	TextView textView;
 		final int[] modIds = {R.id.strMod, R.id.dexMod, R.id.conMod, R.id.intMod, R.id.wisMod, R.id.chaMod};
 		final int[] finalScoreIds = {R.id.finStr, R.id.finDex, R.id.finCon, R.id.finInt, R.id.finWis, R.id.finCha};
 		final int[] baseScoreIds = {R.id.baseStr, R.id.baseDex, R.id.baseCon, R.id.baseInt, R.id.baseWis, R.id.baseCha};
 		final int[] racialModIds = {R.id.raceStr, R.id.raceDex, R.id.raceCon, R.id.raceInt, R.id.raceWis, R.id.raceCha};
     	
 		for(int i = 0; i < NUM_ABILITIES; i++) {
-			t = (TextView) getRootView().findViewById(modIds[i]);
-			t.setText(Integer.toString(m_abilityCalc.getModPostRaceMod(i)));
+			textView = (TextView) getRootView().findViewById(modIds[i]);
+			textView.setText(Integer.toString(m_abilityCalc.getModPostRaceMod(i)));
 
-			t = (TextView) getRootView().findViewById(baseScoreIds[i]);
-			t.setText(Integer.toString(m_abilityCalc.getBaseScore(i)));
+			textView = (TextView) getRootView().findViewById(baseScoreIds[i]);
+			textView.setText(Integer.toString(m_abilityCalc.getBaseScore(i)));
 
-			t = (TextView) getRootView().findViewById(racialModIds[i]);
-			t.setText(Integer.toString(m_abilityCalc.getRaceMod(i)));
+			textView = (TextView) getRootView().findViewById(racialModIds[i]);
+			textView.setText(Integer.toString(m_abilityCalc.getRaceMod(i)));
 			
-			t = (TextView) getRootView().findViewById(finalScoreIds[i]);
-			t.setText(Integer.toString(m_abilityCalc.getScorePostRaceMod(i)));
+			textView = (TextView) getRootView().findViewById(finalScoreIds[i]);
+			textView.setText(Integer.toString(m_abilityCalc.getScorePostRaceMod(i)));
 
-			t = (TextView) getRootView().findViewById(R.id.textCost);
-			t.setText(Integer.toString(m_abilityCalc.getPointBuyCost()));
+			textView = (TextView) getRootView().findViewById(R.id.textCost);
+			textView.setText(Integer.toString(m_abilityCalc.getPointBuyCost()));
 		}
     }
     

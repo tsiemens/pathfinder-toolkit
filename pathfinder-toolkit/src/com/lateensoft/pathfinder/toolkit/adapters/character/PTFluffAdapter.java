@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.adapters.character;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -12,16 +11,15 @@ import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTFluffAdapter extends ArrayAdapter<String>{
-	Context mContext;
-	int mLayoutResourceId;
-	String[] mFluff = null;
-	String TAG = "PTFluffAdapter";
-	
+	Context m_context;
+	int m_layoutResourceId;
+	String[] m_fluff = null;
+
 	public PTFluffAdapter(Context context, int layoutResourceId, String[] fluff) {
 		super(context, layoutResourceId, fluff);
-		mLayoutResourceId = layoutResourceId;
-		mContext = context;
-		mFluff = fluff;		
+		m_layoutResourceId = layoutResourceId;
+		m_context = context;
+		m_fluff = fluff;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -29,8 +27,8 @@ public class PTFluffAdapter extends ArrayAdapter<String>{
 		FluffHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
-			row = inflater.inflate(mLayoutResourceId, parent, false);	
+			LayoutInflater inflater = LayoutInflater.from(m_context);
+			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new FluffHolder();
 			
 			holder.label = (TextView)row.findViewById(R.id.fluffLabel);
@@ -42,12 +40,12 @@ public class PTFluffAdapter extends ArrayAdapter<String>{
 			holder = (FluffHolder)row.getTag();
 		}
 		
-		Resources r = mContext.getResources();
+		Resources r = m_context.getResources();
 		holder.label.setText(r.getStringArray(R.array.fluff_fields)[position]);
-		if(mFluff[position] == null) {
-			mFluff[position] = new String("");
+		if(m_fluff[position] == null) {
+			m_fluff[position] = "";
 		}
-		holder.value.setText(mFluff[position]);
+		holder.value.setText(m_fluff[position]);
 		
 		return row;
 	}

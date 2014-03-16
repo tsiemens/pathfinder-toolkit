@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.adapters.party;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -12,18 +11,17 @@ import android.widget.TextView;
 import com.lateensoft.pathfinder.toolkit.R;
 
 public class PTPartyMemberStatAdapter extends ArrayAdapter<String>{
-	Context mContext;
-	int mLayoutResourceId;
-	int[] mStatValues = null;
-	String[] mStatNames = null;
-	String TAG = "PTPartyMemberStatAdapter";
-	
+	Context m_context;
+	int m_layoutResourceId;
+	int[] m_statValues = null;
+	String[] m_statNames = null;
+
 	public PTPartyMemberStatAdapter(Context context, int layoutResourceId, String[] statNames, int[] statValues) {
 		super(context, layoutResourceId, statNames);
-		mLayoutResourceId = layoutResourceId;
-		mContext = context;
-		mStatValues = statValues;	
-		mStatNames = statNames;
+		m_layoutResourceId = layoutResourceId;
+		m_context = context;
+		m_statValues = statValues;
+		m_statNames = statNames;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -31,8 +29,8 @@ public class PTPartyMemberStatAdapter extends ArrayAdapter<String>{
 		PartyMemberStatHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
-			row = inflater.inflate(mLayoutResourceId, parent, false);	
+			LayoutInflater inflater = LayoutInflater.from(m_context);
+			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new PartyMemberStatHolder();
 			
 			holder.label = (TextView)row.findViewById(R.id.partyMemberStatLabel);
@@ -44,9 +42,9 @@ public class PTPartyMemberStatAdapter extends ArrayAdapter<String>{
 			holder = (PartyMemberStatHolder)row.getTag();
 		}
 		
-		Resources r = mContext.getResources();
+		Resources r = m_context.getResources();
 		holder.label.setText(r.getStringArray(R.array.party_member_stats)[position]);
-		holder.value.setText(Integer.toString(mStatValues[position]));
+		holder.value.setText(Integer.toString(m_statValues[position]));
 		
 		return row;
 	}
@@ -57,7 +55,7 @@ public class PTPartyMemberStatAdapter extends ArrayAdapter<String>{
 	}
 	
 	public void updateValues(int[] newStatValues){
-		mStatValues = newStatValues;
+		m_statValues = newStatValues;
 		notifyDataSetChanged();
 	}
 

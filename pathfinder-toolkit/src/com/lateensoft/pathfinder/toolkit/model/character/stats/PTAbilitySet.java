@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import android.util.SparseIntArray;
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
+import org.jetbrains.annotations.Nullable;
 
 public class PTAbilitySet implements Parcelable{
 	@SuppressWarnings("unused")
@@ -26,7 +29,7 @@ public class PTAbilitySet implements Parcelable{
 	public static final int KEY_WIS = 5;
 	public static final int KEY_CHA = 6;
 	
-	private PTAbility[] m_abilities;
+	private List<PTAbility> m_abilities;
 	
 	/**
 	 * @return an unmodifiable list of the skill keys, in order. This matches the order for string resources, and how the abilities are stored
@@ -36,75 +39,100 @@ public class PTAbilitySet implements Parcelable{
 		Integer[] keys = {KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA};
 		return Collections.unmodifiableList(Arrays.asList(keys));
 	}
+
+    public interface CorrectionListener {
+        public void onInvalidAbilityRemoved(PTAbility removedAbility);
+        public void onMissingAbilityAdded(PTAbility addedAbility);
+    }
+
+    /**
+     * Creates a valid ability set with abilities
+     * If an ability does not exist, will be added and set to default.
+     * Invalid abilities are removed
+     */
+    public static PTAbilitySet newValidAbilitySet(List<PTAbility> abilities, @Nullable CorrectionListener listener) {
+        PTAbilitySet newAbilitySet = new PTAbilitySet(abilities);
+        newAbilitySet.validate(listener);
+        return newAbilitySet;
+    }
 	
 	public PTAbilitySet() {
 		List<Integer> constAbilityKeys = ABILITY_KEYS();
-		m_abilities = new PTAbility[constAbilityKeys.size()];
-		
-		for(int i = 0; i < constAbilityKeys.size(); i++) {
-			m_abilities[i] = new PTAbility(constAbilityKeys.get(i), PTAbility.BASE_ABILITY_SCORE, 0);
-		}
+		m_abilities = Lists.newArrayListWithCapacity(constAbilityKeys.size());
+
+        for (Integer abilityKey : constAbilityKeys) {
+            m_abilities.add(new PTAbility(abilityKey));
+        }
 	}
-	
-	/**
-	 * Safely populates the ability set with scores 
-	 * If an ability does not exist in scores, will be set to default.
-	 * @param abilities
-	 */
-	public PTAbilitySet(PTAbility[] abilities) {
-		List<Integer> constAbilityKeys = ABILITY_KEYS();
-		m_abilities = new PTAbility[constAbilityKeys.size()];
-		List<PTAbility> scoresList = new ArrayList<PTAbility>(Arrays.asList(abilities));
-		
-		for(int i = 0; i < constAbilityKeys.size(); i++) {
-			for (PTAbility score : scoresList) {
-				if(score.getAbilityKey() == constAbilityKeys.get(i).intValue()) {
-					scoresList.remove(score);
-					m_abilities[i] = score;
-					break;
-				}
-			}
-			if (m_abilities[i] == null) {
-				m_abilities[i] = new PTAbility(constAbilityKeys.get(i));
-			}
-		}
+
+	private PTAbilitySet(List<PTAbility> abilities) {
+        m_abilities = abilities;
 	}
 	
 	public PTAbilitySet(Parcel in) {
-		Bundle objectBundle = in.readBundle();
-		m_abilities = (PTAbility[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES);
+        m_abilities = Lists.newArrayListWithCapacity(ABILITY_KEYS().size());
+        in.readTypedList(m_abilities, PTAbility.CREATOR);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_ABILITIES, m_abilities);
-		out.writeBundle(objectBundle);
+		out.writeTypedList(m_abilities);
 	}
+
+    public void validate(CorrectionListener listener) {
+        List<Integer> constAbilityKeys = ABILITY_KEYS();
+        List<PTAbility> abilitiesToRemove = Lists.newArrayList();
+        for (PTAbility ability : m_abilities) {
+            if (!constAbilityKeys.contains(ability.getAbilityKey())) {
+                abilitiesToRemove.add(ability);
+            }
+        }
+        m_abilities.removeAll(abilitiesToRemove);
+        if (listener != null) {
+            for (PTAbility removedAbility : abilitiesToRemove) {
+                listener.onInvalidAbilityRemoved(removedAbility);
+            }
+        }
+
+        boolean found;
+        for (Integer abilityKey : constAbilityKeys) {
+            found = false;
+            for (PTAbility ability : m_abilities) {
+                if (ability.getAbilityKey() == abilityKey) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                PTAbility newAbility = new PTAbility(abilityKey);
+                newAbility.setCharacterID(m_abilities.get(0).getCharacterID());
+                m_abilities.add(newAbility);
+                if (listener != null) {
+                    listener.onMissingAbilityAdded(newAbility);
+                }
+            }
+        }
+
+        Collections.sort(m_abilities);
+    }
 	
 	/**
-	 * @param abilityKey
 	 * @return The ability in the set with abilityKey. null if no such ability exists.
 	 */
 	public PTAbility getAbility(int abilityKey) throws IllegalArgumentException {
-		for(int i = 0; i < m_abilities.length; i++) {
-			if(abilityKey == m_abilities[i].getAbilityKey()) {
-				return m_abilities[i];
-			}
-		}
+        for (PTAbility m_ability : m_abilities) {
+            if (abilityKey == m_ability.getAbilityKey()) {
+                return m_ability;
+            }
+        }
 		throw new IllegalArgumentException("Invalid ability key: "+abilityKey);
 	}
 	
 	/**
-	 * @param index
 	 * @return the ability at index. Note: indexes of the set are defined by ABILITY_KEYS
 	 */
 	public PTAbility getAbilityAtIndex(int index) {
-		if( index >=0 && index <= m_abilities.length) {
-			return m_abilities[index];
-		} else {
-			throw new IndexOutOfBoundsException("No ability for index "+index);
-		}
+		return m_abilities.get(index);
 	}
 	
 	/**
@@ -143,7 +171,7 @@ public class PTAbilitySet implements Parcelable{
 
 	
 	public int size(){
-		return m_abilities.length;
+		return m_abilities.size();
 	}
 	
 	public void setCharacterID(long id) {

@@ -54,7 +54,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 		m_rollButton = (Button) getRootView().findViewById(R.id.buttonRoll);
 		m_rollButton.setOnClickListener(this);
 	
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
 				R.array.checkable_skills_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(R.layout.spinner_plain);
 		m_skillSpinner = (Spinner) getRootView().findViewById(R.id.spinnerSkillToRoll);
@@ -139,7 +139,7 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 				break;
 			}		
 		}
-		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getActivity(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
+		PTPartyRollAdapter adapter = new PTPartyRollAdapter(getContext(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
 		m_partyMemberList.setAdapter(adapter);
 		updateTitle();
 	}
@@ -151,8 +151,6 @@ public class PTPartySkillCheckerFragment extends PTBasePageFragment implements O
 	}
 	
 	/**
-	 * 
-	 * @param party
 	 * @return true if party is in an encounter (has non zero roll values) false if in reset state
 	 */
 	private boolean partyIsInEncounter(PTParty party){

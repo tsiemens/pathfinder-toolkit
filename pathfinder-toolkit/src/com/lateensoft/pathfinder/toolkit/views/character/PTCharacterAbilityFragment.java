@@ -77,8 +77,8 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 	}
 		
 	private void updateSpinnerValues(int abilityIndex) {
-    	Spinner s = new Spinner(getActivity());
-    	TextView tv = new TextView(getActivity());
+    	Spinner s;
+    	TextView tv;
     	
 		tv = (TextView) getRootView().findViewById(baseModViewIds[abilityIndex]);
 		tv.setText(String.valueOf(m_abilityScores.getAbilityAtIndex(abilityIndex).getAbilityModifier()));
@@ -99,11 +99,11 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 			AbilityItemSelectedListener[] listeners, boolean isTemp) {
 		ArrayAdapter<CharSequence> adapter;
 		if (isTemp) {
-			adapter = ArrayAdapter.createFromResource(getActivity(),
+			adapter = ArrayAdapter.createFromResource(getContext(),
 					R.array.selectable_integer_values_strings, android.R.layout.simple_spinner_item);
 			adapter.setDropDownViewResource(R.layout.spinner_plain);
 		} else {
-			adapter = ArrayAdapter.createFromResource(getActivity(),
+			adapter = ArrayAdapter.createFromResource(getContext(),
 					R.array.selectable_whole_values_strings, android.R.layout.simple_spinner_item);
 			adapter.setDropDownViewResource(R.layout.spinner_plain);
 		}
@@ -191,7 +191,7 @@ public class PTCharacterAbilityFragment extends PTCharacterSheetFragment {
 
 	@Override
 	public void loadFromDatabase() {
-		m_abilityScores = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
+		m_abilityScores = m_abilityRepo.querySet(getCurrentCharacterID());
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
 	}
 }

@@ -21,12 +21,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
 import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTCombatStatSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSave;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSaveSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	private static final String TABLE = "Character";
@@ -48,7 +43,7 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	@Override
 	public long insert(PTCharacter object) {
 		long id = super.insert(object);
-		long subCompId = 0;
+		long subCompId;
 		
 		if (id != -1) {
 			// Sets all character ids of components
@@ -171,8 +166,8 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTFluffInfo fluff = fluffRepo.query(id);
 		
 		// Ability Scores
-		PTAbilityRepository abScoreRepo = new PTAbilityRepository();
-		PTAbilitySet abilityScores = new PTAbilitySet(abScoreRepo.querySet(id));
+		PTAbilityRepository abilityRepository = new PTAbilityRepository();
+		PTAbilitySet abilityScores = abilityRepository.querySet(id);
 
 		// Combat Stats
 		PTCombatStatRepository csRepo = new PTCombatStatRepository();
@@ -184,7 +179,25 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 
 		// Skills
 		PTSkillRepository skillRepo = new PTSkillRepository();
-		PTSkillSet skills = new PTSkillSet(skillRepo.querySet(id));
+		PTSkillSet skills = PTSkillSet.newValidatedSkillSet(skillRepo.queryAllForCharacter(id), new PTSkillSet.CorrectionListener() {
+            @Override
+            public void onInvalidSkillRemoved(PTSkill removedSkill) {
+                PTSkillRepository skillRepo = new PTSkillRepository();
+                skillRepo.delete(removedSkill);
+            }
+
+            @Override
+            public void onMissingSkillAdded(PTSkill addedSkill) {
+                PTSkillRepository skillRepo = new PTSkillRepository();
+                skillRepo.insert(addedSkill);
+            }
+
+            @Override
+            public void onSkillModified(PTSkill modifiedSkill) {
+                PTSkillRepository skillRepo = new PTSkillRepository();
+                skillRepo.update(modifiedSkill);
+            }
+        });
 		
 		PTInventory inventory = new PTInventory();
 		// Items
@@ -207,9 +220,8 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 		PTSpellRepository spellRepo = new PTSpellRepository();
 		PTSpellBook spells = new PTSpellBook(spellRepo.querySet(id));
 
-		PTCharacter character = new PTCharacter(id, gold, abilityScores,
+		return new PTCharacter(id, gold, abilityScores,
 				fluff, csSet, saves, skills, inventory, feats, spells);
-		return character;
 	}
 
 	@Override
@@ -227,10 +239,10 @@ public class PTCharacterRepository extends PTBaseRepository<PTCharacter> {
 	 */
 	public String queryName(long id) {
 		Locale l = null;
-		String selector = String.format(l, "%s.%s=%s.%s AND %s.%s=%d", 
-				TABLE, CHARACTER_ID,
-				 PTFluffInfoRepository.TABLE,  CHARACTER_ID,
-				 TABLE, CHARACTER_ID, id);
+		String selector = String.format(l, "%s.%s=%s.%s AND %s.%s=%d",
+                TABLE, CHARACTER_ID,
+                PTFluffInfoRepository.TABLE, CHARACTER_ID,
+                TABLE, CHARACTER_ID, id);
 		String table = m_tableInfo.getTable()+", "+PTFluffInfoRepository.TABLE;
 		String[] columns = {PTFluffInfoRepository.NAME};
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 

@@ -2,7 +2,6 @@ package com.lateensoft.pathfinder.toolkit.adapters;
 
 import com.lateensoft.pathfinder.toolkit.R;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -30,19 +29,19 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	public static long POINTBUY_ID = 5;
 	public static long DICE_ROLLER_ID = 6;
 	
-	private Context mContext;
+	private Context m_context;
 	
-	private String[] mGroupNames;
-	private int[] mGroupIconRes;
-	private String[] mCharacterSheetPages;
+	private String[] m_groupNames;
+	private int[] m_groupIconRes;
+	private String[] m_caracterSheetPages;
 	
-	private long mSelectedItem;
+	private long m_selectedItem;
 	
 	public PTNavDrawerAdapter(Context context) {
-		mContext = context;
+		m_context = context;
 		
-		mGroupNames = mContext.getResources().getStringArray(R.array.main_menu_array);
-		mGroupIconRes = new int[]{
+		m_groupNames = m_context.getResources().getStringArray(R.array.main_menu_array);
+		m_groupIconRes = new int[]{
 				R.drawable.character_sheet_icon,
 				R.drawable.initiative_icon,
 				R.drawable.skill_checker_icon,
@@ -50,16 +49,16 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 				R.drawable.stat_calc_icon,
 				R.drawable.dice_roller_icon
 		};
-		mCharacterSheetPages = new String[]{
-				mContext.getString(R.string.tab_character_fluff),
-				mContext.getString(R.string.tab_character_combat_stats),
-				mContext.getString(R.string.tab_character_abilities),
-				mContext.getString(R.string.tab_character_skills),
-				mContext.getString(R.string.tab_character_inventory),
-				mContext.getString(R.string.tab_character_armor),
-				mContext.getString(R.string.tab_character_weapons),
-				mContext.getString(R.string.tab_character_feats),
-				mContext.getString(R.string.tab_character_spells)
+		m_caracterSheetPages = new String[]{
+				m_context.getString(R.string.tab_character_fluff),
+				m_context.getString(R.string.tab_character_combat_stats),
+				m_context.getString(R.string.tab_character_abilities),
+				m_context.getString(R.string.tab_character_skills),
+				m_context.getString(R.string.tab_character_inventory),
+				m_context.getString(R.string.tab_character_armor),
+				m_context.getString(R.string.tab_character_weapons),
+				m_context.getString(R.string.tab_character_feats),
+				m_context.getString(R.string.tab_character_spells)
 		};
 	}
 	
@@ -84,7 +83,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	@Override
 	public int getChildrenCount(int groupPosition) {
 		if (getGroupId(groupPosition) == CHARACTER_SHEET_ID){
-			return mCharacterSheetPages.length;
+			return m_caracterSheetPages.length;
 		}
 		return 0;
 	}
@@ -106,7 +105,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 
 	@Override
 	public int getGroupCount() {
-		return mGroupNames.length;
+		return m_groupNames.length;
 	}
 
 	@Override
@@ -121,7 +120,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		ItemHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
@@ -135,17 +134,17 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			holder = (ItemHolder)row.getTag();
 		}
 		
-		holder.name.setText(mCharacterSheetPages[childPosition]);
+		holder.name.setText(m_caracterSheetPages[childPosition]);
 
 		holder.icon.setImageResource(R.drawable.character_sheet_icon);
 		holder.icon.setVisibility(View.INVISIBLE);
 		holder.groupState.setImageResource(R.drawable.expander_open_holo_dark);
 		holder.groupState.setVisibility(View.INVISIBLE);
 		
-		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == mSelectedItem) {
-			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
+		if (getCombinedChildId(getGroupId(groupPosition), getChildId(groupPosition, childPosition)) == m_selectedItem) {
+			row.setBackgroundColor(m_context.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holo_dialog_lighter_grey));
+			row.setBackgroundColor(m_context.getResources().getColor(R.color.holo_dialog_lighter_grey));
 		}
 		
 		return row;
@@ -159,7 +158,7 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		ItemHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 			row = inflater.inflate(R.layout.nav_drawer_item, parent, false);	
 			holder = new ItemHolder();
 			
@@ -173,8 +172,8 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 			holder = (ItemHolder)row.getTag();
 		}
 		
-		holder.name.setText(mGroupNames[groupPosition]);
-		holder.icon.setImageResource(mGroupIconRes[groupPosition]);
+		holder.name.setText(m_groupNames[groupPosition]);
+		holder.icon.setImageResource(m_groupIconRes[groupPosition]);
 		if (isExpanded) {
 			holder.groupState.setImageResource(R.drawable.expander_open_holo_dark);
 		} else {
@@ -188,12 +187,12 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 		}
 		
 		// Show the selection indicator on the group, or on the character group is collapsed while a child is selected
-		if (getCombinedGroupId(getGroupId(groupPosition)) == mSelectedItem || 
+		if (getCombinedGroupId(getGroupId(groupPosition)) == m_selectedItem ||
 				(getCombinedGroupId(getGroupId(groupPosition)) == CHARACTER_SHEET_ID &&
-				mSelectedItem >= FLUFF_ID && !isExpanded)) {
-			row.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
+				m_selectedItem >= FLUFF_ID && !isExpanded)) {
+			row.setBackgroundColor(m_context.getResources().getColor(android.R.color.holo_blue_light));
 		} else {
-			row.setBackgroundColor(mContext.getResources().getColor(R.color.holo_dialog_grey));
+			row.setBackgroundColor(m_context.getResources().getColor(R.color.holo_dialog_grey));
 		}
 		
 		return row;
@@ -235,11 +234,11 @@ public class PTNavDrawerAdapter implements ExpandableListAdapter{
 	}
 	
 	public void setSelectedItem(long combinedItemId) {
-		mSelectedItem = combinedItemId;
+		m_selectedItem = combinedItemId;
 	}
 	
 	public long getSelectedItem() {
-		return mSelectedItem;
+		return m_selectedItem;
 	}
 	
 	static class ItemHolder {

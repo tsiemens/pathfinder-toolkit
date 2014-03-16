@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.adapters.character;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class PTWeaponAdapter extends ArrayAdapter<PTWeapon> {
 		WeaponHolder holder;
 		
 		if(row == null) {
-			LayoutInflater inflater = ((Activity)m_context).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 			
 			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new WeaponHolder();

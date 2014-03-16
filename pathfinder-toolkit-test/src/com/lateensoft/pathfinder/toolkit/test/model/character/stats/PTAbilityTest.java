@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 
 import junit.framework.TestCase;
 
-public class PTAbilityScoreTest extends TestCase {
+public class PTAbilityTest extends TestCase {
 	private PTAbility abilityScore;
 	
 	private static final int DEFAULT_SCORE = 10;

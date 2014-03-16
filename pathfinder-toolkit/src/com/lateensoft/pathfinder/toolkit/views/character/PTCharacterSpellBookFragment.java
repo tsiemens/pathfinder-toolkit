@@ -65,7 +65,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment {
 
 	private void refreshSpellListView() {
         Collections.sort(m_spellBook);
-		PTSpellBookAdapter adapter = new PTSpellBookAdapter(getActivity(),
+		PTSpellBookAdapter adapter = new PTSpellBookAdapter(getContext(),
 				R.layout.character_spellbook_row,
 				m_spellBook);
 		
@@ -75,7 +75,7 @@ public class PTCharacterSpellBookFragment extends PTCharacterSheetFragment {
 	}
 	
 	private void showSpellEditor(PTSpell spell) {
-		Intent spellEditIntent = new Intent(getActivity(),
+		Intent spellEditIntent = new Intent(getContext(),
 				PTCharacterSpellEditActivity.class);
 		spellEditIntent.putExtra(
 				PTCharacterSpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, spell);

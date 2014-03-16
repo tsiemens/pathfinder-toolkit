@@ -5,7 +5,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.PTAbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.PTSkillSet;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -44,7 +43,7 @@ public class PTSkillsAdapter extends ArrayAdapter<PTSkill> {
 		SkillHolder holder;
 
 		if (row == null) {
-			LayoutInflater inflater = ((Activity) m_context).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(m_context);
 
 			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new SkillHolder();

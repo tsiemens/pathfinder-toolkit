@@ -422,7 +422,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 			
 			if (defaultAbilityKey != -1) {
 				PTAbilitySelectionDialog dialog = 
-						new PTAbilitySelectionDialog(getActivity(), currentAbility, defaultAbilityKey);
+						new PTAbilitySelectionDialog(getContext(), currentAbility, defaultAbilityKey);
 				dialog.setOnAbilitySelectedListener(new AbilityDialogListener());
 				dialog.show();
 			}
@@ -747,7 +747,7 @@ public class PTCharacterCombatStatsFragment extends PTCharacterSheetFragment
 		m_combatStats = m_statsRepo.query(getCurrentCharacterID());
 		m_saveSet = new PTSaveSet(m_saveRepo.querySet(getCurrentCharacterID()));
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
-		m_abilitySet = new PTAbilitySet(m_abilityRepo.querySet(getCurrentCharacterID()));
+		m_abilitySet = m_abilityRepo.querySet(getCurrentCharacterID());
 	}
 
 }
