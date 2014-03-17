@@ -15,7 +15,7 @@ public class PTAbilityRepositoryTest extends PTBaseRepositoryTest {
 		super.setUp();
 		m_repo = new PTAbilityRepository();
 
-		m_ability = m_repo.queryAllForCharacter(m_characterId)[2];
+		m_ability = m_repo.queryAllForCharacter(m_characterId).get(2);
 	}
 	
 	public void testQuery() {
@@ -32,11 +32,11 @@ public class PTAbilityRepositoryTest extends PTBaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		PTAbility[] queriedAbilityScores = m_repo.queryAllForCharacter(m_characterId);
+		List<PTAbility> queriedAbilityScores = m_repo.queryAllForCharacter(m_characterId);
 		List<Integer> constAbilityKeys = PTAbilitySet.ABILITY_KEYS();
 		
 		for (int i = 0; i < constAbilityKeys.size(); i++){
-			assertEquals(constAbilityKeys.get(i).intValue(), queriedAbilityScores[i].getID());
+			assertEquals(constAbilityKeys.get(i).intValue(), queriedAbilityScores.get(i).getID());
 		}
 	}
 	

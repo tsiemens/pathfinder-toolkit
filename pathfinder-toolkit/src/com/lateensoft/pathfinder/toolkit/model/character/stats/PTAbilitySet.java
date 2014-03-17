@@ -50,7 +50,7 @@ public class PTAbilitySet implements Parcelable{
      * If an ability does not exist, will be added and set to default.
      * Invalid abilities are removed
      */
-    public static PTAbilitySet newValidAbilitySet(List<PTAbility> abilities, @Nullable CorrectionListener listener) {
+    public static PTAbilitySet newValidatedAbilitySet(List<PTAbility> abilities, @Nullable CorrectionListener listener) {
         PTAbilitySet newAbilitySet = new PTAbilitySet(abilities);
         newAbilitySet.validate(listener);
         return newAbilitySet;

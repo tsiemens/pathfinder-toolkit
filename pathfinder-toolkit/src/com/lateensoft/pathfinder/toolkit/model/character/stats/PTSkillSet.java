@@ -158,10 +158,7 @@ public class PTSkillSet implements Parcelable {
     }
 	
 	public PTSkill getSkillByIndex(int index) {
-		if( index >= 0 && index < m_skills.size() )
-			return m_skills.get(index);
-		else
-			return null;
+	    return m_skills.get(index);
 	}
 	
 	public void setCharacterID(long id) {

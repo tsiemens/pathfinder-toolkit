@@ -79,7 +79,7 @@ public class PTAbilityRepository extends PTBaseRepository<PTAbility> {
 	}
 
     public PTAbilitySet querySet(long characterId) {
-        return PTAbilitySet.newValidAbilitySet(queryAllForCharacter(characterId),
+        return PTAbilitySet.newValidatedAbilitySet(queryAllForCharacter(characterId),
                 new PTAbilitySet.CorrectionListener() {
                     @Override
                     public void onInvalidAbilityRemoved(PTAbility removedAbility) {
