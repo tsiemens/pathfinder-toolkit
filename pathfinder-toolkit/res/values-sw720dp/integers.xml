@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="spell_row_description_visibility">0</integer>
+
+    <integer name="feat_row_description_visibility">0</integer>
+</resources>
