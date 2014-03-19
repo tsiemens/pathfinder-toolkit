@@ -2,8 +2,11 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
+
+import java.io.InvalidObjectException;
 
 /**
  * @author tsiemens
@@ -34,12 +37,12 @@ public class SpellXMLAdapter extends XMLObjectAdapter<PTSpell> {
     }
 
     @Override
-    protected PTSpell convertToObject(Element element) {
+    protected PTSpell convertToObject(Element element) throws InvalidObjectException {
         PTSpell spell = new PTSpell();
-        spell.setName(getStringAttribute(element, NAME_ATTR, ""));
-        spell.setLevel(getBoundedIntAttribute(element, LEVEL_ATTR, 0, 10, 0));
-        spell.setPrepared(getBoundedIntAttribute(element, PREPARED_ATTR, 0, 40, 0));
-        spell.setDescription(getSubElementContent(element, DESC_ELEMENT, ""));
+        spell.setName(getStringAttribute(element, NAME_ATTR));
+        spell.setLevel(getBoundedIntAttribute(element, LEVEL_ATTR, 0, 10));
+        spell.setPrepared(getBoundedIntAttribute(element, PREPARED_ATTR, 0, 40));
+        spell.setDescription(getSubElementContent(element, DESC_ELEMENT));
         return spell;
     }
 

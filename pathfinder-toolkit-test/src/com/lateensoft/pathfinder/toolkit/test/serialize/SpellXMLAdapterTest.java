@@ -6,6 +6,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import java.io.InvalidObjectException;
+
 /**
  * @author trevsiemens
  */
@@ -13,7 +15,7 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
 
     private static final SpellXMLAdapter m_adapter = new SpellXMLAdapter();
 
-    public void testToObject() throws DocumentException {
+    public void testToObject() throws InvalidObjectException, DocumentException {
         Element element = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
                 "<desc>description and \nStuff</desc></spell>").getRootElement();
         PTSpell expectedSpell = new PTSpell("fire", 3);
@@ -24,36 +26,38 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
         assertEquals(expectedSpell, generatedSpell);
     }
 
-    public void testToObjectInvalid() throws DocumentException {
-        Element invalidElement1 = DocumentHelper.parseText("<spell >" +
-                "</spell>").getRootElement();
-        PTSpell expectedSpell1 = new PTSpell("", 0);
-        expectedSpell1.setPrepared(0);
-        expectedSpell1.setDescription("");
+    public void testToObjectInvalid() throws InvalidObjectException, DocumentException {
+        try {
+            Element invalidElement1 = DocumentHelper.parseText("<spell >" +
+                    "</spell>").getRootElement();
+            m_adapter.toObject(invalidElement1);
+            fail();
+        } catch (InvalidObjectException e) {} catch (DocumentException e) {
+            e.printStackTrace();
+        }
 
-        PTSpell generatedSpell1 = m_adapter.toObject(invalidElement1);
-        assertEquals(expectedSpell1, generatedSpell1);
+        try {
+            Element invalidElement2 = DocumentHelper.parseText("<spell name=\"fire\" level=\"1.5\" prepared=\"abc\">" +
+                    "<desc></desc></spell>").getRootElement();
+            m_adapter.toObject(invalidElement2);
+            fail();
+        } catch (InvalidObjectException e) {}
 
-        Element invalidElement2 = DocumentHelper.parseText("<spell name=\"fire\" level=\"1.5\" prepared=\"abc\">" +
-                "<desc></desc></spell>").getRootElement();
-        PTSpell expectedSpell2 = new PTSpell("fire", 0);
-        expectedSpell2.setPrepared(0);
-        expectedSpell2.setDescription("");
+        try {
+            Element invalidElement3 = DocumentHelper.parseText("<spell name=\"fire\" level=\"20\" prepared=\"-1\">" +
+                    "<desc></desc></spell>").getRootElement();
+            m_adapter.toObject(invalidElement3);
+            fail();
+        } catch (InvalidObjectException e) {}
 
-        PTSpell generatedSpell2 = m_adapter.toObject(invalidElement2);
-        assertEquals(expectedSpell2, generatedSpell2);
-
-        Element invalidElement3 = DocumentHelper.parseText("<spell name=\"fire\" level=\"20\" prepared=\"-1\">" +
-                "<desc></desc></spell>").getRootElement();
-        PTSpell expectedSpell3 = new PTSpell("fire", 10);
-        expectedSpell3.setPrepared(0);
-        expectedSpell3.setDescription("");
-
-        PTSpell generatedSpell3 = m_adapter.toObject(invalidElement3);
-        assertEquals(expectedSpell3, generatedSpell3);
+        try {
+            Element invalidElement4 = DocumentHelper.parseText("<spell name=\"fire\" level=\"3.0\" prepared=\"20.0\">" +
+                    "<desc>description and \nStuff</desc></spell>").getRootElement();
+            m_adapter.toObject(invalidElement4);
+        } catch (InvalidObjectException e) {}
     }
 
-    public void testToXML() throws DocumentException {
+    public void testToXML() throws InvalidObjectException, DocumentException {
         Element expectedElement = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
                 "<desc>description and \nStuff</desc></spell>").getRootElement();
         PTSpell spell = new PTSpell("fire", 3);

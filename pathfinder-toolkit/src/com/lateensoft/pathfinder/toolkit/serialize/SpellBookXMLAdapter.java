@@ -2,14 +2,16 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
+import java.io.InvalidObjectException;
 import java.util.List;
 
 /**
- * @author trevsiemens
+ * @author tsiemens
  */
-public class SpellBookXMLAdapter extends XMLObjectAdapter<PTSpellBook> {
+public class SpellBookXMLAdapter extends ListXMLAdapter<PTSpellBook, PTSpell, SpellXMLAdapter> {
 
     public static final String ELEMENT_NAME = "spellbook";
 
@@ -21,15 +23,12 @@ public class SpellBookXMLAdapter extends XMLObjectAdapter<PTSpellBook> {
     }
 
     @Override
-    protected PTSpellBook convertToObject(Element element) {
-        List<PTSpell> spells = getSubObjects(element, m_spellAdapter);
-        return new PTSpellBook(spells);
+    public SpellXMLAdapter getItemAdapter() {
+        return m_spellAdapter;
     }
 
     @Override
-    protected void setContentForObject(Element element, PTSpellBook spellBook) {
-        for (PTSpell spell : spellBook) {
-            element.add(m_spellAdapter.toXML(spell));
-        }
+    protected PTSpellBook createFromItems(List<PTSpell> items) {
+        return new PTSpellBook(items);
     }
 }

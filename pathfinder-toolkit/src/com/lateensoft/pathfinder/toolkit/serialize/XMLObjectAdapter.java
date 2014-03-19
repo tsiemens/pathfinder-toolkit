@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
+import java.io.InvalidObjectException;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public abstract class XMLObjectAdapter<E> {
 
     public abstract String getElementName();
 
-    protected abstract E convertToObject(Element element);
+    protected abstract E convertToObject(Element element) throws InvalidObjectException;
     protected abstract void setContentForObject(Element element, E object);
 
     public Element toXML(E object) {
@@ -22,7 +23,7 @@ public abstract class XMLObjectAdapter<E> {
         return element;
     }
 
-    public E toObject(Element element) {
+    public E toObject(Element element) throws InvalidObjectException {
         if (element.getName().equals(getElementName())) {
             return convertToObject(element);
         } else {
@@ -31,55 +32,69 @@ public abstract class XMLObjectAdapter<E> {
         }
     }
 
-    public static int getIntAttribute(Element element, String attrName, int defaultVal) {
-        return getBoundedIntAttribute(element, attrName, Integer.MIN_VALUE, Integer.MAX_VALUE, defaultVal);
+    public static int getIntAttribute(Element element, String attrName) throws InvalidObjectException {
+        return getBoundedIntAttribute(element, attrName, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    public static int getBoundedIntAttribute(Element element, String attrName, int lowestVal, int highestVal, int defaultVal) {
+    public static int getBoundedIntAttribute(Element element, String attrName, int lowestVal, int highestVal) throws InvalidObjectException {
         try {
-            int val = Integer.parseInt(element.attributeValue(attrName));
-            if (val < lowestVal) {
-                return lowestVal;
-            } else if (val > highestVal) {
-                return highestVal;
+            String intString = element.attributeValue(attrName);
+            if (intString == null) {
+                throw new InvalidObjectException(String.format("Missing integer attribute '%s' in '%s'", attrName, element.getName()));
+            }
+            int val = Integer.parseInt(intString);
+            if (val < lowestVal || val > highestVal) {
+                throw new InvalidObjectException(String.format("'%s' in '%s' must be between %d and %d",
+                        attrName, element.getName(), lowestVal, highestVal));
             } else {
                 return val;
             }
         } catch (NumberFormatException e) {
-            return defaultVal;
+            throw new InvalidObjectException(String.format("Malformed integer attribute '%s' in '%s'", attrName, element.getName()));
         }
     }
 
-    public static long getLongAttribute(Element element, String attrName, long defaultVal) {
+    public static long getLongAttribute(Element element, String attrName) throws InvalidObjectException {
         try {
-            return Long.parseLong(element.attributeValue(attrName));
+            String longString = element.attributeValue(attrName);
+            if (longString == null) {
+                throw new InvalidObjectException(String.format("Missing large integer attribute '%s' in '%s'", attrName, element.getName()));
+            }
+            return Long.parseLong(longString);
         } catch (NumberFormatException e) {
-            return defaultVal;
+            throw new InvalidObjectException(String.format("Malformed large integer attribute '%s' in '%s'", attrName, element.getName()));
         }
     }
 
-    public static String getStringAttribute(Element element, String attrName, String defaultVal) {
+    public static String getStringAttribute(Element element, String attrName) throws InvalidObjectException {
         String val = element.attributeValue(attrName);
-        return (val != null) ? val : defaultVal;
+        if (val == null) {
+            throw new InvalidObjectException(String.format("Missing text attribute '%s' in '%s'", attrName, element.getName()));
+        } else {
+            return val;
+        }
     }
 
-    public static boolean getBooleanAttribute(Element element, String attrName, boolean defaultVal) {
+    public static boolean getBooleanAttribute(Element element, String attrName) throws InvalidObjectException {
         String boolString = element.attributeValue(attrName);
+        if (boolString == null) {
+            throw new InvalidObjectException(String.format("Missing boolean attribute '%s' in '%s'", attrName, element.getName()));
+        }
         if ("true".equalsIgnoreCase(boolString)) return true;
         else if ("false".equalsIgnoreCase(boolString)) return false;
-        else return defaultVal;
+        else throw new InvalidObjectException(String.format("Attribute '%s' in '%s' must contain 'true' or 'false'", attrName, element.getName()));
     }
 
-    public static String getSubElementContent(Element element, String subElementName, String defaultVal) {
+    public static String getSubElementContent(Element element, String subElementName) throws InvalidObjectException {
         Element subElement = element.element(subElementName);
-        if (subElement != null && subElement.getText() != null) {
-            return subElement.getText();
-        } else {
-            return defaultVal;
+        if (subElement == null) {
+            throw new InvalidObjectException(String.format("Required element '%s' not found in '%s'", subElementName, element.getName()));
         }
+        return (subElement.getText() != null) ? subElement.getText() : "";
     }
 
-    public static <T> List<T> getSubObjects(Element element, XMLObjectAdapter<T> adapter) {
+    public static <T> List<T> getSubObjects(Element element, XMLObjectAdapter<T> adapter) throws InvalidObjectException {
+        @SuppressWarnings("unchecked")
         List<Element> subElements = element.elements(adapter.getElementName());
         List<T> subObjects = Lists.newArrayListWithCapacity(subElements.size());
         for (Element subElement : subElements) {

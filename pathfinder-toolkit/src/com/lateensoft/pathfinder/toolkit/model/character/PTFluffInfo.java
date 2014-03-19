@@ -40,11 +40,11 @@ public class PTFluffInfo implements Parcelable, PTStorable {
 		m_size = "";
 		m_gender = "";
 		m_height = "";
-		m_weight = new String("");
-		m_eyes = new String("");
-		m_hair = new String("");
-		m_languages = new String("");
-		m_description = new String("");
+		m_weight = "";
+		m_eyes = "";
+		m_hair = "";
+		m_languages = "";
+		m_description = "";
 		
 		m_characterId = UNSET_ID;
 	}
