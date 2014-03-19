@@ -187,8 +187,6 @@
                 android:gravity="center" />
 
             <include
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
                  layout="@layout/character_combat_stats_plus"/>
 
             <LinearLayout
@@ -323,8 +321,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -352,8 +348,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
@@ -366,8 +360,6 @@
                     android:gravity="center" />
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -395,8 +387,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -424,8 +414,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -453,8 +441,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -643,8 +629,6 @@
             </LinearLayout>
 
             <include
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
                  layout="@layout/character_combat_stats_plus"/>
 
             <TextView
@@ -657,8 +641,6 @@
                     android:gravity="center" />
 
             <include
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
                  layout="@layout/character_combat_stats_minus"/>
 
             <LinearLayout
@@ -735,8 +717,6 @@
                     android:gravity="center" />
 
             <include
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 layout="@layout/character_combat_stats_plus"/>
 
             <LinearLayout
@@ -826,8 +806,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
@@ -840,8 +818,6 @@
                     android:gravity="center" />
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -869,8 +845,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -898,8 +872,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -989,8 +961,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
@@ -1003,8 +973,6 @@
                     android:gravity="center" />
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -1032,8 +1000,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -1061,8 +1027,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -1153,8 +1117,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <TextView
@@ -1167,8 +1129,6 @@
                     android:gravity="center" />
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -1196,8 +1156,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
@@ -1225,8 +1183,6 @@
                 </LinearLayout>
 
                 <include
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
                      layout="@layout/character_combat_stats_plus"/>
 
                 <LinearLayout
