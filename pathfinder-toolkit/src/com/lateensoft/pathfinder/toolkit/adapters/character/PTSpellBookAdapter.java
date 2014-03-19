@@ -21,11 +21,11 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 	public PTSpellBookAdapter(Context context, int layoutResourceId,
 			PTSpell[] spells) {
 		super(context, layoutResourceId, spells);
-		Log.v(TAG, "Constructing"); //TODO:Debug log
+		Log.v(TAG, "Constructing");
 		mLayoutResourceId = layoutResourceId;
 		mContext = context;
 		mSpells = spells;		
-		Log.v(TAG, "Finished constructing"); //TODO:Debug log
+		Log.v(TAG, "Finished constructing");
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -64,7 +64,7 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 		holder.prepared.setText(Integer.toString(mSpells[position].getPrepared()));
 		holder.description.setText(mSpells[position].getDescription().split("\\r?\\n")[0]);
 
-		Log.v(TAG, "Finishing getView"); //TODO:Debug log
+		Log.v(TAG, "Finishing getView");
 		return row;
 	}
 

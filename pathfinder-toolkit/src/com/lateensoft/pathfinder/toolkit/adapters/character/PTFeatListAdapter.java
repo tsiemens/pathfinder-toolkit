@@ -20,11 +20,11 @@ public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
 
 	public PTFeatListAdapter(Context context, int layoutResourceId, PTFeat[] feats) {
 		super(context, layoutResourceId, feats);
-		Log.v(TAG, "Constructing"); //TODO:Debug log
+		Log.v(TAG, "Constructing");
 		mLayoutResourceId = layoutResourceId;
 		mContext = context;
 		mFeats = feats;
-		Log.v(TAG, "Finished constructing"); //TODO:Debug log
+		Log.v(TAG, "Finished constructing");
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -50,7 +50,7 @@ public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
 		holder.name.setText(mFeats[position].getName());
 		holder.description.setText(mFeats[position].getDescription().split("\\r?\\n")[0]);
 
-		Log.v(TAG, "Finishing getView"); //TODO:Debug log
+		Log.v(TAG, "Finishing getView");
 		return row;
 	}
 
