@@ -2,8 +2,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingTop="10dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingLeft="@dimen/combat_stats_symbol_padding"
+    android:paddingRight="@dimen/combat_stats_symbol_padding"
     android:gravity="center"
-    android:text="@string/minus" >
+    android:text="@string/plus" >
 </TextView>
