@@ -8,6 +8,7 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:paddingLeft="10dp"
         android:gravity="left|center_vertical"/>
 
     <TextView
@@ -17,7 +18,7 @@
         android:layout_weight="1"
         android:gravity="right|center_vertical"
         android:maxLines="1"
-        android:paddingRight="15dp"
+        android:paddingRight="10dp"
         android:textColor="@color/subtle_text"
         android:visibility="@integer/feat_row_description_visibility"/>
 
