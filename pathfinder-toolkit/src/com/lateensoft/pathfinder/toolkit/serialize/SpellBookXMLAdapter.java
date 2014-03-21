@@ -2,10 +2,7 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
 
-import java.io.InvalidObjectException;
 import java.util.List;
 
 /**
@@ -28,7 +25,7 @@ public class SpellBookXMLAdapter extends ListXMLAdapter<PTSpellBook, PTSpell, Sp
     }
 
     @Override
-    protected PTSpellBook createFromItems(List<PTSpell> items) {
+    protected PTSpellBook createObjectFromItems(List<PTSpell> items) {
         return new PTSpellBook(items);
     }
 }

@@ -14,18 +14,18 @@ public abstract class XMLObjectAdapter<E> {
 
     public abstract String getElementName();
 
-    protected abstract E convertToObject(Element element) throws InvalidObjectException;
-    protected abstract void setContentForObject(Element element, E object);
+    protected abstract E createObjectForElement(Element element) throws InvalidObjectException;
+    protected abstract void setElementContentForObject(Element element, E object);
 
     public Element toXML(E object) {
         Element element = new DefaultElement(getElementName());
-        setContentForObject(element, object);
+        setElementContentForObject(element, object);
         return element;
     }
 
     public E toObject(Element element) throws InvalidObjectException {
         if (element.getName().equals(getElementName())) {
-            return convertToObject(element);
+            return createObjectForElement(element);
         } else {
             throw new IllegalArgumentException("Element type " + element.getName() +
                     " does not match " + getElementName());
@@ -51,6 +51,28 @@ public abstract class XMLObjectAdapter<E> {
             }
         } catch (NumberFormatException e) {
             throw new InvalidObjectException(String.format("Malformed integer attribute '%s' in '%s'", attrName, element.getName()));
+        }
+    }
+
+    public static double getDoubleAttribute(Element element, String attrName) throws InvalidObjectException {
+        return getBoundedDoubleAttribute(element, attrName, Double.MIN_VALUE, Double.MAX_VALUE);
+    }
+
+    public static double getBoundedDoubleAttribute(Element element, String attrName, double lowestVal, double highestVal) throws InvalidObjectException {
+        try {
+            String doubleString = element.attributeValue(attrName);
+            if (doubleString == null) {
+                throw new InvalidObjectException(String.format("Missing decimal attribute '%s' in '%s'", attrName, element.getName()));
+            }
+            double val = Double.parseDouble(doubleString);
+            if (val < lowestVal || val > highestVal) {
+                throw new InvalidObjectException(String.format("'%s' in '%s' must be between %f and %f",
+                        attrName, element.getName(), lowestVal, highestVal));
+            } else {
+                return val;
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidObjectException(String.format("Malformed decimal attribute '%s' in '%s'", attrName, element.getName()));
         }
     }
 

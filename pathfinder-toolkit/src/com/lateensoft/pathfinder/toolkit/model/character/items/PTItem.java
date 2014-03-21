@@ -6,14 +6,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PTItem implements Parcelable, PTStorable, Comparable<PTItem> {
-	String m_name;
-	double m_weight;
-	int m_quantity;
+    private String m_name;
+    private double m_weight;
+    private int m_quantity;
 	//set if in a container such as a bag of holding (will be used to set effective weight to 0)
-	boolean m_isContained;
-	
-	long m_id;
-	long m_characterId;
+    private boolean m_isContained;
+
+    private long m_id;
+    private long m_characterId;
 	
 	public PTItem(long id, long characterId, String name, double weight, int quantity, boolean contained) {
 		m_id = id;
@@ -100,7 +100,7 @@ public class PTItem implements Parcelable, PTStorable, Comparable<PTItem> {
 		return m_isContained;
 	}
 	
-	public void setIsContained(boolean isContained){
+	public void setContained(boolean isContained){
 		m_isContained = isContained;
 	}
 	

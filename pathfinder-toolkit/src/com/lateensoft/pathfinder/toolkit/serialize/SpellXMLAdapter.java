@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
 import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
+import com.lateensoft.pathfinder.toolkit.serialize.XMLObjectAdapter;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
@@ -26,18 +27,7 @@ public class SpellXMLAdapter extends XMLObjectAdapter<PTSpell> {
     }
 
     @Override
-    protected void setContentForObject(Element element, PTSpell spell) {
-        element.addAttribute(NAME_ATTR, spell.getName());
-        element.addAttribute(LEVEL_ATTR, Integer.toString(spell.getLevel()));
-        element.addAttribute(PREPARED_ATTR, Integer.toString(spell.getPrepared()));
-
-        Element description = new DefaultElement(DESC_ELEMENT);
-        description.setText(spell.getDescription());
-        element.add(description);
-    }
-
-    @Override
-    protected PTSpell convertToObject(Element element) throws InvalidObjectException {
+    protected PTSpell createObjectForElement(Element element) throws InvalidObjectException {
         PTSpell spell = new PTSpell();
         spell.setName(getStringAttribute(element, NAME_ATTR));
         spell.setLevel(getBoundedIntAttribute(element, LEVEL_ATTR, 0, 10));
@@ -46,5 +36,14 @@ public class SpellXMLAdapter extends XMLObjectAdapter<PTSpell> {
         return spell;
     }
 
+    @Override
+    protected void setElementContentForObject(Element element, PTSpell spell) {
+        element.addAttribute(NAME_ATTR, spell.getName());
+        element.addAttribute(LEVEL_ATTR, Integer.toString(spell.getLevel()));
+        element.addAttribute(PREPARED_ATTR, Integer.toString(spell.getPrepared()));
 
+        Element description = new DefaultElement(DESC_ELEMENT);
+        description.setText(spell.getDescription());
+        element.add(description);
+    }
 }

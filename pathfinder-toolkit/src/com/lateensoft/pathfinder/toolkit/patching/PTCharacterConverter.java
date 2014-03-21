@@ -124,7 +124,7 @@ public class PTCharacterConverter {
 		newItem.setName(oldItem.getName());
 		newItem.setQuantity(oldItem.getQuantity());
 		newItem.setWeight(oldItem.getWeight());
-		newItem.setIsContained(oldItem.isContained());
+		newItem.setContained(oldItem.isContained());
 	}
 	
 	private static void setWeapon(PTWeapon newWeapon, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTWeapon oldWeapon) {

@@ -47,7 +47,7 @@ public class PTItemRepository extends PTBaseRepository<PTItem> {
 		item.setName(name);
 		item.setWeight(weight);
 		item.setQuantity(quantity);
-		item.setIsContained(isContained);
+		item.setContained(isContained);
 	}
 	
 	@Override

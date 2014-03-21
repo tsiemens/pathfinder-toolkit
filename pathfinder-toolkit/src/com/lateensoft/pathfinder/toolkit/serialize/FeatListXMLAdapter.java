@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
+
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class FeatListXMLAdapter extends ListXMLAdapter<PTFeatList, PTFeat, FeatX
     }
 
     @Override
-    protected PTFeatList createFromItems(List<PTFeat> items) {
+    protected PTFeatList createObjectFromItems(List<PTFeat> items) {
         return new PTFeatList(items);
     }
 }

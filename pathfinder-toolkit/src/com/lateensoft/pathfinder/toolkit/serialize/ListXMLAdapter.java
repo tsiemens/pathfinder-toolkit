@@ -11,16 +11,16 @@ import java.util.List;
 public abstract class ListXMLAdapter<L extends List<E>, E, A extends XMLObjectAdapter<E>> extends XMLObjectAdapter<L> {
 
     public abstract A getItemAdapter();
-    protected abstract L createFromItems(List<E> items);
+    protected abstract L createObjectFromItems(List<E> items);
 
     @Override
-    protected L convertToObject(Element element) throws InvalidObjectException {
+    protected L createObjectForElement(Element element) throws InvalidObjectException {
         List<E> items = getSubObjects(element, getItemAdapter());
-        return createFromItems(items);
+        return createObjectFromItems(items);
     }
 
     @Override
-    protected void setContentForObject(Element element, L list) {
+    protected void setElementContentForObject(Element element, L list) {
         A adapter = getItemAdapter();
         for (E item : list) {
             element.add(adapter.toXML(item));

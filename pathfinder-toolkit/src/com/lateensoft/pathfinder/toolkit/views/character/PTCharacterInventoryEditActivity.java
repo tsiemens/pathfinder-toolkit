@@ -65,7 +65,7 @@ public class PTCharacterInventoryEditActivity extends PTParcelableEditorActivity
 		m_item.setName(name);
 		m_item.setWeight(weight);
 		m_item.setQuantity(quantity);
-		m_item.setIsContained(contained);
+		m_item.setContained(contained);
 	}
 
 	@Override

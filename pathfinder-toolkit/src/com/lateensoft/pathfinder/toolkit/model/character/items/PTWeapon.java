@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model.character.items;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.Context;
@@ -7,25 +8,27 @@ import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class PTWeapon extends PTItem implements Parcelable {
-	int m_totalAttackBonus;
-	String m_damage;
-	String m_critical;
-	int m_range;
-	String m_specialProperties;
-	int m_ammunition;
-	String m_type;
-	String m_size;
+	private int m_totalAttackBonus;
+    private String m_damage;
+    private String m_critical;
+    private int m_range;
+    private String m_specialProperties;
+    private int m_ammunition;
+    private String m_type;
+    private String m_size;
 	
 	public PTWeapon() {
 		super();
 		m_totalAttackBonus = 0;
-		m_damage = new String("");
-		m_critical = new String("x2");
+		m_damage = "";
+		m_critical = "x2";
 		m_range = 5;
-		m_specialProperties = new String("");
+		m_specialProperties = "";
 		m_ammunition = 0;
-		m_type = new String("");
+		m_type = "";
 		m_size = "M";
 	}
 	
@@ -58,16 +61,10 @@ public class PTWeapon extends PTItem implements Parcelable {
 		out.writeString(m_size);
 	}
 
-	/**
-	 * @return the mTotalAttackBonus
-	 */
 	public int getTotalAttackBonus() {
 		return m_totalAttackBonus;
 	}
 
-	/**
-	 * @param totalAttackBonus
-	 */
 	public void setTotalAttackBonus(int totalAttackBonus) {
 		this.m_totalAttackBonus = totalAttackBonus;
 	}
@@ -80,101 +77,65 @@ public class PTWeapon extends PTItem implements Parcelable {
 		}
 		return 1;
 	}
-	
-	/**
-	 * @return the mDamage
-	 */
+
+    public static boolean isValidSize(Context context, String sizeString) {
+        Resources r = context.getResources();
+        List<String> types = Lists.newArrayList(r.getStringArray(R.array.size_spinner_options));
+        return types.contains(sizeString);
+    }
+
 	public String getDamage() {
 		return m_damage;
 	}
 
-	/**
-	 * @param damage
-	 */
 	public void setDamage(String damage) {
 		this.m_damage = damage;
 	}
 
-	/**
-	 * @return the mCritical
-	 */
 	public String getCritical() {
 		return m_critical;
 	}
 
-	/**
-	 * @param critical
-	 */
 	public void setCritical(String critical) {
 		this.m_critical = critical;
 	}
 
-	/**
-	 * @return the mRange
-	 */
 	public int getRange() {
 		return m_range;
 	}
 
-	/**
-	 * @param range
-	 */
 	public void setRange(int range) {
 		this.m_range = range;
 	}
 
-	/**
-	 * @return the mSpecialProperties
-	 */
 	public String getSpecialProperties() {
 		return m_specialProperties;
 	}
 
-	/**
-	 * @param specialProperties
-	 */
 	public void setSpecialProperties(String specialProperties) {
 		this.m_specialProperties = specialProperties;
 	}
 
-	/**
-	 * @return the mAmmunition
-	 */
 	public int getAmmunition() {
 		return m_ammunition;
 	}
 
-	/**
-	 * @param ammunition
-	 */
 	public void setAmmunition(int ammunition) {
 		this.m_ammunition = ammunition;
 	}
 
-	/**
-	 * @return the mType
-	 */
 	public String getType() {
 		return m_type;
 	}
 
-	/**
-	 * @param type
-	 */
 	public void setType(String type) {
 		this.m_type = type;
 	}
 
-	/**
-	 * @return the mSize
-	 */
 	public String getSize() {
 		return m_size;
 	}
 
-	/**
-	 * @param size
-	 */
 	public void setSize(String size) {
 		this.m_size = size;
 	}
@@ -188,6 +149,12 @@ public class PTWeapon extends PTItem implements Parcelable {
 		}
 		return 0;
 	}
+
+    public static boolean isValidType(Context context, String typeString) {
+        Resources r = context.getResources();
+        List<String> types = Lists.newArrayList(r.getStringArray(R.array.weapon_type_options));
+        return types.contains(typeString);
+    }
 	
 	public static final Parcelable.Creator<PTWeapon> CREATOR = new Parcelable.Creator<PTWeapon>() {
 		public PTWeapon createFromParcel(Parcel in) {
