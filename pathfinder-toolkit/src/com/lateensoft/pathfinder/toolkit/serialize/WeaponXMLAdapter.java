@@ -55,7 +55,7 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<PTWeapon> {
         if (!PTWeapon.isValidSize(PTBaseApplication.getAppContext(), sizeString)) {
             throw new InvalidObjectException("Weapon attribute 'size' invalid. Must be 'S', 'M', or 'L'.");
         }
-        weapon.setType(typeString);
+        weapon.setSize(sizeString);
     }
 
     @Override

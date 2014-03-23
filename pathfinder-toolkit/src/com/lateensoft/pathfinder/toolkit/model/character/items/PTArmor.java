@@ -1,7 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.model.character.items;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.R;
+
+import java.util.List;
 
 public class PTArmor extends PTItem {
 	boolean m_worn;
@@ -125,7 +131,7 @@ public class PTArmor extends PTItem {
 	}
 
 	public int getSizeInt() {
-		String[] sizeArray = {"S", "M", "L"};
+		String[] sizeArray = getSizeArray();
 		for(int i = 0; i < sizeArray.length; i++) {
 			if(m_size.equals(sizeArray[i]))
 				return i;
@@ -134,9 +140,18 @@ public class PTArmor extends PTItem {
 	}
 
 	public void setSizeInt(int size) {
-		String[] sizeArray = {"S", "M", "L"};
+		String[] sizeArray = getSizeArray();
 		m_size = sizeArray[size];
 	}
+
+    public static boolean isValidSize(String sizeString) {
+        List<String> types = Lists.newArrayList(getSizeArray());
+        return types.contains(sizeString);
+    }
+
+    private static String[] getSizeArray() {
+        return new String[] {"S", "M", "L"};
+    }
 	
 	public static final Parcelable.Creator<PTArmor> CREATOR = new Parcelable.Creator<PTArmor>() {
 		public PTArmor createFromParcel(Parcel in) {
