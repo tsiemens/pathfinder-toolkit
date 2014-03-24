@@ -321,7 +321,7 @@
     
     <!-- Armor -->
     <string name="add_armor_button">Add Armor</string>
-    <string name="armor_name_header">Name: \u0020</string>
+    <string name="armor_name_header">Name \u0020</string>
     <string name="armor_weight_header">Weight: \u0020</string>
     <string name="armor_size_header">Size: \u0020</string>
     <string name="armor_check_penalty_header">Armor Check Penalty: \u0020</string>
@@ -438,7 +438,7 @@
     
     <!-- Weapons -->
     <string name="add_weapon_button">Add Weapon</string>
-    <string name="weapon_name_header">Name: \u0020</string>
+    <string name="weapon_name_header">Name \u0020</string>
     <string name="weapon_weight_header">Weight: \u0020</string>
     <string name="weapon_size_header">Size: \u0020</string>
     <string name="weapon_critical_header">Critical: \u0020</string>
