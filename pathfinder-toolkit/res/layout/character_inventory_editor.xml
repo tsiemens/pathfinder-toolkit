@@ -12,12 +12,15 @@
 
         <EditText
             android:id="@+id/etItemName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:hint="@string/weapon_name_header"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp"
+            android:minWidth="@dimen/editor_name_min_width"
+            android:maxWidth="@dimen/editor_large_field_max_width"
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -78,10 +81,10 @@
 
         <CheckBox 
             android:id="@+id/checkboxItemContained"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="@string/inventory_contained_full"/>
+            android:text="@string/inventory_contained_full"
+            android:padding="5dp"/>
     </LinearLayout>
 
 </ScrollView>

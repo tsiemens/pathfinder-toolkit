@@ -33,4 +33,8 @@
     <dimen name="combat_stats_side_padding">10dp</dimen>
 
     <dimen name="combat_stats_symbol_padding">2dp</dimen>
+
+    <dimen name="editor_name_min_width">400dp</dimen>
+    <dimen name="editor_large_field_min_width">500dp</dimen>
+    <dimen name="editor_large_field_max_width">700dp</dimen>
 </resources>

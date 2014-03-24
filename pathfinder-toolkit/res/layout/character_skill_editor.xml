@@ -12,19 +12,20 @@
 
         <TextView
             android:id="@+id/tvSkillName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-        	android:maxLines="1"
-        	android:textStyle="bold"
-        	android:textSize="@dimen/larger_text_size" />
-        
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textSize="@dimen/larger_text_size"
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/etSkillSubType"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/skill_subtype_hint"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:padding="5dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -99,7 +100,7 @@
 
         <CheckBox 
             android:id="@+id/checkboxClassSkill"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
             android:text="@string/skills_class_skill_header"

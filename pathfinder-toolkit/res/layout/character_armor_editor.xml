@@ -12,10 +12,13 @@
 
         <EditText
             android:id="@+id/armorName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/armor_name_header"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp"
+            android:minWidth="@dimen/editor_name_min_width"
+            android:maxWidth="@dimen/editor_large_field_max_width"
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -212,20 +215,20 @@
 
         <CheckBox 
             android:id="@+id/checkboxIsWorn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
             android:text="@string/armor_is_worn"
             android:padding="5dp"/>
 
         <EditText
             android:id="@+id/etArmorSpecialProperties"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/armor_special_properties_hint"
             android:imeOptions="normal"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
+            android:padding="5dp"
+            android:minWidth="@dimen/editor_large_field_min_width"
+            android:maxWidth="@dimen/editor_large_field_max_width" />
     </LinearLayout>
 
 </ScrollView>
