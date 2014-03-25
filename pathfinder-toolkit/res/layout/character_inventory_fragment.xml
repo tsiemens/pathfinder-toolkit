@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -11,7 +11,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:weightSum="15" >
-        		
+
         <TextView
             android:id="@+id/tvGoldHeader"
             android:layout_width="0px"
@@ -20,7 +20,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/inventory_gold_header"/>
-        
+
         <EditText
             android:id="@+id/editTextGold"
             android:layout_width="0px"
@@ -31,7 +31,7 @@
             android:hint="@string/inventory_gold_hint"
             android:inputType="numberDecimal"
             android:imeOptions="actionDone"/>
-                
+
         <TextView
             android:id="@+id/tvWeightTotal"
             android:layout_width="0px"
@@ -42,7 +42,7 @@
             android:paddingRight="5dp"
             android:maxLines="1"
             android:text="@string/inventory_total_weight_header"/>
-        
+
          <Button
             android:id="@+id/buttonAddItem"
             android:layout_width="0px"
@@ -50,7 +50,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:text="@string/inventory_add_item_button" />
-         
+
     </LinearLayout>
 
     <LinearLayout

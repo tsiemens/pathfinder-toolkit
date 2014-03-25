@@ -3,50 +3,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:orientation="horizontal" >
-        		
-        <TextView
-            android:id="@+id/spellPreparedHeader"
-            android:layout_width="@dimen/spell_prepared_width"
+        android:orientation="horizontal"
+        android:weightSum="15" >
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="@string/spellbook_prepared"/>
-        
-        <TextView
-            android:id="@+id/levelText"
-            android:layout_width="@dimen/spell_level_width"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="@string/spellbook_level" />
-                
-        <TextView
-            android:id="@+id/nameHeader"
-            android:layout_width="@dimen/spell_name_width"
-            android:layout_height="fill_parent"
-            android:gravity="left|center_vertical"
-            android:text="@string/spellbook_name"/>
-        
-         <Button
+            android:orientation="horizontal"
+            android:layout_weight="13" >
+
+            <TextView
+                android:id="@+id/spellPreparedHeader"
+                android:layout_width="@dimen/spell_prepared_width"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="@string/spellbook_prepared"/>
+
+            <TextView
+                android:id="@+id/levelText"
+                android:layout_width="@dimen/spell_level_width"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="@string/spellbook_level" />
+
+            <TextView
+                android:id="@+id/nameHeader"
+                android:layout_width="@dimen/spell_name_width"
+                android:layout_height="fill_parent"
+                android:gravity="left|center_vertical"
+                android:text="@string/spellbook_name"/>
+        </LinearLayout>
+
+        <Button
             android:id="@+id/addSpell"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_gravity="right"
             android:gravity="center"
-            android:text="@string/spellbook_add_spell_button" />
-         
+            android:text="@string/spellbook_add_spell_button"
+            android:layout_weight="2" />
+
     </LinearLayout>
-    
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#FF909090" />
-    
+
     <ListView
         android:id="@+id/spells"
         android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"/>    
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
