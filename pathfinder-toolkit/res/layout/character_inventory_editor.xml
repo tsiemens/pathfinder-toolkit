@@ -16,67 +16,61 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:hint="@string/weapon_name_header"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:padding="5dp"
             android:minWidth="@dimen/editor_name_min_width"
             android:maxWidth="@dimen/editor_large_field_max_width"
             android:gravity="center" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2" >
 
-            <LinearLayout
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/inventory_quantity_full" />
+
+            <EditText
+                android:id="@+id/etItemQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:inputType="number"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal"
-                android:padding="5dp" >
+                android:text="@string/inventory_weight_full" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/inventory_quantity_full" />
-
-                <EditText
-                    android:id="@+id/etItemQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:inputType="number"
-                    android:hint="@null"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
-            
-            <LinearLayout
+            <EditText
+                android:id="@+id/etItemWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/inventory_weight_full" />
-
-                <EditText
-                    android:id="@+id/etItemWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:hint="@null"
-                    android:inputType="numberDecimal"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:hint="@null"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
         </LinearLayout>
 
         <CheckBox 

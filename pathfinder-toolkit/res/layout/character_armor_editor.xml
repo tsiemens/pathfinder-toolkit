@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/armor_name_header"
-            android:paddingBottom="5dp"
+            android:padding="5dp"
             android:minWidth="@dimen/editor_name_min_width"
             android:maxWidth="@dimen/editor_large_field_max_width"
             android:gravity="center" />
@@ -24,7 +24,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -33,25 +34,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_class_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorClass"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorClass"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -60,25 +55,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_size_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorSize"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -87,25 +76,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_max_dex" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorMaxDex"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorMaxDex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -114,25 +97,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_speed" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorSpeed"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorSpeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -141,25 +118,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_check_penalty_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorCheckPenalty"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorCheckPenalty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -168,25 +139,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_spell_failure_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spArmorSpellFailure"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spArmorSpellFailure"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -195,22 +160,15 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/armor_weight_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etArmorWeight"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etArmorWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:inputType="numberDecimal"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:inputType="numberDecimal"
+                android:gravity="center"
+                android:selectAllOnFocus="true" />
         </LinearLayout>
 
         <CheckBox 

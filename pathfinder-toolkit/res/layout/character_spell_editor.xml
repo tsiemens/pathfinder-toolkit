@@ -24,7 +24,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -33,26 +34,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/spellbook_level" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spSpellLevel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <Spinner
-                    android:id="@+id/spSpellLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -61,19 +55,11 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/spellbook_prepared" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spSpellPrepared"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <Spinner
-                    android:id="@+id/spSpellPrepared"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-                </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <EditText

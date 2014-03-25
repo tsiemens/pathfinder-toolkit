@@ -24,7 +24,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -33,25 +34,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_highest_atk" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spWeaponHighestAtk"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spWeaponHighestAtk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -60,30 +55,24 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_ammunition_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etWeaponAmmo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etWeaponAmmo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:inputType="number"
-                    android:hint="@null"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:inputType="number"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -92,25 +81,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_type_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spWeaponType"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spWeaponType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -119,25 +102,19 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_size_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spWeaponSize"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Spinner
-                    android:id="@+id/spWeaponSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -146,28 +123,23 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_range_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etWeaponRange"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etWeaponRange"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:inputType="numberDecimal"
-                    android:hint="@null"
-                    android:gravity="center"/>
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:inputType="numberDecimal"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -176,29 +148,23 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_critical_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etWeaponCrit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etWeaponCrit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:hint="@null"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -207,29 +173,23 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_damage_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etWeaponDamage"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etWeaponDamage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:hint="@null"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:weightSum="2" >
 
             <TextView
                 android:layout_width="0dp"
@@ -238,23 +198,16 @@
                 android:gravity="right|center_vertical"
                 android:text="@string/weapon_weight_header" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etWeaponWeight"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etWeaponWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp"
-                    android:maxWidth="100dp"
-                    android:inputType="numberDecimal"
-                    android:hint="@null"
-                    android:selectAllOnFocus="true"
-                    android:gravity="center" />
-            </LinearLayout>
+                android:minWidth="100dp"
+                android:maxWidth="100dp"
+                android:inputType="numberDecimal"
+                android:hint="@null"
+                android:selectAllOnFocus="true"
+                android:gravity="center" />
         </LinearLayout>
 
         <EditText
