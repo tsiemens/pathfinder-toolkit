@@ -27,7 +27,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/party_name_header" />
-        
+
         <EditText
             android:id="@+id/editTextPartyName"
             android:layout_width="fill_parent"
@@ -36,9 +36,9 @@
             android:maxLines="1"
             android:hint="@string/party_name_hint"
             android:inputType="textPersonName"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:selectAllOnFocus="true" />
     </LinearLayout>
-
 
     <View
         android:layout_width="fill_parent"
