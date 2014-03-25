@@ -123,17 +123,13 @@
         </LinearLayout>
 
         <!-- Second Column -->
+        <!-- top row left empty -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1" >
-
-            <!-- null entry to leave top of 2nd col blank -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:visible="false"/>
+            android:layout_weight="1"
+            android:paddingTop="@dimen/item_summary_empty_line_height">
 
             <LinearLayout
                 android:layout_width="fill_parent"
