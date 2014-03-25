@@ -11,6 +11,7 @@
             android:text="@string/ability"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:layout_weight="1"/>
         <View
@@ -18,7 +19,8 @@
             android:layout_weight="1"/>
         <TextView
             android:text="@string/score"
-           	android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:layout_weight="1"/>
         <View
@@ -28,18 +30,21 @@
             android:text="@string/racial_mod" 
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView 
             android:text="@string/final_score"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
             android:text="@string/modifier"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:layout_weight="1"/>
     </TableRow>
@@ -332,21 +337,24 @@
         android:background="#FF909090" />
 
     <TableRow android:layout_weight="0.03">
+
         <TextView
             android:layout_column="1"
             android:text="@string/points"
-            android:padding="1dp" 
-            android:gravity="center"/>
+            android:padding="1dp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
         <TextView
             android:padding="@dimen/ability_calc_padding_tiny"
-            android:gravity="center" 
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
             android:id="@+id/textCost"/>
     </TableRow>
-    
+
     <View
         android:layout_height="2dp"
         android:background="#FF909090" />
-    
+
     <Spinner
         android:id="@+id/races_spinner"
         android:layout_width="fill_parent"
