@@ -17,15 +17,15 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 	int mLayoutResourceId;
 	PTSpell[] mSpells = null;
 	String TAG = "PTSpellBookAdapter";
-	
+
 	public PTSpellBookAdapter(Context context, int layoutResourceId,
 			PTSpell[] spells) {
 		super(context, layoutResourceId, spells);
-		Log.v(TAG, "Constructing"); //TODO:Debug log
+		Log.v(TAG, "Constructing");
 		mLayoutResourceId = layoutResourceId;
 		mContext = context;
 		mSpells = spells;		
-		Log.v(TAG, "Finished constructing"); //TODO:Debug log
+		Log.v(TAG, "Finished constructing");
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -39,9 +39,9 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 	        row = ((LayoutInflater)((Activity) parent.getContext()).getLayoutInflater())
 	        .inflate(mLayoutResourceId,null);
 		}*/
-		
+
 		SpellItemHolder holder;
-		
+
 		if(row == null) {
 			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
 			
@@ -51,24 +51,27 @@ public class PTSpellBookAdapter extends ArrayAdapter<PTSpell>{
 			holder.level = (TextView)row.findViewById(R.id.spellLevel);
 			holder.name = (TextView)row.findViewById(R.id.spellName);
 			holder.prepared = (TextView)row.findViewById(R.id.spellPrepared);
-			
+			holder.description = (TextView)row.findViewById(R.id.spellDescription);
+
 			row.setTag(holder);
 		}
 		else {
 			holder = (SpellItemHolder)row.getTag();
 		}
-		
+
 		holder.level.setText(Integer.toString(mSpells[position].getLevel()));
 		holder.name.setText(mSpells[position].getName());
 		holder.prepared.setText(Integer.toString(mSpells[position].getPrepared()));
-		
-		Log.v(TAG, "Finishing getView"); //TODO:Debug log
+		holder.description.setText(mSpells[position].getDescription().split("\\r?\\n")[0]);
+
+		Log.v(TAG, "Finishing getView");
 		return row;
 	}
-	
+
 	static class SpellItemHolder {
 		TextView prepared;
 		TextView name;
 		TextView level;
+		TextView description;
 	}
 }

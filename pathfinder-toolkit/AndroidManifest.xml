@@ -17,8 +17,7 @@
             android:name=".PTMainActivity"
             android:alwaysRetainTaskState="true"
             android:label="@string/title_activity_main_menu"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,55 +27,46 @@
         <activity
             android:name=".views.character.PTCharacterArmorEditActivity"
             android:label="@string/new_armor_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name=".views.character.PTCharacterWeaponEditActivity"
             android:label="@string/new_weapon_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name=".views.character.PTCharacterInventoryEditActivity"
             android:label="@string/new_item_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name=".views.character.PTCharacterSkillEditActivity"
             android:label="@string/edit_skill_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name=".views.character.PTCharacterFeatEditActivity"
             android:label="@string/new_item_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name=".views.character.PTCharacterSpellEditActivity"
             android:label="@string/new_item_title"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
             android:name="com.lateensoft.pathfinder.toolkit.views.party.PTPartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
 		<activity
             android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
       		android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTAboutActivity"
             android:label="@string/title_activity_about"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
     </application>

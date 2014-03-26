@@ -123,9 +123,9 @@ public class PTPointbuyCalculatorFragment extends PTBasePageFragment {
 
 		m_racesSpinner = (Spinner) getRootView().findViewById(R.id.races_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-				R.array.races_array, android.R.layout.simple_spinner_item);
+				R.array.races_array, R.layout.spinner_centered);
 		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(R.layout.spinner_plain);
+		adapter.setDropDownViewResource(R.layout.spinner_centered);
 		// Apply the adapter to the spinner
 		m_racesSpinner.setAdapter(adapter);
 		m_racesSpinner.setOnItemSelectedListener(new RaceItemSelectedListener());

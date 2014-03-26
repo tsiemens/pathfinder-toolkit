@@ -12,94 +12,94 @@
 
         <TextView
             android:id="@+id/tvSkillName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-        	android:maxLines="1"
-        	android:textStyle="bold"
-        	android:textSize="@dimen/larger_text_size" />
-        
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textSize="@dimen/larger_text_size"
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/etSkillSubType"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/skill_subtype_hint"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:padding="5dp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2" >
 
-            <LinearLayout
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/skills_ability_mod_header" />
+
+            <TextView
+                android:id="@+id/tvSkillAbility"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                style="@style/clickable_text_view"
+                android:gravity="center"
+                android:minWidth="90dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+                android:text="@string/skills_rank_header"
+                android:layout_weight="1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/skills_ability_mod_header" />
-
-                <TextView
-                    android:id="@+id/tvSkillAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center"
-                    android:minWidth="90dp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <Spinner
+                android:id="@+id/spinnerSkillRank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="100dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
+                android:text="@string/skills_misc_header"
+                android:layout_weight="1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/skills_rank_header" />
-
-                <Spinner
-                    android:id="@+id/spinnerSkillRank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <Spinner
+                android:id="@+id/spinnerSkillMisc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/skills_misc_header" />
-
-                <Spinner
-                    android:id="@+id/spinnerSkillMisc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="100dp" />
-            </LinearLayout>
-            
+                android:minWidth="100dp" />
         </LinearLayout>
 
         <CheckBox 
             android:id="@+id/checkboxClassSkill"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
-            android:text="@string/skills_class_skill_header"/>
+            android:text="@string/skills_class_skill_header"
+            android:padding="5dp"/>
 
     </LinearLayout>
 
