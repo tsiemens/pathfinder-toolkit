@@ -62,9 +62,9 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 
 		View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
 		m_dialogET = (EditText) dialogView.findViewById(R.id.dialogFluffText);
-		
+
 		builder.setTitle(m_fluffModel.getFluffFields(getContext())[fluffIndex]);
-		m_dialogET.setText(m_fluffModel.getFluffArray()[fluffIndex]);
+		m_dialogET.append(m_fluffModel.getFluffArray()[fluffIndex]);
 		
 		builder.setView(dialogView)
 				.setPositiveButton(R.string.ok_button_text, this)

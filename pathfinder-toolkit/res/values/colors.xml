@@ -6,4 +6,5 @@
     
     <color name="white_button_background">#33ffffff</color>
     <color name="white_button_background_selected">#77ffffff</color>
+    <color name="subtle_text">#77ffffff</color>
 </resources>

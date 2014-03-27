@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="fluff_dialog_max_lines">6</integer>
-    
+
     <!-- Point buy calculator shit -->    
     <integer-array name="HumanMods">
         <item >0</item>
@@ -11,7 +11,7 @@
         <item >0</item>
         <item >0</item>
     </integer-array>
-    
+
     <integer-array name="DwarfMods">
         <item >0</item>
         <item >0</item>
@@ -20,7 +20,7 @@
         <item >2</item>
         <item >-2</item>
     </integer-array>
-    
+
     <integer-array name="ElfMods">
         <item >0</item>
         <item >2</item>
@@ -29,7 +29,7 @@
         <item >0</item>
         <item >0</item>
     </integer-array>
-    
+
     <integer-array name="HalflingMods">
         <item >-2</item>
         <item >2</item>
@@ -38,7 +38,7 @@
         <item >0</item>
         <item >2</item>
     </integer-array>
-    
+
     <integer-array name="GnomeMods">
         <item >-2</item>
         <item >0</item>
@@ -47,7 +47,7 @@
         <item >0</item>
         <item >2</item>
     </integer-array>
-    
+
     <integer-array name="default_skill_ability_keys">
         <item>2</item>
         <item>4</item>
@@ -85,5 +85,8 @@
         <item>1</item>
         <item>6</item>
     </integer-array>
-    
+
+    <integer name="spell_row_description_visibility">2</integer>
+
+    <integer name="feat_row_description_visibility">2</integer>
 </resources>

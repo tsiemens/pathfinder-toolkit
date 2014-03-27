@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="combat_stats_symbol_padding">15dp</dimen>
+</resources>

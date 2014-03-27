@@ -12,7 +12,8 @@
 
     <RelativeLayout
         android:id="@+id/left_drawer"
-        style="@style/navDrawerListStyle" >
+        style="@style/navDrawerListStyle"
+        android:layout_width="@dimen/nav_draw_width" >
 
         <LinearLayout
             android:id="@+id/bottom_bar"

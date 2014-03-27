@@ -11,34 +11,43 @@
             android:text="@string/ability"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
-            android:gravity="center" />
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_weight="1"/>
         <View
             android:layout_height="0dp"
-            android:layout_weight="0.5"/>
+            android:layout_weight="1"/>
         <TextView
             android:text="@string/score"
-           	android:layout_width="wrap_content"
-            android:gravity="center" />       
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_weight="1"/>
         <View
             android:layout_height="0dp"
-            android:layout_weight="0.5"/>
+            android:layout_weight="1"/>
         <TextView
             android:text="@string/racial_mod" 
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
-            android:gravity="center"/>
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_weight="1"/>
         <TextView 
             android:text="@string/final_score"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
-            android:gravity="center"/>
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_weight="1"/>
         <TextView
             android:text="@string/modifier"
             android:padding="@dimen/ability_calc_padding"
             android:layout_width="wrap_content"
-            android:gravity="center"/>
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_weight="1"/>
     </TableRow>
-
 
     <View
         android:layout_height="@dimen/ability_calc_divider_height_large"
@@ -49,275 +58,306 @@
             android:text="@string/str"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncStr"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseStr"
-            android:layout_height="fill_parent" />       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecStr"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus" />
         <TextView
             android:id="@+id/raceStr" 
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finStr"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/strMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
     </TableRow>
-	
+
     <View
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
-	
-	<TableRow android:layout_weight="0.1">
+
+    <TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/dex"
             android:padding="@dimen/ability_calc_padding"
              android:gravity="center"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncDex"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseDex"
-            android:layout_height="fill_parent" />       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecDex"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceDex"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finDex"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/dexMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
-    </TableRow>    
-    
-<View
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    </TableRow>
+
+    <View
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
-	
-	<TableRow android:layout_weight="0.1">
+
+    <TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/con"
             android:padding="@dimen/ability_calc_padding"
              android:gravity="center"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncCon"
             android:layout_height="fill_parent" 
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseCon" 
-            android:layout_height="fill_parent"/>       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecCon"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceCon"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finCon"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/conMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
-    </TableRow>    
-  
-<View
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    </TableRow>
+
+    <View
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
-	
-	<TableRow android:layout_weight="0.1">
+
+    <TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/inl"
             android:padding="@dimen/ability_calc_padding"
              android:gravity="center"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncInt"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center" 
             android:id="@+id/baseInt"
-            android:layout_height="fill_parent"/>       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecInt"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceInt"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finInt"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/intMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
-    </TableRow>    
-	
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    </TableRow>
 
-
-<View
+    <View
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
-	
+
 	<TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/wis"
             android:padding="@dimen/ability_calc_padding"
              android:gravity="center"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncWis"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center" 
             android:id="@+id/baseWis"
-            android:layout_height="fill_parent"/>       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecWis"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceWis"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finWis"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/wisMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
-    </TableRow>    
-    
-<View
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    </TableRow>
+
+    <View
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
-	
-	<TableRow android:layout_weight="0.1">
+
+    <TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/cha"
             android:padding="@dimen/ability_calc_padding" 
              android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnIncCha"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/plus"/>
         <TextView
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
             android:id="@+id/baseCha" 
-            android:layout_height="fill_parent"/>       
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnDecCha"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/minus"/>
         <TextView
             android:id="@+id/raceCha"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView 
             android:id="@+id/finCha"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/chaMod"
             android:padding="@dimen/ability_calc_padding"
             android:gravity="center"
-            android:layout_height="fill_parent"/>
-        
-    </TableRow>    
-    
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+
+    </TableRow>
+
     <View
         android:layout_height="@dimen/ability_calc_divider_height_large"
         android:background="#FF909090" />
-    
+
     <TableRow android:layout_weight="0.03">
+
         <TextView
             android:layout_column="1"
             android:text="@string/points"
-            android:padding="1dp" 
-            android:gravity="center"/>
+            android:padding="1dp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
         <TextView
             android:padding="@dimen/ability_calc_padding_tiny"
-            android:gravity="center" 
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
             android:id="@+id/textCost"/>
     </TableRow>
-    
+
     <View
         android:layout_height="2dp"
         android:background="#FF909090" />
-    
+
     <Spinner
-	    android:id="@+id/races_spinner"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="0.15" />
+        android:id="@+id/races_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15" />
 </TableLayout>

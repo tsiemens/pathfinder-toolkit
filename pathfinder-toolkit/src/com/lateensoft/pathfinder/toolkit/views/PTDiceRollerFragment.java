@@ -6,6 +6,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.utils.PTDiceSet;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -220,7 +221,8 @@ public class PTDiceRollerFragment extends PTBasePageFragment {
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                     optionResourceId, android.R.layout.simple_spinner_item);
 
-            adapter.setDropDownViewResource(R.layout.spinner_plain);
+            adapter.setDropDownViewResource(R.layout.spinner_centered_wrapped);
+            spinner.setGravity(Gravity.CENTER);
             spinner.setAdapter(adapter);
             spinner.setSelection(defaultSelection);
         }
