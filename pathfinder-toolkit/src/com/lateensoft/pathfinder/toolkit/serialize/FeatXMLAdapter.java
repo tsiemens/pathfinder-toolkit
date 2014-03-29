@@ -1,8 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
-import com.lateensoft.pathfinder.toolkit.serialize.XMLObjectAdapter;
-import org.dom4j.DocumentException;
+import com.lateensoft.pathfinder.toolkit.model.character.Feat;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -11,7 +9,7 @@ import java.io.InvalidObjectException;
 /**
  * @author tsiemens
  */
-public class FeatXMLAdapter extends XMLObjectAdapter<PTFeat> {
+public class FeatXMLAdapter extends XMLObjectAdapter<Feat> {
 
     public static final String ELEMENT_NAME = "feat";
     private static final String NAME_ATTR = "name";
@@ -24,7 +22,7 @@ public class FeatXMLAdapter extends XMLObjectAdapter<PTFeat> {
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTFeat feat) {
+    protected void setElementContentForObject(Element element, Feat feat) {
         element.addAttribute(NAME_ATTR, feat.getName());
 
         Element description = new DefaultElement(DESC_ELEMENT);
@@ -33,8 +31,8 @@ public class FeatXMLAdapter extends XMLObjectAdapter<PTFeat> {
     }
 
     @Override
-    protected PTFeat createObjectForElement(Element element) throws InvalidObjectException {
-        PTFeat feat = new PTFeat();
+    protected Feat createObjectForElement(Element element) throws InvalidObjectException {
+        Feat feat = new Feat();
         feat.setName(getStringAttribute(element, NAME_ATTR));
         feat.setDescription(getSubElementContent(element, DESC_ELEMENT));
         return feat;

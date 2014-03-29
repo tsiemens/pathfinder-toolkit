@@ -1,7 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.PTBaseApplication;
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
+import com.lateensoft.pathfinder.toolkit.BaseApplication;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -9,7 +9,7 @@ import java.io.InvalidObjectException;
 /**
  * @author trevsiemens
  */
-public class WeaponXMLAdapter extends XMLObjectAdapter<PTWeapon> {
+public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
 
     public static final String ELEMENT_NAME = "weapon";
     public static final String ATTR_ATTACK_BONUS = "attack-bonus";
@@ -29,13 +29,13 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<PTWeapon> {
     }
 
     @Override
-    protected PTWeapon createObjectForElement(Element element) throws InvalidObjectException {
-        PTWeapon weapon = new PTWeapon();
+    protected Weapon createObjectForElement(Element element) throws InvalidObjectException {
+        Weapon weapon = new Weapon();
         setObjectContentForElement(weapon, element);
         return weapon;
     }
 
-    void setObjectContentForElement(PTWeapon weapon, Element element) throws InvalidObjectException {
+    void setObjectContentForElement(Weapon weapon, Element element) throws InvalidObjectException {
         m_itemXMLAdapter.setObjectContentForElement(weapon, element);
         weapon.setTotalAttackBonus(getBoundedIntAttribute(element, ATTR_ATTACK_BONUS, -10, 40));
         weapon.setDamage(getStringAttribute(element, ATTR_DAMAGE));
@@ -45,21 +45,21 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<PTWeapon> {
         weapon.setSpecialProperties(getStringAttribute(element, ATTR_SPEC_PROPS));
 
         String typeString = getStringAttribute(element, ATTR_TYPE);
-        if (!PTWeapon.isValidType(PTBaseApplication.getAppContext(), typeString)) {
+        if (!Weapon.isValidType(BaseApplication.getAppContext(), typeString)) {
             throw new InvalidObjectException("Weapon attribute 'type' invalid. Reference weapon screens for valid options.");
         }
         weapon.setType(typeString);
 
 
         String sizeString = getStringAttribute(element, ATTR_SIZE);
-        if (!PTWeapon.isValidSize(PTBaseApplication.getAppContext(), sizeString)) {
+        if (!Weapon.isValidSize(BaseApplication.getAppContext(), sizeString)) {
             throw new InvalidObjectException("Weapon attribute 'size' invalid. Must be 'S', 'M', or 'L'.");
         }
         weapon.setSize(sizeString);
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTWeapon weapon) {
+    protected void setElementContentForObject(Element element, Weapon weapon) {
         m_itemXMLAdapter.setElementContentForObject(element, weapon);
         element.addAttribute(ATTR_ATTACK_BONUS, Integer.toString(weapon.getTotalAttackBonus()));
         element.addAttribute(ATTR_DAMAGE, weapon.getDamage());
