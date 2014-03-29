@@ -10,13 +10,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.lateensoft.pathfinder.toolkit.PTBaseApplication"
+        android:name=".BaseApplication"
         android:icon="@drawable/ic_launcher"
         android:logo="@drawable/ic_logo_holo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:hasCode="true" android:allowBackup="true">
         <activity
-            android:name=".PTMainActivity"
+            android:name=".MainActivity"
             android:alwaysRetainTaskState="true"
             android:label="@string/title_activity_main_menu"
             android:launchMode="singleTop" >
@@ -27,47 +27,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.character.PTCharacterArmorEditActivity"
+            android:name=".views.character.ArmorEditActivity"
             android:label="@string/new_armor_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.character.PTCharacterWeaponEditActivity"
+            android:name=".views.character.WeaponEditActivity"
             android:label="@string/new_weapon_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.character.PTCharacterInventoryEditActivity"
+            android:name=".views.character.InventoryItemEditActivity"
             android:label="@string/new_item_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.character.PTCharacterSkillEditActivity"
+            android:name=".views.character.SkillEditActivity"
             android:label="@string/edit_skill_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.character.PTCharacterFeatEditActivity"
+            android:name=".views.character.FeatEditActivity"
             android:label="@string/new_item_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.character.PTCharacterSpellEditActivity"
+            android:name=".views.character.SpellEditActivity"
             android:label="@string/new_item_title"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name="com.lateensoft.pathfinder.toolkit.views.party.PTPartyMemberEditorActivity"
+            android:name=".views.party.PartyMemberEditorActivity"
             android:label="@string/title_activity_party_member_editor"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
 		<activity
-            android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTSettingsActivity"
+            android:name=".views.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-      		android:name="com.lateensoft.pathfinder.toolkit.views.settings.PTAboutActivity"
+      		android:name=".views.settings.AboutActivity"
             android:label="@string/title_activity_about"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>

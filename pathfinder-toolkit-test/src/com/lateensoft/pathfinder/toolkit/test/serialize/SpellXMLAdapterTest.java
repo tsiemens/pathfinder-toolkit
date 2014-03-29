@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
+import com.lateensoft.pathfinder.toolkit.model.character.Spell;
 import com.lateensoft.pathfinder.toolkit.serialize.SpellXMLAdapter;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -18,11 +18,11 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
     public void testToObject() throws InvalidObjectException, DocumentException {
         Element element = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
                 "<desc>description and \nStuff</desc></spell>").getRootElement();
-        PTSpell expectedSpell = new PTSpell("fire", 3);
+        Spell expectedSpell = new Spell("fire", 3);
         expectedSpell.setPrepared(20);
         expectedSpell.setDescription("description and \nStuff");
 
-        PTSpell generatedSpell = m_adapter.toObject(element);
+        Spell generatedSpell = m_adapter.toObject(element);
         assertEquals(expectedSpell, generatedSpell);
     }
 
@@ -60,7 +60,7 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
     public void testToXML() throws InvalidObjectException, DocumentException {
         Element expectedElement = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
                 "<desc>description and \nStuff</desc></spell>").getRootElement();
-        PTSpell spell = new PTSpell("fire", 3);
+        Spell spell = new Spell("fire", 3);
         spell.setPrepared(20);
         spell.setDescription("description and \nStuff");
 
@@ -68,7 +68,7 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
         assertEquals(expectedElement, generatedElement);
     }
 
-    private void assertEquals(PTSpell expected, PTSpell actual) {
+    private void assertEquals(Spell expected, Spell actual) {
         assertNotNull(actual);
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getLevel(), actual.getLevel());

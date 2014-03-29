@@ -1,14 +1,14 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
-import com.lateensoft.pathfinder.toolkit.model.character.PTFeatList;
+import com.lateensoft.pathfinder.toolkit.model.character.Feat;
+import com.lateensoft.pathfinder.toolkit.model.character.FeatList;
 
 import java.util.List;
 
 /**
  * @author tsiemens
  */
-public class FeatListXMLAdapter extends ListXMLAdapter<PTFeatList, PTFeat, FeatXMLAdapter> {
+public class FeatListXMLAdapter extends ListXMLAdapter<FeatList, Feat, FeatXMLAdapter> {
 
     public static final String ELEMENT_NAME = "featlist";
 
@@ -25,7 +25,7 @@ public class FeatListXMLAdapter extends ListXMLAdapter<PTFeatList, PTFeat, FeatX
     }
 
     @Override
-    protected PTFeatList createObjectFromItems(List<PTFeat> items) {
-        return new PTFeatList(items);
+    protected FeatList createObjectFromItems(List<Feat> items) {
+        return new FeatList(items);
     }
 }

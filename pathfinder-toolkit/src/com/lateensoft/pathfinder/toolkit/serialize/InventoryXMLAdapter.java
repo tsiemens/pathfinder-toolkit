@@ -1,9 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTInventory;
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTWeapon;
+import com.lateensoft.pathfinder.toolkit.model.character.Inventory;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author trevsiemens
  */
-public class InventoryXMLAdapter extends XMLObjectAdapter<PTInventory> {
+public class InventoryXMLAdapter extends XMLObjectAdapter<Inventory> {
 
     public static final String ELEMENT_NAME = "inventory";
 
@@ -26,8 +26,8 @@ public class InventoryXMLAdapter extends XMLObjectAdapter<PTInventory> {
     }
 
     @Override
-    protected PTInventory createObjectForElement(Element element) throws InvalidObjectException {
-        PTInventory inventory = new PTInventory();
+    protected Inventory createObjectForElement(Element element) throws InvalidObjectException {
+        Inventory inventory = new Inventory();
         inventory.getItems().addAll(getSubObjects(element, m_itemXMLAdapter));
         inventory.getArmors().addAll(getSubObjects(element, m_armorXMLAdapter));
         inventory.getWeapons().addAll(getSubObjects(element, m_weaponXMLAdapter));
@@ -35,19 +35,19 @@ public class InventoryXMLAdapter extends XMLObjectAdapter<PTInventory> {
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTInventory inventory) {
-        List<PTItem> items = inventory.getItems();
-        for (PTItem item : items) {
+    protected void setElementContentForObject(Element element, Inventory inventory) {
+        List<Item> items = inventory.getItems();
+        for (Item item : items) {
             element.add(m_itemXMLAdapter.toXML(item));
         }
 
-        List<PTArmor> armors = inventory.getArmors();
-        for (PTArmor armor : armors) {
+        List<Armor> armors = inventory.getArmors();
+        for (Armor armor : armors) {
             element.add(m_armorXMLAdapter.toXML(armor));
         }
 
-        List<PTWeapon> weapons = inventory.getWeapons();
-        for (PTWeapon weapon : weapons) {
+        List<Weapon> weapons = inventory.getWeapons();
+        for (Weapon weapon : weapons) {
             element.add(m_weaponXMLAdapter.toXML(weapon));
         }
     }

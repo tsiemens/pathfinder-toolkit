@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTArmor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -8,7 +8,7 @@ import java.io.InvalidObjectException;
 /**
  * @author trevsiemens
  */
-public class ArmorXMLAdapter extends XMLObjectAdapter<PTArmor> {
+public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
 
     public static final String ELEMENT_NAME = "armor";
     public static final String ATTR_WORN = "worn";
@@ -28,13 +28,13 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<PTArmor> {
     }
 
     @Override
-    protected PTArmor createObjectForElement(Element element) throws InvalidObjectException {
-        PTArmor armor = new PTArmor();
+    protected Armor createObjectForElement(Element element) throws InvalidObjectException {
+        Armor armor = new Armor();
         setObjectContentForElement(armor, element);
         return armor;
     }
 
-    void setObjectContentForElement(PTArmor armor, Element element) throws InvalidObjectException {
+    void setObjectContentForElement(Armor armor, Element element) throws InvalidObjectException {
         m_itemXMLAdapter.setObjectContentForElement(armor, element);
         armor.setWorn(getBooleanAttribute(element, ATTR_WORN));
         armor.setACBonus(getBoundedIntAttribute(element, ATTR_AC_BONUS, -20, 20));
@@ -45,14 +45,14 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<PTArmor> {
         armor.setSpecialProperties(getStringAttribute(element, ATTR_SPEC_PROPS));
 
         String sizeString = getStringAttribute(element, ATTR_SIZE);
-        if (!PTArmor.isValidSize(sizeString)) {
+        if (!Armor.isValidSize(sizeString)) {
             throw new InvalidObjectException("Armor attribute 'size' invalid. Must be 'S', 'M', or 'L'.");
         }
         armor.setSize(sizeString);
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTArmor armor) {
+    protected void setElementContentForObject(Element element, Armor armor) {
         m_itemXMLAdapter.setElementContentForObject(element, armor);
 
         element.addAttribute(ATTR_WORN, Boolean.toString(armor.isWorn()));

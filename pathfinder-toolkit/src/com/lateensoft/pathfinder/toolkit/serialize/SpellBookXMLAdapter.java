@@ -1,14 +1,14 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTSpell;
-import com.lateensoft.pathfinder.toolkit.model.character.PTSpellBook;
+import com.lateensoft.pathfinder.toolkit.model.character.Spell;
+import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
 
 import java.util.List;
 
 /**
  * @author tsiemens
  */
-public class SpellBookXMLAdapter extends ListXMLAdapter<PTSpellBook, PTSpell, SpellXMLAdapter> {
+public class SpellBookXMLAdapter extends ListXMLAdapter<SpellBook, Spell, SpellXMLAdapter> {
 
     public static final String ELEMENT_NAME = "spellbook";
 
@@ -25,7 +25,7 @@ public class SpellBookXMLAdapter extends ListXMLAdapter<PTSpellBook, PTSpell, Sp
     }
 
     @Override
-    protected PTSpellBook createObjectFromItems(List<PTSpell> items) {
-        return new PTSpellBook(items);
+    protected SpellBook createObjectFromItems(List<Spell> items) {
+        return new SpellBook(items);
     }
 }

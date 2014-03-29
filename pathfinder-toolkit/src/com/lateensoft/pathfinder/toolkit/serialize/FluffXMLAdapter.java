@@ -1,7 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.PTFluffInfo;
-import com.lateensoft.pathfinder.toolkit.serialize.XMLObjectAdapter;
+import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
@@ -10,7 +9,7 @@ import java.io.InvalidObjectException;
 /**
  * @author tsiemens
  */
-public class FluffXMLAdapter extends XMLObjectAdapter<PTFluffInfo> {
+public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
 
     public static final String ELEMENT_NAME = "fluff";
     private static final String NAME_ATTR = "name";
@@ -37,7 +36,7 @@ public class FluffXMLAdapter extends XMLObjectAdapter<PTFluffInfo> {
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTFluffInfo fluff) {
+    protected void setElementContentForObject(Element element, FluffInfo fluff) {
         element.addAttribute(NAME_ATTR, fluff.getName());
         element.addAttribute(ALIGN_ATTR, fluff.getName());
         element.addAttribute(XP_ATTR, fluff.getXP());
@@ -59,8 +58,8 @@ public class FluffXMLAdapter extends XMLObjectAdapter<PTFluffInfo> {
     }
 
     @Override
-    protected PTFluffInfo createObjectForElement(Element element) throws InvalidObjectException {
-        PTFluffInfo fluff = new PTFluffInfo();
+    protected FluffInfo createObjectForElement(Element element) throws InvalidObjectException {
+        FluffInfo fluff = new FluffInfo();
         fluff.setName(getStringAttribute(element, NAME_ATTR));
         fluff.setAlignment(getStringAttribute(element, ALIGN_ATTR));
         fluff.setXP(getStringAttribute(element, XP_ATTR));

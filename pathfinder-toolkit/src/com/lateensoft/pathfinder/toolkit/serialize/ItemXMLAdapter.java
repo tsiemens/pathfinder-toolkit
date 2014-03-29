@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.model.character.items.PTItem;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -8,7 +8,7 @@ import java.io.InvalidObjectException;
 /**
  * @author trevsiemens
  */
-public class ItemXMLAdapter extends XMLObjectAdapter<PTItem> {
+public class ItemXMLAdapter extends XMLObjectAdapter<Item> {
 
     public static final String ELEMENT_NAME = "item";
     private static final String NAME_ATTR = "name";
@@ -22,13 +22,13 @@ public class ItemXMLAdapter extends XMLObjectAdapter<PTItem> {
     }
 
     @Override
-    protected PTItem createObjectForElement(Element element) throws InvalidObjectException {
-        PTItem item = new PTItem();
+    protected Item createObjectForElement(Element element) throws InvalidObjectException {
+        Item item = new Item();
         setObjectContentForElement(item, element);
         return item;
     }
 
-    protected void setObjectContentForElement(PTItem item, Element element) throws InvalidObjectException {
+    protected void setObjectContentForElement(Item item, Element element) throws InvalidObjectException {
         item.setName(getStringAttribute(element, NAME_ATTR));
         item.setWeight(getBoundedDoubleAttribute(element, WEIGHT_ATTR, 0.0, Double.MAX_VALUE));
         item.setQuantity(getBoundedIntAttribute(element, QUANTITY_ATTR, 0, Integer.MAX_VALUE));
@@ -36,7 +36,7 @@ public class ItemXMLAdapter extends XMLObjectAdapter<PTItem> {
     }
 
     @Override
-    protected void setElementContentForObject(Element element, PTItem item) {
+    protected void setElementContentForObject(Element element, Item item) {
         element.addAttribute(NAME_ATTR, item.getName());
         element.addAttribute(WEIGHT_ATTR, Double.toString(item.getWeight()));
         element.addAttribute(QUANTITY_ATTR, Integer.toString(item.getQuantity()));
