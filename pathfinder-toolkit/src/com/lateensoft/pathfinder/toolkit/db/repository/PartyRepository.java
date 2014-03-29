@@ -33,31 +33,28 @@ public class PartyRepository extends BaseRepository<CampaignParty> {
 	 * 
 	 * @return the id of the character inserted, or -1 if failure occurred.
 	 */
-	public long insert(CampaignParty object, boolean isEncounterParty) {
-		ContentValues values = getContentValues(object);
+	public long insert(CampaignParty party, boolean isEncounterParty) {
+		ContentValues values = getContentValues(party);
 		values.put(IN_ENCOUNTER, isEncounterParty);
 		
 		String table = m_tableInfo.getTable();
 		long id = getDatabase().insert(table, values);
-		if (id != -1 && !isIDSet(object)) {
-			object.setID(id);
+		if (id != -1 && !isIDSet(party)) {
+			party.setID(id);
 		}
-		
-		long subCompId = 0;
-		
+
 		if (id != -1) {
-			// Sets all party ids of members
-			object.setID(id);
-			
-			// PartyMembers
+			party.setID(id);
+
+            long memberId ;
 			PartyMemberRepository memberRepo = new PartyMemberRepository();
-			for(int i = 0; i < object.size(); i++) {
-				subCompId = memberRepo.insert(object.getPartyMember(i));
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            for (PartyMember member : party) {
+                memberId = memberRepo.insert(member);
+                if (memberId == -1) {
+                    delete(id);
+                    return -1;
+                }
+            }
 		}
 		return id;
 	}
@@ -77,10 +74,9 @@ public class PartyRepository extends BaseRepository<CampaignParty> {
 			
 		// PartyMembers
 		PartyMemberRepository memberRepo = new PartyMemberRepository();
-		PartyMember[] members = memberRepo.querySet(id);
+		List<PartyMember> members = memberRepo.querySet(id);
 		
-		CampaignParty party = new CampaignParty(id, name, members);
-		return party;
+		return new CampaignParty(id, name, members);
 	}
 
 	@Override
@@ -97,7 +93,7 @@ public class PartyRepository extends BaseRepository<CampaignParty> {
 	 * Returns all parties
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
-	public List<Entry<Long, String>> queryList() {
+	public List<Entry<Long, String>> queryIdNameList() {
 		String selector = IN_ENCOUNTER + "=0";
 		String orderBy = NAME + " ASC";
 		String table = m_tableInfo.getTable();

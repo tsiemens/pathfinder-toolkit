@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -103,15 +104,15 @@ public class PartyManagerFragment extends BasePageFragment implements
 			m_party = m_partyRepo.query(currentPartyID);
 			if (m_party == null) {
 				// Recovery for some kind of catastrophic failure.
-				List<Entry<Long, String>> ids = m_partyRepo.queryList();
-				for (int i = 0; i < ids.size(); i++) {
-					m_party = m_partyRepo.query(ids.get(i).getKey().longValue());
-					if (m_party != null) {
-						Preferences.getInstance().putLong(
-								Preferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
-						break;
-					}
-				}
+				List<Entry<Long, String>> ids = m_partyRepo.queryIdNameList();
+                for (Entry<Long, String> id : ids) {
+                    m_party = m_partyRepo.query(id.getKey());
+                    if (m_party != null) {
+                        Preferences.getInstance().putLong(
+                                Preferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+                        break;
+                    }
+                }
 				if (m_party == null) {
 					addNewParty();
 				}
@@ -139,22 +140,23 @@ public class PartyManagerFragment extends BasePageFragment implements
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
 		long currentPartyID = m_party.getID();
-		List<Entry<Long, String>> partyIDs = m_partyRepo.queryList();
+		List<Entry<Long, String>> partyIDs = m_partyRepo.queryIdNameList();
 
 		for (int i = 0; i < partyIDs.size(); i++) {
-			if (currentPartyID == partyIDs.get(i).getKey().longValue())
-				currentPartyIndex = i;
+			if (currentPartyID == partyIDs.get(i).getKey()) {
+                currentPartyIndex = i;
+            }
 		}
 
 		if (partyIDs.size() == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
 			Preferences.getInstance().putLong(
-					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey().longValue());
+					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey());
 			loadCurrentParty();
 		} else {
 			Preferences.getInstance().putLong(
-					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey().longValue());
+					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey());
 			loadCurrentParty();
 		}
 
@@ -167,8 +169,9 @@ public class PartyManagerFragment extends BasePageFragment implements
 	}
 
 	private void refreshPartyView() {
+        Collections.sort(m_party, new PartyMember.NameComparator());
 		m_partyNameEditText.setText(m_party.getName());
-		String[] memberNames = m_party.getPartyMemberNames();
+		List<String> memberNames = m_party.getPartyMemberNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
 				android.R.layout.simple_list_item_1, memberNames);
 		m_partyMemberList.setAdapter(adapter);
@@ -176,9 +179,6 @@ public class PartyManagerFragment extends BasePageFragment implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
-		updateDatabase();
-
 		switch (item.getItemId()) {
 		case R.id.mi_party_list:
 			m_dialogMode = R.id.mi_party_list;
@@ -220,13 +220,14 @@ public class PartyManagerFragment extends BasePageFragment implements
 		case R.id.mi_party_list:
 			builder.setTitle("Select Party");
 
-			List<Entry<Long, String>> partyIDs = m_partyRepo.queryList();
+			List<Entry<Long, String>> partyIDs = m_partyRepo.queryIdNameList();
 			String[] partyList = EntryUtils.valueArray(partyIDs);
 			int currentPartyIndex = 0;
 
 			for (int i = 0; i < partyIDs.size(); i++) {
-				if (m_partyIDSelectedInDialog == partyIDs.get(i).getKey().longValue())
-					currentPartyIndex = i;
+				if (m_partyIDSelectedInDialog == partyIDs.get(i).getKey()) {
+                    currentPartyIndex = i;
+                }
 			}
 
 			builder.setSingleChoiceItems(partyList, currentPartyIndex, this)
@@ -272,7 +273,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 			break;
 		default:
 			// Set the currently selected party in the dialog
-			m_partyIDSelectedInDialog = m_partyRepo.queryList().get(selection).getKey().longValue();
+			m_partyIDSelectedInDialog = m_partyRepo.queryIdNameList().get(selection).getKey().longValue();
 			break;
 
 		}
@@ -317,7 +318,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		m_partyMemberIndexSelectedForEdit = position;
-		showPartyMemberEditor(m_party.getPartyMember(position));
+		showPartyMemberEditor(m_party.get(position));
 
 	}
 
@@ -342,13 +343,13 @@ public class PartyManagerFragment extends BasePageFragment implements
                     Log.v(TAG, "Adding a member");
                     member.setPartyID(m_party.getID());
                     if (m_memberRepo.insert(member) != -1) {
-                        m_party.addPartyMember(member);
+                        m_party.add(member);
                         refreshPartyView();
                     }
                 } else {
                     Log.v(TAG, "Editing a member");
                     if (m_memberRepo.update(member) != 0) {
-                        m_party.setPartyMember(m_partyMemberIndexSelectedForEdit, member);
+                        m_party.set(m_partyMemberIndexSelectedForEdit, member);
                         refreshPartyView();
                     }
                 }
@@ -358,8 +359,8 @@ public class PartyManagerFragment extends BasePageFragment implements
 		
 		case PartyMemberEditorActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a member");
-			if (m_memberRepo.delete(m_party.getPartyMember(m_partyMemberIndexSelectedForEdit)) != 0) {
-				m_party.deletePartyMember(m_partyMemberIndexSelectedForEdit);
+			if (m_memberRepo.delete(m_party.get(m_partyMemberIndexSelectedForEdit)) != 0) {
+				m_party.remove(m_partyMemberIndexSelectedForEdit);
 				refreshPartyView();
 			}
 			break;

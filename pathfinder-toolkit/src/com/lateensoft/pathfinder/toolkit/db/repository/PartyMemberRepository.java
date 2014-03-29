@@ -1,10 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 
@@ -110,10 +112,10 @@ public class PartyMemberRepository extends BaseRepository<PartyMember> {
 	
 	/**
 	 * Returns all members for the party with partyId
-	 * @param partyId
+	 * @param partyId the unique id of the party
 	 * @return Array of PartyMember, ordered alphabetically by name
 	 */
-	public PartyMember[] querySet(long partyId) {
+	public List<PartyMember> querySet(long partyId) {
 		String selector = PARTY_ID + "=" + partyId;
 		String orderBy = NAME + " ASC";
 		String table = m_tableInfo.getTable();
@@ -121,14 +123,12 @@ public class PartyMemberRepository extends BaseRepository<PartyMember> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		PartyMember[] members = new PartyMember[cursor.getCount()];
+		List<PartyMember> members = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			members[i] = buildFromHashTable(hashTable);
+			members.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return members;
 	}

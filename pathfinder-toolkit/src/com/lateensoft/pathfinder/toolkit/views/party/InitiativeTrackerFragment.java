@@ -31,12 +31,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class InitiativeTrackerFragment extends BasePageFragment implements
-		OnClickListener, OnItemClickListener,
-		android.content.DialogInterface.OnClickListener {
-	private static final String TAG = InitiativeTrackerFragment.class.getSimpleName();
+import java.util.Collections;
 
-	public CampaignParty m_party;
+public class InitiativeTrackerFragment extends BasePageFragment {
+    private static final String TAG = InitiativeTrackerFragment.class.getSimpleName();
+    public static final int INIT_DIE_TYPE = 20;
+
+    public CampaignParty m_party;
 
 	private int m_dialogMode;
 	private boolean m_hasRolled;
@@ -64,10 +65,26 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		setRootView(inflater.inflate(R.layout.fragment_initiative_tracker, container, false));
 
 		m_rollInitiativeButton = (Button) getRootView().findViewById(R.id.buttonRollInitiative);
-		m_rollInitiativeButton.setOnClickListener(this);
+		m_rollInitiativeButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                DiceSet diceSet = new DiceSet();
+                for (PartyMember member : m_party) {
+                    member.setLastRolledValue(diceSet.singleRoll(INIT_DIE_TYPE) + member.getInitiative());
+                }
+                updateDatabase();
+                m_hasRolled = true;
+                refreshPartyView();
+            }
+        });
 
 		m_partyMemberList = (ListView) getRootView().findViewById(R.id.listViewEncounterMembers);
-		m_partyMemberList.setOnItemClickListener(this);
+		m_partyMemberList.setOnItemClickListener(new OnItemClickListener() {
+            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                m_party.get(position);
+                m_partyMemberSelectedForEdit = position;
+                showPartyMemberEditor(m_party.get(position));
+            }
+        });
 
 		m_hasRolled = false;
 		
@@ -111,24 +128,24 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
     }
 
     private void showPartyDialog() {
-
+        PartyDialogListener listener = new PartyDialogListener();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
 		switch (m_dialogMode) {
 		case R.id.mi_reset:
 			builder.setTitle(getString(R.string.reset_encounter_dialog_title));
 			builder.setMessage(getString(R.string.reset_encounter_dialog_text))
-					.setPositiveButton(R.string.ok_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this)
+					.setPositiveButton(R.string.ok_button_text, listener)
+					.setNegativeButton(R.string.cancel_button_text, listener)
 					.setNeutralButton(
-							getString(R.string.use_defualt_party_button), this);
+							getString(R.string.use_defualt_party_button), listener);
 			break;
 
 		case R.id.mi_new_member:
 			builder.setMessage(
 					getString(R.string.new_encounter_member_dialog_text))
-					.setPositiveButton(R.string.ok_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this);
+					.setPositiveButton(R.string.ok_button_text, listener)
+					.setNegativeButton(R.string.cancel_button_text, listener);
 			break;
 
 		}
@@ -136,37 +153,33 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		alert.show();
 	}
 
-	// Click method for the party selection dialog
-	@Override
-	public void onClick(DialogInterface dialogInterface, int selection) {
-		switch (selection) {
-		case DialogInterface.BUTTON_POSITIVE:
-			performPositiveDialogAction();
-			break;
-		case DialogInterface.BUTTON_NEGATIVE:
-			break;
-		case DialogInterface.BUTTON_NEUTRAL:
-			loadDefaultParty();
-		}
-	}
+    private class PartyDialogListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int selection) {
+            switch (selection) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    performPositiveDialogAction();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+                case DialogInterface.BUTTON_NEUTRAL:
+                    loadDefaultParty();
+            }
+        }
 
-	/**
-	 * Called when dialog positive button is tapped
-	 */
-	private void performPositiveDialogAction() {
-		switch (m_dialogMode) {
-		case R.id.mi_reset:
-			resetPartyRolls();
-			break;
+        private void performPositiveDialogAction() {
+            switch (m_dialogMode) {
+                case R.id.mi_reset:
+                    resetPartyRolls();
+                    break;
 
-		case R.id.mi_new_member:
-			m_partyMemberSelectedForEdit = -1;
-			showPartyMemberEditor(null);
-			break;
-
-		}
-
-	}
+                case R.id.mi_new_member:
+                    m_partyMemberSelectedForEdit = -1;
+                    showPartyMemberEditor(null);
+                    break;
+            }
+        }
+    }
 
 	/**
 	 * Load the current encounter party in shared prefs If there is no party set
@@ -183,10 +196,10 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		} else {
 			m_party = currentEncounterParty;
 			m_hasRolled = false;
-			for (int i = 0; i < m_party.size(); i++)
-				if (m_party.getPartyMember(i).getLastRolledValue() != 0) {
-					m_hasRolled = true;
-				}
+            for (PartyMember member : m_party)
+                if (member.getLastRolledValue() != 0) {
+                    m_hasRolled = true;
+                }
 
 			refreshPartyView();
 		}
@@ -198,19 +211,20 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		CampaignParty defaultParty = null;
 		if (currentPartyID > 0) {
 			defaultParty = m_partyRepo.query(currentPartyID);
-		} 
-		
-		if(defaultParty != null && defaultParty.size() > 0) {
+		}
+
+        // Save a copy as the encounter party, but only if there are members in it
+		if(defaultParty != null && !defaultParty.isEmpty()) {
 			CampaignParty currentEncParty = m_partyRepo.queryEncounterParty();
 			if (currentEncParty != null) {
 				m_partyRepo.delete(currentEncParty.getID());
 			}
-			// Make a copy, but only if there are members in it
+
 			defaultParty.setID(Storable.UNSET_ID);
-			for (int i = 0; i < defaultParty.size(); i++) {
-				defaultParty.getPartyMember(i).setID(Storable.UNSET_ID);
-			}
-			m_partyRepo.insert(defaultParty, true);
+            for (PartyMember member : defaultParty) {
+                member.setID(Storable.UNSET_ID);
+            }
+			m_partyRepo.insert(defaultParty, /*is encounter party*/true);
 		} else {
 			defaultParty = new CampaignParty("New Party");
 		}
@@ -221,28 +235,23 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 	}
 
 	private void resetPartyRolls() {
-		for (int i = 0; i < m_party.size(); i++) {
-			m_party.getPartyMember(i).setLastRolledValue(0);
-		}
+        for (PartyMember member : m_party) {
+            member.setLastRolledValue(0);
+        }
 		updateDatabase();
 		m_hasRolled = false;
 		refreshPartyView();
 	}
 
 	private void refreshPartyView() {
-		String[] memberNames = m_party.getNamesByRollValue();
-		int[] memberRollValues = m_party.getRollValuesByRollValue();
+        Collections.sort(m_party, new PartyMember.RollComparator());
 		PartyRollAdapter adapter = new PartyRollAdapter(getContext(),
-				R.layout.party_roll_row, memberNames, memberRollValues, null);
+				R.layout.party_roll_row, m_party, null);
 		m_partyMemberList.setAdapter(adapter);
 		m_rollInitiativeButton.setEnabled(!m_hasRolled);
         updateTitle();
 	}
 
-	/**
-	 * launches the party member editor
-	 * @param member the member to send to the editor
-	 */
 	private void showPartyMemberEditor(PartyMember member) {
 		Intent intent = new Intent(getContext(),
 				PartyMemberEditorActivity.class);
@@ -264,19 +273,19 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
                     Log.v(TAG, "Adding a member");
                     if (m_party.getID() == Storable.UNSET_ID) {
                         // Party has not yet been added to database
-                        m_party.addPartyMember(member);
+                        m_party.add(member);
                         m_partyRepo.insert(m_party);
                     } else {
                         member.setPartyID(m_party.getID());
                         if (m_memberRepo.insert(member) != -1) {
-                            m_party.addPartyMember(member);
+                            m_party.add(member);
                         }
                     }
                     refreshPartyView();
                 } else {
                     Log.v(TAG, "Editing a member");
                     if (m_memberRepo.update(member) != 0) {
-                        m_party.setPartyMember(m_partyMemberSelectedForEdit, member);
+                        m_party.set(m_partyMemberSelectedForEdit, member);
                         refreshPartyView();
                     }
                 }
@@ -286,8 +295,8 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		
 		case PartyMemberEditorActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a member");
-			if (m_memberRepo.delete(m_party.getPartyMember(m_partyMemberSelectedForEdit)) != 0) {
-				m_party.deletePartyMember(m_partyMemberSelectedForEdit);
+			if (m_memberRepo.delete(m_party.get(m_partyMemberSelectedForEdit)) != 0) {
+				m_party.remove(m_partyMemberSelectedForEdit);
 				refreshPartyView();
 			}
 			break;
@@ -300,36 +309,10 @@ public class InitiativeTrackerFragment extends BasePageFragment implements
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-
-	// When roll initiative button is clicked
-	@Override
-	public void onClick(View view) {
-		DiceSet diceSet = new DiceSet();
-		int initiativeMod;
-
-		for (int i = 0; i < m_party.size(); i++) {
-			initiativeMod = m_party.getPartyMember(i).getInitiative();
-			m_party.getPartyMember(i).setLastRolledValue(
-					diceSet.singleRoll(20) + initiativeMod);
-		}
-		updateDatabase();
-		m_hasRolled = true;
-		loadEncounterParty();
-	}
-
-	// Party member in list was clicked
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		m_partyMemberSelectedForEdit = m_party
-				.getPartyMemberIndexByRollValueIndex(position);
-		showPartyMemberEditor(m_party.getPartyMember(m_partyMemberSelectedForEdit));
-
-	}
 	
 	private void updateDatabase() {
-		for (int i = 0; i < m_party.size(); i++) {
-			m_memberRepo.update(m_party.getPartyMember(i));
-		}
+        for (PartyMember member : m_party) {
+            m_memberRepo.update(member);
+        }
 	}
 }

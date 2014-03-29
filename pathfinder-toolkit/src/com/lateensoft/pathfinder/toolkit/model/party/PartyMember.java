@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model.party;
 
+import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
 
@@ -7,7 +8,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 
 public class PartyMember implements Parcelable, Storable {
 	
@@ -34,11 +37,7 @@ public class PartyMember implements Parcelable, Storable {
 	private long m_partyId;
 	
 	public PartyMember(String name){
-		if(name != null)
-			m_name = name;
-		else
-			m_name = "";
-		
+		m_name = (name != null) ? name : "";
 		m_initiative = 0;
 		m_AC = 0;
 		m_touch = 0;
@@ -62,7 +61,7 @@ public class PartyMember implements Parcelable, Storable {
 	 * returns a deep copy of memberToCopy
 	 */
 	public PartyMember(PartyMember memberToCopy){
-		m_name = new String(memberToCopy.getName());
+		m_name = memberToCopy.getName();
 		m_initiative = memberToCopy.getInitiative();
 		m_AC = memberToCopy.getAC();
 		m_touch = memberToCopy.getTouch();
@@ -285,17 +284,12 @@ public class PartyMember implements Parcelable, Storable {
 	}
 	
 	public String getName() {
-		if(m_name != null)
-			return m_name;
-		else{ 
-			m_name = new String("");
-			return m_name;
-		}
+		return m_name;
 	}
 
-	public void setName(String name) {
-		if(name != null)
-			this.m_name = name;
+	public void setName(@NotNull String name) {
+        Preconditions.checkNotNull(name);
+	    m_name = name;
 	}
 	
 	public int getInitiative() {
@@ -417,13 +411,10 @@ public class PartyMember implements Parcelable, Storable {
 	public void setStealthSkillBonus(int stealthSkillBonus) {
 		this.m_stealthSkillBonus = stealthSkillBonus;
 	}
-	
-	
+
 	public int getLastRolledValue() {
 		return m_lastRolledValue;
 	}
-
-
 
 	public void setLastRolledValue(int rolledVal) {
 		this.m_lastRolledValue = rolledVal;
@@ -461,5 +452,16 @@ public class PartyMember implements Parcelable, Storable {
 			return new PartyMember[size];
 		}
 	};
-	
+
+    public static class NameComparator implements Comparator<PartyMember> {
+        @Override public int compare(PartyMember lhs, PartyMember rhs) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    }
+
+    public static class RollComparator implements Comparator<PartyMember> {
+        @Override public int compare(PartyMember lhs, PartyMember rhs) {
+            return rhs.getLastRolledValue() - lhs.getLastRolledValue();
+        }
+    }
 }

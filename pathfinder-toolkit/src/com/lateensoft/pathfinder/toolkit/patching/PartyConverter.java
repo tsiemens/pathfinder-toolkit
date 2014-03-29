@@ -8,7 +8,7 @@ public class PartyConverter {
 	public static CampaignParty convertParty(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.party.PTParty oldParty) {
 		CampaignParty newParty = new CampaignParty(oldParty.getName());
 		for (int i = 0; i < oldParty.getPartyMemberNames().length; i++) {
-			newParty.addPartyMember(convertMember(oldParty.getPartyMember(i)));
+			newParty.add(convertMember(oldParty.getPartyMember(i)));
 		}
 		
 		return newParty;

@@ -9,44 +9,30 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 
-public class PartyRollAdapter extends ArrayAdapter<String>{
-	public static final int CRIT_FUMBLE = -1;
-	public static final int NO_CRIT = 0;
-	public static final int CRIT = 1;
-	
-	Context m_context;
-	int m_layoutResourceId;
-	int[] m_rollValues = null;
-	int[] m_critValues = null;
-	String[] m_characterNames = null;
+import java.util.List;
 
-	/**
-	 * 
-	 * @param context
-	 * @param layoutResourceId
-	 * @param characterNames
-	 * @param rollValues 
-	 * @param critValues CRUIT_FUMBLE, NO_CRIT, CRIT. if null, all considered NO_CRIT
-	 */
-	public PartyRollAdapter(Context context, int layoutResourceId, String[] characterNames,
-                            int[] rollValues, int[] critValues) {
-		super(context, layoutResourceId, characterNames);
-		m_layoutResourceId = layoutResourceId;
-		m_context = context;
-		m_rollValues = rollValues;
-		m_characterNames = characterNames;
-		m_critValues = critValues;
-	}
+public class PartyRollAdapter extends ArrayAdapter<PartyMember>{
+    public enum CritType {CRIT_FUMBLE, CRIT, NO_CRIT}
+
+	private int m_layoutResourceId;
+    private CritTypeValueGetter m_critGetter;
+
+    public PartyRollAdapter(Context context, int layoutResourceId, List<PartyMember> partymembers, CritTypeValueGetter critGetter) {
+        super(context, layoutResourceId, partymembers);
+        m_layoutResourceId = layoutResourceId;
+        m_critGetter = critGetter;
+    }
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-		CharacterRollHolder holder;
+		MemberRowHolder holder;
 		
 		if(row == null) {		
-			LayoutInflater inflater = LayoutInflater.from(m_context);
+			LayoutInflater inflater = LayoutInflater.from(getContext());
 			row = inflater.inflate(m_layoutResourceId, parent, false);
-			holder = new CharacterRollHolder();
+			holder = new MemberRowHolder();
 			
 			holder.name = (TextView)row.findViewById(R.id.textViewRollName);
 			holder.rollValue = (TextView)row.findViewById(R.id.textViewRollValue);
@@ -54,31 +40,35 @@ public class PartyRollAdapter extends ArrayAdapter<String>{
 			row.setTag(holder);
 		}
 		else {
-			holder = (CharacterRollHolder)row.getTag();
+			holder = (MemberRowHolder)row.getTag();
 		}
 		
-		holder.name.setText(m_characterNames[position]);
-		holder.rollValue.setText(Integer.toString(m_rollValues[position]));
-		
-		if(m_critValues != null){
-			if(m_critValues[position] == CRIT_FUMBLE){
-				holder.rollValue.setTextColor(Color.RED);
-			}
-			else if(m_critValues[position] == CRIT){
-				holder.rollValue.setTextColor(Color.GREEN);
-			}
+		holder.name.setText(this.getItem(position).getName());
+		holder.rollValue.setText(Integer.toString(this.getItem(position).getLastRolledValue()));
+
+        if(m_critGetter != null){
+            CritType critType = m_critGetter.getCritTypeForMember(this.getItem(position));
+            int color = getContext().getResources().getColor(android.R.color.primary_text_dark);
+            switch (critType){
+                case CRIT_FUMBLE:
+                    color = Color.RED;
+                    break;
+                case CRIT:
+                    color = Color.GREEN;
+                    break;
+            }
+            holder.rollValue.setTextColor(color);
 		}
 		
 		return row;
 	}
 
-	static class CharacterRollHolder {
+	private static class MemberRowHolder {
 		TextView name;
 		TextView rollValue;
 	}
-	
-	public void updateRollValues(int[] newRollValues){
-		m_rollValues = newRollValues;
-		notifyDataSetChanged();
-	}
+
+    public interface CritTypeValueGetter {
+        public CritType getCritTypeForMember(PartyMember member);
+    }
 }

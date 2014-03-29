@@ -44,7 +44,7 @@ public class CampaignPartyRepositoryTest extends AndroidTestCase {
 	}
 	
 	public void testQueryList() {
-		List<Entry<Long, String>> names = m_repo.queryList();
+		List<Entry<Long, String>> names = m_repo.queryIdNameList();
 		assertEquals(m_party1.getName(), names.get(0).getValue());
 		assertEquals(m_party2.getName(), names.get(1).getValue());
 		assertEquals(2, names.size());

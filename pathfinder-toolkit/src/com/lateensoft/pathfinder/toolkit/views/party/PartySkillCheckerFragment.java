@@ -5,6 +5,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
+import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 import com.lateensoft.pathfinder.toolkit.utils.DiceSet;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -20,9 +21,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.util.Collections;
+
 
 public class PartySkillCheckerFragment extends BasePageFragment implements OnClickListener, OnItemSelectedListener{
-
 	@SuppressWarnings("unused")
 	private static final String TAG = PartySkillCheckerFragment.class.getSimpleName();
 	
@@ -118,78 +120,68 @@ public class PartySkillCheckerFragment extends BasePageFragment implements OnCli
 	}
 	
 	private void refreshPartyView(){
-		String[] memberNames = m_party.getNamesByRollValue();
-		int[] memberRollValues = m_party.getRollValuesByRollValue();
-		int[] indexesByRollValue = m_party.getIndexesByRollValue();
-		int[] critValues = null;
-		
-		if(m_party.size() > 0) critValues = new int[m_party.size()];
-		
-		for(int i = 0; i < m_party.size(); i++){
-			int naturalRollVal = memberRollValues[i] - getSkillModForMember(indexesByRollValue[i]);
-			switch(naturalRollVal){
-			case 20:
-				critValues[i] = PartyRollAdapter.CRIT;
-				break;
-			case 1:
-				critValues[i] = PartyRollAdapter.CRIT_FUMBLE;
-				break;
-			default:
-				critValues[i] = PartyRollAdapter.NO_CRIT;
-				break;
-			}		
-		}
-		PartyRollAdapter adapter = new PartyRollAdapter(getContext(), R.layout.party_roll_row, memberNames, memberRollValues, critValues);
+        Collections.sort(m_party, new PartyMember.RollComparator());
+        PartyRollAdapter adapter = new PartyRollAdapter(getContext(), R.layout.party_roll_row, m_party, new PartyRollAdapter.CritTypeValueGetter() {
+            @Override
+            public PartyRollAdapter.CritType getCritTypeForMember(PartyMember member) {
+                int naturalRollVal = member.getLastRolledValue() - getSkillModForMember(member);
+                switch(naturalRollVal){
+                    case 20:
+                        return PartyRollAdapter.CritType.CRIT;
+                    case 1:
+                        return PartyRollAdapter.CritType.CRIT_FUMBLE;
+                    default:
+                        return PartyRollAdapter.CritType.NO_CRIT;
+                }
+            }
+        });
 		m_partyMemberList.setAdapter(adapter);
 		updateTitle();
 	}
 	
 	public void resetPartyRolls(){
-		for(int i = 0; i < m_party.size(); i++){
-			m_party.getPartyMember(i).setLastRolledValue(0);
-		}
+        for (PartyMember member : m_party) {
+            member.setLastRolledValue(0);
+        }
 	}
-	
-	/**
-	 * @return true if party is in an encounter (has non zero roll values) false if in reset state
-	 */
-	private boolean partyIsInEncounter(CampaignParty party){
-		for(int i = 0; i < party.size(); i++)
-			if(party.getPartyMember(i).getLastRolledValue() != 0)
-				return true;
+
+	private static boolean partyIsInEncounter(CampaignParty party){
+        for (PartyMember member : party) {
+            if (member.getLastRolledValue() != 0) {
+                return true;
+            }
+        }
 		return false;
 	}
 	
 	//When roll button is clicked
 	public void onClick(View view) {
 		DiceSet diceSet = new DiceSet();
-		int skillMod;
-		
-		for(int i = 0; i < m_party.size(); i++){
-			skillMod = getSkillModForMember(i);
-			m_party.getPartyMember(i).setLastRolledValue(diceSet.singleRoll(20)+skillMod);
-		}
+
+        for (PartyMember member : m_party) {
+            member.setLastRolledValue(diceSet.singleRoll(20) + getSkillModForMember(member));
+        }
 		refreshPartyView();
 	}
 
-	private int getSkillModForMember(int partyMemberIndex){
+	private int getSkillModForMember(PartyMember member){
 		switch(m_skillSelectedForRoll){
 		case 0:
-			return m_party.getPartyMember(partyMemberIndex).getFortSave();
+			return member.getFortSave();
 		case 1:
-			return m_party.getPartyMember(partyMemberIndex).getReflexSave();
+			return member.getReflexSave();
 		case 2:
-			return m_party.getPartyMember(partyMemberIndex).getWillSave();
+			return member.getWillSave();
 		case 3:
-			return m_party.getPartyMember(partyMemberIndex).getBluffSkillBonus();
+			return member.getBluffSkillBonus();
 		case 4:
-			return m_party.getPartyMember(partyMemberIndex).getDisguiseSkillBonus();
+			return member.getDisguiseSkillBonus();
 		case 5:
-			return m_party.getPartyMember(partyMemberIndex).getPerceptionSkillBonus();
+			return member.getPerceptionSkillBonus();
 		case 6:
-			return m_party.getPartyMember(partyMemberIndex).getSenseMotiveSkillBonus();
+			return member.getSenseMotiveSkillBonus();
 		case 7:
-			return m_party.getPartyMember(partyMemberIndex).getStealthSkillBonus();
+			return member.getStealthSkillBonus();
 		default:
 			return 0;
 		}
