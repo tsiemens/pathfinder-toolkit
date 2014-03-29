@@ -60,10 +60,8 @@ public class PTCharacterFeatsFragment extends PTCharacterSheetFragment
 
 	private void refreshFeatsListView() {
         Collections.sort(m_featList);
-        PTFeat[] feats = new PTFeat[m_featList.size()];
 		PTFeatListAdapter adapter = new PTFeatListAdapter(getActivity(),
-				R.layout.character_feats_row,
-				m_featList.toArray(feats));
+				R.layout.character_feats_row, m_featList);
 
 		m_featsListView.setAdapter(adapter);
 	}

@@ -32,19 +32,6 @@ public class PTFeatList  extends ArrayList<PTFeat> implements Parcelable {
 		}
 	}
 
-    // TODO remove this once adapter uses whole feats.
-	/**
-	 * returns an array of all the feats names in the list
-	 * @return an array of PTFeat objects
-	 */
-	public String[] getFeatNames(){
-		String[] featNames = new String[this.size()];
-		for(int i = 0; i < this.size(); i++){
-			featNames[i] = this.get(i).getName();
-		}
-		return featNames;		
-	}
-
 	@Override
 	public int describeContents() {
 		return 0;

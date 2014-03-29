@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.adapters.character;
 
+import com.google.common.base.Splitter;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.PTFeat;
 
@@ -12,19 +13,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
-	Context mContext;
-	int mLayoutResourceId;
-	PTFeat[] mFeats = null;
-	String TAG = "PTFeatListAdapter";
+import java.util.List;
 
-	public PTFeatListAdapter(Context context, int layoutResourceId, PTFeat[] feats) {
+public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
+    private static final String TAG = PTFeatListAdapter.class.getSimpleName();
+	Context m_context;
+	int m_layoutResourceId;
+
+	public PTFeatListAdapter(Context context, int layoutResourceId, List<PTFeat> feats) {
 		super(context, layoutResourceId, feats);
-		Log.v(TAG, "Constructing");
-		mLayoutResourceId = layoutResourceId;
-		mContext = context;
-		mFeats = feats;
-		Log.v(TAG, "Finished constructing");
+		m_layoutResourceId = layoutResourceId;
+		m_context = context;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -33,9 +32,9 @@ public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
 		FeatItemHolder holder;
 
 		if(row == null) {
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+			LayoutInflater inflater = ((Activity) m_context).getLayoutInflater();
 
-			row = inflater.inflate(mLayoutResourceId, parent, false);
+			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new FeatItemHolder();
 
 			holder.name = (TextView)row.findViewById(R.id.featName);
@@ -47,10 +46,10 @@ public class PTFeatListAdapter extends ArrayAdapter<PTFeat>{
 			holder = (FeatItemHolder)row.getTag();
 		}
 
-		holder.name.setText(mFeats[position].getName());
-		holder.description.setText(mFeats[position].getDescription().split("\\r?\\n")[0]);
+		holder.name.setText(getItem(position).getName());
+		holder.description.setText(Splitter.onPattern("\\r?\\n")
+                .splitToList(getItem(position).getDescription()).get(0));
 
-		Log.v(TAG, "Finishing getView");
 		return row;
 	}
 
