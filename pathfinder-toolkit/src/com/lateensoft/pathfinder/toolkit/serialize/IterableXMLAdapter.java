@@ -8,21 +8,21 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public abstract class ListXMLAdapter<L extends List<E>, E, A extends XMLObjectAdapter<E>> extends XMLObjectAdapter<L> {
+public abstract class IterableXMLAdapter<I extends Iterable<E>, E, A extends XMLObjectAdapter<E>> extends XMLObjectAdapter<I> {
 
     public abstract A getItemAdapter();
-    protected abstract L createObjectFromItems(List<E> items);
+    protected abstract I createObjectFromItems(List<E> items);
 
     @Override
-    protected L createObjectForElement(Element element) throws InvalidObjectException {
+    protected I createObjectForElement(Element element) throws InvalidObjectException {
         List<E> items = getSubObjects(element, getItemAdapter());
         return createObjectFromItems(items);
     }
 
     @Override
-    protected void setElementContentForObject(Element element, L list) {
+    protected void setElementContentForObject(Element element, I iterable) {
         A adapter = getItemAdapter();
-        for (E item : list) {
+        for (E item : iterable) {
             element.add(adapter.toXML(item));
         }
     }

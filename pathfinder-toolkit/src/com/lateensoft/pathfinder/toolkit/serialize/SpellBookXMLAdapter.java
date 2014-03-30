@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public class SpellBookXMLAdapter extends ListXMLAdapter<SpellBook, Spell, SpellXMLAdapter> {
+public class SpellBookXMLAdapter extends IterableXMLAdapter<SpellBook, Spell, SpellXMLAdapter> {
 
     public static final String ELEMENT_NAME = "spellbook";
 

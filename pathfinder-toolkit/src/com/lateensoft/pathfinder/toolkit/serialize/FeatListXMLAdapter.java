@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public class FeatListXMLAdapter extends ListXMLAdapter<FeatList, Feat, FeatXMLAdapter> {
+public class FeatListXMLAdapter extends IterableXMLAdapter<FeatList, Feat, FeatXMLAdapter> {
 
     public static final String ELEMENT_NAME = "featlist";
 
