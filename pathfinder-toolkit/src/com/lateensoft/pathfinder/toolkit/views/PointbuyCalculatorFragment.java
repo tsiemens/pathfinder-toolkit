@@ -41,7 +41,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 	static final int INT_IDX = 3;
 	static final int WIS_IDX = 4;
 	static final int CHA_IDX = 5;
-	static final int NUM_ABILITIES = AbilitySet.ABILITY_KEYS().size();
+	static final int NUM_ABILITIES = AbilitySet.ABILITY_KEYS.size();
 	
 	static final int CUSTOM_RACE_INDEX = 7;
 	

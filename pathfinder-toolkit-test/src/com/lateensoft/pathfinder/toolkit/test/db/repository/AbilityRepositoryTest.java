@@ -33,10 +33,9 @@ public class AbilityRepositoryTest extends BaseRepositoryTest {
 	
 	public void testQuerySet() {
 		List<Ability> queriedAbilityScores = m_repo.queryAllForCharacter(m_characterId);
-		List<Integer> constAbilityKeys = AbilitySet.ABILITY_KEYS();
-		
-		for (int i = 0; i < constAbilityKeys.size(); i++){
-			assertEquals(constAbilityKeys.get(i).intValue(), queriedAbilityScores.get(i).getID());
+
+        for (int i = 0; i < AbilitySet.ABILITY_KEYS.size(); i++){
+			assertEquals(AbilitySet.ABILITY_KEYS.get(i).intValue(), queriedAbilityScores.get(i).getID());
 		}
 	}
 	

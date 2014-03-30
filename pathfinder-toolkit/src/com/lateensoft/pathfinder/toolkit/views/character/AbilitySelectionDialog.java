@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import java.util.List;
-
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 
@@ -39,9 +37,7 @@ public class AbilitySelectionDialog {
 				case DialogInterface.BUTTON_NEGATIVE:
 					break;
 				default:
-					// Set the currently selected ability
-					List<Integer> constAbilityKeys = AbilitySet.ABILITY_KEYS();
-					m_selectedAbilityKey = constAbilityKeys.get(which);
+                    m_selectedAbilityKey = AbilitySet.ABILITY_KEYS.get(which);
 					break;
 
 				}
@@ -64,9 +60,8 @@ public class AbilitySelectionDialog {
 	}
 
 	protected int getIndexForAbilityKey(int abilityKey) {
-		List<Integer> constAbilityKeys = AbilitySet.ABILITY_KEYS();
-		for (int i = 0; i < constAbilityKeys.size(); i++) {
-			if (constAbilityKeys.get(i).intValue() == abilityKey) {
+        for (int i = 0; i < AbilitySet.ABILITY_KEYS.size(); i++) {
+			if (AbilitySet.ABILITY_KEYS.get(i) == abilityKey) {
 				return i;
 			}
 		}

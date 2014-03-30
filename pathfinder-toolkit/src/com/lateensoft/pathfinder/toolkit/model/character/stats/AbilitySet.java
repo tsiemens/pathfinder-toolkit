@@ -1,9 +1,10 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
@@ -14,28 +15,27 @@ import android.os.Parcelable;
 import android.util.SparseArray;
 import org.jetbrains.annotations.Nullable;
 
-public class AbilitySet implements Parcelable{
-	@SuppressWarnings("unused")
-	private static final String TAG = AbilitySet.class.getSimpleName();
-	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
-	
-	public static final int KEY_STR = 1;
+public class AbilitySet implements Parcelable, Iterable<Ability> {
+
+    public static final int KEY_STR = 1;
 	public static final int KEY_DEX = 2;
 	public static final int KEY_CON = 3;
 	public static final int KEY_INT = 4;
 	public static final int KEY_WIS = 5;
 	public static final int KEY_CHA = 6;
+
+    /**
+     * All valid ability keys, in order. This matches the order for string resources,
+     * and how the abilities are stored in the set.
+     */
+    public static final ImmutableList<Integer> ABILITY_KEYS;
+    static {
+        ImmutableList.Builder<Integer> builder = ImmutableList.builder();
+        builder.add(KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA);
+        ABILITY_KEYS = builder.build();
+    }
 	
 	private List<Ability> m_abilities;
-	
-	/**
-	 * @return an unmodifiable list of the skill keys, in order. This matches the order for string resources, and how the abilities are stored
-	 * in the set.
-	 */
-	public static List<Integer> ABILITY_KEYS() {
-		Integer[] keys = {KEY_STR, KEY_DEX, KEY_CON, KEY_INT, KEY_WIS, KEY_CHA};
-		return Collections.unmodifiableList(Arrays.asList(keys));
-	}
 
     public interface CorrectionListener {
         public void onInvalidAbilityRemoved(Ability removedAbility);
@@ -54,10 +54,9 @@ public class AbilitySet implements Parcelable{
     }
 	
 	public AbilitySet() {
-		List<Integer> constAbilityKeys = ABILITY_KEYS();
-		m_abilities = Lists.newArrayListWithCapacity(constAbilityKeys.size());
+        m_abilities = Lists.newArrayListWithCapacity(ABILITY_KEYS.size());
 
-        for (Integer abilityKey : constAbilityKeys) {
+        for (Integer abilityKey : ABILITY_KEYS) {
             m_abilities.add(new Ability(abilityKey));
         }
 	}
@@ -67,7 +66,7 @@ public class AbilitySet implements Parcelable{
 	}
 	
 	public AbilitySet(Parcel in) {
-        m_abilities = Lists.newArrayListWithCapacity(ABILITY_KEYS().size());
+        m_abilities = Lists.newArrayListWithCapacity(ABILITY_KEYS.size());
         in.readTypedList(m_abilities, Ability.CREATOR);
 	}
 
@@ -77,10 +76,9 @@ public class AbilitySet implements Parcelable{
 	}
 
     public void validate(CorrectionListener listener) {
-        List<Integer> constAbilityKeys = ABILITY_KEYS();
         List<Ability> abilitiesToRemove = Lists.newArrayList();
         for (Ability ability : m_abilities) {
-            if (!constAbilityKeys.contains(ability.getAbilityKey())) {
+            if (!ABILITY_KEYS.contains(ability.getAbilityKey())) {
                 abilitiesToRemove.add(ability);
             }
         }
@@ -92,7 +90,7 @@ public class AbilitySet implements Parcelable{
         }
 
         boolean found;
-        for (Integer abilityKey : constAbilityKeys) {
+        for (Integer abilityKey : ABILITY_KEYS) {
             found = false;
             for (Ability ability : m_abilities) {
                 if (ability.getAbilityKey() == abilityKey) {
@@ -157,11 +155,10 @@ public class AbilitySet implements Parcelable{
 	 * @return a map of the ability keys to their short name
 	 */
 	public static SparseArray<String> getAbilityShortNameMap() {
-		List<Integer> constAbilityKeys = ABILITY_KEYS();
-		SparseArray<String> map = new SparseArray<String>(constAbilityKeys.size());
+        SparseArray<String> map = new SparseArray<String>(ABILITY_KEYS.size());
 		String[] names = getShortAbilityNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(constAbilityKeys.get(i), names[i]);
+			map.append(ABILITY_KEYS.get(i), names[i]);
 		}
 		return map;
 	}	
@@ -176,6 +173,24 @@ public class AbilitySet implements Parcelable{
 			ability.setCharacterID(id);
 		}
 	}
+
+    @Override
+    public Iterator<Ability> iterator() {
+        return new Iterator<Ability>() {
+            Iterator<Ability> _iterator = m_abilities.iterator();
+            @Override public boolean hasNext() {
+                return _iterator.hasNext();
+            }
+
+            @Override public Ability next() {
+                return _iterator.next();
+            }
+
+            @Override public void remove() {
+                throw new UnsupportedOperationException(AbilitySet.class.getSimpleName() + ".iterator.remove");
+            }
+        };
+    }
 	
 	@Override
 	public int describeContents() {
@@ -193,8 +208,7 @@ public class AbilitySet implements Parcelable{
 	};
 
     public static boolean isValidAbility(int abilityKey) {
-        List<Integer> constAbilityKeys = ABILITY_KEYS();
-        for (int key : constAbilityKeys) {
+        for (int key : ABILITY_KEYS) {
             if (key == abilityKey) return true;
         }
         return false;

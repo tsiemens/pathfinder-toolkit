@@ -74,7 +74,7 @@ public class CharacterRepository extends BaseRepository<Character> {
 			
 			// Saves
 			SaveRepository saveRepo = new SaveRepository();
-			Save[] saves = object.getSaveSet().getSaves();
+			SaveSet saves = object.getSaveSet();
 			for (Save save : saves) {
 				subCompId = saveRepo.insert(save);
 				if (subCompId == -1) {
@@ -85,7 +85,7 @@ public class CharacterRepository extends BaseRepository<Character> {
 			
 			// Skills
 			SkillRepository skillRepo = new SkillRepository();
-			List<Skill> skills = object.getSkillSet().getSkills();
+			SkillSet skills = object.getSkillSet();
 			for (Skill skill : skills) {
 				subCompId = skillRepo.insert(skill);
 				if (subCompId == -1) {

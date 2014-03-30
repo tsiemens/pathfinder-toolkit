@@ -8,12 +8,13 @@ import android.os.Parcelable;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 import org.jetbrains.annotations.Nullable;
 
-public class SkillSet implements Parcelable {
+public class SkillSet implements Parcelable, Iterable<Skill> {
 	public static final int ACRO = 1;
     public static final int APPRAISE = 2;
     public static final int BLUFF = 3;
@@ -49,28 +50,27 @@ public class SkillSet implements Parcelable {
     public static final int SURVIVAL = 33;
     public static final int SWIM = 34;
     public static final int USE_MAGIC_DEVICE = 35;
+
+    // list of the skill keys, in order.
+    public static final ImmutableList<Integer> SKILL_KEYS;
+    // list skill keys which can be subtyped.
+    public static final ImmutableList<Integer> SUBTYPED_SKILLS;
+
+    static {
+        ImmutableList.Builder<Integer> builder = ImmutableList.builder();
+        builder.add(ACRO, APPRAISE, BLUFF, CLIMB, CRAFT, DIPLOM,
+                DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
+                KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
+                LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
+                SURVIVAL, SWIM, USE_MAGIC_DEVICE);
+        SKILL_KEYS = builder.build();
+
+        builder = ImmutableList.builder();
+        builder.add(CRAFT, PERFORM, PROF);
+        SUBTYPED_SKILLS = builder.build();
+    }
     
 	List<Skill> m_skills;
-	
-	/**
-	 * @return an unmodifiable list of the skill keys, in order.
-	 */
-	public static List<Integer> SKILL_KEYS() {
-		Integer[] keys = { ACRO, APPRAISE, BLUFF, CLIMB, CRAFT, DIPLOM,
-		    	DISABLE_DEV,DISGUISE,ESCAPE,FLY,HANDLE_ANIMAL, HEAL,INTIMIDATE, KNOW_ARCANA, KNOW_DUNGEON,
-		    	KNOW_ENG, KNOW_GEO, KNOW_HIST, KNOW_LOCAL, KNOW_NATURE, KNOW_NOBILITY, KNOW_PLANES, KNOW_RELIGION,
-		    	LING,  PERCEPT, PERFORM, PROF, RIDE, SENSE_MOTIVE, SLEIGHT_OF_HAND,SPELLCRAFT, STEALTH,
-		    	SURVIVAL, SWIM, USE_MAGIC_DEVICE };
-		return Collections.unmodifiableList(Arrays.asList(keys));
-	}
-	
-	/**
-	 * @return an unmodifiable list skill keys which can be subtyped.
-	 */
-	public static List<Integer> SUBTYPED_SKILLS() {
-		Integer[] keys = {CRAFT, PERFORM, PROF};
-		return Collections.unmodifiableList(Arrays.asList(keys));
-	}
 
     public interface CorrectionListener {
         public void onInvalidSkillRemoved(Skill removedSkill);
@@ -86,11 +86,10 @@ public class SkillSet implements Parcelable {
 	
 	public SkillSet() {
 		int[] defaultSkillAbilityIds = getDefaultAbilityIds();
-		List<Integer> constSkillKeys = SKILL_KEYS();
-		m_skills = Lists.newArrayListWithCapacity(constSkillKeys.size());
+        m_skills = Lists.newArrayListWithCapacity(SKILL_KEYS.size());
 		
-		for(int i = 0; i < constSkillKeys.size(); i++) {
-			m_skills.add(new Skill(constSkillKeys.get(i), defaultSkillAbilityIds[i]));
+		for(int i = 0; i < SKILL_KEYS.size(); i++) {
+			m_skills.add(new Skill(SKILL_KEYS.get(i), defaultSkillAbilityIds[i]));
 		}
 	}
 
@@ -135,8 +134,7 @@ public class SkillSet implements Parcelable {
         }
 
         boolean found;
-        List<Integer> constSkillKeys = SKILL_KEYS();
-        for (Integer skillKey : constSkillKeys) {
+        for (Integer skillKey : SKILL_KEYS) {
             found = false;
             for (Skill skill : m_skills) {
                 if (skill.getSkillKey() == skillKey) {
@@ -187,6 +185,24 @@ public class SkillSet implements Parcelable {
 	public List<Skill> getSkills(){
 		return m_skills;
 	}
+
+    @Override
+    public Iterator<Skill> iterator() {
+        return new Iterator<Skill>() {
+            Iterator<Skill> _iterator = m_skills.iterator();
+            @Override public boolean hasNext() {
+                return _iterator.hasNext();
+            }
+
+            @Override public Skill next() {
+                return _iterator.next();
+            }
+
+            @Override public void remove() {
+                throw new UnsupportedOperationException(SkillSet.class.getSimpleName() + ".iterator.remove");
+            }
+        };
+    }
 	
 	public int size() {
 		return m_skills.size();
@@ -254,11 +270,10 @@ public class SkillSet implements Parcelable {
 	 * @return a map of the skill key to the ability key
 	 */
 	public static SparseIntArray getDefaultAbilityKeyMap() {
-		List<Integer> constSkillKeys = SKILL_KEYS();
-		SparseIntArray map = new SparseIntArray(constSkillKeys.size());
+        SparseIntArray map = new SparseIntArray(SKILL_KEYS.size());
 		int[] abilityIds = getDefaultAbilityIds();
-		for(int i = 0; i < constSkillKeys.size(); i++) {
-			map.append(constSkillKeys.get(i), abilityIds[i]);
+		for(int i = 0; i < SKILL_KEYS.size(); i++) {
+			map.append(SKILL_KEYS.get(i), abilityIds[i]);
 		}
 		return map;
 	}
@@ -272,24 +287,17 @@ public class SkillSet implements Parcelable {
 	}
 	
 	public static boolean isSubtypedSkill(int skillKey) {
-		List<Integer> subtypedSkills = SUBTYPED_SKILLS();
-		for (int key : subtypedSkills) {
-			if (key == skillKey) {
-				return true;
-			}
-		}
-		return false;
+        return SUBTYPED_SKILLS.contains(skillKey);
 	}
 	
 	/**
 	 * @return a map of the skill keys to their name
 	 */
 	public static SparseArray<String> getSkillNameMap() {
-		List<Integer> constSkillKeys = SKILL_KEYS();
-		SparseArray<String> map = new SparseArray<String>(constSkillKeys.size());
+        SparseArray<String> map = new SparseArray<String>(SKILL_KEYS.size());
 		String[] names = getSkillNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(constSkillKeys.get(i), names[i]);
+			map.append(SKILL_KEYS.get(i), names[i]);
 		}
 		return map;
 	}	
@@ -310,7 +318,7 @@ public class SkillSet implements Parcelable {
 	};
 
     public static boolean isValidSkill(int skillKey) {
-        return (skillKey > 0 && skillKey <= SKILL_KEYS().size());
+        return SKILL_KEYS.contains(skillKey);
     }
 }
 

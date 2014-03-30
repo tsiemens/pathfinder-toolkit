@@ -1,10 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Save;
 
@@ -41,9 +43,8 @@ public class SaveRepository extends BaseRepository<Save> {
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
 		int tempMod = ((Long) hashTable.get(TEMP_MOD)).intValue();
 		
-		Save save = new Save(saveKey, characterId, baseValue, abilityKey, magicMod,
+		return new Save(saveKey, characterId, baseValue, abilityKey, magicMod,
 				miscMod, tempMod);
-		return save;
 	}
 
 	@Override
@@ -70,10 +71,10 @@ public class SaveRepository extends BaseRepository<Save> {
 	
 	/**
 	 * Returns all saves for the character with characterId
-	 * @param characterId
+	 * @param characterId ID of the character
 	 * @return Array of Save, ordered by saveKey
 	 */
-	public Save[] querySet(long characterId) {
+	public List<Save> querySet(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = SAVE_KEY + " ASC";
 		String table = m_tableInfo.getTable();
@@ -81,14 +82,12 @@ public class SaveRepository extends BaseRepository<Save> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		Save[] saves = new Save[cursor.getCount()];
+		List<Save> saves = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
-		int i = 0;
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			saves[i] = buildFromHashTable(hashTable);
+			saves.add(buildFromHashTable(hashTable));
 			cursor.moveToNext();
-			i++;
 		}
 		return saves;
 	}

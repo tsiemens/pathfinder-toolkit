@@ -1,90 +1,79 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
 import com.lateensoft.pathfinder.toolkit.R;
 
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
-public class SaveSet implements Parcelable {
-	private static final String PARCEL_BUNDLE_KEY_SAVES = "saves";
-	
+public class SaveSet implements Parcelable, Iterable<Save> {
 	public static final int KEY_FORT = 1;
 	public static final int KEY_REF = 2;
 	public static final int KEY_WILL = 3;
+
+    /**
+     * list of saves keys in order.
+     */
+    public static final ImmutableList<Integer> SAVE_KEYS;
+    public static final ImmutableList<Integer> DEFAULT_ABILITIES;
+
+    static {
+        ImmutableList.Builder<Integer> builder = ImmutableList.builder();
+        builder.add(KEY_FORT, KEY_REF, KEY_WILL);
+        SAVE_KEYS = builder.build();
+
+        builder = ImmutableList.builder();
+        builder.add(AbilitySet.KEY_CON, AbilitySet.KEY_DEX, AbilitySet.KEY_WIS);
+        DEFAULT_ABILITIES = builder.build();
+    }
 	
-	Save[] m_saves;
-	
-	/**
-	 * @return an unmodifiable list of saves in order.
-	 */
-	public static List<Integer> SAVE_KEYS() {
-		Integer[] keys = {KEY_FORT, KEY_REF, KEY_WILL};
-		return Collections.unmodifiableList(Arrays.asList(keys));
-	}
-	
-	/**
-	 * @return an unmodifiable list of default keys for saves in order.
-	 */
-	public static List<Integer> DEFAULT_ABILITIES() {
-		Integer[] keys = {AbilitySet.KEY_CON, AbilitySet.KEY_DEX, AbilitySet.KEY_WIS};
-		return Collections.unmodifiableList(Arrays.asList(keys));
-	}
+	private List<Save> m_saves;
 	
 	public SaveSet() {
-		List<Integer> constSaveKeys = SAVE_KEYS();
-		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
-		m_saves = new Save[constSaveKeys.size()];
+        m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
 		
-		for(int i = 0; i < constSaveKeys.size(); i++) {
-			m_saves[i] = new Save(constSaveKeys.get(i), constDefaultAbilities.get(i));
+		for(int i = 0; i < SAVE_KEYS.size(); i++) {
+			m_saves.add(new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i)));
 		}
 	}
 	
 	/**
 	 * Safely populates the save set with saves 
 	 * If an save does not exist in saves, will be set to default.
-	 * @param saves
 	 */
-	public SaveSet(Save[] saves) {
-		List<Integer> constSaveKeys = SAVE_KEYS();
-		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
-		m_saves = new Save[constSaveKeys.size()];
-		List<Save> savesList = new ArrayList<Save>(Arrays.asList(saves));
+	public SaveSet(List<Save> saves) {
+        m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
 		
-		for(int i = 0; i < constSaveKeys.size(); i++) {
-			for (Save save : savesList) {
-				if(save.getSaveKey() == constSaveKeys.get(i).intValue()) {
-					savesList.remove(save);
-					m_saves[i] = save;
+		for(int i = 0; i < SAVE_KEYS.size(); i++) {
+            boolean found = false;
+			for (Save save : saves) {
+				if(save.getSaveKey() == SAVE_KEYS.get(i)) {
+                    m_saves.add(save);
+                    found = true;
 					break;
 				}
 			}
-			if (m_saves[i] == null) {
-				m_saves[i] = new Save(constSaveKeys.get(i), constDefaultAbilities.get(i));
+			if (!found) {
+				m_saves.add(new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i)));
 			}
 		}
 	}
 	
 	public SaveSet(Parcel in) {
-		Bundle objectBundle = in.readBundle();
-		m_saves = (Save[]) objectBundle.getParcelableArray(PARCEL_BUNDLE_KEY_SAVES);
+        m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
+        in.readTypedList(m_saves, Save.CREATOR);
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelableArray(PARCEL_BUNDLE_KEY_SAVES, m_saves);
-		out.writeBundle(objectBundle);
+        out.writeTypedList(m_saves);
 	}
 	
 	public Save getSave(int saveKey) {
@@ -96,31 +85,25 @@ public class SaveSet implements Parcelable {
 		return null;
 	}
 	
-	public Save[] getSaves(){
-		return m_saves;
-	}
-	
 	public Save getSaveByIndex(int index) {
-		return m_saves[index];
+		return m_saves.get(index);
 	}
 	
 	public int size() {
-		return m_saves.length;
+		return m_saves.size();
 	}
 	
 	/**
 	 * @return a map of the save key to the ability key
 	 */
 	public static SparseIntArray getDefaultAbilityKeyMap() {
-		List<Integer> constSaveKeys = SAVE_KEYS();
-		List<Integer> constDefaultAbilities = DEFAULT_ABILITIES();
-		SparseIntArray map = new SparseIntArray(constSaveKeys.size());
-		for(int i = 0; i < constSaveKeys.size(); i++) {
-			map.append(constSaveKeys.get(i), constDefaultAbilities.get(i));
+        SparseIntArray map = new SparseIntArray(SAVE_KEYS.size());
+		for(int i = 0; i < SAVE_KEYS.size(); i++) {
+			map.append(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i));
 		}
 		return map;
 	}
-	
+
 	/**
 	 * @return the skill names, in the order as defined by SAVE_KEYS
 	 */
@@ -128,25 +111,42 @@ public class SaveSet implements Parcelable {
 		Resources res = BaseApplication.getAppContext().getResources();
 		return res.getStringArray(R.array.save_names);
 	}
-	
+
 	/**
 	 * @return a map of the save keys to their name
 	 */
 	public static SparseArray<String> getSaveNameMap() {
-		List<Integer> constSaveKeys = SAVE_KEYS();
-		SparseArray<String> map = new SparseArray<String>(constSaveKeys.size());
+        SparseArray<String> map = new SparseArray<String>(SAVE_KEYS.size());
 		String[] names = getSaveNames();
 		for (int i = 0; i < names.length; i++) {
-			map.append(constSaveKeys.get(i), names[i]);
+			map.append(SAVE_KEYS.get(i), names[i]);
 		}
 		return map;
-	}	
+	}
 	
 	public void setCharacterID(long id) {
 		for (Save save : m_saves) {
 			save.setCharacterID(id);
 		}
 	}
+
+    @Override
+     public Iterator<Save> iterator() {
+        return new Iterator<Save>() {
+            Iterator<Save> _iterator = m_saves.iterator();
+            @Override public boolean hasNext() {
+                return _iterator.hasNext();
+            }
+
+            @Override public Save next() {
+                return _iterator.next();
+            }
+
+            @Override public void remove() {
+                throw new UnsupportedOperationException(SaveSet.class.getSimpleName() + ".iterator.remove");
+            }
+        };
+    }
 	
 	@Override
 	public int describeContents() {

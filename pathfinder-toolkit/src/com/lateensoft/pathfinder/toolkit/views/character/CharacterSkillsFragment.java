@@ -1,7 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import java.util.List;
-
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.SkillListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
@@ -203,8 +201,7 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 	
 	private void addNewSubSkills() {
 		Skill newSkill;
-		List<Integer> constSubSkills = SkillSet.SUBTYPED_SKILLS();
-		for (int key : constSubSkills) {
+        for (int key : SkillSet.SUBTYPED_SKILLS) {
 			if (m_skillSet.allSubSkillsUsed(key)) {
 				newSkill = m_skillSet.addNewSubSkill(key);
 				m_skillRepo.insert(newSkill);

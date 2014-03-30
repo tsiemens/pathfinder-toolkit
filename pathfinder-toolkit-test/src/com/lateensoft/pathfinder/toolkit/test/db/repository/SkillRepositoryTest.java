@@ -33,9 +33,8 @@ public class SkillRepositoryTest extends BaseRepositoryTest {
 
 	public void testQuerySet() {
 		List<Skill> queriedSkills = m_repo.queryAllForCharacter(m_characterId);
-		List<Integer> constSkillKeys = SkillSet.SKILL_KEYS();
-		for (int i = 0; i < constSkillKeys.size(); i++){
-			assertEquals(constSkillKeys.get(i).intValue(), queriedSkills.get(i).getSkillKey());
+        for (int i = 0; i < SkillSet.SKILL_KEYS.size(); i++){
+			assertEquals(SkillSet.SKILL_KEYS.get(i).intValue(), queriedSkills.get(i).getSkillKey());
 		}
 	}
 	

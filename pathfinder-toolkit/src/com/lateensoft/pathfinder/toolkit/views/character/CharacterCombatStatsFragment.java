@@ -26,7 +26,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	@SuppressWarnings("unused")
 	private static final String TAG = CharacterCombatStatsFragment.class.getSimpleName();
 	
-	private static enum EAbilityMod { INIT, AC, CMB, CMD, FORT, REF, WILL };
+	private static enum EAbilityMod { INIT, AC, CMB, CMD, FORT, REF, WILL }
 	private EAbilityMod m_abilityModSelectedForEdit;
 
 	private TextView m_currentHPTextView;
@@ -361,10 +361,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	}
 
 	/**
-	 * 
-	 * @param editText
-	 * @return the value in the edit text. Returns Integer.MAX_VALUE if the
-	 *         parse failed
+	 * @return the value in the edit text. Returns 0 if the parse failed
 	 */
 	private int getEditTextInt(EditText editText) {
 		try {
@@ -433,7 +430,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 
 		@Override public void onAbilitySelected(int abilityKey) {
 			if (abilityKey != 0) {
-				int viewID = -1;
+				int viewID;
 				switch (m_abilityModSelectedForEdit) {
 				case AC:
 					m_combatStats.setACAbilityKey(abilityKey);
@@ -466,9 +463,8 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 				default:
 					return;
 				}
-				if (viewID != -1) {
-					finishedEditing(viewID);
-				}
+
+				finishedEditing(viewID);
 			}
 		}
 		
@@ -628,8 +624,6 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 
 	/**
 	 * Updates the view which has finished being edited
-	 * 
-	 * @param viewID
 	 */
 	private void finishedEditing(int viewID) {
 		if (viewID == m_woundsEditText.getId()
@@ -734,8 +728,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 		
 		if (m_combatStats != null) {
 			m_statsRepo.update(m_combatStats);
-			Save[] saves = m_saveSet.getSaves();
-			for(Save save : saves) {
+			for(Save save : m_saveSet) {
 				m_saveRepo.update(save);
 			}
 		}
