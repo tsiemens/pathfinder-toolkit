@@ -12,6 +12,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import org.jetbrains.annotations.Nullable;
 
 public class SaveSet implements Parcelable, Iterable<Save> {
 	public static final int KEY_FORT = 1;
@@ -35,36 +36,29 @@ public class SaveSet implements Parcelable, Iterable<Save> {
     }
 	
 	private List<Save> m_saves;
+
+    public interface CorrectionListener {
+        public void onInvalidSaveRemoved(Save removedSkill);
+        public void onMissingSaveAdded(Save addedSkill);
+    }
 	
-	public SaveSet() {
-        m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
-		
-		for(int i = 0; i < SAVE_KEYS.size(); i++) {
-			m_saves.add(new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i)));
-		}
+    public static SaveSet newValidatedSaveSet(List<Save> saves, @Nullable CorrectionListener listener) {
+        SaveSet saveSet = new SaveSet(saves);
+        saveSet.validate(listener);
+        return saveSet;
+    }
+
+	private SaveSet(List<Save> saves) {
+        m_saves = saves;
 	}
-	
-	/**
-	 * Safely populates the save set with saves 
-	 * If an save does not exist in saves, will be set to default.
-	 */
-	public SaveSet(List<Save> saves) {
+
+    public SaveSet() {
         m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
-		
-		for(int i = 0; i < SAVE_KEYS.size(); i++) {
-            boolean found = false;
-			for (Save save : saves) {
-				if(save.getSaveKey() == SAVE_KEYS.get(i)) {
-                    m_saves.add(save);
-                    found = true;
-					break;
-				}
-			}
-			if (!found) {
-				m_saves.add(new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i)));
-			}
-		}
-	}
+
+        for(int i = 0; i < SAVE_KEYS.size(); i++) {
+            m_saves.add(new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i)));
+        }
+    }
 	
 	public SaveSet(Parcel in) {
         m_saves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
@@ -75,6 +69,44 @@ public class SaveSet implements Parcelable, Iterable<Save> {
 	public void writeToParcel(Parcel out, int flags) {
         out.writeTypedList(m_saves);
 	}
+
+    public void validate(@Nullable CorrectionListener listener) {
+        List<Save> validSaves = Lists.newArrayListWithCapacity(SAVE_KEYS.size());
+        List<Save> invalidSaves = Lists.newArrayList();
+
+        for (Save save : m_saves) {
+            if(!SAVE_KEYS.contains(save.getSaveKey())) {
+                invalidSaves.add(save);
+            }
+        }
+        m_saves.removeAll(invalidSaves);
+        if (listener != null) {
+            for (Save removedSave : invalidSaves) {
+                listener.onInvalidSaveRemoved(removedSave);
+            }
+        }
+
+        for(int i = 0; i < SAVE_KEYS.size(); i++) {
+            boolean found = false;
+            for (Save save : m_saves) {
+                if(save.getSaveKey() == SAVE_KEYS.get(i)) {
+                    validSaves.add(save);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Save newSave = new Save(SAVE_KEYS.get(i), DEFAULT_ABILITIES.get(i));
+                newSave.setCharacterID(m_saves.get(0).getCharacterID());
+                validSaves.add(newSave);
+                if (listener != null) {
+                    listener.onMissingSaveAdded(newSave);
+                }
+            }
+        }
+
+        m_saves = validSaves;
+    }
 	
 	public Save getSave(int saveKey) {
 		for (Save save : m_saves) {

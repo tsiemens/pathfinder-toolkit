@@ -171,29 +171,11 @@ public class CharacterRepository extends BaseRepository<Character> {
 
 		// Saves
 		SaveRepository saveRepo = new SaveRepository();
-		SaveSet saves = new SaveSet(saveRepo.querySet(id));
+		SaveSet saves = saveRepo.querySet(id);
 
 		// Skills
 		SkillRepository skillRepo = new SkillRepository();
-		SkillSet skills = SkillSet.newValidatedSkillSet(skillRepo.queryAllForCharacter(id), new SkillSet.CorrectionListener() {
-            @Override
-            public void onInvalidSkillRemoved(Skill removedSkill) {
-                SkillRepository skillRepo = new SkillRepository();
-                skillRepo.delete(removedSkill);
-            }
-
-            @Override
-            public void onMissingSkillAdded(Skill addedSkill) {
-                SkillRepository skillRepo = new SkillRepository();
-                skillRepo.insert(addedSkill);
-            }
-
-            @Override
-            public void onSkillModified(Skill modifiedSkill) {
-                SkillRepository skillRepo = new SkillRepository();
-                skillRepo.update(modifiedSkill);
-            }
-        });
+		SkillSet skills = skillRepo.querySet(id);
 		
 		Inventory inventory = new Inventory();
 		// Items
