@@ -27,7 +27,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 	public void setUp() {
 		super.setUp();
 		m_repo = new SaveRepository();
-		m_save = m_repo.querySet(m_characterId).get(SAVE_INDEX);
+		m_save = m_repo.queryAllForCharacter(m_characterId).get(SAVE_INDEX);
 		m_save.setBaseSave(BASE_VALUE);
 		m_save.setAbilityKey(ABILITY_KEY);
 		m_save.setMagicMod(MAGIC_MOD);
@@ -61,7 +61,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQuerySet() {
-		List<Save> queriedSaves = m_repo.querySet(m_characterId);
+		List<Save> queriedSaves = m_repo.queryAllForCharacter(m_characterId);
 
         for (int i = 0; i < SaveSet.SAVE_KEYS.size(); i++){
 			assertEquals(queriedSaves.get(i).getSaveKey(), SaveSet.SAVE_KEYS.get(i).intValue());

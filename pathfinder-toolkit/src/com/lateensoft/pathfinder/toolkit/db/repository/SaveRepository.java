@@ -9,6 +9,7 @@ import android.database.Cursor;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Save;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
 
 public class SaveRepository extends BaseRepository<Save> {
 	static final String TABLE = "Save";
@@ -74,7 +75,7 @@ public class SaveRepository extends BaseRepository<Save> {
 	 * @param characterId ID of the character
 	 * @return Array of Save, ordered by saveKey
 	 */
-	public List<Save> querySet(long characterId) {
+	public List<Save> queryAllForCharacter(long characterId) {
 		String selector = CHARACTER_ID + "=" + characterId; 
 		String orderBy = SAVE_KEY + " ASC";
 		String table = m_tableInfo.getTable();
@@ -91,6 +92,22 @@ public class SaveRepository extends BaseRepository<Save> {
 		}
 		return saves;
 	}
+
+    public SaveSet querySet(long characterId) {
+        return SaveSet.newValidatedSaveSet(queryAllForCharacter(characterId),
+                new SaveSet.CorrectionListener() {
+                    @Override
+                    public void onInvalidSaveRemoved(Save removedSave) {
+                        SaveRepository.this.delete(removedSave);
+                    }
+
+                    @Override
+                    public void onMissingSaveAdded(Save addedSave) {
+                        SaveRepository.this.insert(addedSave);
+                    }
+                }
+        );
+    }
 	
 	@Override
 	protected String getSelector(Save object) {

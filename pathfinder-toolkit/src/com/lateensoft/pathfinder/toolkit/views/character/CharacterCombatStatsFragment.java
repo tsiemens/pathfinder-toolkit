@@ -737,7 +737,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	@Override
 	public void loadFromDatabase() {
 		m_combatStats = m_statsRepo.query(getCurrentCharacterID());
-		m_saveSet = new SaveSet(m_saveRepo.querySet(getCurrentCharacterID()));
+		m_saveSet = m_saveRepo.querySet(getCurrentCharacterID());
 		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
 		m_abilitySet = m_abilityRepo.querySet(getCurrentCharacterID());
 	}
