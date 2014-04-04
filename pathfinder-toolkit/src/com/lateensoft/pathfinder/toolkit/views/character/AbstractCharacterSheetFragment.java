@@ -7,7 +7,7 @@ import com.lateensoft.pathfinder.toolkit.Preferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -28,9 +28,6 @@ import android.widget.Toast;
 //This is a base class for all fragments in the character sheet activity
 public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	private static final String TAG = AbstractCharacterSheetFragment.class.getSimpleName();
-	
-	public static final int TAB_INDEX_FLUFF = 0;
-	public static final int TAB_INDEX_ABILITIES = 2;
 	
 	public long m_currentCharacterID;
 
@@ -112,7 +109,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 * the fragments.
 	 */
 	public void addNewCharacter() {
-		com.lateensoft.pathfinder.toolkit.model.character.Character newChar = new Character("New Adventurer", getContext());
+		PathfinderCharacter newChar = new PathfinderCharacter("New Adventurer");
 		long id = m_characterRepo.insert(newChar);
 		if (id != -1) {
 			Preferences.getInstance().putLong(
@@ -135,7 +132,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		long characterForDeletion = m_currentCharacterID;
 
 		for (int i = 0; i < characters.size(); i++) {
-			if (characterForDeletion == characters.get(i).getKey().longValue()){
+			if (characterForDeletion == characters.get(i).getKey()){
 				currentCharacterIndex = i;
 				break;
 			}
@@ -146,7 +143,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		} else {
 			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
 			Preferences.getInstance().putLong(
-					Preferences.KEY_LONG_SELECTED_CHARACTER_ID, characters.get(charToSelect).getKey().longValue());
+					Preferences.KEY_LONG_SELECTED_CHARACTER_ID, characters.get(charToSelect).getKey());
 			loadCurrentCharacter();
 		}
 
@@ -199,7 +196,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 			int currentCharacterIndex = 0;
 
 			for (int i = 0; i < characterEntries.size(); i++) {
-				if (m_characterSelectedInDialog == characterEntries.get(i).getKey().longValue())
+				if (m_characterSelectedInDialog == characterEntries.get(i).getKey())
 					currentCharacterIndex = i;
 			}
 

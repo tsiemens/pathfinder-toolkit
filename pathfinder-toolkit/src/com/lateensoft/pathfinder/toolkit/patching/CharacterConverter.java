@@ -1,9 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.patching;
 
-import com.lateensoft.pathfinder.toolkit.BaseApplication;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
-import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
@@ -12,8 +10,8 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 
 public class CharacterConverter {
 
-	public static Character convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
-		Character newCharacter = new Character("", BaseApplication.getAppContext());
+	public static PathfinderCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
+		PathfinderCharacter newCharacter = new PathfinderCharacter("");
 		newCharacter.setGold(oldCharacter.mGold);
 		setFluff(newCharacter.getFluff(), oldCharacter.getFluff());
 		setAbilities(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet(), oldCharacter.getTempAbilitySet());

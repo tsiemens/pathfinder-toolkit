@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +10,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 
-public class Character implements Parcelable, Storable {
+public class PathfinderCharacter implements Parcelable, Storable {
 	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
 	private static final String PARCEL_BUNDLE_KEY_COMBAT_STATS = "combat_stats";
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
@@ -33,17 +32,17 @@ public class Character implements Parcelable, Storable {
 	
 	private long m_id;
 	
-	public Character(long characterId, String name, Context context) {
-		this(name, context);
+	public PathfinderCharacter(long characterId, String name) {
+		this(name);
 		m_id = characterId;
 	}
 	
 	/**
 	 * Only use for instantiation from database
 	 */
-	public Character(long characterId, double gold, AbilitySet abilitySet,
-                     FluffInfo fluff, CombatStatSet combatStats, SaveSet saves, SkillSet skills,
-                     Inventory inventory, FeatList feats, SpellBook spells) {
+	public PathfinderCharacter(long characterId, double gold, AbilitySet abilitySet,
+                               FluffInfo fluff, CombatStatSet combatStats, SaveSet saves, SkillSet skills,
+                               Inventory inventory, FeatList feats, SpellBook spells) {
 		m_id = characterId;
 		m_gold = gold;
 		m_abilitySet = abilitySet;
@@ -55,8 +54,14 @@ public class Character implements Parcelable, Storable {
 		m_feats = feats;
 		m_spellBook = spells;
 	}
+
+    public PathfinderCharacter(double gold, AbilitySet abilitySet,
+                               FluffInfo fluff, CombatStatSet combatStats, SaveSet saves, SkillSet skills,
+                               Inventory inventory, FeatList feats, SpellBook spells) {
+        this(UNSET_ID, gold, abilitySet, fluff, combatStats, saves, skills, inventory, feats, spells);
+    }
 	
-	public Character(String name, Context context) {
+	public PathfinderCharacter(String name) {
 		m_id = UNSET_ID;
 		m_abilitySet = new AbilitySet();
 		m_combatStatSet = new CombatStatSet();
@@ -70,7 +75,7 @@ public class Character implements Parcelable, Storable {
 		setName(name);
 	}
 	
-	public Character(Parcel in) {
+	public PathfinderCharacter(Parcel in) {
 		Bundle objectBundle = in.readBundle();
 		m_abilitySet = (AbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
 		m_combatStatSet = (CombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
@@ -191,13 +196,13 @@ public class Character implements Parcelable, Storable {
 		return 0;
 	}
 	
-	public static final Parcelable.Creator<Character> CREATOR = new Parcelable.Creator<Character>() {
-		public Character createFromParcel(Parcel in) {
-			return new Character(in);
+	public static final Parcelable.Creator<PathfinderCharacter> CREATOR = new Parcelable.Creator<PathfinderCharacter>() {
+		public PathfinderCharacter createFromParcel(Parcel in) {
+			return new PathfinderCharacter(in);
 		}
 		
-		public Character[] newArray(int size) {
-			return new Character[size];
+		public PathfinderCharacter[] newArray(int size) {
+			return new PathfinderCharacter[size];
 		}
 	};
 }

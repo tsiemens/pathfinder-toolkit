@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.InventoryItemListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 
 import android.app.Activity;
@@ -36,7 +36,7 @@ public class CharacterInventoryFragment extends AbstractCharacterSheetFragment {
 	
 	private int m_itemIndexSelectedForEdit;
 	
-	private Character m_character;
+	private PathfinderCharacter m_character;
 	private ItemRepository m_itemRepo;
 	
 	@Override

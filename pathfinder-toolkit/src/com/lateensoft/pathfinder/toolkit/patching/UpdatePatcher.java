@@ -12,6 +12,7 @@ import com.lateensoft.pathfinder.toolkit.db.Database;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 
 public class UpdatePatcher {
@@ -101,7 +102,7 @@ public class UpdatePatcher {
 		
 		int[] oldCharIDs = oldDBManager.getCharacterIDs();
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldChar;
-		com.lateensoft.pathfinder.toolkit.model.character.Character newChar;
+		PathfinderCharacter newChar;
 		for (int id : oldCharIDs) {
 			oldChar = oldDBManager.getCharacter(id);
 			newChar = CharacterConverter.convertCharacter(oldChar);

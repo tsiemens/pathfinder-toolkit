@@ -12,14 +12,14 @@ import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
-public class CharacterRepository extends BaseRepository<Character> {
+public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	private static final String TABLE = "Character";
 	private static final String GOLD = "Gold";
 	
@@ -37,7 +37,7 @@ public class CharacterRepository extends BaseRepository<Character> {
 	 * @return the id of the character inserted, or -1 if failure occurred.
 	 */
 	@Override
-	public long insert(Character object) {
+	public long insert(PathfinderCharacter object) {
 		long id = super.insert(object);
 		long subCompId;
 		
@@ -153,7 +153,7 @@ public class CharacterRepository extends BaseRepository<Character> {
 	}
 
 	@Override
-	protected Character buildFromHashTable(Hashtable<String, Object> hashTable) {
+	protected PathfinderCharacter buildFromHashTable(Hashtable<String, Object> hashTable) {
 		long id = (Long) hashTable.get(CHARACTER_ID);
 		double gold = (Double) hashTable.get(GOLD);
 		
@@ -198,12 +198,12 @@ public class CharacterRepository extends BaseRepository<Character> {
 		SpellRepository spellRepo = new SpellRepository();
 		SpellBook spells = new SpellBook(spellRepo.querySet(id));
 
-		return new Character(id, gold, abilityScores,
+		return new PathfinderCharacter(id, gold, abilityScores,
 				fluff, csSet, saves, skills, inventory, feats, spells);
 	}
 
 	@Override
-	protected ContentValues getContentValues(Character object) {
+	protected ContentValues getContentValues(PathfinderCharacter object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
 			values.put(CHARACTER_ID, object.getID());

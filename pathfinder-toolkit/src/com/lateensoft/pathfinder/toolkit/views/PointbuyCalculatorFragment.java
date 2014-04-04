@@ -28,7 +28,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.utils.AbilitySetCalculator;
 import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
@@ -272,7 +272,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
 		switch (item.getItemId()) {
 		case R.id.mi_export_to_new:
-			Character character = new Character("From calc", getContext());
+			PathfinderCharacter character = new PathfinderCharacter("From calc");
 			m_abilityCalc.setCalculatedAbilityScores(character.getAbilitySet());
 			Resources r = getResources();
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)

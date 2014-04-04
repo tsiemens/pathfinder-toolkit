@@ -4,20 +4,20 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.model.character.Character;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 
 public class CharacterRepositoryTest extends BaseRepositoryTest {
 	
 	private CharacterRepository m_repo;
 	
-	private Character m_char1;
+	private PathfinderCharacter m_char1;
 	
 	@Override
 	public void setUp() {
 		super.setUp();
 		m_repo = new CharacterRepository();
 		
-		m_char1 = new com.lateensoft.pathfinder.toolkit.model.character.Character("A", getContext());
+		m_char1 = new PathfinderCharacter("A", getContext());
 		m_repo.insert(m_char1);
 	}
 	
@@ -29,7 +29,7 @@ public class CharacterRepositoryTest extends BaseRepositoryTest {
 	}
 
 	public void testQuery() {
-		Character joe = m_repo.query(m_characterId);
+		PathfinderCharacter joe = m_repo.query(m_characterId);
 		assertEquals(CHARACTER_GOLD, joe.getGold());
 		assertEquals(CHARACTER_NAME, joe.getFluff().getName());
 	}

@@ -124,4 +124,13 @@ public abstract class XMLObjectAdapter<E> {
         }
         return subObjects;
     }
+
+    public static <T> T getSubObject(Element element, XMLObjectAdapter<T> adapter) throws InvalidObjectException {
+        @SuppressWarnings("unchecked")
+        Element subElement = element.element(adapter.getElementName());
+        if (subElement == null) {
+            throw new InvalidObjectException("Required element " + adapter.getElementName() + " not found in " + element.getName());
+        }
+        return adapter.toObject(element);
+    }
 }
