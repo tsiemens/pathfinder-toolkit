@@ -6,8 +6,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
-import com.lateensoft.pathfinder.toolkit.Preferences;
 import com.lateensoft.pathfinder.toolkit.db.Database;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
@@ -71,7 +71,7 @@ public class UpdatePatcher {
 		Context appContext = BaseApplication.getAppContext();
 		CharacterRepository characterRepo = new CharacterRepository();
 		PartyRepository partyRepo = new PartyRepository();
-		Preferences newSharedPrefs = Preferences.getInstance();
+		AppPreferences newSharedPrefs = AppPreferences.getInstance();
 		PTUserPrefsManager oldPrefsManager = new PTUserPrefsManager(appContext);
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager oldDBManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager(appContext);
 		boolean completeSuccess = true;
@@ -98,7 +98,7 @@ public class UpdatePatcher {
 		oldPrefsManager.remove(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY);
 		
 		// Give user a week before they are asked to rate again.
-		oldPrefsManager.remove(Preferences.KEY_LONG_LAST_RATE_PROMPT_TIME);
+		oldPrefsManager.remove(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME);
 		
 		int[] oldCharIDs = oldDBManager.getCharacterIDs();
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldChar;
@@ -111,7 +111,7 @@ public class UpdatePatcher {
 				completeSuccess = false;
 				Log.e(TAG, "Error migrating character "+oldChar.getName());
 			} else if (id == oldSelectedCharacterID) {
-				newSharedPrefs.putLong(Preferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getID());
+				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getID());
 			}
 		}
 		
@@ -125,7 +125,7 @@ public class UpdatePatcher {
 				completeSuccess = false;
 				Log.e(TAG, "Error migrating party "+oldParty.getName());
 			} if (id == oldSelectedPartyID) {
-				newSharedPrefs.putLong(Preferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getID());
+				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getID());
 			}
 		}
 		
@@ -166,7 +166,7 @@ public class UpdatePatcher {
 		PackageInfo pInfo;
 		try{
 			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return Preferences.getInstance().putInt(Preferences.KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
+			return AppPreferences.getInstance().putInt(AppPreferences.KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
 		}catch (NameNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -177,7 +177,7 @@ public class UpdatePatcher {
 	 * @return The last used version code, before patch application, or -1 if none exists.
 	 */
 	public static int getPreviousVersion(){
-		return Preferences.getInstance().getInt(Preferences.KEY_INT_LAST_USED_VERSION, -1);
+		return AppPreferences.getInstance().getInt(AppPreferences.KEY_INT_LAST_USED_VERSION, -1);
 	}
 	
 	/**

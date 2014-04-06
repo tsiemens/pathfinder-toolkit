@@ -9,8 +9,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
-public class Preferences {
-	private final String TAG = Preferences.class.getSimpleName();
+public class AppPreferences {
+	private final String TAG = AppPreferences.class.getSimpleName();
 	
 	private final long MILISECONDS_BETWEEN_RATE_PROMPT = 604800000L; //One week
 	
@@ -22,7 +22,7 @@ public class Preferences {
 	public static String KEY_LONG_SELECTED_CHARACTER_ID = "selectedCharacter";
 	public static String KEY_LONG_SELECTED_PARTY_ID = "selectedParty";
 	
-	private static Preferences s_instance;
+	private static AppPreferences s_instance;
 
 	private SharedPreferences m_sharedPreferences;
 	Editor m_editor;
@@ -31,14 +31,14 @@ public class Preferences {
 	 * Manages the shared preferences for the Pathfinder Toolkit application 
 	 * @return The singleton instance of the manager. 
 	 */
-	public static Preferences getInstance() {
+	public static AppPreferences getInstance() {
 		if (s_instance == null) {
-			s_instance = new Preferences();
+			s_instance = new AppPreferences();
 		}
 		return s_instance;
 	}
 	
-	protected Preferences(){
+	protected AppPreferences(){
 		Context appContext = BaseApplication.getAppContext();
 		m_sharedPreferences = appContext.getSharedPreferences(
 				KEY_APP_SHARED_PREFS_NAME, Context.MODE_PRIVATE);

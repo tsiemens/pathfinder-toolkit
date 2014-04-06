@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.utils;
+package com.lateensoft.pathfinder.toolkit.util;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -29,8 +29,10 @@ public class DOMUtils {
     public static void write(Document document, OutputStream outputStream) throws IOException {
         OutputFormat outputFormat = new OutputFormat();
         outputFormat.setIndent(INDENT);
+        outputFormat.setNewlines(true);
         XMLWriter xmlWriter = new XMLWriter(outputStream, outputFormat);
         xmlWriter.setEscapeText(true);
         xmlWriter.write(document);
+        outputStream.flush();
     }
 }

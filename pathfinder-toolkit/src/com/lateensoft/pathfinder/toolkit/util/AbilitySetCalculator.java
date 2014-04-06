@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.utils;
+package com.lateensoft.pathfinder.toolkit.util;
 
 import android.content.Context;
 import android.content.res.Resources;

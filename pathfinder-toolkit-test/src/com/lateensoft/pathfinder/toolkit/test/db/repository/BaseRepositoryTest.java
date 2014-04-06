@@ -17,7 +17,7 @@ public class BaseRepositoryTest extends AndroidTestCase {
 	@Override
 	protected void setUp() {
 		m_db = Database.getInstance();
-		PathfinderCharacter joe = new PathfinderCharacter(CHARACTER_NAME, BaseApplication.getAppContext());
+		PathfinderCharacter joe = new PathfinderCharacter(CHARACTER_NAME);
 		joe.setGold(CHARACTER_GOLD);
 		CharacterRepository repo = new CharacterRepository();
 		m_characterId = repo.insert(joe);

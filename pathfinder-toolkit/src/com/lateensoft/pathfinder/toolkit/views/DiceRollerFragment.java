@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views;
 import android.content.Context;
 import android.widget.*;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.utils.DiceSet;
+import com.lateensoft.pathfinder.toolkit.util.DiceSet;
 
 import android.os.Bundle;
 import android.view.Gravity;

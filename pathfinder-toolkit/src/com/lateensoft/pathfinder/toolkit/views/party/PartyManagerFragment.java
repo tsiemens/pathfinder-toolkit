@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.lateensoft.pathfinder.toolkit.Preferences;
+import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
-import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
+import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 import com.lateensoft.pathfinder.toolkit.views.character.SpellEditActivity;
@@ -94,8 +94,8 @@ public class PartyManagerFragment extends BasePageFragment implements
 	 * user prefs, it automatically generates a new one.
 	 */
 	private void loadCurrentParty() {
-		long currentPartyID = Preferences.getInstance().getLong(
-				Preferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+		long currentPartyID = AppPreferences.getInstance().getLong(
+				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 
 		if (currentPartyID == -1) {
 			// There was no current party set in shared prefs
@@ -108,8 +108,8 @@ public class PartyManagerFragment extends BasePageFragment implements
                 for (Entry<Long, String> id : ids) {
                     m_party = m_partyRepo.query(id.getKey());
                     if (m_party != null) {
-                        Preferences.getInstance().putLong(
-                                Preferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+                        AppPreferences.getInstance().putLong(
+                                AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
                         break;
                     }
                 }
@@ -128,8 +128,8 @@ public class PartyManagerFragment extends BasePageFragment implements
 	private void addNewParty() {
 		m_party = new CampaignParty("New Party");
 		m_partyRepo.insert(m_party);
-		Preferences.getInstance().putLong(
-				Preferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+		AppPreferences.getInstance().putLong(
+				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
 		refreshPartyView();
 	}
 
@@ -151,12 +151,12 @@ public class PartyManagerFragment extends BasePageFragment implements
 		if (partyIDs.size() == 1) {
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
-			Preferences.getInstance().putLong(
-					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey());
+			AppPreferences.getInstance().putLong(
+					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey());
 			loadCurrentParty();
 		} else {
-			Preferences.getInstance().putLong(
-					Preferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey());
+			AppPreferences.getInstance().putLong(
+					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey());
 			loadCurrentParty();
 		}
 
@@ -289,8 +289,8 @@ public class PartyManagerFragment extends BasePageFragment implements
 			if (m_partyIDSelectedInDialog != m_party.getID()) {
 				updateDatabase(); // Ensures any data changed on the party
 										// in the current fragment is saved
-				Preferences.getInstance().putLong(
-						Preferences.KEY_LONG_SELECTED_PARTY_ID, m_partyIDSelectedInDialog);
+				AppPreferences.getInstance().putLong(
+						AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_partyIDSelectedInDialog);
 				loadCurrentParty();
 			}
 			break;

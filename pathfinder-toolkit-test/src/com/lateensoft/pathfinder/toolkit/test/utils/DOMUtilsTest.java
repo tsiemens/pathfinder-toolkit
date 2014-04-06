@@ -2,7 +2,7 @@ package com.lateensoft.pathfinder.toolkit.test.utils;
 
 import android.test.AndroidTestCase;
 import com.google.common.base.Charsets;
-import com.lateensoft.pathfinder.toolkit.utils.DOMUtils;
+import com.lateensoft.pathfinder.toolkit.util.DOMUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 

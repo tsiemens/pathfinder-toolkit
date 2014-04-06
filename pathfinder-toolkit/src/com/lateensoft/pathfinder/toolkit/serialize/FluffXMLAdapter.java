@@ -2,7 +2,6 @@ package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import org.dom4j.Element;
-import org.dom4j.tree.DefaultElement;
 
 import java.io.InvalidObjectException;
 
@@ -27,7 +26,7 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
     private static final String EYES_ATTR = "eyes";
     private static final String HAIR_ATTR = "hair";
     private static final String LANGS_ATTR = "languages";
-    private static final String DESC_ELEMENT = "desc";
+    private static final String DESC_ATTR = "desc";
 
 
     @Override
@@ -52,9 +51,7 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
         element.addAttribute(EYES_ATTR, fluff.getEyes());
         element.addAttribute(HAIR_ATTR, fluff.getHair());
         element.addAttribute(LANGS_ATTR, fluff.getLanguages());
-        Element description = new DefaultElement(DESC_ELEMENT);
-        description.setText(fluff.getDescription());
-        element.add(description);
+        element.addAttribute(DESC_ATTR, fluff.getDescription());
     }
 
     @Override
@@ -75,7 +72,7 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
         fluff.setEyes(getStringAttribute(element, EYES_ATTR));
         fluff.setHair(getStringAttribute(element, HAIR_ATTR));
         fluff.setLanguages(getStringAttribute(element, LANGS_ATTR));
-        fluff.setDescription(getSubElementContent(element, DESC_ELEMENT));
+        fluff.setDescription(getStringAttribute(element, DESC_ATTR));
         return fluff;
     }
 }

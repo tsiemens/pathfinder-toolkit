@@ -107,14 +107,6 @@ public abstract class XMLObjectAdapter<E> {
         else throw new InvalidObjectException(String.format("Attribute '%s' in '%s' must contain 'true' or 'false'", attrName, element.getName()));
     }
 
-    public static String getSubElementContent(Element element, String subElementName) throws InvalidObjectException {
-        Element subElement = element.element(subElementName);
-        if (subElement == null) {
-            throw new InvalidObjectException(String.format("Required element '%s' not found in '%s'", subElementName, element.getName()));
-        }
-        return (subElement.getText() != null) ? subElement.getText() : "";
-    }
-
     public static <T> List<T> getSubObjects(Element element, XMLObjectAdapter<T> adapter) throws InvalidObjectException {
         @SuppressWarnings("unchecked")
         List<Element> subElements = element.elements(adapter.getElementName());

@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
-import com.lateensoft.pathfinder.toolkit.Preferences;
+import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
@@ -8,7 +8,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
-import com.lateensoft.pathfinder.toolkit.utils.DiceSet;
+import com.lateensoft.pathfinder.toolkit.util.DiceSet;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 import com.lateensoft.pathfinder.toolkit.views.character.SpellEditActivity;
@@ -206,8 +206,8 @@ public class InitiativeTrackerFragment extends BasePageFragment {
 	}
 
 	private void loadDefaultParty() {
-		long currentPartyID = Preferences.getInstance().getLong(
-				Preferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+		long currentPartyID = AppPreferences.getInstance().getLong(
+				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		CampaignParty defaultParty = null;
 		if (currentPartyID > 0) {
 			defaultParty = m_partyRepo.query(currentPartyID);

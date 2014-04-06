@@ -15,4 +15,9 @@
         android:id="@+id/mi_delete_character"
         android:title="@string/menu_item_delete_character"
         android:showAsAction="never" />
+
+    <item
+        android:id="@+id/mi_export_character"
+        android:title="Export Character"
+        android:showAsAction="never" />
 </menu>

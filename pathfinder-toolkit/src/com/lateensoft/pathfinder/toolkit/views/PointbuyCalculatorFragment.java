@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.lateensoft.pathfinder.toolkit.Preferences;
+import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
@@ -30,8 +30,8 @@ import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
-import com.lateensoft.pathfinder.toolkit.utils.AbilitySetCalculator;
-import com.lateensoft.pathfinder.toolkit.utils.EntryUtils;
+import com.lateensoft.pathfinder.toolkit.util.AbilitySetCalculator;
+import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
 
 public class PointbuyCalculatorFragment extends BasePageFragment {
 	
@@ -279,8 +279,8 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 					[m_racesSpinner.getSelectedItemPosition()]);
 
 			if (m_characterRepo.insert(character) != -1) {
-				Preferences.getInstance().putLong(
-						Preferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
+				AppPreferences.getInstance().putLong(
+						AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
 				switchToPage(NavDrawerAdapter.ABILITIES_ID);
 			}
 			break;
@@ -331,8 +331,8 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 					}
 					m_fluffRepo.update(fluff);
 
-					Preferences.getInstance().putLong(
-							Preferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterIdSelectedInDialog);
+					AppPreferences.getInstance().putLong(
+							AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterIdSelectedInDialog);
                     switchToPage(NavDrawerAdapter.ABILITIES_ID);
 				}
 				break;

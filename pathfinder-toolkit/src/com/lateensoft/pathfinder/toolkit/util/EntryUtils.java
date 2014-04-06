@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.utils;
+package com.lateensoft.pathfinder.toolkit.util;
 
 import java.util.ArrayList;
 import java.util.List;

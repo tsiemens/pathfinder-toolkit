@@ -1,12 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
-import com.lateensoft.pathfinder.toolkit.Preferences;
+import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
-import com.lateensoft.pathfinder.toolkit.utils.DiceSet;
+import com.lateensoft.pathfinder.toolkit.util.DiceSet;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
 import android.os.Bundle;
@@ -104,8 +104,8 @@ public class PartySkillCheckerFragment extends BasePageFragment implements OnCli
    	}
    	
 	public void loadDefaultParty(){
-		long currentPartyID = Preferences.getInstance().getLong(
-				Preferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+		long currentPartyID = AppPreferences.getInstance().getLong(
+				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		CampaignParty party = null;
 		if(currentPartyID > 0) {
 			party = m_partyRepo.query(currentPartyID);

@@ -166,7 +166,7 @@ public class MainActivity extends Activity implements
 	}
 
 	private void showRateDialogIfRequired() {
-		Preferences sharedPrefs = Preferences.getInstance();
+		AppPreferences sharedPrefs = AppPreferences.getInstance();
 		if (sharedPrefs.isLastRateTimeLongEnough()
 				&& !sharedPrefs.hasRatedCurrentVersion()) {
 			showRateAppPromptDialog();
@@ -221,12 +221,12 @@ public class MainActivity extends Activity implements
     // For dialog
     @Override
 	public void onClick(DialogInterface dialogInterface, int selection) {
-		Preferences sharedPrefs = Preferences.getInstance();
+		AppPreferences sharedPrefs = AppPreferences.getInstance();
 		
 		switch (selection) {
 		case DialogInterface.BUTTON_POSITIVE:
 			sharedPrefs.updateLastRatedVersion();
-			sharedPrefs.putLong(Preferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
+			sharedPrefs.putLong(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
 					Calendar.getInstance().getTimeInMillis());
 			Log.v(TAG, "Attempting to open market page");
 			String appPackageName = this.getPackageName();
@@ -243,7 +243,7 @@ public class MainActivity extends Activity implements
 			break;
 		default:
 			Log.v(TAG, "Delaying rate dialog.");
-			sharedPrefs.putLong(Preferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
+			sharedPrefs.putLong(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
 					Calendar.getInstance().getTimeInMillis());
 		}
 
