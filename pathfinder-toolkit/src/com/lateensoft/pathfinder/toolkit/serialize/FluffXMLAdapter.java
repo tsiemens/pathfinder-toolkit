@@ -28,7 +28,6 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
     private static final String LANGS_ATTR = "languages";
     private static final String DESC_ATTR = "desc";
 
-
     @Override
     public String getElementName() {
         return ELEMENT_NAME;
@@ -37,7 +36,7 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
     @Override
     protected void setElementContentForObject(Element element, FluffInfo fluff) {
         element.addAttribute(NAME_ATTR, fluff.getName());
-        element.addAttribute(ALIGN_ATTR, fluff.getName());
+        element.addAttribute(ALIGN_ATTR, fluff.getAlignment());
         element.addAttribute(XP_ATTR, fluff.getXP());
         element.addAttribute(NEXT_XP_ATTR, fluff.getNextLevelXP());
         element.addAttribute(CLASS_ATTR, fluff.getPlayerClass());

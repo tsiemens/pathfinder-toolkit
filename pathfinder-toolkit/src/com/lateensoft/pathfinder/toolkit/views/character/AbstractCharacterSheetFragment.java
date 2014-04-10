@@ -11,6 +11,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
+import com.lateensoft.pathfinder.toolkit.util.ActivityLauncher;
 import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.util.FileUtils;
 import com.lateensoft.pathfinder.toolkit.util.ImportExportUtils;
@@ -81,7 +82,6 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 			updateTitle();
 		}
 
-        ImportExportUtils.clearExportCache();
 		m_isWaitingForResult = false;
 	}
 	
@@ -176,7 +176,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                 showCharacterDialog();
                 break;
             case R.id.mi_export_character:
-                showExportCharacterDialog();
+                exportCurrentCharacter();
                 break;
         }
 
@@ -286,48 +286,9 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
 	}
 
-    public File exportCurrentCharacterToFile(boolean isFileExternal) throws IOException {
+    public void exportCurrentCharacter() {
         PathfinderCharacter character = new CharacterRepository().query(getCurrentCharacterID());
-        if (character != null) {
-            File file = ImportExportUtils.createExportFileForName(character.getName(), isFileExternal);
-            FileOutputStream fos = new FileOutputStream(file);
-            ImportExportUtils.exportCharacterToFile(character, fos);
-            fos.close();
-            return file;
-        } else {
-            throw new IllegalStateException("No character loaded");
-        }
-    }
-
-    public void showExportCharacterDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Select Export Location");
-        builder.setMessage("Please select a location to export the character to.");
-        builder.setPositiveButton("Default", new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                try {
-                    File exportFile = exportCurrentCharacterToFile(true);
-                    Toast.makeText(getContext(), "Character exported to " + exportFile.getPath(), Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                try {
-                    File exportFile = exportCurrentCharacterToFile(false);
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(exportFile));
-                    shareIntent.setType(FileUtils.XML_MIME);
-                    startActivity(Intent.createChooser(shareIntent, "Export to"));
-                } catch (IOException e) {
-                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        builder.show();
+        ImportExportUtils.exportCharacterWithDialog(getContext(), character, new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
     @Override

@@ -388,19 +388,19 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 			int currentAbility = AbilitySet.KEY_DEX;
 			if (v == m_initAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.INIT;
-				defaultAbilityKey = CombatStatSet.DEFUALT_INIT_ABILITY_KEY;
+				defaultAbilityKey = CombatStatSet.DEFAULT_INIT_ABILITY_KEY;
 				currentAbility = m_combatStats.getInitAbilityKey();
 			} else if (v == m_ACAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.AC;
-				defaultAbilityKey = CombatStatSet.DEFUALT_AC_ABILITY_KEY;
+				defaultAbilityKey = CombatStatSet.DEFAULT_AC_ABILITY_KEY;
 				currentAbility = m_combatStats.getACAbilityKey();
 			} else if (v == m_CMBAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.CMB;
-				defaultAbilityKey = CombatStatSet.DEFUALT_CMB_ABILITY_KEY;
+				defaultAbilityKey = CombatStatSet.DEFAULT_CMB_ABILITY_KEY;
 				currentAbility = m_combatStats.getCMBAbilityKey();
 			} else if (v == m_CMDAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.CMD;
-				defaultAbilityKey = CombatStatSet.DEFUALT_CMD_ABILITY_KEY;
+				defaultAbilityKey = CombatStatSet.DEFAULT_CMD_ABILITY_KEY;
 				currentAbility = m_combatStats.getCMDAbilityKey();
 			} else if (v == m_fortAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.FORT;

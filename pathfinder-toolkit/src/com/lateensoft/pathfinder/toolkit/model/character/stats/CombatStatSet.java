@@ -6,22 +6,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CombatStatSet implements Parcelable, Storable {
-	public static final int DEFUALT_INIT_ABILITY_KEY = AbilitySet.KEY_DEX;
-	public static final int DEFUALT_AC_ABILITY_KEY = AbilitySet.KEY_DEX;
-	public static final int DEFUALT_CMB_ABILITY_KEY = AbilitySet.KEY_STR;
-	public static final int DEFUALT_CMD_ABILITY_KEY = AbilitySet.KEY_DEX;
-	
+	public static final int DEFAULT_INIT_ABILITY_KEY = AbilitySet.KEY_DEX;
+	public static final int DEFAULT_AC_ABILITY_KEY = AbilitySet.KEY_DEX;
+	public static final int DEFAULT_CMB_ABILITY_KEY = AbilitySet.KEY_STR;
+	public static final int DEFAULT_CMD_ABILITY_KEY = AbilitySet.KEY_DEX;
+
 	private int m_totalHP;
 	private int m_wounds;
 	private int m_nonLethalDamage;
 	private int m_damageReduction;
 	private int m_baseSpeedFt;
 	//may need other for speed
-	
+
 	/** Defaulted to dex */
 	private int m_initAbilityKey;
 	private int m_initMiscMod;
-	
+
 	private int m_ACArmour;
 	private int m_ACShield;
 	/** Defaulted to dex */
@@ -30,48 +30,48 @@ public class CombatStatSet implements Parcelable, Storable {
 	private int m_ACNaturalArmour;
 	private int m_deflectionMod;
 	private int m_ACMiscMod;
-	
+
 	private int m_spellResist;
-	
+
 	private int m_BABPrimary;
 	private String m_BABSecondary;
 	/** Defaulted to strength */
 	private int m_CMBAbilityKey;
-	
+
 	/** Defaulted to dex */
 	private int m_CMDAbilityKey;
 	private int m_CMDMiscMod;
-	
+
 	private long m_characterId;
-	
+
 	public CombatStatSet(long characterId) {
 		this();
 		m_characterId = characterId;
 	}
-	
+
 	public CombatStatSet(){
 		m_totalHP = 0;
 		m_wounds = 0;
 		m_nonLethalDamage = 0;
 		m_damageReduction = 0;
 		m_baseSpeedFt = 0;
-		
-		m_initAbilityKey = DEFUALT_INIT_ABILITY_KEY;
+
+		m_initAbilityKey = DEFAULT_INIT_ABILITY_KEY;
 		m_initMiscMod = 0;
-		
+
 		m_ACArmour = 0;
 		m_ACShield = 0;
-		m_ACAbilityKey = DEFUALT_AC_ABILITY_KEY;
+		m_ACAbilityKey = DEFAULT_AC_ABILITY_KEY;
 		m_sizeMod = 0;
 		m_ACNaturalArmour = 0;
 		m_deflectionMod = 0;
 		m_ACMiscMod = 0;
-		
+
 		m_BABPrimary = 0;
 		m_BABSecondary = "";
-		m_CMBAbilityKey = DEFUALT_CMB_ABILITY_KEY;
-		
-		m_CMDAbilityKey = DEFUALT_CMD_ABILITY_KEY;
+		m_CMBAbilityKey = DEFAULT_CMB_ABILITY_KEY;
+
+		m_CMDAbilityKey = DEFAULT_CMD_ABILITY_KEY;
 		m_CMDMiscMod = 0;
 		
 		m_spellResist = 0;
