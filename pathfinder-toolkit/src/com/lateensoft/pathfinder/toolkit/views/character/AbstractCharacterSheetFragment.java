@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import java.io.*;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -13,7 +12,6 @@ import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.util.ActivityLauncher;
 import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
-import com.lateensoft.pathfinder.toolkit.util.FileUtils;
 import com.lateensoft.pathfinder.toolkit.util.ImportExportUtils;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -41,19 +39,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
 	private CharacterRepository m_characterRepo;
 	
-	private int m_dialogMode;
-	private long m_characterSelectedInDialog;
-	
-	private OnClickListener m_characterClickListener;
-	
 	private boolean m_isWaitingForResult = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		m_characterRepo = new CharacterRepository();
-		
-		setupCharacterSelectionDialogClickListener();
 	}
 
 	@Override
@@ -164,19 +155,19 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_character_list:
-                m_dialogMode = R.id.mi_character_list;
-                showCharacterDialog();
+                showCharacterSelectionDialog();
                 break;
             case R.id.mi_new_character:
-                m_dialogMode = R.id.mi_new_character;
-                showCharacterDialog();
+                showCreateCharacterDialog();
                 break;
             case R.id.mi_delete_character:
-                m_dialogMode = R.id.mi_delete_character;
-                showCharacterDialog();
+                showDeleteCharacterDialog();
                 break;
             case R.id.mi_export_character:
                 exportCurrentCharacter();
+                break;
+            case R.id.mi_import_character:
+                // TODO
                 break;
         }
 
@@ -189,102 +180,82 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	private void showCharacterDialog() {
-		m_characterSelectedInDialog = m_currentCharacterID; // current character
+    private void showCharacterSelectionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.select_character_dialog_header));
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
+        String[] characterNames = EntryUtils.valueArray(characterEntries);
+        int currentCharacterIndex = 0;
 
+        for (int i = 0; i < characterEntries.size(); i++) {
+            if (m_currentCharacterID == characterEntries.get(i).getKey()) {
+                currentCharacterIndex = i;
+            }
+        }
 
-        switch (m_dialogMode) {
-            case R.id.mi_character_list:
-                builder.setTitle(getString(R.string.select_character_dialog_header));
+        CharacterSelectionClickListener clickListener = new CharacterSelectionClickListener(characterEntries, currentCharacterIndex);
+        builder.setSingleChoiceItems(characterNames, currentCharacterIndex,
+                clickListener)
+                .setPositiveButton(R.string.ok_button_text, clickListener)
+                .setNegativeButton(R.string.cancel_button_text, null);
+        builder.show();
+    }
 
-                List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
-                String[] characterNames = EntryUtils.valueArray(characterEntries);
-                int currentCharacterIndex = 0;
+    private class CharacterSelectionClickListener implements OnClickListener {
+        private List<Entry<Long, String>> characterEntries;
+        private long selectedCharacterId;
 
-                for (int i = 0; i < characterEntries.size(); i++) {
-                    if (m_characterSelectedInDialog == characterEntries.get(i).getKey())
-                        currentCharacterIndex = i;
-                }
+        public CharacterSelectionClickListener(List<Entry<Long, String>> characterEntries, int initialSelection) {
+            this.characterEntries = characterEntries;
+            this.selectedCharacterId = characterEntries.get(initialSelection).getKey();
+        }
 
-                builder.setSingleChoiceItems(characterNames, currentCharacterIndex,
-                        m_characterClickListener)
-                        .setPositiveButton(R.string.ok_button_text, m_characterClickListener)
-                        .setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
-                break;
-
-            case R.id.mi_new_character:
-                builder.setTitle(getString(R.string.menu_item_new_character));
-                builder.setMessage(getString(R.string.new_character_dialog_message))
-                        .setPositiveButton(R.string.ok_button_text, m_characterClickListener)
-                        .setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
-                break;
-
-            case R.id.mi_delete_character:
-                builder.setTitle(getString(R.string.menu_item_delete_character));
-                builder.setMessage(
-                        getString(R.string.delete_character_dialog_message_1)
-                                + m_characterRepo.queryName(m_currentCharacterID)
-                                + getString(R.string.delete_character_dialog_message_2))
-                        .setPositiveButton(R.string.delete_button_text, m_characterClickListener)
-                        .setNegativeButton(R.string.cancel_button_text, m_characterClickListener);
-                break;
-
-		}
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	private void setupCharacterSelectionDialogClickListener() {
-		m_characterClickListener = new OnClickListener() {
-			// Click method for the character selection dialog
-			public void onClick(DialogInterface dialogInterface, int selection) {
-                switch (selection) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        performPositiveDialogAction();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                    default:
-                        // Set the currently selected character in the dialog
-                        m_characterSelectedInDialog = m_characterRepo.queryList().get(selection).getKey();
-                        Log.v(TAG, "Selected character " + m_characterSelectedInDialog);
-                        break;
-
-                }
-			}
-		};
-	}
-
-	/**
-	 * Called when dialog positive button is tapped
-	 */
-	public void performPositiveDialogAction() {
-        switch (m_dialogMode) {
-            case R.id.mi_character_list:
-                // Check if "currently selected" character is the same as saved one
-                if (m_characterSelectedInDialog != m_currentCharacterID) {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                if (selectedCharacterId != m_currentCharacterID) {
                     updateDatabase();
 
                     AppPreferences.getInstance().putLong(
-                            AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, m_characterSelectedInDialog);
+                            AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, selectedCharacterId);
                     loadCurrentCharacter();
                 }
-                break;
-
-            case R.id.mi_new_character:
-                performUpdateReset();
-                addNewCharacter();
-                break;
-
-            case R.id.mi_delete_character:
-                deleteCurrentCharacter();
-                break;
-
+            } else if (which >= 0 && which < characterEntries.size()) {
+                selectedCharacterId = characterEntries.get(which).getKey();
+            }
         }
+    }
 
-	}
+    private void showCreateCharacterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.menu_item_new_character));
+        builder.setMessage(getString(R.string.new_character_dialog_message))
+                .setPositiveButton(R.string.ok_button_text, new OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        performUpdateReset();
+                        addNewCharacter();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button_text, null);
+        builder.show();
+    }
+
+    private void showDeleteCharacterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.menu_item_delete_character));
+        builder.setMessage(
+                getString(R.string.delete_character_dialog_message_1)
+                        + m_characterRepo.queryName(m_currentCharacterID)
+                        + getString(R.string.delete_character_dialog_message_2))
+                .setPositiveButton(R.string.delete_button_text, new OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        deleteCurrentCharacter();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button_text, null);
+        builder.show();
+    }
 
     public void exportCurrentCharacter() {
         PathfinderCharacter character = new CharacterRepository().query(getCurrentCharacterID());

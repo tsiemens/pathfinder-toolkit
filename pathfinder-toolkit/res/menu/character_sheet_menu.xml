@@ -9,7 +9,8 @@
     <item 
         android:id="@+id/mi_new_character"
         android:title="@string/menu_item_new_character"
-        android:showAsAction="never" />
+        android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="ifRoom" />
     
     <item 
         android:id="@+id/mi_delete_character"
@@ -18,6 +19,11 @@
 
     <item
         android:id="@+id/mi_export_character"
-        android:title="Export Character"
+        android:title="@string/menu_item_export_character"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/mi_import_character"
+        android:title="@string/menu_item_import_character"
         android:showAsAction="never" />
 </menu>
