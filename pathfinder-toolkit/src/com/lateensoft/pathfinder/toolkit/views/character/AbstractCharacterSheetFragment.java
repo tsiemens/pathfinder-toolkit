@@ -1,5 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InvalidObjectException;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -10,9 +13,8 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.util.ActivityLauncher;
-import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
-import com.lateensoft.pathfinder.toolkit.util.ImportExportUtils;
+import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRootAdapter;
+import com.lateensoft.pathfinder.toolkit.util.*;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
 import android.app.AlertDialog;
@@ -28,6 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 
 //This is a base class for all fragments in the character sheet activity
 public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
@@ -69,7 +73,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	public void onResume() {
 		super.onResume();
 		if (!m_isWaitingForResult) {
-			loadCurrentCharacter();
+			loadSelectedCharacter();
 			updateTitle();
 		}
 
@@ -82,18 +86,23 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		m_isWaitingForResult = true;
 	}
 
+    private void setSelectedCharacter(long currentCharacterID) {
+        AppPreferences.getInstance().putLong(
+                AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, currentCharacterID);
+    }
+
 	/**
 	 * Load the currently set character in shared prefs If there is no character
 	 * set in user prefs, it automatically generates a new one.
 	 */
-	public void loadCurrentCharacter() {
+	public void loadSelectedCharacter() {
 		long currentCharacterID = AppPreferences.getInstance()
 				.getLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, -1);
 
 		if (currentCharacterID == -1) { 
 			// There was no current character set in shared prefs
 			Log.v(TAG, "Default character add");
-			addNewCharacter();
+			addNewCharacterAndSelect();
 		} else {
 			m_currentCharacterID = currentCharacterID;
 			loadFromDatabase();
@@ -108,19 +117,26 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 * Generates a new character and sets it to the current character. Reloads
 	 * the fragments.
 	 */
-	public void addNewCharacter() {
+	public void addNewCharacterAndSelect() {
 		PathfinderCharacter newChar = new PathfinderCharacter("New Adventurer");
-		long id = m_characterRepo.insert(newChar);
+		long id = addCharacterToDB(newChar);
 		if (id != -1) {
-			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, id);
-			Log.i(TAG, "Added new character");
+			setSelectedCharacter(id);
 		} else {
-			Log.e(TAG, "Error occurred creating new character");
 			Toast.makeText(getContext(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
 		}
 		performUpdateReset();
 	}
+
+    public long addCharacterToDB(PathfinderCharacter character) {
+        long id = m_characterRepo.insert(character);
+        if (id != -1) {
+            Log.i(TAG, "Added new character");
+        } else {
+            Log.e(TAG, "Error occurred creating new character");
+        }
+        return id;
+    }
 
 	/**
 	 * Deletes the current character and loads the first in the list, or creates
@@ -139,12 +155,11 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		}
 
 		if (characters.size() == 1) {
-			addNewCharacter();
+			addNewCharacterAndSelect();
 		} else {
 			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
-			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characters.get(charToSelect).getKey());
-			loadCurrentCharacter();
+			setSelectedCharacter(characters.get(charToSelect).getKey());
+			loadSelectedCharacter();
 		}
 
 		m_characterRepo.delete(characterForDeletion);
@@ -167,7 +182,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                 exportCurrentCharacter();
                 break;
             case R.id.mi_import_character:
-                // TODO
+                importCharacters();
                 break;
         }
 
@@ -217,9 +232,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                 if (selectedCharacterId != m_currentCharacterID) {
                     updateDatabase();
 
-                    AppPreferences.getInstance().putLong(
-                            AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, selectedCharacterId);
-                    loadCurrentCharacter();
+                    setSelectedCharacter(selectedCharacterId);
+                    loadSelectedCharacter();
                 }
             } else if (which >= 0 && which < characterEntries.size()) {
                 selectedCharacterId = characterEntries.get(which).getKey();
@@ -234,7 +248,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                 .setPositiveButton(R.string.ok_button_text, new OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         performUpdateReset();
-                        addNewCharacter();
+                        addNewCharacterAndSelect();
                     }
                 })
                 .setNegativeButton(R.string.cancel_button_text, null);
@@ -262,25 +276,55 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         ImportExportUtils.exportCharacterWithDialog(getContext(), character, new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
+    public void importCharacters() {
+        ImportExportUtils.importCharacterFromContent(new ActivityLauncher.ActivityLauncherFragment(this),
+                GET_IMPORT_REQ_CODE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_IMPORT_REQ_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getData();
-            String path = uri != null ? uri.getPath() : null;
-            if (path != null) {
-                // TODO import character
-//                ParcelFileDescriptor fd;
-//                try {
-//                    fd = getContext().getContentResolver().openFileDescriptor(uri, "w");
-//                    FileOutputStream fos = new FileOutputStream(fd.getFileDescriptor());
-//                    exportCurrentCharacterToFile(fos);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-            } else {
-                Toast.makeText(getContext(), "Unable to load file", Toast.LENGTH_SHORT).show();
+            try {
+                Uri uri = data.getData();
+                if (uri == null) {
+                    throw new FileNotFoundException();
+                }
+
+                InputStream is = getContext().getContentResolver().openInputStream(uri);
+                Document document = DOMUtils.newDocument(is);
+                XMLExportRootAdapter xmlAdapter = new XMLExportRootAdapter();
+                List<PathfinderCharacter> characters = xmlAdapter.toObject(document.getRootElement());
+
+                long lastCharacterId = -1;
+                boolean didFailToImport = false;
+                for(PathfinderCharacter character : characters) {
+                    lastCharacterId = addCharacterToDB(character);
+                    if (lastCharacterId == -1) {
+                        didFailToImport = true;
+                    }
+                }
+                if (lastCharacterId != -1) {
+                    setSelectedCharacter(lastCharacterId);
+                    loadSelectedCharacter();
+                }
+                if(didFailToImport) {
+                    Toast.makeText(getContext(), "Errors occurred during import.", Toast.LENGTH_LONG).show();
+                }
+
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getContext(), "Error: File not found", Toast.LENGTH_LONG).show();
+                LogUtils.logStackTraceError(TAG, e);
+            } catch (DocumentException e) {
+                Toast.makeText(getContext(), "Error: Invalid file formatting", Toast.LENGTH_LONG).show();
+                LogUtils.logStackTraceError(TAG, e);
+            } catch (InvalidObjectException e) {
+                Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                LogUtils.logStackTraceError(TAG, e);
             }
+
+        } else {
+            Toast.makeText(getContext(), "Unable to load file", Toast.LENGTH_LONG).show();
         }
     }
 

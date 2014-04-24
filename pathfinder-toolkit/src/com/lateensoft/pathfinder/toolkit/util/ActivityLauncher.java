@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ActivityLauncher {
 
     public void startActivity(Intent intent);
+    public void startActivityForResult(Intent intent, int requestCode);
 
     public static class ActivityLauncherActivity implements ActivityLauncher {
         private Activity m_activity;
@@ -24,6 +25,11 @@ public interface ActivityLauncher {
         @Override
         public void startActivity(Intent intent) {
             m_activity.startActivity(intent);
+        }
+
+        @Override
+        public void startActivityForResult(Intent intent, int requestCode) {
+            m_activity.startActivityForResult(intent, requestCode);
         }
     }
 
@@ -37,6 +43,11 @@ public interface ActivityLauncher {
         @Override
         public void startActivity(Intent intent) {
             m_fragment.startActivity(intent);
+        }
+
+        @Override
+        public void startActivityForResult(Intent intent, int requestCode) {
+            m_fragment.startActivityForResult(intent, requestCode);
         }
     }
 }

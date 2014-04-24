@@ -123,6 +123,6 @@ public abstract class XMLObjectAdapter<E> {
         if (subElement == null) {
             throw new InvalidObjectException("Required element " + adapter.getElementName() + " not found in " + element.getName());
         }
-        return adapter.toObject(element);
+        return adapter.toObject(subElement);
     }
 }

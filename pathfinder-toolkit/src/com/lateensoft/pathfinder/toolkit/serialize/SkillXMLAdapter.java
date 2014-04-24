@@ -48,7 +48,7 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
         skill.setRank(getBoundedIntAttribute(element, RANK_ATTR, -10, 40));
         skill.setMiscMod(getBoundedIntAttribute(element, MISC_MOD_ATTR, -10, 40));
 
-        if (SkillSet.isSubtypedSkill(skillKey)) {
+        if (SkillSet.isSubtypedSkill(skillKey) && element.attribute(SUB_TYPE_ATTR) != null) {
             skill.setSubType(getStringAttribute(element, SUB_TYPE_ATTR));
         }
         return skill;

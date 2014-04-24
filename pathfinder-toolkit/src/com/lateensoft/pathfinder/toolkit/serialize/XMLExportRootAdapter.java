@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author trevsiemens
  */
-public class XMLExportRoot extends XMLObjectAdapter<List<PathfinderCharacter>>{
+public class XMLExportRootAdapter extends XMLObjectAdapter<List<PathfinderCharacter>>{
     private static final int VERSION = 1;
 
     public static final String ELEMENT_NAME = "ptx";

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRoot;
+import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRootAdapter;
 import org.dom4j.Document;
 import org.dom4j.tree.DefaultDocument;
 import org.jetbrains.annotations.NotNull;
@@ -67,13 +67,20 @@ public class ImportExportUtils {
         return safeString;
     }
 
+    public static void importCharacterFromContent(ActivityLauncher activityLauncher, int requestCode) {
+        Intent getContentIntent = new Intent();
+        getContentIntent.setAction(Intent.ACTION_GET_CONTENT);
+        getContentIntent.setType(FileUtils.XML_MIME);
+        activityLauncher.startActivityForResult(getContentIntent, requestCode);
+    }
+
     public static void exportCharacterToStream(PathfinderCharacter character, OutputStream outputStream) throws IOException {
-        Document doc = new DefaultDocument(new XMLExportRoot().toXML(character));
+        Document doc = new DefaultDocument(new XMLExportRootAdapter().toXML(character));
         DOMUtils.write(doc, outputStream);
     }
 
     public static void exportCharactersToStream(List<PathfinderCharacter> characters, OutputStream outputStream) throws IOException {
-        Document doc = new DefaultDocument(new XMLExportRoot().toXML(characters));
+        Document doc = new DefaultDocument(new XMLExportRootAdapter().toXML(characters));
         DOMUtils.write(doc, outputStream);
     }
 
