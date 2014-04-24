@@ -285,8 +285,9 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_IMPORT_REQ_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            Exception thrownException = null;
             try {
-                Uri uri = data.getData();
                 if (uri == null) {
                     throw new FileNotFoundException();
                 }
@@ -314,13 +315,17 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
             } catch (FileNotFoundException e) {
                 Toast.makeText(getContext(), "Error: File not found", Toast.LENGTH_LONG).show();
-                LogUtils.logStackTraceError(TAG, e);
+                thrownException = e;
             } catch (DocumentException e) {
                 Toast.makeText(getContext(), "Error: Invalid file formatting", Toast.LENGTH_LONG).show();
-                LogUtils.logStackTraceError(TAG, e);
+                thrownException = e;
             } catch (InvalidObjectException e) {
                 Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                LogUtils.logStackTraceError(TAG, e);
+                thrownException = e;
+            } finally {
+                if (thrownException != null) {
+                    Log.e(TAG, "Failed to import character(s) from file " + uri, thrownException);
+                }
             }
 
         } else {
