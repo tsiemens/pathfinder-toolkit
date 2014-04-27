@@ -11,8 +11,8 @@ import java.io.InvalidObjectException;
 public class FeatXMLAdapter extends XMLObjectAdapter<Feat> {
 
     public static final String ELEMENT_NAME = "feat";
-    private static final String NAME_ATTR = "name";
-    private static final String DESC_ATTR = "desc";
+    private static final String NAME_ELMT = "name";
+    private static final String DESC_ELMT = "desc";
 
 
     @Override
@@ -22,15 +22,15 @@ public class FeatXMLAdapter extends XMLObjectAdapter<Feat> {
 
     @Override
     protected void setElementContentForObject(Element element, Feat feat) {
-        element.addAttribute(NAME_ATTR, feat.getName());
-        element.addAttribute(DESC_ATTR, feat.getDescription());
+        addSubElementText(element, NAME_ELMT, feat.getName());
+        addSubElementText(element, DESC_ELMT, feat.getDescription());
     }
 
     @Override
     protected Feat createObjectForElement(Element element) throws InvalidObjectException {
         Feat feat = new Feat();
-        feat.setName(getStringAttribute(element, NAME_ATTR));
-        feat.setDescription(getStringAttribute(element, DESC_ATTR));
+        feat.setName(getSubElementText(element, NAME_ELMT));
+        feat.setDescription(getSubElementText(element, DESC_ELMT));
         return feat;
     }
 

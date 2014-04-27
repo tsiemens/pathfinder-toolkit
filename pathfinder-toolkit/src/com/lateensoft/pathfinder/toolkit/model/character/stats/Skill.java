@@ -208,4 +208,36 @@ public class Skill implements Parcelable, Storable, Comparable<Skill> {
 			return 1;
 		}
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Skill)) return false;
+
+        Skill skill = (Skill) o;
+
+        if (m_abilityKey != skill.m_abilityKey) return false;
+        if (m_characterId != skill.m_characterId) return false;
+        if (m_classSkill != skill.m_classSkill) return false;
+        if (m_id != skill.m_id) return false;
+        if (m_miscMod != skill.m_miscMod) return false;
+        if (m_rank != skill.m_rank) return false;
+        if (m_skillKey != skill.m_skillKey) return false;
+        if (m_subType != null ? !m_subType.equals(skill.m_subType) : skill.m_subType != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (m_classSkill ? 1 : 0);
+        result = 31 * result + m_rank;
+        result = 31 * result + m_miscMod;
+        result = 31 * result + m_abilityKey;
+        result = 31 * result + (m_subType != null ? m_subType.hashCode() : 0);
+        result = 31 * result + m_skillKey;
+        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

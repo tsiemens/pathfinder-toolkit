@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.test.utils;
+package com.lateensoft.pathfinder.toolkit.test.util;
 
 import android.test.AndroidTestCase;
 import com.google.common.base.Charsets;

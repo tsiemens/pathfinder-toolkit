@@ -205,4 +205,43 @@ public class PathfinderCharacter implements Parcelable, Storable {
 			return new PathfinderCharacter[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PathfinderCharacter)) return false;
+
+        PathfinderCharacter character = (PathfinderCharacter) o;
+
+        if (Double.compare(character.m_gold, m_gold) != 0) return false;
+        if (m_id != character.m_id) return false;
+        if (!m_abilitySet.equals(character.m_abilitySet)) return false;
+        if (!m_combatStatSet.equals(character.m_combatStatSet)) return false;
+        if (!m_feats.equals(character.m_feats)) return false;
+        if (!m_fluffInfo.equals(character.m_fluffInfo)) return false;
+        if (!m_inventory.equals(character.m_inventory)) return false;
+        if (!m_saveSet.equals(character.m_saveSet)) return false;
+        if (!m_skillSet.equals(character.m_skillSet)) return false;
+        if (!m_spellBook.equals(character.m_spellBook)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = m_abilitySet.hashCode();
+        result = 31 * result + m_combatStatSet.hashCode();
+        result = 31 * result + m_skillSet.hashCode();
+        result = 31 * result + m_saveSet.hashCode();
+        result = 31 * result + m_fluffInfo.hashCode();
+        result = 31 * result + m_inventory.hashCode();
+        temp = Double.doubleToLongBits(m_gold);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + m_feats.hashCode();
+        result = 31 * result + m_spellBook.hashCode();
+        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        return result;
+    }
 }

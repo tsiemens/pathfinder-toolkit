@@ -13,10 +13,10 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
 
     public static final String ELEMENT_NAME = "weapon";
     public static final String ATTR_ATTACK_BONUS = "attack-bonus";
-    public static final String ATTR_DAMAGE = "damage";
-    public static final String ATTR_CRIT = "crit";
+    public static final String ELMT_DAMAGE = "damage";
+    public static final String ELMT_CRIT = "crit";
     public static final String ATTR_RANGE = "range";
-    public static final String ATTR_SPEC_PROPS = "special-properties";
+    public static final String ELMT_SPEC_PROPS = "special-properties";
     public static final String ATTR_AMMO = "ammo";
     public static final String ATTR_TYPE = "type";
     public static final String ATTR_SIZE = "size";
@@ -38,11 +38,11 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
     void setObjectContentForElement(Weapon weapon, Element element) throws InvalidObjectException {
         m_itemXMLAdapter.setObjectContentForElement(weapon, element);
         weapon.setTotalAttackBonus(getBoundedIntAttribute(element, ATTR_ATTACK_BONUS, -10, 40));
-        weapon.setDamage(getStringAttribute(element, ATTR_DAMAGE));
-        weapon.setCritical(getStringAttribute(element, ATTR_CRIT));
+        weapon.setDamage(getSubElementText(element, ELMT_DAMAGE));
+        weapon.setCritical(getSubElementText(element, ELMT_CRIT));
         weapon.setRange(getBoundedIntAttribute(element, ATTR_RANGE, 0, Integer.MAX_VALUE));
         weapon.setAmmunition(getBoundedIntAttribute(element, ATTR_AMMO, 0, Integer.MAX_VALUE));
-        weapon.setSpecialProperties(getStringAttribute(element, ATTR_SPEC_PROPS));
+        weapon.setSpecialProperties(getSubElementText(element, ELMT_SPEC_PROPS));
 
         String typeString = getStringAttribute(element, ATTR_TYPE);
         if (!Weapon.isValidType(BaseApplication.getAppContext(), typeString)) {
@@ -62,12 +62,12 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
     protected void setElementContentForObject(Element element, Weapon weapon) {
         m_itemXMLAdapter.setElementContentForObject(element, weapon);
         element.addAttribute(ATTR_ATTACK_BONUS, Integer.toString(weapon.getTotalAttackBonus()));
-        element.addAttribute(ATTR_DAMAGE, weapon.getDamage());
-        element.addAttribute(ATTR_CRIT, weapon.getCritical());
+        addSubElementText(element, ELMT_DAMAGE, weapon.getDamage());
+        addSubElementText(element, ELMT_CRIT, weapon.getCritical());
         element.addAttribute(ATTR_RANGE, Integer.toString(weapon.getRange()));
         element.addAttribute(ATTR_AMMO, Integer.toString(weapon.getAmmunition()));
         element.addAttribute(ATTR_TYPE, weapon.getType());
         element.addAttribute(ATTR_SIZE, weapon.getSize());
-        element.addAttribute(ATTR_SPEC_PROPS, weapon.getSpecialProperties());
+        addSubElementText(element, ELMT_SPEC_PROPS, weapon.getSpecialProperties());
     }
 }

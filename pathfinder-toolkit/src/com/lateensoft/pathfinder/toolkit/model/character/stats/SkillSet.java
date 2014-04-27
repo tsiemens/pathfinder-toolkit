@@ -320,6 +320,23 @@ public class SkillSet implements Parcelable, Iterable<Skill> {
     public static boolean isValidSkill(int skillKey) {
         return SKILL_KEYS.contains(skillKey);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SkillSet)) return false;
+
+        SkillSet skills = (SkillSet) o;
+
+        if (!m_skills.equals(skills.m_skills)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return m_skills.hashCode();
+    }
 }
 
 

@@ -112,4 +112,29 @@ public class Feat implements Parcelable, Storable, Comparable<Feat> {
     public int compareTo(Feat another) {
         return this.getName().compareToIgnoreCase(another.getName());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Feat)) return false;
+
+        Feat feat = (Feat) o;
+
+        if (m_characterId != feat.m_characterId) return false;
+        if (m_id != feat.m_id) return false;
+        if (m_description != null ? !m_description.equals(feat.m_description) : feat.m_description != null)
+            return false;
+        if (m_name != null ? !m_name.equals(feat.m_name) : feat.m_name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_name != null ? m_name.hashCode() : 0;
+        result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
+        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

@@ -310,4 +310,59 @@ public class FluffInfo implements Parcelable, Storable {
 			return new FluffInfo[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FluffInfo)) return false;
+
+        FluffInfo fluffInfo = (FluffInfo) o;
+
+        if (m_characterId != fluffInfo.m_characterId) return false;
+        if (m_XP != null ? !m_XP.equals(fluffInfo.m_XP) : fluffInfo.m_XP != null) return false;
+        if (m_alignment != null ? !m_alignment.equals(fluffInfo.m_alignment) : fluffInfo.m_alignment != null)
+            return false;
+        if (m_deity != null ? !m_deity.equals(fluffInfo.m_deity) : fluffInfo.m_deity != null) return false;
+        if (m_description != null ? !m_description.equals(fluffInfo.m_description) : fluffInfo.m_description != null)
+            return false;
+        if (m_eyes != null ? !m_eyes.equals(fluffInfo.m_eyes) : fluffInfo.m_eyes != null) return false;
+        if (m_gender != null ? !m_gender.equals(fluffInfo.m_gender) : fluffInfo.m_gender != null) return false;
+        if (m_hair != null ? !m_hair.equals(fluffInfo.m_hair) : fluffInfo.m_hair != null) return false;
+        if (m_height != null ? !m_height.equals(fluffInfo.m_height) : fluffInfo.m_height != null) return false;
+        if (m_languages != null ? !m_languages.equals(fluffInfo.m_languages) : fluffInfo.m_languages != null)
+            return false;
+        if (m_level != null ? !m_level.equals(fluffInfo.m_level) : fluffInfo.m_level != null) return false;
+        if (m_name != null ? !m_name.equals(fluffInfo.m_name) : fluffInfo.m_name != null) return false;
+        if (m_nextLevelXP != null ? !m_nextLevelXP.equals(fluffInfo.m_nextLevelXP) : fluffInfo.m_nextLevelXP != null)
+            return false;
+        if (m_playerClass != null ? !m_playerClass.equals(fluffInfo.m_playerClass) : fluffInfo.m_playerClass != null)
+            return false;
+        if (m_race != null ? !m_race.equals(fluffInfo.m_race) : fluffInfo.m_race != null) return false;
+        if (m_size != null ? !m_size.equals(fluffInfo.m_size) : fluffInfo.m_size != null) return false;
+        if (m_weight != null ? !m_weight.equals(fluffInfo.m_weight) : fluffInfo.m_weight != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_name != null ? m_name.hashCode() : 0;
+        result = 31 * result + (m_alignment != null ? m_alignment.hashCode() : 0);
+        result = 31 * result + (m_XP != null ? m_XP.hashCode() : 0);
+        result = 31 * result + (m_nextLevelXP != null ? m_nextLevelXP.hashCode() : 0);
+        result = 31 * result + (m_playerClass != null ? m_playerClass.hashCode() : 0);
+        result = 31 * result + (m_race != null ? m_race.hashCode() : 0);
+        result = 31 * result + (m_deity != null ? m_deity.hashCode() : 0);
+        result = 31 * result + (m_level != null ? m_level.hashCode() : 0);
+        result = 31 * result + (m_size != null ? m_size.hashCode() : 0);
+        result = 31 * result + (m_gender != null ? m_gender.hashCode() : 0);
+        result = 31 * result + (m_height != null ? m_height.hashCode() : 0);
+        result = 31 * result + (m_weight != null ? m_weight.hashCode() : 0);
+        result = 31 * result + (m_eyes != null ? m_eyes.hashCode() : 0);
+        result = 31 * result + (m_hair != null ? m_hair.hashCode() : 0);
+        result = 31 * result + (m_languages != null ? m_languages.hashCode() : 0);
+        result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

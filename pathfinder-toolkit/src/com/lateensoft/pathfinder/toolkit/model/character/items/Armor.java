@@ -24,7 +24,7 @@ public class Armor extends Item {
 		m_maxDex = 10;
 		m_spellFail = 0;
 		m_speed = 30;
-		m_specialProperties = new String("");
+		m_specialProperties = "";
 		m_size = "M";
 	}
 	
@@ -122,8 +122,7 @@ public class Armor extends Item {
 	}
 	
 	public String getSpeedString() {
-		String speedString = new String();
-		speedString = Integer.toString(m_speed) + " ft.";
+		String speedString = Integer.toString(m_speed) + " ft.";
 		return speedString;
 	}
 
@@ -159,4 +158,39 @@ public class Armor extends Item {
 			return new Armor[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Armor)) return false;
+        if (!super.equals(o)) return false;
+
+        Armor armor = (Armor) o;
+
+        if (m_ACBonus != armor.m_ACBonus) return false;
+        if (m_checkPen != armor.m_checkPen) return false;
+        if (m_maxDex != armor.m_maxDex) return false;
+        if (m_speed != armor.m_speed) return false;
+        if (m_spellFail != armor.m_spellFail) return false;
+        if (m_worn != armor.m_worn) return false;
+        if (m_size != null ? !m_size.equals(armor.m_size) : armor.m_size != null) return false;
+        if (m_specialProperties != null ? !m_specialProperties.equals(armor.m_specialProperties) : armor.m_specialProperties != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (m_worn ? 1 : 0);
+        result = 31 * result + m_ACBonus;
+        result = 31 * result + m_checkPen;
+        result = 31 * result + m_maxDex;
+        result = 31 * result + m_spellFail;
+        result = 31 * result + m_speed;
+        result = 31 * result + (m_specialProperties != null ? m_specialProperties.hashCode() : 0);
+        result = 31 * result + (m_size != null ? m_size.hashCode() : 0);
+        return result;
+    }
 }

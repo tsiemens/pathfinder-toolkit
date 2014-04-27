@@ -194,4 +194,21 @@ public class SaveSet implements Parcelable, Iterable<Save> {
 			return new SaveSet[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SaveSet)) return false;
+
+        SaveSet saves = (SaveSet) o;
+
+        if (!m_saves.equals(saves.m_saves)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return m_saves.hashCode();
+    }
 }

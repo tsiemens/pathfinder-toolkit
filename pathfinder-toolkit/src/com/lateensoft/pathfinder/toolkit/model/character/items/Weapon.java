@@ -165,4 +165,39 @@ public class Weapon extends Item implements Parcelable {
 			return new Weapon[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Weapon)) return false;
+        if (!super.equals(o)) return false;
+
+        Weapon weapon = (Weapon) o;
+
+        if (m_ammunition != weapon.m_ammunition) return false;
+        if (m_range != weapon.m_range) return false;
+        if (m_totalAttackBonus != weapon.m_totalAttackBonus) return false;
+        if (m_critical != null ? !m_critical.equals(weapon.m_critical) : weapon.m_critical != null) return false;
+        if (m_damage != null ? !m_damage.equals(weapon.m_damage) : weapon.m_damage != null) return false;
+        if (m_size != null ? !m_size.equals(weapon.m_size) : weapon.m_size != null) return false;
+        if (m_specialProperties != null ? !m_specialProperties.equals(weapon.m_specialProperties) : weapon.m_specialProperties != null)
+            return false;
+        if (m_type != null ? !m_type.equals(weapon.m_type) : weapon.m_type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + m_totalAttackBonus;
+        result = 31 * result + (m_damage != null ? m_damage.hashCode() : 0);
+        result = 31 * result + (m_critical != null ? m_critical.hashCode() : 0);
+        result = 31 * result + m_range;
+        result = 31 * result + (m_specialProperties != null ? m_specialProperties.hashCode() : 0);
+        result = 31 * result + m_ammunition;
+        result = 31 * result + (m_type != null ? m_type.hashCode() : 0);
+        result = 31 * result + (m_size != null ? m_size.hashCode() : 0);
+        return result;
+    }
 }

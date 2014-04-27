@@ -213,4 +213,21 @@ public class AbilitySet implements Parcelable, Iterable<Ability> {
         }
         return false;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbilitySet)) return false;
+
+        AbilitySet that = (AbilitySet) o;
+
+        if (!m_abilities.equals(that.m_abilities)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return m_abilities.hashCode();
+    }
 }

@@ -18,7 +18,7 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
     private static final String RANK_ATTR = "rank";
     private static final String ABILITY_ATTR = "ability";
     private static final String MISC_MOD_ATTR = "misc";
-    private static final String SUB_TYPE_ATTR = "sub-type";
+    private static final String SUB_TYPE_ELMT = "sub-type";
 
     public static final ImmutableBiMap<Integer, String> SKILL_KEY_STRINGS = buildSkillKeyStrings();
 
@@ -48,8 +48,8 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
         skill.setRank(getBoundedIntAttribute(element, RANK_ATTR, -10, 40));
         skill.setMiscMod(getBoundedIntAttribute(element, MISC_MOD_ATTR, -10, 40));
 
-        if (SkillSet.isSubtypedSkill(skillKey) && element.attribute(SUB_TYPE_ATTR) != null) {
-            skill.setSubType(getStringAttribute(element, SUB_TYPE_ATTR));
+        if (SkillSet.isSubtypedSkill(skillKey) && element.element(SUB_TYPE_ELMT) != null) {
+            skill.setSubType(getSubElementText(element, SUB_TYPE_ELMT));
         }
         return skill;
     }
@@ -62,8 +62,8 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
         element.addAttribute(RANK_ATTR, Integer.toString(skill.getRank()));
         element.addAttribute(MISC_MOD_ATTR, Integer.toString(skill.getMiscMod()));
 
-        if (SkillSet.isSubtypedSkill(skill.getSkillKey())) {
-            element.addAttribute(SUB_TYPE_ATTR, skill.getSubType());
+        if (SkillSet.isSubtypedSkill(skill.getSkillKey()) && skill.getSubType() != null) {
+            addSubElementText(element, SUB_TYPE_ELMT, skill.getSubType());
         }
     }
 

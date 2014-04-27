@@ -12,13 +12,11 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRootAdapter;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.tree.DefaultDocument;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -72,6 +70,12 @@ public class ImportExportUtils {
         getContentIntent.setAction(Intent.ACTION_GET_CONTENT);
         getContentIntent.setType(FileUtils.XML_MIME);
         activityLauncher.startActivityForResult(getContentIntent, requestCode);
+    }
+
+    public static List<PathfinderCharacter> importCharactersFromStream(InputStream is) throws DocumentException, InvalidObjectException {
+        Document document = DOMUtils.newDocument(is);
+        XMLExportRootAdapter xmlAdapter = new XMLExportRootAdapter();
+        return xmlAdapter.toObject(document.getRootElement());
     }
 
     public static void exportCharacterToStream(PathfinderCharacter character, OutputStream outputStream) throws IOException {
@@ -141,14 +145,14 @@ public class ImportExportUtils {
         public void onClick(DialogInterface dialog, int which) {
             if (which == AlertDialog.BUTTON_POSITIVE) {
                 try {
-                    File exportFile = exportCharactersToFile(m_characters, m_exportName, true);
+                    File exportFile = exportCharactersToFile(m_characters, m_exportName, false);
                     Toast.makeText(m_context, "Character exported to " + exportFile.getPath(), Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     Toast.makeText(m_context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else if (which == AlertDialog.BUTTON_NEGATIVE) {
                 try {
-                    File exportFile = exportCharactersToFile(m_characters, m_exportName, false);
+                    File exportFile = exportCharactersToFile(m_characters, m_exportName, true);
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(exportFile));

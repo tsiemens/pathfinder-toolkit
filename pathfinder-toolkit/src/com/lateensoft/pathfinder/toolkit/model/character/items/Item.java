@@ -141,4 +141,35 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
     public int compareTo(Item another) {
         return this.getName().compareToIgnoreCase(another.getName());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+
+        Item item = (Item) o;
+
+        if (m_characterId != item.m_characterId) return false;
+        if (m_id != item.m_id) return false;
+        if (m_isContained != item.m_isContained) return false;
+        if (m_quantity != item.m_quantity) return false;
+        if (Double.compare(item.m_weight, m_weight) != 0) return false;
+        if (m_name != null ? !m_name.equals(item.m_name) : item.m_name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = m_name != null ? m_name.hashCode() : 0;
+        temp = Double.doubleToLongBits(m_weight);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + m_quantity;
+        result = 31 * result + (m_isContained ? 1 : 0);
+        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

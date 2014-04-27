@@ -69,7 +69,10 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
 
         combatStats.setSpellResistance(getIntAttribute(element, SPELL_RESIST_ATTR));
         combatStats.setBABPrimary(getIntAttribute(element, BAB_P_ATTR));
-        combatStats.setBABSecondary(getStringAttribute(element, BAB_S_ATTR));
+
+        if (element.attribute(BAB_S_ATTR) != null) {
+            combatStats.setBABSecondary(getStringAttribute(element, BAB_S_ATTR));
+        }
 
         combatStats.setCMBAbilityKey(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, CMB_ABILITY_ATTR)));

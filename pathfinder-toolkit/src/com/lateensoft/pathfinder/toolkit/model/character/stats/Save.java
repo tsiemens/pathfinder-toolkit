@@ -155,4 +155,34 @@ public class Save implements Parcelable, Storable {
 	public long getID() {
 		return getSaveKey();
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Save)) return false;
+
+        Save save = (Save) o;
+
+        if (m_abilityKey != save.m_abilityKey) return false;
+        if (m_baseSave != save.m_baseSave) return false;
+        if (m_characterId != save.m_characterId) return false;
+        if (m_magicMod != save.m_magicMod) return false;
+        if (m_miscMod != save.m_miscMod) return false;
+        if (m_saveKey != save.m_saveKey) return false;
+        if (m_tempMod != save.m_tempMod) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (m_characterId ^ (m_characterId >>> 32));
+        result = 31 * result + m_saveKey;
+        result = 31 * result + m_baseSave;
+        result = 31 * result + m_abilityKey;
+        result = 31 * result + m_magicMod;
+        result = 31 * result + m_miscMod;
+        result = 31 * result + m_tempMod;
+        return result;
+    }
 }

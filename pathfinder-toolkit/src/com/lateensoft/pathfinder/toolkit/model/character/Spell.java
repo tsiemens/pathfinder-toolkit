@@ -143,4 +143,33 @@ public class Spell implements Parcelable, Storable, Comparable<Spell> {
         int comparison = this.getLevel() - another.getLevel();
         return (comparison != 0) ? comparison : this.getName().compareToIgnoreCase(another.getName());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Spell)) return false;
+
+        Spell spell = (Spell) o;
+
+        if (m_characterId != spell.m_characterId) return false;
+        if (m_id != spell.m_id) return false;
+        if (m_level != spell.m_level) return false;
+        if (m_prepared != spell.m_prepared) return false;
+        if (m_description != null ? !m_description.equals(spell.m_description) : spell.m_description != null)
+            return false;
+        if (m_name != null ? !m_name.equals(spell.m_name) : spell.m_name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_name != null ? m_name.hashCode() : 0;
+        result = 31 * result + m_prepared;
+        result = 31 * result + m_level;
+        result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
+        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

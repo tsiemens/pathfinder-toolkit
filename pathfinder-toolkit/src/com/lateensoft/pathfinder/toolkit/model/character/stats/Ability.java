@@ -170,4 +170,28 @@ public class Ability implements Parcelable, Storable, Comparable<Ability> {
     public int compareTo(Ability another) {
         return this.getAbilityKey() - another.getAbilityKey();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ability)) return false;
+
+        Ability ability = (Ability) o;
+
+        if (m_abilityKey != ability.m_abilityKey) return false;
+        if (m_characterId != ability.m_characterId) return false;
+        if (m_score != ability.m_score) return false;
+        if (m_tempBonus != ability.m_tempBonus) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_abilityKey;
+        result = 31 * result + m_score;
+        result = 31 * result + m_tempBonus;
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

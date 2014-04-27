@@ -284,52 +284,51 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GET_IMPORT_REQ_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getData();
-            Exception thrownException = null;
-            try {
-                if (uri == null) {
-                    throw new FileNotFoundException();
-                }
+        if (requestCode == GET_IMPORT_REQ_CODE ) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri uri = data.getData();
+                Exception thrownException = null;
+                try {
+                    if (uri == null) {
+                        throw new FileNotFoundException();
+                    }
 
-                InputStream is = getContext().getContentResolver().openInputStream(uri);
-                Document document = DOMUtils.newDocument(is);
-                XMLExportRootAdapter xmlAdapter = new XMLExportRootAdapter();
-                List<PathfinderCharacter> characters = xmlAdapter.toObject(document.getRootElement());
+                    InputStream is = getContext().getContentResolver().openInputStream(uri);
+                    List<PathfinderCharacter> characters = ImportExportUtils.importCharactersFromStream(is);
 
-                long lastCharacterId = -1;
-                boolean didFailToImport = false;
-                for(PathfinderCharacter character : characters) {
-                    lastCharacterId = addCharacterToDB(character);
-                    if (lastCharacterId == -1) {
-                        didFailToImport = true;
+                    long lastCharacterId = -1;
+                    boolean didFailToImport = false;
+                    for(PathfinderCharacter character : characters) {
+                        lastCharacterId = addCharacterToDB(character);
+                        if (lastCharacterId == -1) {
+                            didFailToImport = true;
+                        }
+                    }
+                    if (lastCharacterId != -1) {
+                        setSelectedCharacter(lastCharacterId);
+                        loadSelectedCharacter();
+                    }
+                    if(didFailToImport) {
+                        Toast.makeText(getContext(), "Errors occurred during import.", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getContext(), "Error: File not found", Toast.LENGTH_LONG).show();
+                    thrownException = e;
+                } catch (DocumentException e) {
+                    Toast.makeText(getContext(), "Error: Invalid file formatting", Toast.LENGTH_LONG).show();
+                    thrownException = e;
+                } catch (InvalidObjectException e) {
+                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    thrownException = e;
+                } finally {
+                    if (thrownException != null) {
+                        Log.e(TAG, "Failed to import character(s) from file " + uri, thrownException);
                     }
                 }
-                if (lastCharacterId != -1) {
-                    setSelectedCharacter(lastCharacterId);
-                    loadSelectedCharacter();
-                }
-                if(didFailToImport) {
-                    Toast.makeText(getContext(), "Errors occurred during import.", Toast.LENGTH_LONG).show();
-                }
-
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getContext(), "Error: File not found", Toast.LENGTH_LONG).show();
-                thrownException = e;
-            } catch (DocumentException e) {
-                Toast.makeText(getContext(), "Error: Invalid file formatting", Toast.LENGTH_LONG).show();
-                thrownException = e;
-            } catch (InvalidObjectException e) {
-                Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                thrownException = e;
-            } finally {
-                if (thrownException != null) {
-                    Log.e(TAG, "Failed to import character(s) from file " + uri, thrownException);
-                }
+            } else {
+                Toast.makeText(getContext(), "Unable to load file", Toast.LENGTH_LONG).show();
             }
-
-        } else {
-            Toast.makeText(getContext(), "Unable to load file", Toast.LENGTH_LONG).show();
         }
     }
 

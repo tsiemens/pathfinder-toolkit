@@ -395,4 +395,62 @@ public class CombatStatSet implements Parcelable, Storable {
 			return new CombatStatSet[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CombatStatSet)) return false;
+
+        CombatStatSet that = (CombatStatSet) o;
+
+        if (m_ACAbilityKey != that.m_ACAbilityKey) return false;
+        if (m_ACArmour != that.m_ACArmour) return false;
+        if (m_ACMiscMod != that.m_ACMiscMod) return false;
+        if (m_ACNaturalArmour != that.m_ACNaturalArmour) return false;
+        if (m_ACShield != that.m_ACShield) return false;
+        if (m_BABPrimary != that.m_BABPrimary) return false;
+        if (m_CMBAbilityKey != that.m_CMBAbilityKey) return false;
+        if (m_CMDAbilityKey != that.m_CMDAbilityKey) return false;
+        if (m_CMDMiscMod != that.m_CMDMiscMod) return false;
+        if (m_baseSpeedFt != that.m_baseSpeedFt) return false;
+        if (m_characterId != that.m_characterId) return false;
+        if (m_damageReduction != that.m_damageReduction) return false;
+        if (m_deflectionMod != that.m_deflectionMod) return false;
+        if (m_initAbilityKey != that.m_initAbilityKey) return false;
+        if (m_initMiscMod != that.m_initMiscMod) return false;
+        if (m_nonLethalDamage != that.m_nonLethalDamage) return false;
+        if (m_sizeMod != that.m_sizeMod) return false;
+        if (m_spellResist != that.m_spellResist) return false;
+        if (m_totalHP != that.m_totalHP) return false;
+        if (m_wounds != that.m_wounds) return false;
+        if (!m_BABSecondary.equals(that.m_BABSecondary)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_totalHP;
+        result = 31 * result + m_wounds;
+        result = 31 * result + m_nonLethalDamage;
+        result = 31 * result + m_damageReduction;
+        result = 31 * result + m_baseSpeedFt;
+        result = 31 * result + m_initAbilityKey;
+        result = 31 * result + m_initMiscMod;
+        result = 31 * result + m_ACArmour;
+        result = 31 * result + m_ACShield;
+        result = 31 * result + m_ACAbilityKey;
+        result = 31 * result + m_sizeMod;
+        result = 31 * result + m_ACNaturalArmour;
+        result = 31 * result + m_deflectionMod;
+        result = 31 * result + m_ACMiscMod;
+        result = 31 * result + m_spellResist;
+        result = 31 * result + m_BABPrimary;
+        result = 31 * result + m_BABSecondary.hashCode();
+        result = 31 * result + m_CMBAbilityKey;
+        result = 31 * result + m_CMDAbilityKey;
+        result = 31 * result + m_CMDMiscMod;
+        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
+        return result;
+    }
 }

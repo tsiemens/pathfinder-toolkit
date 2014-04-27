@@ -104,4 +104,26 @@ public class Inventory implements Parcelable {
 			return new Inventory[size];
 		}
 	};
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Inventory)) return false;
+
+        Inventory inventory = (Inventory) o;
+
+        if (!m_armor.equals(inventory.m_armor)) return false;
+        if (!m_items.equals(inventory.m_items)) return false;
+        if (!m_weapons.equals(inventory.m_weapons)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = m_items.hashCode();
+        result = 31 * result + m_armor.hashCode();
+        result = 31 * result + m_weapons.hashCode();
+        return result;
+    }
 }

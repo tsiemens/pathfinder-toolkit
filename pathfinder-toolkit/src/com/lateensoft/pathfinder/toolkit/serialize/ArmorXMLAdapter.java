@@ -17,7 +17,7 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
     public static final String ATTR_MAX_DEX = "max-dex";
     public static final String ATTR_SPELL_FAIL = "spell-failure";
     public static final String ATTR_SPEED = "speed";
-    public static final String ATTR_SPEC_PROPS = "special-properties";
+    public static final String ELMT_SPEC_PROPS = "special-properties";
     public static final String ATTR_SIZE = "size";
 
     private final ItemXMLAdapter m_itemXMLAdapter = new ItemXMLAdapter();
@@ -42,7 +42,7 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
         armor.setMaxDex(getBoundedIntAttribute(element, ATTR_MAX_DEX, 0, 40));
         armor.setSpellFail(getBoundedIntAttribute(element, ATTR_SPELL_FAIL, 0, 95));
         armor.setSpeed(getBoundedIntAttribute(element, ATTR_SPEED, 0, 120));
-        armor.setSpecialProperties(getStringAttribute(element, ATTR_SPEC_PROPS));
+        armor.setSpecialProperties(getSubElementText(element, ELMT_SPEC_PROPS));
 
         String sizeString = getStringAttribute(element, ATTR_SIZE);
         if (!Armor.isValidSize(sizeString)) {
@@ -62,6 +62,6 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
         element.addAttribute(ATTR_SPELL_FAIL, Integer.toString(armor.getSpellFail()));
         element.addAttribute(ATTR_SPEED, Integer.toString(armor.getSpeed()));
         element.addAttribute(ATTR_SIZE, armor.getSize());
-        element.addAttribute(ATTR_SPEC_PROPS, armor.getSpecialProperties());
+        addSubElementText(element, ELMT_SPEC_PROPS, armor.getSpecialProperties());
     }
 }
