@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.net.Uri;
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
@@ -179,6 +180,9 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
             case R.id.mi_export_character:
                 exportCurrentCharacter();
                 break;
+            case R.id.mi_export_all:
+                exportAllCharacters();
+                break;
             case R.id.mi_import_character:
                 importCharacters();
                 break;
@@ -270,8 +274,17 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public void exportCurrentCharacter() {
-        PathfinderCharacter character = new CharacterRepository().query(getCurrentCharacterID());
+        PathfinderCharacter character = m_characterRepo.query(getCurrentCharacterID());
         ImportExportUtils.exportCharacterWithDialog(getContext(), character, new ActivityLauncher.ActivityLauncherFragment(this));
+    }
+
+    public void exportAllCharacters() {
+        List<Entry<Long, String>> charIds = m_characterRepo.queryList();
+        List<PathfinderCharacter> characters = Lists.newArrayListWithCapacity(charIds.size());
+        for (Entry<Long, String> id : charIds) {
+            characters.add(m_characterRepo.query(id.getKey()));
+        }
+        ImportExportUtils.exportCharactersWithDialog(getContext(), characters, "All Characters", new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
     public void importCharacters() {

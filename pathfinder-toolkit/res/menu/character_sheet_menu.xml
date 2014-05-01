@@ -23,6 +23,11 @@
         android:showAsAction="never" />
 
     <item
+        android:id="@+id/mi_export_all"
+        android:title="@string/menu_item_export_all"
+        android:showAsAction="never" />
+
+    <item
         android:id="@+id/mi_import_character"
         android:title="@string/menu_item_import_character"
         android:showAsAction="never" />

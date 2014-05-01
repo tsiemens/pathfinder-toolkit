@@ -65,7 +65,8 @@
     <string name="menu_item_new_character">New Character</string>
     <string name="menu_item_delete_character">Delete Character</string>
     <string name="menu_item_export_character">Export Character</string>
-    <string name="menu_item_import_character">Import Character</string>
+    <string name="menu_item_export_all">Export All</string>
+    <string name="menu_item_import_character">Import Character(s)</string>
 	<string name="select_character_dialog_header">Select Character</string>
 	<string name="new_character_dialog_message">Create new character?</string>
 	<string name="delete_character_dialog_message_1">Are you sure you want to delete\u0020</string>
