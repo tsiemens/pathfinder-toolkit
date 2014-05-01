@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.test.util;
 
-import android.graphics.Path;
 import android.test.AndroidTestCase;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;

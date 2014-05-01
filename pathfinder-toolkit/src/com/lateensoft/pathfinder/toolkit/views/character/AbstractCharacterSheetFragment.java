@@ -13,7 +13,6 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRootAdapter;
 import com.lateensoft.pathfinder.toolkit.util.*;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -30,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 //This is a base class for all fragments in the character sheet activity
@@ -309,25 +307,26 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                         loadSelectedCharacter();
                     }
                     if(didFailToImport) {
-                        Toast.makeText(getContext(), "Errors occurred during import.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.import_error_unknown, Toast.LENGTH_LONG).show();
                     }
 
                 } catch (FileNotFoundException e) {
-                    Toast.makeText(getContext(), "Error: File not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.import_error_file_not_found, Toast.LENGTH_LONG).show();
                     thrownException = e;
                 } catch (DocumentException e) {
-                    Toast.makeText(getContext(), "Error: Invalid file formatting", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.import_error_invalid_xml, Toast.LENGTH_LONG).show();
                     thrownException = e;
                 } catch (InvalidObjectException e) {
-                    Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), String.format(getString(R.string.import_error_exception), e.getMessage()),
+                            Toast.LENGTH_LONG).show();
                     thrownException = e;
                 } finally {
                     if (thrownException != null) {
-                        Log.e(TAG, "Failed to import character(s) from file " + uri, thrownException);
+                        Log.e(TAG, "Failed to import character(s) from " + uri, thrownException);
                     }
                 }
             } else {
-                Toast.makeText(getContext(), "Unable to load file", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.unable_to_load_file_msg, Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.widget.Toast;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.serialize.XMLExportRootAdapter;
 import org.dom4j.Document;
@@ -107,20 +108,20 @@ public class ImportExportUtils {
     public static void exportCharacterWithDialog(Context context, PathfinderCharacter character, ActivityLauncher activityLauncher) {
         ExportCharactersDialogListener listener = new ExportCharactersDialogListener(context, character, activityLauncher);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Select Export Location");
-        builder.setMessage("Please select a location to export the character to.");
-        builder.setPositiveButton("Default", listener);
-        builder.setNegativeButton("Share", listener);
+        builder.setTitle(context.getString(R.string.export_character_dialog_title));
+        builder.setMessage(context.getString(R.string.export_single_character_dialog_text));
+        builder.setPositiveButton(context.getString(R.string.export_character_location_default), listener);
+        builder.setNegativeButton(context.getString(R.string.export_character_location_share), listener);
         builder.show();
     }
 
-    public static void exportCharactersWithDialog(Context context, List<PathfinderCharacter> character, String exportName, ActivityLauncher activityLauncher) {
-        ExportCharactersDialogListener listener = new ExportCharactersDialogListener(context, character, exportName, activityLauncher);
+    public static void exportCharactersWithDialog(Context context, List<PathfinderCharacter> characters, String exportName, ActivityLauncher activityLauncher) {
+        ExportCharactersDialogListener listener = new ExportCharactersDialogListener(context, characters, exportName, activityLauncher);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Select Export Location");
-        builder.setMessage("Please select a location to export " + exportName + " to.");
-        builder.setPositiveButton("Default", listener);
-        builder.setNegativeButton("Share", listener);
+        builder.setTitle(context.getString(R.string.export_character_dialog_title));
+        builder.setMessage(String.format(context.getString(R.string.export_multiple_characters_dialog_text), exportName));
+        builder.setPositiveButton(context.getString(R.string.export_character_location_default), listener);
+        builder.setNegativeButton(context.getString(R.string.export_character_location_share), listener);
         builder.show();
     }
 
@@ -146,9 +147,9 @@ public class ImportExportUtils {
             if (which == AlertDialog.BUTTON_POSITIVE) {
                 try {
                     File exportFile = exportCharactersToFile(m_characters, m_exportName, false);
-                    Toast.makeText(m_context, "Character exported to " + exportFile.getPath(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(m_context, m_context.getString(R.string.character_exported_to_msg) + exportFile.getPath(), Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
-                    Toast.makeText(m_context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(m_context, m_context.getString(R.string.error) + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else if (which == AlertDialog.BUTTON_NEGATIVE) {
                 try {
@@ -157,9 +158,9 @@ public class ImportExportUtils {
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(exportFile));
                     shareIntent.setType(FileUtils.XML_MIME);
-                    m_activityLauncher.startActivity(Intent.createChooser(shareIntent, "Export to"));
+                    m_activityLauncher.startActivity(Intent.createChooser(shareIntent, m_context.getString(R.string.export_intent_title)));
                 } catch (IOException e) {
-                    Toast.makeText(m_context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(m_context, m_context.getString(R.string.error) + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }
