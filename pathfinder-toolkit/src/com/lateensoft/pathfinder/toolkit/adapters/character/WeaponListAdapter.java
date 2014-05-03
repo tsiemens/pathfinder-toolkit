@@ -38,7 +38,6 @@ public class WeaponListAdapter extends ArrayAdapter<Weapon> {
 			holder.damage = (TextView)row.findViewById(R.id.weaponDamage);
 			holder.range = (TextView)row.findViewById(R.id.weaponRange);
 			holder.specialProperties = (TextView)row.findViewById(R.id.weaponSpecial);
-			//holder.ammunition = (TextView)row.findViewById
 			holder.type = (TextView)row.findViewById(R.id.weaponType);
 			holder.size = (TextView)row.findViewById(R.id.weaponSize);
 			holder.critical = (TextView)row.findViewById(R.id.weaponCrit);
@@ -50,7 +49,7 @@ public class WeaponListAdapter extends ArrayAdapter<Weapon> {
 		}
 		
 		holder.name.setText(getItem(position).getName());
-		holder.weight.setText(Double.toString(getItem(position).getWeight()));
+		holder.weight.setText(getItem(position).getWeightQuantityContainedText(getContext()));
 		holder.totalAttackBonus.setText(Integer.toString(getItem(position).getTotalAttackBonus()));
 		holder.damage.setText(getItem(position).getDamage());
 		holder.range.setText(Integer.toString(getItem(position).getRange()));
@@ -70,7 +69,6 @@ public class WeaponListAdapter extends ArrayAdapter<Weapon> {
 		TextView damage;
 		TextView range;
 		TextView specialProperties;
-		TextView ammunition;
 		TextView type;
 		TextView size;
 		TextView critical;

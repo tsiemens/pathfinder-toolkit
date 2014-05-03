@@ -54,7 +54,7 @@ public class ArmorListAdapter extends ArrayAdapter<Armor> {
 		
 		holder.name.setText(getItem(position).getName());
 		holder.worn.setVisibility(getItem(position).isWorn() ? View.VISIBLE : View.GONE);
-		holder.weight.setText(Double.toString(getItem(position).getWeight()));
+		holder.weight.setText(getItem(position).getWeightQuantityContainedText(getContext()));
 		holder.ACBonus.setText(Integer.toString(getItem(position).getACBonus()));
 		holder.checkPen.setText(Integer.toString(getItem(position).getCheckPen()));
 		holder.maxDex.setText(Integer.toString(getItem(position).getMaxDex()));

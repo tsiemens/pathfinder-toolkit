@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import android.content.res.Resources;
 import android.os.Parcelable;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -24,6 +25,8 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
     private EditText m_nameET;
     private EditText m_damageET;
     private EditText m_criticalET;
+    private EditText m_quantityET;
+    private CheckBox m_itemContainedCheckbox;
     private EditText m_specialPropertiesET;
 
 	private Weapon m_weapon;
@@ -42,6 +45,8 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		m_criticalET = (EditText) findViewById(R.id.etWeaponCrit);
 		m_damageET = (EditText) findViewById(R.id.etWeaponDamage);
 		m_weightET = (EditText) findViewById(R.id.etWeaponWeight);
+        m_quantityET = (EditText) findViewById(R.id.etItemQuantity);
+        m_itemContainedCheckbox = (CheckBox) findViewById(R.id.checkboxItemContained);
 		m_specialPropertiesET = (EditText) findViewById(
 				R.id.etWeaponSpecialProperties);
 		
@@ -64,6 +69,8 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 			m_rangeET.setText(Integer.toString(m_weapon.getRange()));
 			m_typeSpinner.setSelection(m_weapon.getTypeInt(this));
 			m_weightET.setText(Double.toString(m_weapon.getWeight()));
+            m_quantityET.setText(Integer.toString(m_weapon.getQuantity()));
+            m_itemContainedCheckbox.setChecked(m_weapon.isContained());
 			m_specialPropertiesET.setText(m_weapon.getSpecialProperties());
 		}
 	}
@@ -89,6 +96,13 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		} catch (NumberFormatException e) {
 			weight = 1;
 		}
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(m_quantityET.getText().toString());
+        } catch (NumberFormatException e) {
+            quantity = 1;
+        }
 
         int range = m_weapon.getRange();
         try {
@@ -121,6 +135,8 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		m_weapon.setSpecialProperties(specialProperties);
 		m_weapon.setType(type);
 		m_weapon.setSize(size);
+        m_weapon.setQuantity(quantity);
+        m_weapon.setContained(m_itemContainedCheckbox.isChecked());
 	}
 
 	@Override

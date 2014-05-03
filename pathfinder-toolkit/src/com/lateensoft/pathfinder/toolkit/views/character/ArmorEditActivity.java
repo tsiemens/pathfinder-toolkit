@@ -30,6 +30,8 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
     private EditText m_weightET;
     private EditText m_nameET;
     private EditText m_specialPropertiesET;
+    private EditText m_quantityET;
+    private CheckBox m_itemContainedCheckbox;
     private CheckBox m_wornCheckbox;
 	private OnTouchListener m_spinnerOnTouchListener;
 	
@@ -51,6 +53,8 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
 		m_nameET = (EditText) findViewById(R.id.armorName);
 		m_maxDexSpinner = (Spinner) findViewById(R.id.spArmorMaxDex);
 		m_wornCheckbox = (CheckBox) findViewById(R.id.checkboxIsWorn);
+        m_quantityET = (EditText) findViewById(R.id.etItemQuantity);
+        m_itemContainedCheckbox = (CheckBox) findViewById(R.id.checkboxItemContained);
 		
 		m_spinnerOnTouchListener = new OnTouchListener() {
 			@Override
@@ -80,19 +84,25 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
 		m_speedSpinner.setSelection(m_armor.getSpeed()/5);
 		m_ASFSpinner.setSelection(m_armor.getSpellFail() / ASF_INCREMENT);
 		m_weightET.setText(Double.toString(m_armor.getWeight()));
+        m_quantityET.setText(Integer.toString(m_armor.getQuantity()));
 		m_specialPropertiesET.setText(m_armor.getSpecialProperties());
 		m_wornCheckbox.setChecked(m_armor.isWorn());
+        m_itemContainedCheckbox.setChecked(m_armor.isContained());
 	}
 
 	@Override
 	protected void updateEditedParcelableValues() throws InvalidValueException {
-		String name = new String(m_nameET.getText().toString());
+		String name = m_nameET.getText().toString();
 
 		if(name == null || name.isEmpty()) {
 			throw new InvalidValueException(getString(R.string.editor_name_required_alert));
 		}
 
-		String specialProperties = new String(m_specialPropertiesET.getText().toString());
+		String specialProperties = m_specialPropertiesET.getText().toString();
+        if (specialProperties == null) {
+            specialProperties = "";
+        }
+
 		int speed = m_speedSpinner.getSelectedItemPosition() * SPEED_INCREMENT;
 
 		int spellFail = m_ASFSpinner.getSelectedItemPosition() * ASF_INCREMENT;
@@ -103,23 +113,31 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
         } catch (NumberFormatException e) {
                 weight = 1;
         }
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(m_quantityET.getText().toString());
+        } catch (NumberFormatException e) {
+            quantity = 1;
+        }
         
         int size = m_sizeSpinner.getSelectedItemPosition();
         int ac = m_ACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
         int acp = m_ACPSpinner.getSelectedItemPosition() - ACP_SPINNER_OFFSET;
         int maxDex = m_maxDexSpinner.getSelectedItemPosition();
-        boolean worn = m_wornCheckbox.isChecked();
-        
+
         m_armor.setName(name);
         m_armor.setSpeed(speed);
         m_armor.setSpecialProperties(specialProperties);
         m_armor.setSpellFail(spellFail);
         m_armor.setWeight(weight);
+        m_armor.setQuantity(quantity);
         m_armor.setSizeInt(size);
         m_armor.setACBonus(ac);
         m_armor.setCheckPen(acp);
         m_armor.setMaxDex(maxDex);
-        m_armor.setWorn(worn);
+        m_armor.setWorn(m_wornCheckbox.isChecked());
+        m_armor.setContained(m_itemContainedCheckbox.isChecked());
 	}
 
 	@Override

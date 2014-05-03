@@ -331,6 +331,7 @@
     <string name="inventory_total_weight_header">Total Wt:</string>
     <string name="inventory_gold_header">gp:</string>
     <string name="inventory_gold_hint">Gold</string>
+    <string name="item_contained_abrev">cont.</string>
     <string name="new_item_title">New Item</string>
     <string name="edit_item_title">Edit Item</string>
     

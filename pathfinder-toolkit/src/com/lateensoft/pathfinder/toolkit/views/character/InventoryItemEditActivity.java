@@ -42,7 +42,7 @@ public class InventoryItemEditActivity extends ParcelableEditorActivity {
 
 	@Override
 	protected void updateEditedParcelableValues() throws InvalidValueException {
-		String name = new String(m_nameET.getText().toString());
+		String name = m_nameET.getText().toString();
 		if(name == null || name.isEmpty()){
 			throw new InvalidValueException(getString(R.string.editor_name_required_alert));
 		}

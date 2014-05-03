@@ -1,5 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.model.character.items;
 
+import android.content.Context;
+import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
 
 import android.os.Parcel;
@@ -29,9 +31,7 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
 	}
 	
 	/**
-	 * Creates new instance of an Item. Defaults quantity to 1 and contained to false. 
-	 * @param name
-	 * @param weight
+	 * Creates new instance of an Item. Defaults quantity to 1 and contained to false.
 	 */
 	public Item(long characterId, String name, double weight) {
 		this(characterId, name, weight, 1, false);
@@ -171,5 +171,20 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
         result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
+    }
+
+    /**
+     * Builds a concise string representation of the weight, quantity and contained state of the item.
+     */
+    public String getWeightQuantityContainedText(Context context) {
+        String weightText = Double.toString(getWeight());
+        if (getQuantity() > 1) {
+            weightText = weightText + String.format(" x%d", getQuantity());
+        }
+        if (isContained()) {
+            weightText = weightText +
+                    " (" + context.getString(R.string.item_contained_abrev)+ ")";
+        }
+        return weightText;
     }
 }
