@@ -178,7 +178,7 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
      */
     public String getWeightQuantityContainedText(Context context) {
         String weightText = Double.toString(getWeight());
-        if (getQuantity() > 1) {
+        if (getQuantity() != 1) {
             weightText = weightText + String.format(" x%d", getQuantity());
         }
         if (isContained()) {
