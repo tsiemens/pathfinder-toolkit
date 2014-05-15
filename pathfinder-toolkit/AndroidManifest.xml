@@ -61,6 +61,10 @@
             android:label="@string/title_activity_party_member_editor"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
+        <activity
+            android:name=".views.PickerActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
 		<activity
             android:name=".views.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
