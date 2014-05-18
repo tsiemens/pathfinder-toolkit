@@ -62,7 +62,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-            android:name=".views.PickerActivity"
+            android:name=".views.picker.PickerActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
 		<activity

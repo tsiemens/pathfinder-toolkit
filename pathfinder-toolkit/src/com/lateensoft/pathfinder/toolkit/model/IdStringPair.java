@@ -17,6 +17,10 @@ public class IdStringPair implements Parcelable, Comparable<IdStringPair> {
         m_value = value;
     }
 
+    public IdStringPair(IdStringPair toCopy) {
+        this(toCopy.m_id, toCopy.m_value);
+    }
+
     public IdStringPair(Parcel in) {
         m_id = in.readLong();
         m_value = in.readString();
