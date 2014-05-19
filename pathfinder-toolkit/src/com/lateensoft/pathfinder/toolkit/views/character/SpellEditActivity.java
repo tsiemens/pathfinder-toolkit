@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.Spell;
+import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
 import android.os.Parcelable;
@@ -37,7 +38,7 @@ public class SpellEditActivity extends ParcelableEditorActivity {
 		m_spinnerOnTouchListener = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				closeKeyboard();
+                InputMethodUtils.hideSoftKeyboard(SpellEditActivity.this);
 				return false;
 			}
 		};

@@ -757,7 +757,15 @@
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
    	<string name="edit_spell_title">Edit Spell</string>
-    
+
+    <!-- Picker -->
+    <string name="picker_menu_item_search">Filter</string>
+    <string name="picker_menu_item_done">Done</string>
+    <string name="picker_menu_item_cancel">Cancel</string>
+    <string name="picker_tab_title_characters">Characters</string>
+    <string name="picker_tab_title_parties">Parties</string>
+    <string name="picker_no_items">No items</string>
+
     <!-- Initiative Tracker Strings -->
     <string name="menu_item_reset_encounter">Reset</string>
     <string name="menu_item_add_encounter_member">Add Encounter Member</string>

@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.picker;
 import android.content.Context;
 import android.content.Intent;
 import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,12 +42,14 @@ public class PickerUtils {
         ArrayList<PickerList> pickerLists = Lists.newArrayList();
 
         if (pickableCharacters != null) {
-            pickerLists.add(new PickerList(CHARACTERS_KEY, "Characters", // TODO add string to resources
+            pickerLists.add(new PickerList(CHARACTERS_KEY,
+                    context.getString(R.string.picker_tab_title_characters),
                     pickableCharacters));
         }
 
         if (pickableCharacters != null) {
-            pickerLists.add(new PickerList(PARTY_KEY, "Parties", // TODO add string to resources
+            pickerLists.add(new PickerList(PARTY_KEY,
+                    context.getString(R.string.picker_tab_title_parties),
                     pickableParties));
         }
 

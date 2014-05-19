@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
 public class ArmorEditActivity extends ParcelableEditorActivity {
@@ -59,7 +60,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
 		m_spinnerOnTouchListener = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				closeKeyboard();
+                InputMethodUtils.hideSoftKeyboard(ArmorEditActivity.this);
 				return false;
 			}
 		};

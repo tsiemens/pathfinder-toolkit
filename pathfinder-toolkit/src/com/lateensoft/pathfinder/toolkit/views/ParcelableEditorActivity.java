@@ -5,7 +5,6 @@ import com.lateensoft.pathfinder.toolkit.R;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -140,14 +138,6 @@ public abstract class ParcelableEditorActivity extends Activity {
 		spinner.setAdapter(adapter);
 		spinner.setOnTouchListener(touchListener);
 		spinner.setSelection(defaultSelection, false);
-	}
-	
-	/**
-	 * Hides the soft keyboard
-	 */
-	protected void closeKeyboard() {
-		InputMethodManager iMM = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-		iMM.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
 	
 	/**

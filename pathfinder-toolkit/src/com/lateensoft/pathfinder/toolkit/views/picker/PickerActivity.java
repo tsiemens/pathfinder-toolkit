@@ -6,10 +6,17 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +33,12 @@ public class PickerActivity extends FragmentActivity {
 
     private List<PickerList> m_pickerLists;
 
+    private ListTypeAdapter m_fragmentAdapter;
     private ViewPager m_viewPager;
+
+    private EditText m_searchEditText;
+
+    private boolean m_isSingleChoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,33 +46,37 @@ public class PickerActivity extends FragmentActivity {
         setContentView(R.layout.activity_picker);
 
         ActionBar actionBar = getActionBar();
-        List<PickerList> lists = getIntent().getParcelableArrayListExtra(PICKER_LISTS_KEY);
+        Intent intent = getIntent();
+        String title = intent.getStringExtra(TITLE_KEY);
+        if (title != null) {
+            setTitle(title);
+        }
 
+        m_isSingleChoice = intent.getBooleanExtra(IS_SINGLE_CHOICE_KEY, false);
+
+        List<PickerList> lists = intent.getParcelableArrayListExtra(PICKER_LISTS_KEY);
         if (lists == null || actionBar == null) {
             finish();
             return;
         }
-        actionBar.setDisplayHomeAsUpEnabled(true);
         m_pickerLists = lists;
-        ListTypeAdapter adapter = new ListTypeAdapter(getFragmentManager());
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        m_fragmentAdapter = new ListTypeAdapter(getFragmentManager());
 
         m_viewPager = (ViewPager)findViewById(R.id.view_pager);
-        m_viewPager.setAdapter(adapter);
+        m_viewPager.setAdapter(m_fragmentAdapter);
 
         if (lists.size() > 1) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
             ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-                public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                     m_viewPager.setCurrentItem(tab.getPosition(), true);
                 }
 
-                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                    // hide the given tab
-                }
+                @Override public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
 
-                public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                    // probably ignore this event
-                }
+                @Override public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
             };
 
             for (PickerList list : lists) {
@@ -75,15 +91,59 @@ public class PickerActivity extends FragmentActivity {
                 @Override
                 public void onPageSelected(int position) {
                     getActionBar().setSelectedNavigationItem(position);
+                    refreshFragment(position);
                 }
             });
+        }
+    }
+
+    private void refreshFragment(int position) {
+        ArrayListFragment fragment = m_fragmentAdapter.getFragment(position);
+        if (fragment != null) {
+            fragment.refreshList();
+        } else {
+            Log.e(TAG, "Error: no fragment found onPageSelected: " + position);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.base_editor_menu, menu);
+        inflater.inflate(R.menu.picker_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.mi_search);
+        ViewGroup actionView = (ViewGroup) menuItem.getActionView();
+        if (actionView!= null) {
+            m_searchEditText = (EditText) actionView.findViewById(R.id.et_search);
+            m_searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    refreshFragment(m_viewPager.getCurrentItem());
+                }
+
+                @Override public void afterTextChanged(Editable s) {}
+            });
+
+            menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    m_searchEditText.requestFocusFromTouch();
+                    InputMethodUtils.showSoftKeyboard(PickerActivity.this);
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    m_searchEditText.setText(null);
+                    InputMethodUtils.hideSoftKeyboard(PickerActivity.this);
+                    return true;
+                }
+            });
+        } else {
+            Log.e(TAG, "Error: No action view found for mi_search");
+        }
         return true;
     }
 
@@ -117,6 +177,7 @@ public class PickerActivity extends FragmentActivity {
     }
 
     private class ListTypeAdapter extends FragmentPagerAdapter {
+        SparseArray<ArrayListFragment> m_fragments =new SparseArray<ArrayListFragment>(m_pickerLists.size());
 
         public ListTypeAdapter(FragmentManager fm) {
             super(fm);
@@ -129,7 +190,19 @@ public class PickerActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return newArrayListFragmentInstance(position);
+            ArrayListFragment newFragment = newArrayListFragmentInstance(position);
+            m_fragments.put(position, newFragment);
+            return newFragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+            m_fragments.put(position, null);
+        }
+
+        public ArrayListFragment getFragment(int position) {
+            return m_fragments.get(position);
         }
     }
 
@@ -165,7 +238,48 @@ public class PickerActivity extends FragmentActivity {
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            setListAdapter(new PickerListAdapter(getActivity(), pickerList));
+            Log.d(TAG, "Fragment created");
+            refreshList();
+        }
+
+        public void refreshList() {
+            setListAdapter(new PickerListAdapter(getActivity(),  getFilteredPairs(), new PickerListAdapter.OnPairSelectionChangedListener() {
+                @Override public void onSelectionChanged(ArrayAdapter adapter, SelectablePair pair, boolean isSelected) {
+                    if (m_isSingleChoice && isSelected) {
+                        for (PickerList list : m_pickerLists) {
+                            for (SelectablePair p : list) {
+                                if (p != pair) {
+                                    p.setSelected(false);
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetInvalidated();
+                    }
+                }
+            }));
+        }
+
+        private List<SelectablePair> getFilteredPairs() {
+            if (m_searchEditText != null) {
+                Editable editable = m_searchEditText.getText();
+                if (editable != null) {
+                    String searchText = editable.toString();
+                    if (searchText != null && !searchText.isEmpty()) {
+                        return getFilteredPairs(searchText);
+                    }
+                }
+            }
+            return pickerList;
+        }
+
+        private List<SelectablePair> getFilteredPairs(String filterText) {
+            List<SelectablePair> filteredPairs = Lists.newArrayList();
+            for (SelectablePair pair : pickerList) {
+                if (pair.getValue().toLowerCase().contains(filterText.toLowerCase())) {
+                    filteredPairs.add(pair);
+                }
+            }
+            return filteredPairs;
         }
     }
 

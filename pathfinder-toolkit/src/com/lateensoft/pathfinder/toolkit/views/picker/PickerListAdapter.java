@@ -14,8 +14,15 @@ import java.util.List;
 public class PickerListAdapter extends ArrayAdapter<SelectablePair> {
     private static int ROW_LAYOUT_RESOURCE = R.layout.picker_row;
 
-    public PickerListAdapter(Context context, List<SelectablePair> items) {
+    private OnPairSelectionChangedListener m_selectedListener;
+
+    public interface OnPairSelectionChangedListener {
+        public void onSelectionChanged(ArrayAdapter adapter, SelectablePair pair, boolean isSelected);
+    }
+
+    public PickerListAdapter(Context context, List<SelectablePair> items, OnPairSelectionChangedListener listener) {
         super(context, ROW_LAYOUT_RESOURCE, items);
+        m_selectedListener = listener;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -57,6 +64,9 @@ public class PickerListAdapter extends ArrayAdapter<SelectablePair> {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             m_selectablePair.setSelected(isChecked);
+            if (m_selectedListener != null) {
+                m_selectedListener.onSelectionChanged(PickerListAdapter.this, m_selectablePair, isChecked);
+            }
         }
     }
 }
