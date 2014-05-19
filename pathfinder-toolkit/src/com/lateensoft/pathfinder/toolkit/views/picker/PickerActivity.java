@@ -13,6 +13,7 @@ import android.util.SparseArray;
 import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
@@ -100,7 +101,14 @@ public class PickerActivity extends FragmentActivity {
     private void refreshFragment(int position) {
         ArrayListFragment fragment = m_fragmentAdapter.getFragment(position);
         if (fragment != null) {
-            fragment.refreshList();
+            ListAdapter adapter = fragment.getListAdapter();
+            if (m_searchEditText != null && adapter != null) {
+                Editable editable = m_searchEditText.getText();
+                if (editable != null) {
+                    String searchText = editable.toString();
+                    ((PickerListAdapter) adapter).getFilter().filter(searchText == null ? "" : searchText);
+                }
+            }
         } else {
             Log.e(TAG, "Error: no fragment found onPageSelected: " + position);
         }
@@ -239,12 +247,10 @@ public class PickerActivity extends FragmentActivity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             Log.d(TAG, "Fragment created");
-            refreshList();
-        }
-
-        public void refreshList() {
-            setListAdapter(new PickerListAdapter(getActivity(),  getFilteredPairs(), new PickerListAdapter.OnPairSelectionChangedListener() {
-                @Override public void onSelectionChanged(ArrayAdapter adapter, SelectablePair pair, boolean isSelected) {
+            getListView().setTextFilterEnabled(true);
+            setListAdapter(new PickerListAdapter(getActivity(), pickerList, new PickerListAdapter.OnPairSelectionChangedListener() {
+                @Override
+                public void onSelectionChanged(ArrayAdapter adapter, SelectablePair pair, boolean isSelected) {
                     if (m_isSingleChoice && isSelected) {
                         for (PickerList list : m_pickerLists) {
                             for (SelectablePair p : list) {
@@ -253,33 +259,10 @@ public class PickerActivity extends FragmentActivity {
                                 }
                             }
                         }
-                        adapter.notifyDataSetInvalidated();
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }));
-        }
-
-        private List<SelectablePair> getFilteredPairs() {
-            if (m_searchEditText != null) {
-                Editable editable = m_searchEditText.getText();
-                if (editable != null) {
-                    String searchText = editable.toString();
-                    if (searchText != null && !searchText.isEmpty()) {
-                        return getFilteredPairs(searchText);
-                    }
-                }
-            }
-            return pickerList;
-        }
-
-        private List<SelectablePair> getFilteredPairs(String filterText) {
-            List<SelectablePair> filteredPairs = Lists.newArrayList();
-            for (SelectablePair pair : pickerList) {
-                if (pair.getValue().toLowerCase().contains(filterText.toLowerCase())) {
-                    filteredPairs.add(pair);
-                }
-            }
-            return filteredPairs;
         }
     }
 
