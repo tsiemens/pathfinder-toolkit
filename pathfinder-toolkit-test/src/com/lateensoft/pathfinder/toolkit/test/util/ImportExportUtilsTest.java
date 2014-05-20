@@ -27,7 +27,7 @@ public class ImportExportUtilsTest extends AndroidTestCase {
 
     public void testImportExport() throws IOException, DocumentException {
         PathfinderCharacter fullCharacter = buildTestCharacter();
-        PathfinderCharacter defaultCharacter = new PathfinderCharacter("");
+        PathfinderCharacter defaultCharacter = PathfinderCharacter.newDefaultCharacter("");
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImportExportUtils.exportCharactersToStream(Lists.newArrayList(fullCharacter, defaultCharacter), os);
@@ -42,7 +42,7 @@ public class ImportExportUtilsTest extends AndroidTestCase {
     }
 
     private static PathfinderCharacter buildTestCharacter() {
-        PathfinderCharacter character = new PathfinderCharacter("test \nchar");
+        PathfinderCharacter character = PathfinderCharacter.newDefaultCharacter("test \nchar");
         long id = character.getID();
         character.setGold(1131415.4);
 

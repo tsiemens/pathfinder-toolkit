@@ -31,49 +31,27 @@ public class PathfinderCharacter implements Parcelable, Storable {
 	private SpellBook m_spellBook;
 	
 	private long m_id;
-	
-	public PathfinderCharacter(long characterId, String name) {
-		this(name);
-		m_id = characterId;
-	}
-	
-	/**
-	 * Only use for instantiation from database
-	 */
-	public PathfinderCharacter(long characterId, double gold, AbilitySet abilitySet,
-                               FluffInfo fluff, CombatStatSet combatStats, SaveSet saves, SkillSet skills,
-                               Inventory inventory, FeatList feats, SpellBook spells) {
-		m_id = characterId;
-		m_gold = gold;
-		m_abilitySet = abilitySet;
-		m_fluffInfo = fluff;
-		m_combatStatSet = combatStats;
-		m_saveSet = saves;
-		m_skillSet = skills;
-		m_inventory = inventory;
-		m_feats = feats;
-		m_spellBook = spells;
-	}
 
-    public PathfinderCharacter(double gold, AbilitySet abilitySet,
-                               FluffInfo fluff, CombatStatSet combatStats, SaveSet saves, SkillSet skills,
-                               Inventory inventory, FeatList feats, SpellBook spells) {
-        this(UNSET_ID, gold, abilitySet, fluff, combatStats, saves, skills, inventory, feats, spells);
+    protected PathfinderCharacter(Builder builder) {
+        m_id = builder.id;
+        m_abilitySet = builder.abilitySet != null ? builder.abilitySet : new AbilitySet();
+        m_combatStatSet = builder.combatStatSet != null ? builder.combatStatSet : new CombatStatSet();
+        m_skillSet = builder.skillSet != null ? builder.skillSet : new SkillSet();
+        m_saveSet = builder.saveSet != null ? builder.saveSet : new SaveSet();
+        m_fluffInfo = builder.fluffInfo != null ? builder.fluffInfo : new FluffInfo();
+        m_inventory = builder.inventory != null ? builder.inventory : new Inventory();
+        m_feats = builder.feats != null ? builder.feats : new FeatList();
+        m_spellBook = builder.spellBook != null ? builder.spellBook : new SpellBook();
+        m_gold = builder.gold;
+        if (builder.name != null) {
+            setName(builder.name);
+        }
     }
-	
-	public PathfinderCharacter(String name) {
-		m_id = UNSET_ID;
-		m_abilitySet = new AbilitySet();
-		m_combatStatSet = new CombatStatSet();
-		m_skillSet = new SkillSet();
-		m_saveSet = new SaveSet();
-		m_fluffInfo = new FluffInfo();
-		m_inventory = new Inventory();
-		m_feats = new FeatList();
-		m_spellBook = new SpellBook();
-		m_gold = 0;
-		setName(name);
-	}
+
+    public static PathfinderCharacter newDefaultCharacter(String name) {
+        Builder builder = new Builder().setName(name);
+        return new PathfinderCharacter(builder);
+    }
 	
 	public PathfinderCharacter(Parcel in) {
 		Bundle objectBundle = in.readBundle();
@@ -150,7 +128,7 @@ public class PathfinderCharacter implements Parcelable, Storable {
 	}
 	
 	public void setName(String name){
-		if(name != null && name != "")
+		if(name != null && !name.isEmpty())
 			m_fluffInfo.setName(name);
 	}
 
@@ -243,5 +221,81 @@ public class PathfinderCharacter implements Parcelable, Storable {
         result = 31 * result + m_spellBook.hashCode();
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static class Builder<T extends Builder> {
+        private long id = UNSET_ID;
+        private String name;
+        private AbilitySet abilitySet;
+        private CombatStatSet combatStatSet;
+        private SkillSet skillSet;
+        private SaveSet saveSet;
+        private FluffInfo fluffInfo;
+        private Inventory inventory;
+        private double gold = 0;
+        private FeatList feats;
+        private SpellBook spellBook;
+
+        public Builder() {}
+
+        public PathfinderCharacter build() {
+            return new PathfinderCharacter(this);
+        }
+
+        public T setId(long id) {
+            this.id = id;
+            return (T) this;
+        }
+
+        public T setName(String name) {
+            this.name = name;
+            return (T) this;
+        }
+
+        public T setAbilitySet(AbilitySet abilitySet) {
+            this.abilitySet = abilitySet;
+            return (T) this;
+        }
+
+        public T setCombatStatSet(CombatStatSet combatStatSet) {
+            this.combatStatSet = combatStatSet;
+            return (T) this;
+        }
+
+        public T setSkillSet(SkillSet skillSet) {
+            this.skillSet = skillSet;
+            return (T) this;
+        }
+
+        public T setSaveSet(SaveSet saveSet) {
+            this.saveSet = saveSet;
+            return (T) this;
+        }
+
+        public T setFluffInfo(FluffInfo fluffInfo) {
+            this.fluffInfo = fluffInfo;
+            return (T) this;
+        }
+
+        public T setInventory(Inventory inventory) {
+            this.inventory = inventory;
+            return (T) this;
+        }
+
+        public T setGold(double gold) {
+            this.gold = gold;
+            return (T) this;
+        }
+
+        public T setFeats(FeatList feats) {
+            this.feats = feats;
+            return (T) this;
+        }
+
+        public T setSpellBook(SpellBook spellBook) {
+            this.spellBook = spellBook;
+            return (T) this;
+        }
     }
 }

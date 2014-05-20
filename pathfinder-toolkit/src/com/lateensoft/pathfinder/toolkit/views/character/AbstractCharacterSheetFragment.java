@@ -117,7 +117,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 * the fragments.
 	 */
 	public void addNewCharacterAndSelect() {
-		PathfinderCharacter newChar = new PathfinderCharacter("New Adventurer");
+		PathfinderCharacter newChar = PathfinderCharacter.newDefaultCharacter("New Adventurer");
 		long id = addCharacterToDB(newChar);
 		if (id != -1) {
 			setSelectedCharacter(id);

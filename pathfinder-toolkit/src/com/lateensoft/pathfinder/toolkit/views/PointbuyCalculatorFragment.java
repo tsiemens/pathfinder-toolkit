@@ -272,7 +272,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
 		switch (item.getItemId()) {
 		case R.id.mi_export_to_new:
-			PathfinderCharacter character = new PathfinderCharacter("From calc");
+			PathfinderCharacter character = PathfinderCharacter.newDefaultCharacter("From calc");
 			m_abilityCalc.setCalculatedAbilityScores(character.getAbilitySet());
 			Resources r = getResources();
 			character.getFluff().setRace(r.getStringArray(R.array.races_array)

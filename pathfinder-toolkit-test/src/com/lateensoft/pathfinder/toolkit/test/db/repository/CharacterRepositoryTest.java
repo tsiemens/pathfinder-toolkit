@@ -17,7 +17,7 @@ public class CharacterRepositoryTest extends BaseRepositoryTest {
 		super.setUp();
 		m_repo = new CharacterRepository();
 		
-		m_char1 = new PathfinderCharacter("A");
+		m_char1 = PathfinderCharacter.newDefaultCharacter("A");
 		m_repo.insert(m_char1);
 	}
 	

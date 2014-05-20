@@ -22,8 +22,19 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	private static final String TABLE = "Character";
 	private static final String GOLD = "Gold";
-	
-	public CharacterRepository() {
+
+    private FluffInfoRepository m_fluffRepo = new FluffInfoRepository();
+    private AbilityRepository m_abilityRepo = new AbilityRepository();
+    private CombatStatRepository m_combatStatRepo = new CombatStatRepository();
+    private SaveRepository m_saveRepo = new SaveRepository();
+    private SkillRepository m_skillRepo = new SkillRepository();
+    private ItemRepository m_itemRepo = new ItemRepository();
+    private WeaponRepository m_weaponRepo = new WeaponRepository();
+    private ArmorRepository m_armorRepo = new ArmorRepository();
+    private FeatRepository m_featRepo = new FeatRepository();
+    private SpellRepository m_spellRepo = new SpellRepository();
+
+    public CharacterRepository() {
 		super();
 		TableAttribute id = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
 		TableAttribute gold = new TableAttribute(GOLD, SQLDataType.REAL);
@@ -154,53 +165,31 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 
 	@Override
 	protected PathfinderCharacter buildFromHashTable(Hashtable<String, Object> hashTable) {
-		long id = (Long) hashTable.get(CHARACTER_ID);
-		double gold = (Double) hashTable.get(GOLD);
-		
-		// Fluff
-		FluffInfoRepository fluffRepo = new FluffInfoRepository();
-		FluffInfo fluff = fluffRepo.query(id);
-		
-		// Ability Scores
-		AbilityRepository abilityRepository = new AbilityRepository();
-		AbilitySet abilityScores = abilityRepository.querySet(id);
-
-		// Combat Stats
-		CombatStatRepository csRepo = new CombatStatRepository();
-		CombatStatSet csSet = csRepo.query(id);
-
-		// Saves
-		SaveRepository saveRepo = new SaveRepository();
-		SaveSet saves = saveRepo.querySet(id);
-
-		// Skills
-		SkillRepository skillRepo = new SkillRepository();
-		SkillSet skills = skillRepo.querySet(id);
-		
-		Inventory inventory = new Inventory();
-		// Items
-		ItemRepository itemRepo = new ItemRepository();
-		inventory.getItems().addAll(itemRepo.querySet(id));
-		
-		// Weapons
-		WeaponRepository weaponRepo = new WeaponRepository();
-		inventory.getWeapons().addAll(weaponRepo.querySet(id));
-		
-		// Armor
-		ArmorRepository armorRepo = new ArmorRepository();
-		inventory.getArmors().addAll(armorRepo.querySet(id));
-		
-		// Feats
-		FeatRepository featRepo = new FeatRepository();
-		FeatList feats = new FeatList(featRepo.querySet(id));
-					
-		// Spells
-		SpellRepository spellRepo = new SpellRepository();
-		SpellBook spells = new SpellBook(spellRepo.querySet(id));
-
-		return new PathfinderCharacter(id, gold, abilityScores,
-				fluff, csSet, saves, skills, inventory, feats, spells);
+        PathfinderCharacter.Builder builder = new PathfinderCharacter.Builder();
+        populateBuilderFromHashTable(hashTable, builder);
+		return builder.build();
 	}
+
+    protected void populateBuilderFromHashTable(Hashtable<String, Object> hashTable,
+                                             PathfinderCharacter.Builder builder) {
+        long id = (Long) hashTable.get(CHARACTER_ID);
+        builder.setId(id)
+            .setGold((Double) hashTable.get(GOLD))
+            .setFluffInfo(m_fluffRepo.query(id))
+            .setAbilitySet(m_abilityRepo.querySet(id))
+            .setCombatStatSet(m_combatStatRepo.query(id))
+            .setSaveSet(m_saveRepo.querySet(id))
+            .setSkillSet(m_skillRepo.querySet(id));
+
+        Inventory inventory = new Inventory();
+        inventory.getItems().addAll(m_itemRepo.querySet(id));
+        inventory.getWeapons().addAll(m_weaponRepo.querySet(id));
+        inventory.getArmors().addAll(m_armorRepo.querySet(id));
+
+        builder.setInventory(inventory)
+            .setFeats(new FeatList(m_featRepo.querySet(id)))
+            .setSpellBook(new SpellBook(m_spellRepo.querySet(id)));
+    }
 
 	@Override
 	protected ContentValues getContentValues(PathfinderCharacter object) {

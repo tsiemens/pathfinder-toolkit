@@ -1,10 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.*;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -32,16 +28,21 @@ public class CharacterXMLAdapter extends XMLObjectAdapter<PathfinderCharacter> {
 
     @Override
     protected PathfinderCharacter createObjectForElement(Element element) throws InvalidObjectException {
-        double gold = getBoundedDoubleAttribute(element, GOLD_ATTR, 0.0, Double.MAX_VALUE);
-        FluffInfo fluff = getSubObject(element, m_fluffXMLAdapter);
-        AbilitySet abilitySet = getSubObject(element, m_abilitySetXMLAdapter);
-        CombatStatSet combatStatSet = getSubObject(element, m_combatStatXMLAdapter);
-        FeatList feats = getSubObject(element, m_featListXMLAdapter);
-        Inventory inv = getSubObject(element, m_inventoryXMLAdapter);
-        SaveSet saves = getSubObject(element, m_saveSetXMLAdapter);
-        SkillSet skillSet = getSubObject(element, m_skillSetXMLAdapter);
-        SpellBook spells = getSubObject(element, m_spellbookXMLAdapter);
-        return new PathfinderCharacter(gold, abilitySet, fluff, combatStatSet, saves, skillSet, inv, feats, spells);
+        PathfinderCharacter.Builder builder = new PathfinderCharacter.Builder();
+        setBuilderContentForElement(builder, element);
+        return builder.build();
+    }
+
+    protected void setBuilderContentForElement(PathfinderCharacter.Builder builder, Element element) throws InvalidObjectException {
+        builder.setGold(getBoundedDoubleAttribute(element, GOLD_ATTR, 0.0, Double.MAX_VALUE))
+            .setFluffInfo(getSubObject(element, m_fluffXMLAdapter))
+            .setAbilitySet(getSubObject(element, m_abilitySetXMLAdapter))
+            .setCombatStatSet(getSubObject(element, m_combatStatXMLAdapter))
+            .setFeats(getSubObject(element, m_featListXMLAdapter))
+            .setInventory(getSubObject(element, m_inventoryXMLAdapter))
+            .setSaveSet(getSubObject(element, m_saveSetXMLAdapter))
+            .setSkillSet(getSubObject(element, m_skillSetXMLAdapter))
+            .setSpellBook(getSubObject(element, m_spellbookXMLAdapter));
     }
 
     @Override

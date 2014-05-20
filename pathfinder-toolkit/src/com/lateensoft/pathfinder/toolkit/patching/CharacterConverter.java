@@ -11,7 +11,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 public class CharacterConverter {
 
 	public static PathfinderCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
-		PathfinderCharacter newCharacter = new PathfinderCharacter("");
+		PathfinderCharacter newCharacter = PathfinderCharacter.newDefaultCharacter("");
 		newCharacter.setGold(oldCharacter.mGold);
 		setFluff(newCharacter.getFluff(), oldCharacter.getFluff());
 		setAbilities(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet(), oldCharacter.getTempAbilitySet());
