@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.serialize;
 
+import android.test.AndroidTestCase;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;
 import com.lateensoft.pathfinder.toolkit.serialize.FeatXMLAdapter;
 import org.dom4j.DocumentException;
@@ -11,18 +12,17 @@ import java.io.InvalidObjectException;
 /**
  * @author trevsiemens
  */
-public class FeatXMLAdapterTest extends AbstractXMLAdapterTestCase {
+public class FeatXMLAdapterTest extends AndroidTestCase {
 
     private static final FeatXMLAdapter m_adapter = new FeatXMLAdapter();
 
-    public void testToObject() throws InvalidObjectException, DocumentException {
-        Element element = DocumentHelper.parseText("<feat name=\"feat1\">" +
-                "<desc>description and \nStuff</desc></feat>").getRootElement();
+    public void testConversion() throws InvalidObjectException, DocumentException {
         Feat expectedFeat = new Feat();
-        expectedFeat.setName("feat1");
+        expectedFeat.setName("<feat1>");
         expectedFeat.setDescription("description and \nStuff");
+        Element featElement = m_adapter.toXML(expectedFeat);
 
-        Feat generatedSpell = m_adapter.toObject(element);
+        Feat generatedSpell = m_adapter.toObject(featElement);
         assertEquals(expectedFeat, generatedSpell);
     }
 
@@ -41,17 +41,6 @@ public class FeatXMLAdapterTest extends AbstractXMLAdapterTestCase {
             m_adapter.toObject(invalidElement2);
             fail();
         } catch (InvalidObjectException e) {}
-    }
-
-    public void testToXML() throws InvalidObjectException, DocumentException {
-        Element expectedElement = DocumentHelper.parseText("<feat name=\"&lt;feat1&lt;\">" +
-                "<desc>description &lt;and&gt; \nStuff</desc></feat>").getRootElement();
-        Feat spell = new Feat();
-        spell.setName("<feat1>");
-        spell.setDescription("description <and> \nStuff");
-
-        Element generatedElement = m_adapter.toXML(spell);
-        assertEquals(expectedElement, generatedElement);
     }
 
     private void assertEquals(Feat expected, Feat actual) {

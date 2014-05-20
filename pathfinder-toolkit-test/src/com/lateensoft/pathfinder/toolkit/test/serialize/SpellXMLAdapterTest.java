@@ -1,5 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.serialize;
 
+import android.test.AndroidTestCase;
 import com.lateensoft.pathfinder.toolkit.model.character.Spell;
 import com.lateensoft.pathfinder.toolkit.serialize.SpellXMLAdapter;
 import org.dom4j.DocumentException;
@@ -11,18 +12,17 @@ import java.io.InvalidObjectException;
 /**
  * @author trevsiemens
  */
-public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
+public class SpellXMLAdapterTest extends AndroidTestCase {
 
     private static final SpellXMLAdapter m_adapter = new SpellXMLAdapter();
 
-    public void testToObject() throws InvalidObjectException, DocumentException {
-        Element element = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
-                "<desc>description and \nStuff</desc></spell>").getRootElement();
+    public void tesConvert() throws InvalidObjectException, DocumentException {
         Spell expectedSpell = new Spell("fire", 3);
         expectedSpell.setPrepared(20);
         expectedSpell.setDescription("description and \nStuff");
+        Element spellElement = m_adapter.toXML(expectedSpell);
 
-        Spell generatedSpell = m_adapter.toObject(element);
+        Spell generatedSpell = m_adapter.toObject(spellElement);
         assertEquals(expectedSpell, generatedSpell);
     }
 
@@ -55,17 +55,6 @@ public class SpellXMLAdapterTest extends AbstractXMLAdapterTestCase {
                     "<desc>description and \nStuff</desc></spell>").getRootElement();
             m_adapter.toObject(invalidElement4);
         } catch (InvalidObjectException e) {}
-    }
-
-    public void testToXML() throws InvalidObjectException, DocumentException {
-        Element expectedElement = DocumentHelper.parseText("<spell name=\"fire\" level=\"3\" prepared=\"20\">" +
-                "<desc>description and \nStuff</desc></spell>").getRootElement();
-        Spell spell = new Spell("fire", 3);
-        spell.setPrepared(20);
-        spell.setDescription("description and \nStuff");
-
-        Element generatedElement = m_adapter.toXML(spell);
-        assertEquals(expectedElement, generatedElement);
     }
 
     private void assertEquals(Spell expected, Spell actual) {
