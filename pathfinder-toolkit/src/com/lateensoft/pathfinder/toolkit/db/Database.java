@@ -76,6 +76,11 @@ public class Database extends SQLiteOpenHelper {
 		return result;
 	}
 
+    public Cursor rawQuery(String query, String[] selectionArgs) {
+        open();
+        return m_database.rawQuery(query, selectionArgs);
+    }
+
 	/**
 	 * Updates table
 	 * @param table

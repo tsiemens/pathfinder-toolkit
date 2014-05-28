@@ -23,6 +23,9 @@ public class TableCreator {
 		db.execSQL(createSpell());
 		db.execSQL(createFeat());
 		db.execSQL(createFluffInfo());
+
+        db.execSQL(createEncounter());
+        db.execSQL(createEncounterParticipant());
 	}
 	
 	public String createSkill() {
@@ -146,7 +149,8 @@ public class TableCreator {
 					"ON DELETE CASCADE " +
 				");";
 	}
-	
+
+    // TODO remove this
 	public String createPartyMember() {
 		Log.d(TAG, "Creating party member table");
 		return "CREATE TABLE PartyMember (" +
@@ -171,15 +175,6 @@ public class TableCreator {
 				"RolledValue INTEGER, " +
 				"FOREIGN KEY (party_id) REFERENCES Party(party_id) " +
 					"ON DELETE CASCADE " +
-				");";
-	}
-	
-	public String createParty() {
-		Log.d(TAG, "Creating party table");
-		return "CREATE TABLE Party (" +
-				"party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"Name TEXT, " +
-				"InEncounter INTEGER" +
 				");";
 	}
 	
@@ -241,4 +236,49 @@ public class TableCreator {
 				"Gold REAL " +
 				");";
 	}
+
+    public String createParty() {
+        Log.d(TAG, "Creating party table");
+        return "CREATE TABLE Party (" +
+                "party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "Name TEXT, " +
+                "InEncounter INTEGER" +
+                ");";
+    }
+
+    public String createPartyMembership() {
+        Log.d(TAG, "Creating party membership table");
+        return "CREATE TABLE PartyMembership (" +
+                "party_id INTEGER, " +
+                "character_id INTEGER, "  +
+                "PRIMARY KEY (party_id, character_id) " +
+                "FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+                "ON DELETE CASCADE, " +
+                "FOREIGN KEY (party_id) REFERENCES Party(party_id) " +
+                "ON DELETE CASCADE " +
+                ");";
+    }
+
+    public String createEncounter() {
+        Log.d(TAG, "Creating encounter table");
+        return "CREATE TABLE Encounter (" +
+                "encounter_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "Name TEXT " +
+                ");";
+    }
+
+    public String createEncounterParticipant() {
+        Log.d(TAG, "Creating encounter participant table");
+        return "CREATE TABLE EncounterParticipant (" +
+                "encounter_id INTEGER, " +
+                "character_id INTEGER, "  +
+                "InitiativeScore INTEGER, " +
+                "TurnOrder INTEGER, " +
+                "PRIMARY KEY (encounter_id, character_id) " +
+                "FOREIGN KEY (character_id) REFERENCES Character(character_id) " +
+                "ON DELETE CASCADE, " +
+                "FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id) " +
+                "ON DELETE CASCADE " +
+                ");";
+    }
 }

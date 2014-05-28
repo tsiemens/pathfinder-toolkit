@@ -13,14 +13,18 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     private int m_initiativeScore;
     private int m_turnOrder;
 
+    private long m_encounterId;
+
     protected EncounterParticipant(Builder builder) {
         super(builder);
         m_initiativeScore = builder.initiativeScore;
         m_turnOrder = builder.turnOrder;
+        m_encounterId = builder.encounterId;
     }
 
     public EncounterParticipant(Parcel in) {
         super(in);
+        m_encounterId = in.readLong();
         m_initiativeScore = in.readInt();
         m_turnOrder = in.readInt();
     }
@@ -28,6 +32,7 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
+        out.writeLong(m_encounterId);
         out.writeInt(m_initiativeScore);
         out.writeInt(m_turnOrder);
     }
@@ -46,6 +51,14 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
 
     public void setTurnOrder(int turnOrder) {
         m_turnOrder = turnOrder;
+    }
+
+    public long getEncounterId() {
+        return m_encounterId;
+    }
+
+    public void setEncounterId(long encounterId) {
+        m_encounterId = encounterId;
     }
 
     @Override
@@ -70,10 +83,35 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EncounterParticipant)) return false;
+        if (!super.equals(o)) return false;
+
+        EncounterParticipant that = (EncounterParticipant) o;
+
+        if (m_encounterId != that.m_encounterId) return false;
+        if (m_initiativeScore != that.m_initiativeScore) return false;
+        if (m_turnOrder != that.m_turnOrder) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + m_initiativeScore;
+        result = 31 * result + m_turnOrder;
+        result = 31 * result + (int) (m_encounterId ^ (m_encounterId >>> 32));
+        return result;
+    }
+
     @SuppressWarnings("unchecked")
     public static class Builder<T extends Builder> extends PathfinderCharacter.Builder<T> {
         private int initiativeScore = 0;
         private int turnOrder = 0;
+        private long encounterId = UNSET_ID;
 
         public Builder() {
             super();
@@ -90,6 +128,11 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
 
         public T setTurnOrder(int turnOrder) {
             this.turnOrder = turnOrder;
+            return (T) this;
+        }
+
+        public T setEncounterId(long encounterId) {
+            this.encounterId = encounterId;
             return (T) this;
         }
     }

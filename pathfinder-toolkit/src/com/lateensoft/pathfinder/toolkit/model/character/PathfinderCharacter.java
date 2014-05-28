@@ -33,7 +33,6 @@ public class PathfinderCharacter implements Parcelable, Storable {
 	private long m_id;
 
     protected PathfinderCharacter(Builder builder) {
-        m_id = builder.id;
         m_abilitySet = builder.abilitySet != null ? builder.abilitySet : new AbilitySet();
         m_combatStatSet = builder.combatStatSet != null ? builder.combatStatSet : new CombatStatSet();
         m_skillSet = builder.skillSet != null ? builder.skillSet : new SkillSet();
@@ -46,6 +45,7 @@ public class PathfinderCharacter implements Parcelable, Storable {
         if (builder.name != null) {
             setName(builder.name);
         }
+        this.setID(builder.id);
     }
 
     public static PathfinderCharacter newDefaultCharacter(String name) {

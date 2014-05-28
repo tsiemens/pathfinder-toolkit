@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
@@ -20,7 +21,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
-	private static final String TABLE = "Character";
+	public static final String TABLE = "Character";
 	private static final String GOLD = "Gold";
 
     private FluffInfoRepository m_fluffRepo = new FluffInfoRepository();
@@ -247,6 +248,32 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					(String)hashTable.get(FluffInfoRepository.NAME)));
 			cursor.moveToNext();
 		}
+        cursor.close();
 		return characters;
 	}
+
+    public boolean doesExist(long id) {
+        Cursor cursor= getDatabase().rawQuery("select count(*) count from " + TABLE + " where " +
+                        CHARACTER_ID + "=" + id, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(cursor.getColumnIndex("count"));
+        cursor.close();
+        return count != 0;
+    }
+
+    public String[] getCombinedTableColumns(String[] subTableCols) {
+        List<String> subTableColsList = Lists.newArrayList(subTableCols);
+        subTableColsList.remove(CHARACTER_ID);
+
+        List<String> combinedCols = Lists.newArrayList(m_tableInfo.getColumns());
+        int idColIndex = combinedCols.indexOf(CHARACTER_ID);
+        // renames the column to simply character_id. ie. SELECT Character.character_id character_id FROM ...
+        combinedCols.set(idColIndex, CharacterRepository.TABLE + "." + CHARACTER_ID + " " + CHARACTER_ID);
+
+        combinedCols.addAll(subTableColsList);
+
+        String[] colsArray = new String[combinedCols.size()];
+        combinedCols.toArray(colsArray);
+        return colsArray;
+    }
 }
