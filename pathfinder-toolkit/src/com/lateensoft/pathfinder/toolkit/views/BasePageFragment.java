@@ -79,10 +79,10 @@ public abstract class BasePageFragment extends Fragment{
         }
     }
 
-    public void switchToPage(final long pageId) {
+    public void switchToPage(final Class<? extends BasePageFragment> fragment) {
         new MainActivityAction() {
             @Override public void performOnMainActivity(MainActivity activity) {
-                activity.showView(pageId);
+                activity.showFragment(fragment);
             }
         }.performAction();
     }

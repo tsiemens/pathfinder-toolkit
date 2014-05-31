@@ -35,15 +35,23 @@ public class UpdatePatcher {
 		Database.getInstance();
 		
 		if (prevVer != -1) {
-			// Apply each patch in order, as required
-			if (prevVer < 5) {
-				applyPreV5Patch();
-			}
+            // Apply each patch in order, as required.
 			if (prevVer < 6) {
+                // These are non-forward compatible, and will need to be updated.
+                if (prevVer < 5) {
+                    applyPreV5Patch();
+                }
 				if (!applyV5ToCurrentPatch()) {
 					completeSuccess = false;
 				}
-			}
+			} else {
+                // These should be mostly forward compatible patches from now on.
+                if (prevVer < 10) {
+                    if (!applyV9ToV10Patch()) {
+                        completeSuccess = false;
+                    }
+                }
+            }
 		}
 		
 		updateLastUsedVersion();
@@ -53,6 +61,19 @@ public class UpdatePatcher {
 		}
 		return completeSuccess;
 	}
+
+    /**
+     * TODO - update party table to not have isencounterparty col
+     * TODO - create encounter, partymembership, encounterparticipation tables
+     * TODO - migrate partymembers to characters with party membership, and delete partymembers table
+     * TODO - convert single encounter in party database to an encounter, then remove
+     * All this should be done while avoiding the use of our datamodels to provide forward compatibility.
+     * This may be unavoidable though with the transfer from partymember to character
+     */
+    private static boolean applyV9ToV10Patch() {
+
+        return false;
+    }
 	
 	/**
 	 * In version 6, the database was overhauled, so old values must be extracted from that database, and migrated

@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
+import com.lateensoft.pathfinder.toolkit.adapters.nav.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
@@ -32,6 +32,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.util.AbilitySetCalculator;
 import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
+import com.lateensoft.pathfinder.toolkit.views.character.CharacterAbilitiesFragment;
 
 public class PointbuyCalculatorFragment extends BasePageFragment {
 	
@@ -281,7 +282,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 			if (m_characterRepo.insert(character) != -1) {
 				AppPreferences.getInstance().putLong(
 						AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
-				switchToPage(NavDrawerAdapter.ABILITIES_ID);
+				switchToPage(CharacterAbilitiesFragment.class);
 			}
 			break;
 		case R.id.mi_export_to_existing:
@@ -333,7 +334,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
 					AppPreferences.getInstance().putLong(
 							AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterIdSelectedInDialog);
-                    switchToPage(NavDrawerAdapter.ABILITIES_ID);
+                    switchToPage(CharacterAbilitiesFragment.class);
 				}
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:

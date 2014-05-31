@@ -11,7 +11,6 @@ import android.net.Uri;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.adapters.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.util.*;
@@ -349,7 +348,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 * mCharacter, and updates them. Ends with current tab set to Fluff.
 	 */
 	public void performUpdateReset() {
-        switchToPage(NavDrawerAdapter.FLUFF_ID);
+        switchToPage(CharacterFluffFragment.class);
 	}
 
 	public long getCurrentCharacterID() {

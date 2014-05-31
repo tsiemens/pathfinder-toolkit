@@ -28,14 +28,13 @@
     <string name="about_community_use_clause">This application uses trademarks and/or copyrights owned by Paizo Publishing, LLC, which are used under Paizo\'s Community Use Policy. We are expressly prohibited from charging you to use or access this content. This application is not published, endorsed, or specifically approved by Paizo Publishing. For more information about Paizo\'s Community Use Policy, please visit paizo.com/communityuse. For more information about Paizo Publishing and Paizo products, please visit paizo.com.</string>
 
     <!-- Main Menu Strings -->
-    <string-array name="main_menu_array">
-        <item>Characters</item>
-        <item>Initiative Tracker</item>
-        <item>Party Skill Checker</item>
-        <item>Party Manager</item>
-        <item>Pointbuy Calculator</item>
-        <item>Dice Roller</item>
-    </string-array>
+    <string name="main_menu_character_group">Characters</string>
+    <string name="main_menu_init_tracker">Initiative Tracker</string>
+    <string name="main_menu_party_skill_checker">Party Skill Checker</string>
+    <string name="main_menu_party_manager">Party Manager</string>
+    <string name="main_menu_pointbuy">Pointbuy Calculator</string>
+    <string name="main_menu_dice_roller">Dice Roller</string>
+
     <string name="rate_dialog_title">Please rate our app!</string>
     <string name="rate_dialog_message">You rolled a 1 on your Rate Popup saving throw! Rate now to get a +5 cloak of ad avoidance. You can keep it until it slips back into the astral plane on the next update.</string>
     <string name="rate_dialog_positive_button">Rate</string>
@@ -61,6 +60,7 @@
     <string name="tab_character_fluff">Fluff</string>
     <string name="tab_character_spells">Spells</string>
     <string name="tab_character_combat_stats">Combat Stats</string>
+    <string name="tab_character_membership">Party Membership</string>
     <string name="menu_item_character_list">Characters</string>
     <string name="menu_item_new_character">New Character</string>
     <string name="menu_item_delete_character">Delete Character</string>
@@ -757,6 +757,9 @@
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
    	<string name="edit_spell_title">Edit Spell</string>
+
+    <!-- Character Membership Strings -->
+    <string name="membership_add_button">Add To Party</string>
 
     <!-- Picker -->
     <string name="picker_menu_item_search">Filter</string>
