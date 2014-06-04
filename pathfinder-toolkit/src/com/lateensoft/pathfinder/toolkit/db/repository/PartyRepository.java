@@ -1,30 +1,33 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map.Entry;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.NamedList;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
-import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 
-public class PartyRepository extends BaseRepository<CampaignParty> {
+import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository.Membership;
+
+public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacter>> {
 	private static final String TABLE = "Party";
 	private static final String PARTY_ID = "party_id";
 	private static final String NAME = "Name";
-	private static final String IN_ENCOUNTER = "InEncounter";
-	
+
+    PartyMembershipRepository m_membersRepo = new PartyMembershipRepository();
+
 	public PartyRepository() {
 		super();
 		TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
 		TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
-		TableAttribute isInEncounter = new TableAttribute(IN_ENCOUNTER, SQLDataType.INTEGER);
-		TableAttribute[] columns = {id, name, isInEncounter};
+		TableAttribute[] columns = {id, name};
 		m_tableInfo = new TableInfo(TABLE, columns);
 	}
 	
@@ -33,54 +36,50 @@ public class PartyRepository extends BaseRepository<CampaignParty> {
 	 * 
 	 * @return the id of the character inserted, or -1 if failure occurred.
 	 */
-	public long insert(CampaignParty party, boolean isEncounterParty) {
+    @Override
+	public long insert(NamedList<PathfinderCharacter> party) {
 		ContentValues values = getContentValues(party);
-		values.put(IN_ENCOUNTER, isEncounterParty);
-		
+
 		String table = m_tableInfo.getTable();
 		long id = getDatabase().insert(table, values);
 		if (id != -1 && !isIDSet(party)) {
 			party.setID(id);
 		}
 
-		if (id != -1) {
-			party.setID(id);
+        if (id != -1) {
+            party.setID(id);
 
-            long memberId ;
-			PartyMemberRepository memberRepo = new PartyMemberRepository();
-            for (PartyMember member : party) {
-                memberId = memberRepo.insert(member);
-                if (memberId == -1) {
-                    delete(id);
-                    return -1;
+            CharacterRepository charRepo = new CharacterRepository();
+            for (PathfinderCharacter member : party) {
+                if (!charRepo.doesExist(member.getID())) {
+                    if (charRepo.insert(member) == -1) {
+                        delete(id);
+                        return -1;
+                    }
                 }
             }
-		}
+        }
 		return id;
-	}
-	
-	/**
-	 * Same as insert(object, false)
-	 */
-	@Override
-	public long insert(CampaignParty object) {
-		return insert(object, false);
 	}
 
 	@Override
-	protected CampaignParty buildFromHashTable(Hashtable<String, Object> hashTable) {
+	protected NamedList<PathfinderCharacter> buildFromHashTable(Hashtable<String, Object> hashTable) {
 		long id = (Long) hashTable.get(PARTY_ID);
 		String name = (String) hashTable.get(NAME);
 			
-		// PartyMembers
-		PartyMemberRepository memberRepo = new PartyMemberRepository();
-		List<PartyMember> members = memberRepo.querySet(id);
+		CharacterRepository charRepo = new CharacterRepository();
+
+        List<Long> characterIds = m_membersRepo.queryCharactersInParty(id);
+		List<PathfinderCharacter> members = Lists.newArrayList();
+        for (Long characterId : characterIds) {
+            members.add(charRepo.query(characterId));
+        }
 		
-		return new CampaignParty(id, name, members);
+		return new NamedList<PathfinderCharacter>(id, name, members);
 	}
 
 	@Override
-	protected ContentValues getContentValues(CampaignParty object) {
+	protected ContentValues getContentValues(NamedList<PathfinderCharacter> object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
 			values.put(PARTY_ID, object.getID());
@@ -88,48 +87,64 @@ public class PartyRepository extends BaseRepository<CampaignParty> {
 		values.put(NAME, object.getName());
 		return values;
 	}
+
+    public PartyMembershipRepository getMembersRepo() { return m_membersRepo; }
 	
-	/**
-	 * Returns all parties
-	 * @return Array of IdNamePair, ordered alphabetically by name
-	 */
-	public List<Entry<Long, String>> queryIdNameList() {
-		String selector = IN_ENCOUNTER + "=0";
-		String orderBy = NAME + " ASC";
-		String table = m_tableInfo.getTable();
-		String[] columns = m_tableInfo.getColumns();
-		Cursor cursor = getDatabase().query(true, table, columns, selector, 
-				null, null, null, orderBy, null);
-		
-		ArrayList<Entry<Long, String>> members = new ArrayList<Entry<Long, String>>(cursor.getCount());
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			members.add(new SimpleEntry<Long, String>((Long)hashTable.get(PARTY_ID), 
-					(String)hashTable.get(NAME)));
-			cursor.moveToNext();
-		}
-		return members;
-	}
-	
-	/**
-	 * Returns party which is marked as encounter party
-	 * @return the encounter party or null if none is set
-	 */
-	public CampaignParty queryEncounterParty() {
-		String selector = IN_ENCOUNTER + "<>0";
-		String table = m_tableInfo.getTable();
-		String[] columns = m_tableInfo.getColumns();
-		Cursor cursor = getDatabase().query(true, table, columns, selector, 
-				null, null, null, null, null);
-		
-		CampaignParty encounterParty = null;
-		cursor.moveToFirst();
-		if (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			encounterParty = buildFromHashTable(hashTable);
-		}
-		return encounterParty;
+	/** @return ids and names of all parties **/
+	public List<IdStringPair> queryIdNameList() {
+		return queryFilteredIdNameList(null);
 	}
 
+    public List<IdStringPair> queryFilteredIdNameList(String selector) {
+        String orderBy = NAME + " ASC";
+        String table = m_tableInfo.getTable();
+        String[] columns = m_tableInfo.getColumns();
+        Cursor cursor = getDatabase().query(true, table, columns, selector,
+                null, null, null, orderBy, null);
+
+        List<IdStringPair> members = Lists.newArrayListWithCapacity(cursor.getCount());
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            members.add(new IdStringPair((Long)hashTable.get(PARTY_ID),
+                    (String)hashTable.get(NAME)));
+            cursor.moveToNext();
+        }
+        return members;
+    }
+	
+	@Deprecated
+	public CampaignParty queryEncounterParty() {
+		throw new UnsupportedOperationException();
+	}
+
+    public int removeCharactersFromParty(long partyId, List<Long> characterIds) {
+        int numRemoved = 0;
+        for (Long characterId : characterIds) {
+            numRemoved += m_membersRepo.delete(partyId, characterId);
+        }
+
+        return numRemoved;
+    }
+
+    public void addCharactersToParty(long partyId, List<Long> characterIds) {
+        for (Long characterId : characterIds) {
+            m_membersRepo.insert(new Membership(partyId, characterId));
+        }
+    }
+
+    public List<IdStringPair> queryPartyNamesForCharacter(long characterId) {
+        List<Long> partyIds = m_membersRepo.queryPartiesForCharacter(characterId);
+        String selector = QueryUtils.selectorForAll(PARTY_ID, partyIds);
+        return queryFilteredIdNameList(selector);
+    }
+
+    public List<IdStringPair> queryCharacterNamesForParty(long partyId) {
+        List<Long> charactersInParty = m_membersRepo.queryCharactersInParty(partyId);
+
+        CharacterRepository charRepo = new CharacterRepository();
+        String characterIdCol = CharacterRepository.TABLE + "." + CharacterRepository.CHARACTER_ID;
+        String selector = QueryUtils.selectorForAll(characterIdCol, charactersInParty);
+        return charRepo.queryFilteredIdNameList(selector);
+    }
 }

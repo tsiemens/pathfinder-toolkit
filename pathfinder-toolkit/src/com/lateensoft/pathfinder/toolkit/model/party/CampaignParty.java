@@ -12,6 +12,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public class CampaignParty extends ArrayList<PartyMember> implements Parcelable, Storable {
 	@SuppressWarnings("unused")
 	private final String TAG = CampaignParty.class.getSimpleName();

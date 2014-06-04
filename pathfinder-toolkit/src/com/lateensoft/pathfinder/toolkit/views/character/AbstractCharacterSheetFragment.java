@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InvalidObjectException;
 import java.util.List;
-import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -12,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.util.*;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
@@ -142,11 +142,11 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 */
 	public void deleteCurrentCharacter() {
 		int currentCharacterIndex = 0;
-		List<Entry<Long, String>> characters = m_characterRepo.queryList();
+		List<IdStringPair> characters = m_characterRepo.queryIdNameList();
 		long characterForDeletion = m_currentCharacterID;
 
 		for (int i = 0; i < characters.size(); i++) {
-			if (characterForDeletion == characters.get(i).getKey()){
+			if (characterForDeletion == characters.get(i).getId()){
 				currentCharacterIndex = i;
 				break;
 			}
@@ -156,7 +156,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 			addNewCharacterAndSelect();
 		} else {
 			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
-			setSelectedCharacter(characters.get(charToSelect).getKey());
+			setSelectedCharacter(characters.get(charToSelect).getId());
 			loadSelectedCharacter();
 		}
 
@@ -200,12 +200,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.select_character_dialog_header));
 
-        List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
-        String[] characterNames = EntryUtils.valueArray(characterEntries);
+        List<IdStringPair> characterEntries = m_characterRepo.queryIdNameList();
+        String[] characterNames = IdStringPair.valueArray(characterEntries);
         int currentCharacterIndex = 0;
 
         for (int i = 0; i < characterEntries.size(); i++) {
-            if (m_currentCharacterID == characterEntries.get(i).getKey()) {
+            if (m_currentCharacterID == characterEntries.get(i).getId()) {
                 currentCharacterIndex = i;
             }
         }
@@ -219,12 +219,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     private class CharacterSelectionClickListener implements OnClickListener {
-        private List<Entry<Long, String>> characterEntries;
+        private List<IdStringPair> characterEntries;
         private long selectedCharacterId;
 
-        public CharacterSelectionClickListener(List<Entry<Long, String>> characterEntries, int initialSelection) {
+        public CharacterSelectionClickListener(List<IdStringPair> characterEntries, int initialSelection) {
             this.characterEntries = characterEntries;
-            this.selectedCharacterId = characterEntries.get(initialSelection).getKey();
+            this.selectedCharacterId = characterEntries.get(initialSelection).getId();
         }
 
         @Override
@@ -237,7 +237,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                     loadSelectedCharacter();
                 }
             } else if (which >= 0 && which < characterEntries.size()) {
-                selectedCharacterId = characterEntries.get(which).getKey();
+                selectedCharacterId = characterEntries.get(which).getId();
             }
         }
     }
@@ -278,10 +278,10 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public void exportAllCharacters() {
-        List<Entry<Long, String>> charIds = m_characterRepo.queryList();
+        List<IdStringPair> charIds = m_characterRepo.queryIdNameList();
         List<PathfinderCharacter> characters = Lists.newArrayListWithCapacity(charIds.size());
-        for (Entry<Long, String> id : charIds) {
-            characters.add(m_characterRepo.query(id.getKey()));
+        for (IdStringPair id : charIds) {
+            characters.add(m_characterRepo.query(id.getId()));
         }
         ImportExportUtils.exportCharactersWithDialog(getContext(), characters, "All Characters", new ActivityLauncher.ActivityLauncherFragment(this));
     }

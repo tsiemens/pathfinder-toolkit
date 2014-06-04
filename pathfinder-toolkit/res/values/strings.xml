@@ -760,6 +760,10 @@
 
     <!-- Character Membership Strings -->
     <string name="membership_add_button">Add To Party</string>
+    <string name="action_mode_menu_item_remove">Remove</string>
+    <string name="membership_party_picker_title">Select Parties</string>
+    <string name="membership_remove_dialog_title">Confirm Remove</string>
+    <string name="membership_remove_dialog_msg">Remove character from (%d) parties?</string>
 
     <!-- Picker -->
     <string name="picker_menu_item_search">Filter</string>

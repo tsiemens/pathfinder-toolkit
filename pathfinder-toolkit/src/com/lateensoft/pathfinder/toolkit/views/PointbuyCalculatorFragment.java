@@ -1,7 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,15 +22,14 @@ import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.adapters.nav.NavDrawerAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.util.AbilitySetCalculator;
-import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterAbilitiesFragment;
 
 public class PointbuyCalculatorFragment extends BasePageFragment {
@@ -288,8 +286,8 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 		case R.id.mi_export_to_existing:
 			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 			builder.setTitle(getString(R.string.select_character_dialog_header));
-			List<Entry<Long, String>> characterEntries = m_characterRepo.queryList();
-			String[] characterNames = EntryUtils.valueArray(characterEntries);
+			List<IdStringPair> characterEntries = m_characterRepo.queryIdNameList();
+			String[] characterNames = IdStringPair.valueArray(characterEntries);
 
 			OnCharacterExportSelectListener exportListener = 
 					new OnCharacterExportSelectListener(characterEntries);
@@ -308,9 +306,9 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
 	private class OnCharacterExportSelectListener implements DialogInterface.OnClickListener {
 		long _characterIdSelectedInDialog;
-		List<Entry<Long, String>> _characterList;
+		List<IdStringPair> _characterList;
 		
-		public OnCharacterExportSelectListener(List<Entry<Long, String>> characterIds) {
+		public OnCharacterExportSelectListener(List<IdStringPair> characterIds) {
 			_characterList = characterIds;
 			_characterIdSelectedInDialog = 0;
 		}
@@ -341,7 +339,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 				break;
 			default:
 				// Set the currently selected character in the dialog
-				_characterIdSelectedInDialog = _characterList.get(selection).getKey();
+				_characterIdSelectedInDialog = _characterList.get(selection).getId();
 				break;
 
 			}

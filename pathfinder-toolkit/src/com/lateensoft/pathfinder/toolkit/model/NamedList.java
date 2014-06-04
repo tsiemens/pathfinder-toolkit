@@ -13,6 +13,12 @@ public class NamedList<E> extends ArrayList<E> implements Storable {
     private long m_id = UNSET_ID;
     private String m_name;
 
+    public NamedList(String name) {
+        super();
+        m_id = UNSET_ID;
+        m_name = name;
+    }
+
     public NamedList(long id, String name, Collection<E> items) {
         super(items);
         m_id = id;

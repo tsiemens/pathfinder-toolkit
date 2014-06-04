@@ -4,6 +4,8 @@
     <color name="holo_dialog_dark_grey">#202020</color>
     <color name="holo_dialog_lighter_grey">#323232</color>
     
+    <color name="holo_blue_light_translucent">#5033b5e5</color>
+
     <color name="white_button_background">#33ffffff</color>
     <color name="white_button_background_selected">#77ffffff</color>
     <color name="subtle_text">#77ffffff</color>

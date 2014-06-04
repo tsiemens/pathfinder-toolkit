@@ -24,6 +24,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
+import java.util.List;
+
 public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 		implements OnItemClickListener {
 	private static final String TAG = CharacterSkillsFragment.class.getSimpleName();
@@ -157,16 +159,12 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 	}
 
 	private void updateSkillsList() {
-        SkillListAdapter adapter;
-        if (m_trainedFilterCheckBox.isChecked()) {
-            adapter = new SkillListAdapter(getContext(),
-                    R.layout.character_skill_row, m_skillSet.getTrainedSkills(),
-                    m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
-        } else {
-            adapter = new SkillListAdapter(getContext(),
-                    R.layout.character_skill_row, m_skillSet.getSkills(),
-                    m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
-        }
+        if (m_skillSet == null || m_abilitySet == null) return;
+        List<Skill> skills = m_trainedFilterCheckBox.isChecked() ?
+                m_skillSet.getTrainedSkills() : m_skillSet.getSkills();
+        SkillListAdapter adapter = new SkillListAdapter(getContext(),
+                R.layout.character_skill_row, skills,
+                m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
         m_skillsListView.setAdapter(adapter);
 	}
 	

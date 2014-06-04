@@ -394,7 +394,8 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
                 createCharacterSheetItem(R.string.tab_character_armor, CharacterArmorFragment.class),
                 createCharacterSheetItem(R.string.tab_character_weapons, CharacterWeaponsFragment.class),
                 createCharacterSheetItem(R.string.tab_character_feats, CharacterFeatsFragment.class),
-                createCharacterSheetItem(R.string.tab_character_spells, CharacterSpellBookFragment.class)
+                createCharacterSheetItem(R.string.tab_character_spells, CharacterSpellBookFragment.class),
+                createCharacterSheetItem(R.string.tab_character_membership, CharacterPartyMembershipFragment.class)
         );
 
         return Lists.newArrayList(

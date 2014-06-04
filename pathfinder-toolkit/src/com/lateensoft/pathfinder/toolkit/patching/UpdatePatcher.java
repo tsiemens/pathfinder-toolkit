@@ -135,30 +135,32 @@ public class UpdatePatcher {
 				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getID());
 			}
 		}
-		
-		int[] oldPartyIDs = oldDBManager.getPartyIDs();
-		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.party.PTParty oldParty;
-		CampaignParty newParty;
-		for (int id : oldPartyIDs) {
-			oldParty = oldDBManager.getParty(id);
-			newParty = PartyConverter.convertParty(oldParty);
-			if (partyRepo.insert(newParty) == -1) {
-				completeSuccess = false;
-				Log.e(TAG, "Error migrating party "+oldParty.getName());
-			} if (id == oldSelectedPartyID) {
-				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getID());
-			}
-		}
-		
-		oldParty = null;
-		oldParty = oldPrefsManager.getEncounterParty();
-		if (oldParty != null) {
-			CampaignParty newEncParty = PartyConverter.convertParty(oldParty);
-			if (partyRepo.insert(newEncParty, true) == -1) {
-				completeSuccess = false;
-				Log.e(TAG, "Error migrating encounter party "+oldParty.getName());
-			}
-		}
+
+        // TODO convert party members to characters
+//		int[] oldPartyIDs = oldDBManager.getPartyIDs();
+//		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.party.PTParty oldParty;
+//		CampaignParty newParty;
+//		for (int id : oldPartyIDs) {
+//			oldParty = oldDBManager.getParty(id);
+//			newParty = PartyConverter.convertParty(oldParty);
+//			if (partyRepo.insert(newParty) == -1) {
+//				completeSuccess = false;
+//				Log.e(TAG, "Error migrating party "+oldParty.getName());
+//			} if (id == oldSelectedPartyID) {
+//				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getID());
+//			}
+//		}
+
+        // TODO use new EncounterParticipant classes
+//		oldParty = null;
+//		oldParty = oldPrefsManager.getEncounterParty();
+//		if (oldParty != null) {
+//			CampaignParty newEncParty = PartyConverter.convertParty(oldParty);
+//			if (partyRepo.insert(newEncParty, true) == -1) {
+//				completeSuccess = false;
+//				Log.e(TAG, "Error migrating encounter party "+oldParty.getName());
+//			}
+//		}
 		
 		// Final cleanup
 		oldPrefsManager.remove(com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager.KEY_SHARED_PREFS_ENCOUNTER_PARTY);

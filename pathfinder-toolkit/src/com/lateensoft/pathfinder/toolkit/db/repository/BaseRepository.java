@@ -95,7 +95,7 @@ public abstract class BaseRepository<T extends Storable> {
 		return m_database.delete(table, selector);
 	}
 	
-	protected Hashtable<String, Object> getTableOfValues(Cursor cursor) {
+	protected static Hashtable<String, Object> getTableOfValues(Cursor cursor) {
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		String[] columns = cursor.getColumnNames();
 		for(int i = 0; i < columns.length; i++) {
@@ -107,7 +107,7 @@ public abstract class BaseRepository<T extends Storable> {
 		return table;
 	}
 	
-	protected Object getDatum(Cursor cursor, String column) {
+	protected static Object getDatum(Cursor cursor, String column) {
 		int index = cursor.getColumnIndex(column);
 		int type = cursor.getType(index);
 		Object data;

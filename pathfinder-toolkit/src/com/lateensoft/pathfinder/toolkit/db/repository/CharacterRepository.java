@@ -12,6 +12,7 @@ import android.database.Cursor;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
@@ -228,7 +229,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	 * Returns all characters
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
-	public List<Entry<Long, String>> queryList() {
+	public List<IdStringPair> queryIdNameList() {
 		Locale l = null;
 		String selector = String.format(l, "%s.%s=%s.%s", 
 				TABLE, CHARACTER_ID,
@@ -240,17 +241,44 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 		Cursor cursor = getDatabase().query(true, table, columns, selector, 
 				null, null, null, orderBy, null);
 		
-		ArrayList<Entry<Long, String>> characters = new ArrayList<Entry<Long, String>>(cursor.getCount());
+		ArrayList<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			characters.add(new SimpleEntry<Long, String>((Long)hashTable.get(CHARACTER_ID), 
+			characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
 					(String)hashTable.get(FluffInfoRepository.NAME)));
 			cursor.moveToNext();
 		}
         cursor.close();
 		return characters;
 	}
+
+    protected List<IdStringPair> queryFilteredIdNameList(String selector) {
+        Locale l = null;
+        String baseSelector = String.format(l, "%s.%s=%s.%s",
+                TABLE, CHARACTER_ID,
+                FluffInfoRepository.TABLE,  CHARACTER_ID);
+        if (selector != null) {
+            baseSelector = baseSelector + " AND " + selector;
+        }
+        String orderBy = FluffInfoRepository.NAME + " ASC";
+        String table = m_tableInfo.getTable()+", "+ FluffInfoRepository.TABLE;
+        String[] columns = {m_tableInfo.getTable()+"."+CHARACTER_ID+" "+CHARACTER_ID,
+                FluffInfoRepository.NAME};
+        Cursor cursor = getDatabase().query(true, table, columns, baseSelector,
+                null, null, null, orderBy, null);
+
+        List<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
+                    (String)hashTable.get(FluffInfoRepository.NAME)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return characters;
+    }
 
     public boolean doesExist(long id) {
         Cursor cursor= getDatabase().rawQuery("select count(*) count from " + TABLE + " where " +

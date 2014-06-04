@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 
 public class CharacterRepositoryTest extends BaseRepositoryTest {
@@ -35,7 +36,7 @@ public class CharacterRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQueryList() {
-		List<Entry<Long, String>> names = m_repo.queryList();
+		List<IdStringPair> names = m_repo.queryIdNameList();
 		assertEquals(m_char1.getName(), names.get(0).getValue());
 		assertEquals(CHARACTER_NAME, names.get(1).getValue());
 	}

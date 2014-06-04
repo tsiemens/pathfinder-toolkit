@@ -18,14 +18,15 @@ public class TableCreator {
 		db.execSQL(createItem());
 		db.execSQL(createArmor());
 		db.execSQL(createWeapon());
-		db.execSQL(createPartyMember());
-		db.execSQL(createParty());
 		db.execSQL(createSpell());
 		db.execSQL(createFeat());
 		db.execSQL(createFluffInfo());
 
+        db.execSQL(createPartyMember());
+        db.execSQL(createParty());
         db.execSQL(createEncounter());
         db.execSQL(createEncounterParticipant());
+        db.execSQL(createPartyMembership());
 	}
 	
 	public String createSkill() {
@@ -241,8 +242,7 @@ public class TableCreator {
         Log.d(TAG, "Creating party table");
         return "CREATE TABLE Party (" +
                 "party_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "Name TEXT, " +
-                "InEncounter INTEGER" +
+                "Name TEXT " +
                 ");";
     }
 

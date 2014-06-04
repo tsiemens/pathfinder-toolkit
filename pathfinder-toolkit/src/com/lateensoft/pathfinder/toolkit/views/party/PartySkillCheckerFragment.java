@@ -108,7 +108,7 @@ public class PartySkillCheckerFragment extends BasePageFragment implements OnCli
 				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		CampaignParty party = null;
 		if(currentPartyID > 0) {
-			party = m_partyRepo.query(currentPartyID);
+//			party = m_partyRepo.query(currentPartyID); // TODO this should use encounter repo
 		}
 		
 		if (party == null) {

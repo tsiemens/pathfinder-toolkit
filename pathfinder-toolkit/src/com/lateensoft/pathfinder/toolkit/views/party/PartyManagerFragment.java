@@ -1,27 +1,29 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 
+import android.text.Editable;
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
-import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
+import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.NamedList;
+import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
-import com.lateensoft.pathfinder.toolkit.util.EntryUtils;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 import com.lateensoft.pathfinder.toolkit.views.character.SpellEditActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -38,7 +39,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 		OnClickListener, OnItemClickListener {
 	private static final String TAG = PartyManagerFragment.class.getSimpleName();
 	
-	public CampaignParty m_party;
+	public NamedList<PathfinderCharacter> m_party;
 
 	private int m_dialogMode;
 	private long m_partyIDSelectedInDialog;
@@ -49,6 +50,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 	private int m_partyMemberIndexSelectedForEdit;
 	
 	private PartyRepository m_partyRepo;
+	private CharacterRepository m_characterRepo;
 	private PartyMemberRepository m_memberRepo;
 
 	@Override
@@ -104,9 +106,9 @@ public class PartyManagerFragment extends BasePageFragment implements
 			m_party = m_partyRepo.query(currentPartyID);
 			if (m_party == null) {
 				// Recovery for some kind of catastrophic failure.
-				List<Entry<Long, String>> ids = m_partyRepo.queryIdNameList();
-                for (Entry<Long, String> id : ids) {
-                    m_party = m_partyRepo.query(id.getKey());
+				List<IdStringPair> ids = m_partyRepo.queryIdNameList();
+                for (IdStringPair id : ids) {
+                    m_party = m_partyRepo.query(id.getId());
                     if (m_party != null) {
                         AppPreferences.getInstance().putLong(
                                 AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
@@ -126,7 +128,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 	 * Generates a new party and sets it to the current party.
 	 */
 	private void addNewParty() {
-		m_party = new CampaignParty("New Party");
+		m_party = new NamedList<PathfinderCharacter>("New Party");
 		m_partyRepo.insert(m_party);
 		AppPreferences.getInstance().putLong(
 				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
@@ -140,10 +142,10 @@ public class PartyManagerFragment extends BasePageFragment implements
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
 		long currentPartyID = m_party.getID();
-		List<Entry<Long, String>> partyIDs = m_partyRepo.queryIdNameList();
+		List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
 
 		for (int i = 0; i < partyIDs.size(); i++) {
-			if (currentPartyID == partyIDs.get(i).getKey()) {
+			if (currentPartyID == partyIDs.get(i).getId()) {
                 currentPartyIndex = i;
             }
 		}
@@ -152,11 +154,11 @@ public class PartyManagerFragment extends BasePageFragment implements
 			addNewParty();
 		} else if (currentPartyIndex == 0) {
 			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getKey());
+					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getId());
 			loadCurrentParty();
 		} else {
 			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getKey());
+					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getId());
 			loadCurrentParty();
 		}
 
@@ -164,18 +166,29 @@ public class PartyManagerFragment extends BasePageFragment implements
 	}
 
 	private void updateDatabase() {
-		m_party.setName(m_partyNameEditText.getText().toString());
+        Editable text = m_partyNameEditText.getText();
+		m_party.setName(text != null ? text.toString() : "");
 		m_partyRepo.update(m_party);
 	}
 
 	private void refreshPartyView() {
-        Collections.sort(m_party, new PartyMember.NameComparator());
+        Collections.sort(m_party, new CharacterComparator());
 		m_partyNameEditText.setText(m_party.getName());
-		List<String> memberNames = m_party.getPartyMemberNames();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-				android.R.layout.simple_list_item_1, memberNames);
+        SimpleSelectableListAdapter<PathfinderCharacter> adapter = new SimpleSelectableListAdapter<PathfinderCharacter>(
+                getContext(), m_party,
+                new SimpleSelectableListAdapter.DisplayStringGetter<PathfinderCharacter>() {
+                    @Override public String getDisplayString(PathfinderCharacter object) {
+                        return object.getName();
+                    }
+                });
 		m_partyMemberList.setAdapter(adapter);
 	}
+
+    private static class CharacterComparator implements Comparator<PathfinderCharacter> {
+        @Override public int compare(PathfinderCharacter lhs, PathfinderCharacter rhs) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -220,12 +233,12 @@ public class PartyManagerFragment extends BasePageFragment implements
 		case R.id.mi_party_list:
 			builder.setTitle("Select Party");
 
-			List<Entry<Long, String>> partyIDs = m_partyRepo.queryIdNameList();
-			String[] partyList = EntryUtils.valueArray(partyIDs);
+			List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
+			String[] partyList = IdStringPair.valueArray(partyIDs);
 			int currentPartyIndex = 0;
 
 			for (int i = 0; i < partyIDs.size(); i++) {
-				if (m_partyIDSelectedInDialog == partyIDs.get(i).getKey()) {
+				if (m_partyIDSelectedInDialog == partyIDs.get(i).getId()) {
                     currentPartyIndex = i;
                 }
 			}
@@ -273,7 +286,7 @@ public class PartyManagerFragment extends BasePageFragment implements
 			break;
 		default:
 			// Set the currently selected party in the dialog
-			m_partyIDSelectedInDialog = m_partyRepo.queryIdNameList().get(selection).getKey().longValue();
+			m_partyIDSelectedInDialog = m_partyRepo.queryIdNameList().get(selection).getId();
 			break;
 
 		}
@@ -318,8 +331,8 @@ public class PartyManagerFragment extends BasePageFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		m_partyMemberIndexSelectedForEdit = position;
-		showPartyMemberEditor(m_party.get(position));
-
+		//showPartyMemberEditor(m_party.get(position));
+        // TODO open character sheet
 	}
 
 	private void showPartyMemberEditor(PartyMember member) {
@@ -329,49 +342,49 @@ public class PartyManagerFragment extends BasePageFragment implements
 				SpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);
 		startActivityForResult(intent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != ParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
-            return;
-        }
-		switch (resultCode) {
-		case Activity.RESULT_OK:
-			PartyMember member = ParcelableEditorActivity.getParcelableFromIntent(data);
-            if (member != null) {
-                if(m_partyMemberIndexSelectedForEdit < 0) {
-                    Log.v(TAG, "Adding a member");
-                    member.setPartyID(m_party.getID());
-                    if (m_memberRepo.insert(member) != -1) {
-                        m_party.add(member);
-                        refreshPartyView();
-                    }
-                } else {
-                    Log.v(TAG, "Editing a member");
-                    if (m_memberRepo.update(member) != 0) {
-                        m_party.set(m_partyMemberIndexSelectedForEdit, member);
-                        refreshPartyView();
-                    }
-                }
-            }
 
-            break;
-		
-		case PartyMemberEditorActivity.RESULT_DELETE:
-			Log.v(TAG, "Deleting a member");
-			if (m_memberRepo.delete(m_party.get(m_partyMemberIndexSelectedForEdit)) != 0) {
-				m_party.remove(m_partyMemberIndexSelectedForEdit);
-				refreshPartyView();
-			}
-			break;
-		
-		case Activity.RESULT_CANCELED:
-			break;
-		
-		default:
-			break;
-		}
-		updateDatabase();
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+//	@Override
+//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode != ParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
+//            return;
+//        }
+//		switch (resultCode) {
+//		case Activity.RESULT_OK:
+//			PartyMember member = ParcelableEditorActivity.getParcelableFromIntent(data);
+//            if (member != null) {
+//                if(m_partyMemberIndexSelectedForEdit < 0) {
+//                    Log.v(TAG, "Adding a member");
+//                    member.setPartyID(m_party.getID());
+//                    if (m_memberRepo.insert(member) != -1) {
+//                        m_party.add(member);
+//                        refreshPartyView();
+//                    }
+//                } else {
+//                    Log.v(TAG, "Editing a member");
+//                    if (m_memberRepo.update(member) != 0) {
+//                        m_party.set(m_partyMemberIndexSelectedForEdit, member);
+//                        refreshPartyView();
+//                    }
+//                }
+//            }
+//
+//            break;
+//
+//		case PartyMemberEditorActivity.RESULT_DELETE:
+//			Log.v(TAG, "Deleting a member");
+//			if (m_memberRepo.delete(m_party.get(m_partyMemberIndexSelectedForEdit)) != 0) {
+//				m_party.remove(m_partyMemberIndexSelectedForEdit);
+//				refreshPartyView();
+//			}
+//			break;
+//
+//		case Activity.RESULT_CANCELED:
+//			break;
+//
+//		default:
+//			break;
+//		}
+//		updateDatabase();
+//		super.onActivityResult(requestCode, resultCode, data);
+//	}
 }

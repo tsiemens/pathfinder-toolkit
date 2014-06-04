@@ -2,7 +2,12 @@ package com.lateensoft.pathfinder.toolkit.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Longs;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author tsiemens
@@ -92,5 +97,21 @@ public class IdStringPair implements Parcelable, Comparable<IdStringPair> {
     @Override
     public String toString() {
         return Long.toString(m_id) + " : " + m_value;
+    }
+
+    public static List<String> valueList(List<IdStringPair> idStringPairs) {
+        List<String> values = Lists.newArrayListWithCapacity(idStringPairs.size());
+        for (IdStringPair pair : idStringPairs) {
+            values.add(pair.getValue());
+        }
+        return values;
+    }
+
+    public static String[] valueArray(List<IdStringPair> idStringPairs) {
+        String[] values = new String[idStringPairs.size()];
+        for (int i = 0; i < idStringPairs.size(); i++) {
+            values[i] = idStringPairs.get(i).getValue();
+        }
+        return values;
     }
 }

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 
+@Deprecated
 public class PartyMember implements Parcelable, Storable {
 	
 	private String m_name;

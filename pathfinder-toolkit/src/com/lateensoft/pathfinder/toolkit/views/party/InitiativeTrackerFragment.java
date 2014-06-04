@@ -210,7 +210,7 @@ public class InitiativeTrackerFragment extends BasePageFragment {
 				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
 		CampaignParty defaultParty = null;
 		if (currentPartyID > 0) {
-			defaultParty = m_partyRepo.query(currentPartyID);
+//			defaultParty = m_partyRepo.query(currentPartyID); TODO
 		}
 
         // Save a copy as the encounter party, but only if there are members in it
@@ -224,7 +224,7 @@ public class InitiativeTrackerFragment extends BasePageFragment {
             for (PartyMember member : defaultParty) {
                 member.setID(Storable.UNSET_ID);
             }
-			m_partyRepo.insert(defaultParty, /*is encounter party*/true);
+//			m_partyRepo.insert(defaultParty); tODO add to encounters table
 		} else {
 			defaultParty = new CampaignParty("New Party");
 		}
@@ -274,7 +274,7 @@ public class InitiativeTrackerFragment extends BasePageFragment {
                     if (m_party.getID() == Storable.UNSET_ID) {
                         // Party has not yet been added to database
                         m_party.add(member);
-                        m_partyRepo.insert(m_party);
+//                        m_partyRepo.insert(m_party); TODO
                     } else {
                         member.setPartyID(m_party.getID());
                         if (m_memberRepo.insert(member) != -1) {
