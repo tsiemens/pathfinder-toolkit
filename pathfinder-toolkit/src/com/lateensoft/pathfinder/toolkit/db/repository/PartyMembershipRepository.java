@@ -93,6 +93,15 @@ public class PartyMembershipRepository extends BaseRepository<PartyMembershipRep
         return getLongsFromCursor(cursor, PARTY_ID);
     }
 
+    public boolean doesExist(Membership membership) {
+        Cursor cursor= getDatabase().rawQuery("select count(*) count from " + TABLE + " where " +
+                getSelector(membership), null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(cursor.getColumnIndex("count"));
+        cursor.close();
+        return count != 0;
+    }
+
     private static List<Long> getLongsFromCursor(Cursor cursor, String column) {
         List<Long> vals = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();

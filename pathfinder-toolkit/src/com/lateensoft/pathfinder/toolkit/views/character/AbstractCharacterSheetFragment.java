@@ -259,10 +259,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     private void showDeleteCharacterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.menu_item_delete_character));
-        builder.setMessage(
-                getString(R.string.delete_character_dialog_message_1)
-                        + m_characterRepo.queryName(m_currentCharacterID)
-                        + getString(R.string.delete_character_dialog_message_2))
+        builder.setMessage(String.format(getString(R.string.confirm_delete_item_message),
+                        m_characterRepo.queryName(m_currentCharacterID)))
                 .setPositiveButton(R.string.delete_button_text, new OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         deleteCurrentCharacter();

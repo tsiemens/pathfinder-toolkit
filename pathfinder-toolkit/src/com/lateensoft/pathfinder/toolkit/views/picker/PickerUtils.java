@@ -84,7 +84,11 @@ public class PickerUtils {
         }
 
         public List<IdStringPair> getCharacters() {
-            return m_data.getParcelableArrayListExtra(CHARACTERS_KEY);
+            if (m_data != null) {
+                return m_data.getParcelableArrayListExtra(CHARACTERS_KEY);
+            } else {
+                return null;
+            }
         }
 
         public IdStringPair getCharacter() {
@@ -92,7 +96,11 @@ public class PickerUtils {
         }
 
         public List<IdStringPair> getParties() {
-            return m_data.getParcelableArrayListExtra(PARTY_KEY);
+            if (m_data != null) {
+                return m_data.getParcelableArrayListExtra(PARTY_KEY);
+            } else {
+                return null;
+            }
         }
 
         public IdStringPair getParty() {

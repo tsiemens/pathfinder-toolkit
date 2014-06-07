@@ -6,16 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.LitePartyRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
 import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
 
 import java.util.Collections;
@@ -31,17 +30,16 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 	private ListView m_partyListView;
 	private Button m_addButton;
 
-    private PartyRepository m_partyRepo;
+    private LitePartyRepository m_partyRepo;
     private List<IdStringPair> m_parties;
 
     private ActionMode m_actionMode;
-    // Integrated checking/selection in ListView is not behaving as expected, so this is needed for now
-    private SparseBooleanArray m_actionModeSelections;
+    private ActionModeCallback m_actionModeCallback;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        m_partyRepo = new PartyRepository();
+        m_partyRepo = new LitePartyRepository();
 	}
 
 	@Override
@@ -69,19 +67,17 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                     return false;
                 }
 
-                m_actionMode = getActivity().startActionMode(new ActionModeCallback());
-                m_actionModeSelections = new SparseBooleanArray();
-                m_actionModeSelections.put(position, true);
-                m_partyListView.invalidateViews();
+                m_actionModeCallback = new ActionModeCallback();
+                m_actionMode = getActivity().startActionMode(m_actionModeCallback);
+                m_actionModeCallback.selectListItem(position, true);
                 return true;
             }
         });
         m_partyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (m_actionMode != null) {
-                    m_actionModeSelections.put(position, !m_actionModeSelections.get(position));
-                    m_partyListView.invalidateViews();
+                if (m_actionModeCallback != null) {
+                    m_actionModeCallback.toggleListItemSelection(position);
                 }
             }
         });
@@ -92,8 +88,8 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 	private void refreshPartiesListView() {
         if (m_actionMode != null) {
             m_actionMode.finish();
+            m_actionModeCallback = null;
             m_actionMode = null;
-            m_actionModeSelections = null;
         }
 
         Collections.sort(m_parties);
@@ -106,8 +102,8 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                 });
         adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
             @Override public boolean isItemSelected(int position) {
-                if (m_actionMode != null && m_actionModeSelections != null) {
-                    return m_actionModeSelections.get(position);
+                if (m_actionModeCallback != null) {
+                    return m_actionModeCallback.isListItemSelected(position);
                 } else {
                     return false;
                 }
@@ -117,46 +113,32 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 		m_partyListView.setAdapter(adapter);
 	}
 
-    private class ActionModeCallback implements ActionMode.Callback {
+    private class ActionModeCallback extends MultiSelectActionModeCallback {
 
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.membership_action_mode_menu, menu);
-            return true;
+        public ActionModeCallback() {
+            super(R.menu.membership_action_mode_menu);
         }
 
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
+        public ListView getListView() {
+            return m_partyListView;
         }
 
-        // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.mi_remove) {
-                List<IdStringPair> selectedParties = Lists.newArrayListWithCapacity(m_actionModeSelections.size());
-                for (int i = 0; i < m_actionModeSelections.size(); i++) {
-                    int key = m_actionModeSelections.keyAt(i);
-                    if (m_actionModeSelections.get(key)) {
-                        selectedParties.add(m_parties.get(key));
-                    }
-                }
-                showRemoveCharacterFromPartyDialog(selectedParties);
+                showRemoveCharacterFromPartyDialog(getSelectedItems(m_parties));
                 mode.finish();
                 return true;
             }
             return false;
         }
 
-        // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            super.onDestroyActionMode(mode);
             m_actionMode = null;
-            m_actionModeSelections = null;
-            m_partyListView.invalidateViews();
+            m_actionModeCallback = null;
         }
     }
 
@@ -205,18 +187,19 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                 data != null) {
             PickerUtils.ResultData resultData = new PickerUtils.ResultData(data);
             List<IdStringPair> partiesToAdd = resultData.getParties();
-
-            PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
-            for (IdStringPair party : partiesToAdd) {
-                long id = membersRepo.insert(new Membership(party.getId(), m_currentCharacterID));
-                if (id >= 0) {
-                    m_parties.add(party);
-                } else {
-                    Log.e(TAG, "Database returned " + id + " while adding character "
-                            + m_currentCharacterID + " to " + party);
+            if (partiesToAdd != null) {
+                PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
+                for (IdStringPair party : partiesToAdd) {
+                    long id = membersRepo.insert(new Membership(party.getId(), m_currentCharacterID));
+                    if (id >= 0) {
+                        m_parties.add(party);
+                    } else {
+                        Log.e(TAG, "Database returned " + id + " while adding character "
+                                + m_currentCharacterID + " to " + party);
+                    }
                 }
+                refreshPartiesListView();
             }
-            refreshPartiesListView();
         }
     }
 

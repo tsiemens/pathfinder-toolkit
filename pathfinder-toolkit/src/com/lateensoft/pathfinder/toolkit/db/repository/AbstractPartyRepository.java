@@ -1,30 +1,27 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
-import java.util.Hashtable;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
-import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
+
+import java.util.Hashtable;
+import java.util.List;
 
 import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository.Membership;
 
-@Deprecated
-public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacter>> {
+public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedList<T>> {
 	private static final String TABLE = "Party";
 	private static final String PARTY_ID = "party_id";
 	private static final String NAME = "Name";
 
-    PartyMembershipRepository m_membersRepo = new PartyMembershipRepository();
+    final PartyMembershipRepository m_membersRepo = new PartyMembershipRepository();
 
-	public PartyRepository() {
+	public AbstractPartyRepository() {
 		super();
 		TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
 		TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
@@ -38,7 +35,7 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
 	 * @return the id of the character inserted, or -1 if failure occurred.
 	 */
     @Override
-	public long insert(NamedList<PathfinderCharacter> party) {
+	public long insert(NamedList<T> party) {
 		ContentValues values = getContentValues(party);
 
 		String table = m_tableInfo.getTable();
@@ -50,37 +47,33 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
         if (id != -1) {
             party.setID(id);
 
-            CharacterRepository charRepo = new CharacterRepository();
-            for (PathfinderCharacter member : party) {
-                if (!charRepo.doesExist(member.getID())) {
-                    if (charRepo.insert(member) == -1) {
-                        delete(id);
-                        return -1;
-                    }
-                }
+            if (insertMembers(party) == -1) {
+                delete(id);
+                return -1;
             }
         }
 		return id;
 	}
 
+    /**
+     * Inserts members into their database.
+     * @return -1 if failed to add all members, 0 otherwise.
+     */
+    protected abstract long insertMembers(NamedList<T> party);
+
 	@Override
-	protected NamedList<PathfinderCharacter> buildFromHashTable(Hashtable<String, Object> hashTable) {
+	protected NamedList<T> buildFromHashTable(Hashtable<String, Object> hashTable) {
 		long id = (Long) hashTable.get(PARTY_ID);
 		String name = (String) hashTable.get(NAME);
 			
-		CharacterRepository charRepo = new CharacterRepository();
-
-        List<Long> characterIds = m_membersRepo.queryCharactersInParty(id);
-		List<PathfinderCharacter> members = Lists.newArrayList();
-        for (Long characterId : characterIds) {
-            members.add(charRepo.query(characterId));
-        }
-		
-		return new NamedList<PathfinderCharacter>(id, name, members);
+		List<T> members = queryMembers(id);
+		return new NamedList<T>(id, name, members);
 	}
 
+    protected abstract List<T> queryMembers(long partyId);
+
 	@Override
-	protected ContentValues getContentValues(NamedList<PathfinderCharacter> object) {
+	protected ContentValues getContentValues(NamedList<T> object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
 			values.put(PARTY_ID, object.getID());
@@ -140,6 +133,7 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
         return queryFilteredIdNameList(selector);
     }
 
+    // TODO this should be just query()
     public List<IdStringPair> queryCharacterNamesForParty(long partyId) {
         List<Long> charactersInParty = m_membersRepo.queryCharactersInParty(partyId);
 

@@ -69,8 +69,8 @@
     <string name="menu_item_import_character">Import Character(s)</string>
 	<string name="select_character_dialog_header">Select Character</string>
 	<string name="new_character_dialog_message">Create new character?</string>
-	<string name="delete_character_dialog_message_1">Are you sure you want to delete\u0020</string>
-	<string name="delete_character_dialog_message_2">\u003F \u000AThis action cannot be undone.</string>
+
+	<string name="confirm_delete_item_message">Are you sure you want to delete %s?\u000AThis action cannot be undone.</string>
 
     <!-- Import/Export Messages -->
     <string name="import_error_unknown">Errors occurred during import.</string>
@@ -798,7 +798,7 @@
     <!-- Party Manager Strings -->
     <string name="menu_item_party_list">Parties</string>
     <string name="menu_item_new_party">New Party</string>
-    <string name="menu_item_new_member">New Member</string>
+    <string name="menu_item_new_member">Add Member</string>
     <string name="menu_item_delete_party">Delete Party</string>
     <string name="party_name_header">Party Name:</string>
     <string name="party_name_hint">Party name</string>
@@ -806,7 +806,9 @@
     <string name="party_member_name_hint">Character name</string>
     <string name="party_member_stat_hint">Value</string>
     <string name="new_party_dialog_text">Create new party?</string>
-    <string name="new_party_member_dialog_text">Add a new member to this party?</string>
+    <string name="single_party_picker_title">Select Party</string>
+    <string name="select_members_picker_title">Select Members To Add</string>
+    <string name="party_remove_members_dialog_msg">Remove (%d) members from party?</string>
 
     <string-array name="party_member_stats">
         <item>Initiative</item>

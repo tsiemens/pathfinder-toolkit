@@ -1,65 +1,45 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.text.Editable;
+import android.util.Log;
+import android.view.*;
+import android.widget.AdapterView;
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
+import com.lateensoft.pathfinder.toolkit.db.repository.*;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
-import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
-import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
-import com.lateensoft.pathfinder.toolkit.views.character.SpellEditActivity;
+import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
+import com.lateensoft.pathfinder.toolkit.views.character.CharacterCombatStatsFragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
 
-public class PartyManagerFragment extends BasePageFragment implements
-		OnClickListener, OnItemClickListener {
+public class PartyManagerFragment extends BasePageFragment {
 	private static final String TAG = PartyManagerFragment.class.getSimpleName();
-	
-	public NamedList<PathfinderCharacter> m_party;
+    private static final int GET_NEW_MEMBERS_CODE = 178792110;
+    private static final int GET_PARTY_CODE = 313923144;
 
-	private int m_dialogMode;
-	private long m_partyIDSelectedInDialog;
+	public NamedList<IdStringPair> m_party;
 
 	private EditText m_partyNameEditText;
 	private ListView m_partyMemberList;
 	
-	private int m_partyMemberIndexSelectedForEdit;
-	
-	private PartyRepository m_partyRepo;
-	private CharacterRepository m_characterRepo;
-	private PartyMemberRepository m_memberRepo;
+	private LitePartyRepository m_partyRepo = new LitePartyRepository();
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		m_partyRepo = new PartyRepository();
-		m_memberRepo = new PartyMemberRepository();
-	}
+    private ActionMode m_actionMode;
+    private ActionModeCallback m_actionModeCallback;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +53,29 @@ public class PartyManagerFragment extends BasePageFragment implements
 
 		m_partyMemberList = (ListView) getRootView()
 				.findViewById(R.id.listViewPartyMembers);
-		m_partyMemberList.setOnItemClickListener(this);
+		m_partyMemberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (m_actionModeCallback == null) {
+                    showMemberDetails(m_party.get(position).getId());
+                } else {
+                    m_actionModeCallback.toggleListItemSelection(position);
+                }
+            }
+        });
+        m_partyMemberList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (m_actionMode != null) {
+                    return false;
+                }
+
+                m_actionModeCallback = new ActionModeCallback();
+                m_actionMode = getActivity().startActionMode(m_actionModeCallback);
+                m_actionModeCallback.selectListItem(position, true);
+                return true;
+            }
+        });
 
 		loadCurrentParty();
 		return getRootView();
@@ -89,6 +91,12 @@ public class PartyManagerFragment extends BasePageFragment implements
     public void updateTitle() {
         setTitle(R.string.title_activity_party_manager);
         setSubtitle(null);
+    }
+
+    private void showMemberDetails(long characterId) {
+        AppPreferences.getInstance().putLong(
+                AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characterId);
+        switchToPage(CharacterCombatStatsFragment.class);
     }
 
 	/**
@@ -124,11 +132,70 @@ public class PartyManagerFragment extends BasePageFragment implements
 		}
 	}
 
+    private class ActionModeCallback extends MultiSelectActionModeCallback {
+
+        public ActionModeCallback() {
+            super(R.menu.membership_action_mode_menu);
+        }
+
+        @Override
+        public ListView getListView() {
+            return m_partyMemberList;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.mi_remove) {
+                showRemoveCharactersFromPartyDialog(getSelectedItems(m_party));
+                mode.finish();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            super.onDestroyActionMode(mode);
+            m_actionMode = null;
+            m_actionModeCallback = null;
+        }
+    }
+
+    private void showRemoveCharactersFromPartyDialog(final List<IdStringPair> membersToRemove) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.membership_remove_dialog_title)
+                .setMessage(String.format(getString(R.string.party_remove_members_dialog_msg),
+                        m_party.size()));
+
+        builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    removeMembersFromParty(membersToRemove);
+                }
+            }
+        })
+                .setNegativeButton(R.string.cancel_button_text, null)
+                .show();
+    }
+
+    private void removeMembersFromParty(List<IdStringPair> membersToRemove) {
+        List<Long> memberIds = Lists.newArrayList();
+        for (IdStringPair pair : membersToRemove) {
+            memberIds.add(pair.getId());
+        }
+
+        int dels = m_partyRepo.removeCharactersFromParty(m_party.getID(), memberIds);
+        if (dels > 0) {
+            m_party.removeAll(membersToRemove);
+        }
+        refreshPartyView();
+    }
+
 	/**
 	 * Generates a new party and sets it to the current party.
 	 */
 	private void addNewParty() {
-		m_party = new NamedList<PathfinderCharacter>("New Party");
+		m_party = new NamedList<IdStringPair>("New Party");
 		m_partyRepo.insert(m_party);
 		AppPreferences.getInstance().putLong(
 				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
@@ -172,44 +239,47 @@ public class PartyManagerFragment extends BasePageFragment implements
 	}
 
 	private void refreshPartyView() {
-        Collections.sort(m_party, new CharacterComparator());
+        if (m_actionMode != null) {
+            m_actionMode.finish();
+            m_actionModeCallback = null;
+            m_actionMode = null;
+        }
+
+        Collections.sort(m_party);
 		m_partyNameEditText.setText(m_party.getName());
-        SimpleSelectableListAdapter<PathfinderCharacter> adapter = new SimpleSelectableListAdapter<PathfinderCharacter>(
+        SimpleSelectableListAdapter<IdStringPair> adapter = new SimpleSelectableListAdapter<IdStringPair>(
                 getContext(), m_party,
-                new SimpleSelectableListAdapter.DisplayStringGetter<PathfinderCharacter>() {
-                    @Override public String getDisplayString(PathfinderCharacter object) {
-                        return object.getName();
+                new SimpleSelectableListAdapter.DisplayStringGetter<IdStringPair>() {
+                    @Override public String getDisplayString(IdStringPair object) {
+                        return object.getValue();
                     }
                 });
+        adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
+            @Override public boolean isItemSelected(int position) {
+                if (m_actionModeCallback != null) {
+                    return m_actionModeCallback.isListItemSelected(position);
+                } else {
+                    return false;
+                }
+            }
+        });
 		m_partyMemberList.setAdapter(adapter);
 	}
-
-    private static class CharacterComparator implements Comparator<PathfinderCharacter> {
-        @Override public int compare(PathfinderCharacter lhs, PathfinderCharacter rhs) {
-            return lhs.getName().compareTo(rhs.getName());
-        }
-    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.mi_party_list:
-			m_dialogMode = R.id.mi_party_list;
-			showPartyDialog();
+			showPartyPicker();
 			break;
 		case R.id.mi_new_member:
-			m_dialogMode = R.id.mi_new_member;
-			showPartyDialog();
+			showMemberPicker();
 			break;
 		case R.id.mi_new_party:
-			// Add new party
-			m_dialogMode = R.id.mi_new_party;
-			showPartyDialog();
+			showCreateNewPartyDialog();
 			break;
 		case R.id.mi_delete_party:
-			// Delete party
-			m_dialogMode = R.id.mi_delete_party;
-			showPartyDialog();
+            showDeletePartyDialog();
 			break;
 		}
 
@@ -224,167 +294,86 @@ public class PartyManagerFragment extends BasePageFragment implements
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void showPartyDialog() {
-		m_partyIDSelectedInDialog = m_party.getID(); // actual current party
+    private void showPartyPicker() {
+        List<IdStringPair> parties = m_partyRepo.queryIdNameList();
+        parties.remove(new IdStringPair(m_party.getID(), m_party.getName()));
+        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        builder.setTitle(R.string.single_party_picker_title)
+                .setSingleChoice(true)
+                .setPickableParties(parties);
+        Intent pickerIntent = builder.build();
+        startActivityForResult(pickerIntent, GET_PARTY_CODE);
+    }
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    private void showMemberPicker() {
+        CharacterRepository charRepo = new CharacterRepository();
+        List<IdStringPair> characters = charRepo.queryIdNameList();;
+        characters.removeAll(m_party);
+        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        builder.setTitle(R.string.select_members_picker_title)
+                .setSingleChoice(false)
+                .setPickableCharacters(characters);
+        Intent pickerIntent = builder.build();
+        startActivityForResult(pickerIntent, GET_NEW_MEMBERS_CODE);
+    }
 
-		switch (m_dialogMode) {
-		case R.id.mi_party_list:
-			builder.setTitle("Select Party");
+    private void showCreateNewPartyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(getString(R.string.new_party_dialog_text))
+                .setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        updateDatabase();
+                        addNewParty();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button_text, null);
+        builder.create().show();
+    }
 
-			List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
-			String[] partyList = IdStringPair.valueArray(partyIDs);
-			int currentPartyIndex = 0;
+    private void showDeletePartyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(String.format(getString(R.string.confirm_delete_item_message),
+                m_party.getName()))
+                .setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        deleteCurrentParty();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button_text, null);
+        builder.create().show();
+    }
 
-			for (int i = 0; i < partyIDs.size(); i++) {
-				if (m_partyIDSelectedInDialog == partyIDs.get(i).getId()) {
-                    currentPartyIndex = i;
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
+            PickerUtils.ResultData pickerData = new PickerUtils.ResultData(data);
+            if (requestCode == GET_PARTY_CODE) {
+                // Ensures any data changed on the party in the current fragment is saved
+                updateDatabase();
+                IdStringPair party = pickerData.getParty();
+                if (party != null) {
+                    AppPreferences.getInstance().putLong(
+                            AppPreferences.KEY_LONG_SELECTED_PARTY_ID, party.getId());
+                    loadCurrentParty();
                 }
-			}
+            } else {
+                List<IdStringPair> membersToAdd = pickerData.getCharacters();
+                if (membersToAdd != null) {
+                    PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
+                    for (IdStringPair member : membersToAdd) {
+                        long id = membersRepo.insert(new PartyMembershipRepository.Membership(m_party.getID(), member.getId()));
+                        if (id >= 0) {
+                            m_party.add(member);
+                        } else {
+                            Log.e(TAG, "Database returned " + id + " while adding character "
+                                    + member + " to " + m_party.getID());
+                        }
+                    }
+                    refreshPartyView();
+                }
+            }
+        }
 
-			builder.setSingleChoiceItems(partyList, currentPartyIndex, this)
-					.setPositiveButton(R.string.ok_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this);
-			break;
-
-		case R.id.mi_new_party:
-			builder.setMessage(R.string.new_party_dialog_text)
-					.setPositiveButton(R.string.ok_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this);
-			break;
-
-		case R.id.mi_delete_party:
-			builder.setTitle(getString(R.string.menu_item_delete_party));
-			builder.setMessage(
-					getString(R.string.delete_character_dialog_message_1)
-							+ m_party.getName()
-							+ getString(R.string.delete_character_dialog_message_2))
-					.setPositiveButton(R.string.delete_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this);
-			break;
-
-		case R.id.mi_new_member:
-			builder.setMessage(getString(R.string.new_party_member_dialog_text))
-					.setPositiveButton(R.string.ok_button_text, this)
-					.setNegativeButton(R.string.cancel_button_text, this);
-			break;
-
-		}
-		AlertDialog alert = builder.create();
-		alert.show();
+		super.onActivityResult(requestCode, resultCode, data);
 	}
-
-	// Click method for the party selection dialog
-	@Override
-	public void onClick(DialogInterface dialogInterface, int selection) {
-		switch (selection) {
-		case DialogInterface.BUTTON_POSITIVE:
-			performPositiveDialogAction();
-			break;
-		case DialogInterface.BUTTON_NEGATIVE:
-			break;
-		default:
-			// Set the currently selected party in the dialog
-			m_partyIDSelectedInDialog = m_partyRepo.queryIdNameList().get(selection).getId();
-			break;
-
-		}
-	}
-
-	/**
-	 * Called when dialog positive button is tapped
-	 */
-	private void performPositiveDialogAction() {
-		switch (m_dialogMode) {
-		case R.id.mi_party_list:
-			// Check if "currently selected" party is the same as saved one
-			if (m_partyIDSelectedInDialog != m_party.getID()) {
-				updateDatabase(); // Ensures any data changed on the party
-										// in the current fragment is saved
-				AppPreferences.getInstance().putLong(
-						AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_partyIDSelectedInDialog);
-				loadCurrentParty();
-			}
-			break;
-
-		case R.id.mi_new_party:
-			updateDatabase();
-			addNewParty();
-			break;
-
-		case R.id.mi_delete_party:
-			deleteCurrentParty();
-			break;
-
-		case R.id.mi_new_member:
-			m_partyMemberIndexSelectedForEdit = -1;
-			showPartyMemberEditor(null);
-			break;
-
-		}
-
-	}
-
-	// Party member in list was clicked
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		m_partyMemberIndexSelectedForEdit = position;
-		//showPartyMemberEditor(m_party.get(position));
-        // TODO open character sheet
-	}
-
-	private void showPartyMemberEditor(PartyMember member) {
-		Intent intent = new Intent(getContext(),
-				PartyMemberEditorActivity.class);
-		intent.putExtra(
-				SpellEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, member);
-		startActivityForResult(intent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
-	}
-
-//	@Override
-//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode != ParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
-//            return;
-//        }
-//		switch (resultCode) {
-//		case Activity.RESULT_OK:
-//			PartyMember member = ParcelableEditorActivity.getParcelableFromIntent(data);
-//            if (member != null) {
-//                if(m_partyMemberIndexSelectedForEdit < 0) {
-//                    Log.v(TAG, "Adding a member");
-//                    member.setPartyID(m_party.getID());
-//                    if (m_memberRepo.insert(member) != -1) {
-//                        m_party.add(member);
-//                        refreshPartyView();
-//                    }
-//                } else {
-//                    Log.v(TAG, "Editing a member");
-//                    if (m_memberRepo.update(member) != 0) {
-//                        m_party.set(m_partyMemberIndexSelectedForEdit, member);
-//                        refreshPartyView();
-//                    }
-//                }
-//            }
-//
-//            break;
-//
-//		case PartyMemberEditorActivity.RESULT_DELETE:
-//			Log.v(TAG, "Deleting a member");
-//			if (m_memberRepo.delete(m_party.get(m_partyMemberIndexSelectedForEdit)) != 0) {
-//				m_party.remove(m_partyMemberIndexSelectedForEdit);
-//				refreshPartyView();
-//			}
-//			break;
-//
-//		case Activity.RESULT_CANCELED:
-//			break;
-//
-//		default:
-//			break;
-//		}
-//		updateDatabase();
-//		super.onActivityResult(requestCode, resultCode, data);
-//	}
 }
