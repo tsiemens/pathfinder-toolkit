@@ -1,6 +1,8 @@
 package com.lateensoft.pathfinder.toolkit;
 
+import java.util.ArrayDeque;
 import java.util.Calendar;
+import java.util.Deque;
 import java.util.List;
 
 import android.app.*;
@@ -56,9 +58,12 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	
 	private BasePageFragment m_currentFragment;
 
+    private Deque<Class<? extends BasePageFragment>> m_fragmentBackStack;
+
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        m_fragmentBackStack = new ArrayDeque<Class<? extends BasePageFragment>>();
 
 		setContentView(R.layout.activity_drawer_main);
 		
@@ -214,92 +219,35 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.confirm_exit_dialog_title)
-        .setMessage(R.string.confirm_exit_dialog_message)
-        .setPositiveButton(R.string.ok_button_text, new OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        })
-        .setNegativeButton(R.string.cancel_button_text, null)
-        .show();
+        if (m_fragmentBackStack.size() > 0) {
+            showFragment(m_fragmentBackStack.pop(), false);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.confirm_exit_dialog_title)
+                    .setMessage(R.string.confirm_exit_dialog_message)
+                    .setPositiveButton(R.string.ok_button_text, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel_button_text, null)
+                    .show();
+        }
     }
 
-    // TODO
-//	public void showView(long id) {
-//		FragmentManager fragmentManager = getFragmentManager();
-//		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//		BasePageFragment newFragment = null;
-//
-//		if ( id == NavDrawerAdapter.FLUFF_ID ) {
-//			newFragment = new CharacterFluffFragment();
-//
-//		} else if ( id == NavDrawerAdapter.COMBAT_STATS_ID ) {
-//			newFragment = new CharacterCombatStatsFragment();
-//
-//		} else if ( id == NavDrawerAdapter.ABILITIES_ID ) {
-//			newFragment = new CharacterAbilitiesFragment();
-//
-//		} else if ( id == NavDrawerAdapter.SKILLS_ID ) {
-//			newFragment = new CharacterSkillsFragment();
-//
-//		} else if ( id == NavDrawerAdapter.INVENTORY_ID ) {
-//			newFragment = new CharacterInventoryFragment();
-//
-//		} else if ( id == NavDrawerAdapter.ARMOR_ID ) {
-//			newFragment = new CharacterArmorFragment();
-//
-//		} else if ( id == NavDrawerAdapter.WEAPONS_ID ) {
-//			newFragment = new CharacterWeaponsFragment();
-//
-//		} else if ( id == NavDrawerAdapter.FEATS_ID ) {
-//			newFragment = new CharacterFeatsFragment();
-//
-//		} else if ( id == NavDrawerAdapter.SPELLS_ID ) {
-//			newFragment = new CharacterSpellBookFragment();
-//
-//		} else if ( id == NavDrawerAdapter.INITIATIVE_TRACKER_ID ) {
-//			newFragment = new InitiativeTrackerFragment();
-//
-//		} else if ( id == NavDrawerAdapter.SKILL_CHECKER_ID ) {
-//			newFragment = new PartySkillCheckerFragment();
-//
-//		} else if ( id == NavDrawerAdapter.PARTY_MANAGER_ID ) {
-//			newFragment = new PartyManagerFragment();
-//
-//		} else if ( id == NavDrawerAdapter.POINTBUY_ID ) {
-//			newFragment = new PointbuyCalculatorFragment();
-//
-//		} else if (id == NavDrawerAdapter.DICE_ROLLER_ID) {
-//			newFragment = new DiceRollerFragment();
-//		}
-//
-//
-//		if (newFragment != null) {
-//			((NavDrawerAdapter)m_drawerList.getExpandableListAdapter()).setSelectedItemId(id);
-//			m_drawerList.invalidateViews();
-//			if (newFragment instanceof AbstractCharacterSheetFragment) {
-//				m_drawerList.expandGroup(0);
-//			}
-//
-//
-//			fragmentTransaction.replace(R.id.content_frame, newFragment);
-//			fragmentTransaction.commit();
-//
-//			m_currentFragment = newFragment;
-//			m_currentFragmentId = id;
-//		}
-//	}
-
     private void showFragmentForNavItem(NavDrawerItem item) {
+        showFragmentForNavItem(item, true);
+    }
+
+    private void showFragmentForNavItem(NavDrawerItem item, boolean pushCurrentToStack) {
         NavDrawerAdapter adapter = (NavDrawerAdapter) m_drawerList.getExpandableListAdapter();
         if (adapter != null && item != null) {
             Class<? extends BasePageFragment> fragmentClass = item.getFragmentClass();
             if (fragmentClass == null) return;
             try {
                 adapter.setSelectedItem(item);
-                showFragment(fragmentClass.newInstance());
+                showFragment(fragmentClass.newInstance(), pushCurrentToStack);
                 m_drawerList.invalidateViews();
                 if (item instanceof NavDrawerChildItem) {
                     int groupIndex = adapter.getGroupIndexForItem(item);
@@ -316,21 +264,28 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
     }
 
     public void showFragment(@NotNull Class<? extends BasePageFragment> fragmentClass) {
+        showFragment(fragmentClass, true);
+    }
+
+    public void showFragment(@NotNull Class<? extends BasePageFragment> fragmentClass, boolean pushCurrentToStack) {
         NavDrawerAdapter adapter = ((NavDrawerAdapter) m_drawerList.getExpandableListAdapter());
         if (adapter == null) return;
         NavDrawerItem item = adapter.getItemForFragment(fragmentClass);
         if (item != null) {
-            showFragmentForNavItem(item);
+            showFragmentForNavItem(item, pushCurrentToStack);
         } else {
             Log.e(TAG, "Cannot show " + fragmentClass);
         }
     }
 
-    private void showFragment(BasePageFragment fragment) {
+    private void showFragment(BasePageFragment fragment, boolean pushCurrentToStack) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
+        if (m_currentFragment != null && pushCurrentToStack) {
+            m_fragmentBackStack.push(m_currentFragment.getClass());
+        }
         m_currentFragment = fragment;
     }
 
