@@ -107,6 +107,10 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
         return result;
     }
 
+    public static Builder<Builder> builder() {
+        return new Builder<Builder>();
+    }
+
     @SuppressWarnings("unchecked")
     public static class Builder<T extends Builder> extends PathfinderCharacter.Builder<T> {
         private int initiativeScore = 0;
