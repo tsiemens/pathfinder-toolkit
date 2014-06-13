@@ -5,14 +5,16 @@
 
     <LinearLayout
         android:id="@+id/ll_rolls"
-        android:layout_width="40dp"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_margin="1dp"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:padding="10dp"
-        android:background="@color/holo_dialog_lighter_grey" >
+        android:padding="5dp"
+        android:clickable="true"
+        android:background="@drawable/button_background">
     
         <TextView
             android:id="@+id/tv_init_roll"
@@ -21,7 +23,7 @@
             android:paddingBottom="2dp"
             android:maxLines="1"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="18sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
 
@@ -29,11 +31,10 @@
             android:id="@+id/tv_check_roll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="2dp"
             android:maxLines="1"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp"
+            android:textColor="@color/skill_check_text"
             android:textStyle="bold"/>
 
     </LinearLayout>
