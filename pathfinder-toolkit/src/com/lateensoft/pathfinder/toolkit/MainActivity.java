@@ -40,6 +40,7 @@ import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 import com.lateensoft.pathfinder.toolkit.views.*;
 import com.lateensoft.pathfinder.toolkit.views.character.*;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterSkillsFragment;
+import com.lateensoft.pathfinder.toolkit.views.encounter.EncounterFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.InitiativeTrackerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PartyManagerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PartySkillCheckerFragment;
@@ -355,8 +356,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
         return Lists.newArrayList(
                 new NavDrawerGroupItem(getString(R.string.main_menu_character_group), R.drawable.character_sheet_icon, characterPages),
-                new NavDrawerGroupItem(getString(R.string.main_menu_init_tracker), R.drawable.initiative_icon, InitiativeTrackerFragment.class),
-                new NavDrawerGroupItem(getString(R.string.main_menu_party_skill_checker), R.drawable.skill_checker_icon, PartySkillCheckerFragment.class),
+                new NavDrawerGroupItem(getString(R.string.main_menu_encounters), R.drawable.initiative_icon, EncounterFragment.class),
+                new NavDrawerGroupItem(getString(R.string.main_menu_init_tracker), R.drawable.initiative_icon, InitiativeTrackerFragment.class), // TODO remove
+                new NavDrawerGroupItem(getString(R.string.main_menu_party_skill_checker), R.drawable.skill_checker_icon, PartySkillCheckerFragment.class), // TODO remove
                 new NavDrawerGroupItem(getString(R.string.main_menu_party_manager), R.drawable.party_icon, PartyManagerFragment.class),
                 new NavDrawerGroupItem(getString(R.string.main_menu_pointbuy), R.drawable.stat_calc_icon, PointbuyCalculatorFragment.class),
                 new NavDrawerGroupItem(getString(R.string.main_menu_dice_roller), R.drawable.dice_roller_icon, DiceRollerFragment.class)

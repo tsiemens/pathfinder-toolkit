@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/mi_roll_init"
+        android:title="@string/menu_item_roll_init"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_manual_start"
+        android:title="@string/menu_item_manual_start"
+        android:showAsAction="never" />
+</menu>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/mi_start"
+        android:title="@string/menu_item_start_encounter"
+        android:icon="@drawable/initiative_icon"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/mi_reset"
+        android:title="@string/menu_item_reset_encounter"
+        android:icon="@drawable/ic_action_undo"
+        android:showAsAction="always" />
+    <item
+        android:id="@+id/mi_check_skill"
+        android:title="@string/menu_item_check_skill"
+        android:icon="@drawable/dice_roller_icon"
+        android:showAsAction="always" />
+    <item
+        android:id="@+id/mi_select_encounter"
+        android:title="@string/menu_item_select_encounter"
+       	android:icon="@drawable/ic_action_group"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/mi_add_participant"
+        android:title="@string/menu_item_add_participants"
+        android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="ifRoom" />
+    <item 
+        android:id="@+id/mi_new_encounter"
+        android:title="@string/menu_item_new_encounter"
+        android:showAsAction="never" />
+    <item 
+        android:id="@+id/mi_delete_encounter"
+        android:title="@string/menu_item_delete_encounter"
+        android:showAsAction="never" />
+</menu>

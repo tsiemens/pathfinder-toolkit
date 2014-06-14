@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/mi_fort_check"
+        android:title="@string/menu_item_fort_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_reflex_check"
+        android:title="@string/menu_item_reflex_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_will_check"
+        android:title="@string/menu_item_will_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_bluff_check"
+        android:title="@string/menu_item_bluff_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_disguise_check"
+        android:title="@string/menu_item_disguise_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_perception_check"
+        android:title="@string/menu_item_perception_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_sense_check"
+        android:title="@string/menu_item_sense_check"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/mi_stealth_check"
+        android:title="@string/menu_item_stealth_check"
+        android:showAsAction="never" />
+</menu>

@@ -6,6 +6,7 @@
     <string name="title_activity_ability_calc">Pointbuy Calculator</string>
     <string name="title_activity_initiative_tracker">Initiative Tracker</string>
     <string name="title_activity_skill_checker">Party Skill Checker</string>
+    <string name="title_fragment_encounters">Encounters</string>
     <string name="title_activity_party_manager">Party Manager</string>
     <string name="title_activity_party_member_editor">Party Member Editor</string>
     <string name="title_activity_settings">Settings</string>
@@ -31,6 +32,7 @@
     <string name="main_menu_character_group">Characters</string>
     <string name="main_menu_init_tracker">Initiative Tracker</string>
     <string name="main_menu_party_skill_checker">Party Skill Checker</string>
+    <string name="main_menu_encounters">Encounters</string>
     <string name="main_menu_party_manager">Party Manager</string>
     <string name="main_menu_pointbuy">Pointbuy Calculator</string>
     <string name="main_menu_dice_roller">Dice Roller</string>
@@ -774,14 +776,36 @@
     <string name="picker_no_items">No items</string>
 
     <!-- Initiative Tracker Strings -->
-    <string name="menu_item_reset_encounter">Reset</string>
     <string name="menu_item_add_encounter_member">Add Encounter Member</string>
     <string name="initiative_tracker_roll_button">Roll for Initiative!</string>
     <string name="new_encounter_member_dialog_text">Add a new character or NPC to this encounter?</string>
     <string name="reset_encounter_dialog_title">Reset Encounter</string>
     <string name="reset_encounter_dialog_text">Reset the encounter? Tap \"Use Default\" to completely reset to the current party as it is shown in the Party Manager.</string>
     <string name="use_defualt_party_button">Use Default</string>
-    
+
+    <!-- Encounters Strings -->
+    <string name="menu_item_start_encounter">Start</string>
+    <string name="menu_item_roll_init">Roll Initiative</string>
+    <string name="menu_item_manual_start">Manual Start</string>
+    <string name="menu_item_reset_encounter">Reset</string>
+    <string name="menu_item_check_skill">Check Skill</string>
+    <string name="menu_item_select_encounter">Encounters</string>
+    <string name="menu_item_new_encounter">New Encounter</string>
+    <string name="menu_item_add_participants">Add Participant</string>
+    <string name="menu_item_delete_encounter">Delete Encounter</string>
+
+    <string name="menu_item_fort_check">"Fort Save</string>
+    <string name="menu_item_reflex_check">"Reflex Save</string>
+    <string name="menu_item_will_check">"Will Save</string>
+    <string name="menu_item_bluff_check">"Bluff</string>
+    <string name="menu_item_disguise_check">"Disguise</string>
+    <string name="menu_item_perception_check">"Perception</string>
+    <string name="menu_item_sense_check">"Sense Motive</string>
+    <string name="menu_item_stealth_check">"Stealth</string>
+
+    <string name="next_turn_button">Next Turn</string>
+    <string name="last_skill_check_label">Last Skill Check:</string>
+
     <!-- Skill Checker Strings -->
     <string name="skill_checker_roll_button">Roll</string>
     <string-array name="checkable_skills_array">
