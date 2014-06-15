@@ -28,15 +28,15 @@ public class CampaignPartyRepositoryTest extends AndroidTestCase {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		m_repo.delete(m_party1.getID());
-		m_repo.delete(m_party2.getID());
-		assertTrue (m_repo.query(m_party1.getID()) == null);
+		m_repo.delete(m_party1.getId());
+		m_repo.delete(m_party2.getId());
+		assertTrue (m_repo.query(m_party1.getId()) == null);
 		super.tearDown();
 	}
 
 	public void testQuery() {
-        NamedList<PathfinderCharacter> queried = m_repo.query(m_party1.getID());
-		assertEquals(m_party1.getID(), queried.getID());
+        NamedList<PathfinderCharacter> queried = m_repo.query(m_party1.getId());
+		assertEquals(m_party1.getId(), queried.getId());
 		assertEquals(m_party1.getName(), queried.getName());
 	}
 	

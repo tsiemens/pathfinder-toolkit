@@ -35,7 +35,7 @@ public class FluffInfoRepositoryTest extends BaseRepositoryTest {
 	public void testQuery() {
 		FluffInfo queried = m_repo.query(m_characterId);
 		
-		assertEquals(m_fluff.getID(), queried.getID());
+		assertEquals(m_fluff.getId(), queried.getId());
 		assertEquals(m_fluff.getName(), queried.getName());
 		assertEquals(m_fluff.getAlignment(), queried.getAlignment());
 		assertEquals(m_fluff.getXP(), queried.getXP());
@@ -57,7 +57,7 @@ public class FluffInfoRepositoryTest extends BaseRepositoryTest {
 	public void testUpdate() {
 		FluffInfo toUpdate = new FluffInfo();
 		
-		toUpdate.setID(m_characterId);
+		toUpdate.setId(m_characterId);
 		toUpdate.setName("Bob");
 		toUpdate.setAlignment("Lawful Good");
 		toUpdate.setXP("1045");
@@ -77,7 +77,7 @@ public class FluffInfoRepositoryTest extends BaseRepositoryTest {
 		
 		m_repo.update(toUpdate);
 		FluffInfo updated = m_repo.query(m_characterId);
-		assertEquals(toUpdate.getID(), updated.getID());
+		assertEquals(toUpdate.getId(), updated.getId());
 		assertEquals(toUpdate.getName(), updated.getName());
 		assertEquals(toUpdate.getAlignment(), updated.getAlignment());
 		assertEquals(toUpdate.getXP(), updated.getXP());

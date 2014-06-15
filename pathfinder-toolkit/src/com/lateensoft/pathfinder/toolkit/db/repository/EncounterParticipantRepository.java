@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 
 import java.util.Hashtable;
@@ -45,10 +46,10 @@ public class EncounterParticipantRepository extends BaseRepository<EncounterPart
 	
 	@Override
 	public long insert(EncounterParticipant object) {
-        if (object.getEncounterId() == Storable.UNSET_ID) {
+        if (object.getEncounterId() == Identifiable.UNSET_ID) {
             throw new IllegalArgumentException("EncounterParticipant must have a set encounter ID");
         }
-        if (!m_characterRepo.doesExist(object.getID())) {
+        if (!m_characterRepo.doesExist(object.getId())) {
             m_characterRepo.insert(object);
         }
 		return super.insert(object);
@@ -91,7 +92,7 @@ public class EncounterParticipantRepository extends BaseRepository<EncounterPart
      */
     @Override
     protected String getSelector(EncounterParticipant participant) {
-        return getSelector(participant.getID(), participant.getEncounterId());
+        return getSelector(participant.getId(), participant.getEncounterId());
     }
 
     /**
@@ -106,7 +107,7 @@ public class EncounterParticipantRepository extends BaseRepository<EncounterPart
 	@Override
 	protected ContentValues getContentValues(EncounterParticipant object) {
 		ContentValues values = new ContentValues();
-        values.put(CHARACTER_ID, object.getID());
+        values.put(CHARACTER_ID, object.getId());
         values.put(ENCOUNTER_ID, object.getEncounterId());
         values.put(INITIATIVE_SCORE, object.getInitiativeScore());
         values.put(TURN_ORDER, object.getTurnOrder());

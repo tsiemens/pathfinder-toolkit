@@ -54,7 +54,7 @@ public class SkillRepository extends BaseRepository<Skill> {
 	protected ContentValues getContentValues(Skill object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) {
-			values.put(SKILL_ID, object.getID());
+			values.put(SKILL_ID, object.getId());
 		}
 		values.put(SKILL_KEY, object.getSkillKey());
 		values.put(CHARACTER_ID, object.getCharacterID());

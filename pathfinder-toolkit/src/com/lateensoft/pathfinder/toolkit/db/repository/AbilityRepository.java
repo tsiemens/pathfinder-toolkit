@@ -96,7 +96,7 @@ public class AbilityRepository extends BaseRepository<Ability> {
 
 	@Override
 	protected String getSelector(Ability object) {
-		return getSelector(object.getID(), object.getCharacterID());
+		return getSelector(object.getId(), object.getCharacterID());
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class FeatRepository extends BaseRepository<Feat> {
 	protected ContentValues getContentValues(Feat object) {
 		ContentValues values = new ContentValues();
 		if(isIDSet(object)) { 
-			values.put(ID, object.getID());
+			values.put(ID, object.getId());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(NAME, object.getName());

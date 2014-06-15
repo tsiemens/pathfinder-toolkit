@@ -1,7 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
@@ -24,8 +23,8 @@ public class CharacterRepositoryTest extends BaseRepositoryTest {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		m_repo.delete(m_char1.getID());
-		assertTrue (m_repo.query(m_char1.getID()) == null);
+		m_repo.delete(m_char1.getId());
+		assertTrue (m_repo.query(m_char1.getId()) == null);
 		super.tearDown();
 	}
 

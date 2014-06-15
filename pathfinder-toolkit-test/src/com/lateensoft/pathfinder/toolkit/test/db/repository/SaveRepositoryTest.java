@@ -37,7 +37,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQuery() {
-		Save queried = m_repo.query(m_save.getID(), m_characterId);
+		Save queried = m_repo.query(m_save.getId(), m_characterId);
 		assertEquals(m_save.getCharacterID(), queried.getCharacterID());
 		assertEquals(m_save.getBaseSave(), queried.getBaseSave());
 		assertEquals(m_save.getAbilityKey(), queried.getAbilityKey());
@@ -50,7 +50,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 		Save toUpdate = new Save(m_save.getSaveKey(), m_characterId, NEW_BASE_VALUE,
 				NEW_ABILITY_KEY, NEW_MAGIC_MOD, NEW_MISC_MOD, NEW_TEMP_MOD);
 		m_repo.update(toUpdate);
-		Save updated = m_repo.query(m_save.getID(), m_characterId);
+		Save updated = m_repo.query(m_save.getId(), m_characterId);
 		assertEquals(updated.getSaveKey(), toUpdate.getSaveKey());
 		assertEquals(updated.getCharacterID(), toUpdate.getCharacterID());
 		assertEquals(updated.getBaseSave(), toUpdate.getBaseSave());

@@ -41,11 +41,11 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
 		String table = m_tableInfo.getTable();
 		long id = getDatabase().insert(table, values);
 		if (id != -1 && !isIDSet(party)) {
-			party.setID(id);
+			party.setId(id);
 		}
 
         if (id != -1) {
-            party.setID(id);
+            party.setId(id);
 
             if (insertMembers(party) == -1) {
                 delete(id);
@@ -76,7 +76,7 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
 	protected ContentValues getContentValues(NamedList<T> object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
-			values.put(PARTY_ID, object.getID());
+			values.put(PARTY_ID, object.getId());
 		}
 		values.put(NAME, object.getName());
 		return values;

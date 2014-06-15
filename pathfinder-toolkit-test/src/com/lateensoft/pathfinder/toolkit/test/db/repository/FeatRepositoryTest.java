@@ -29,20 +29,20 @@ public class FeatRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQuery() {
-		Feat queried = m_repo.query(m_feat1.getID());
+		Feat queried = m_repo.query(m_feat1.getId());
 		assertEquals(m_feat1, queried);
 	}
 	
 	public void testUpdate() {
-		Feat toUpdate = new Feat(m_feat2.getID(), m_characterId, "sidkjf", "sdfsdf");
+		Feat toUpdate = new Feat(m_feat2.getId(), m_characterId, "sidkjf", "sdfsdf");
 		m_repo.update(toUpdate);
-		Feat updated = m_repo.query(m_feat2.getID());
+		Feat updated = m_repo.query(m_feat2.getId());
 		assertEquals(updated, toUpdate);
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_feat1.getID());
-		assertTrue (m_repo.query(m_feat1.getID()) == null);
+		m_repo.delete(m_feat1.getId());
+		assertTrue (m_repo.query(m_feat1.getId()) == null);
 	}
 	
 	public void testQuerySet() {
@@ -52,7 +52,7 @@ public class FeatRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	private static void assertEquals(Feat feat1, Feat feat2) {
-		assertEquals(feat1.getID(), feat2.getID());
+		assertEquals(feat1.getId(), feat2.getId());
 		assertEquals(feat1.getCharacterID(), feat2.getCharacterID());
 		assertEquals(feat1.getName(), feat2.getName());
 		assertEquals(feat1.getDescription(), feat2.getDescription());

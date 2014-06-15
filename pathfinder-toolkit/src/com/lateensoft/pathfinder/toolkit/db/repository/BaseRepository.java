@@ -6,8 +6,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
-public abstract class BaseRepository<T extends Storable> {
+public abstract class BaseRepository<T extends Identifiable> {
 	private Database m_database;
 	protected TableInfo m_tableInfo;
 	
@@ -31,7 +32,7 @@ public abstract class BaseRepository<T extends Storable> {
 		String table = m_tableInfo.getTable();
 		long id = m_database.insert(table, values);
 		if (id != -1 && !isIDSet(object)) {
-			object.setID(id);
+			object.setId(id);
 		}
 		return id;
 	}
@@ -60,19 +61,19 @@ public abstract class BaseRepository<T extends Storable> {
 	}
 	
 	/**
-	 * Gets selector for Storable
-	 * Unoverriden methods will only use getID(), as the single primary key 
+	 * Gets selector for Identifiable
+	 * Unoverriden methods will only use getId(), as the single primary key
 	 * defined by the table attributes
 	 * @param object
 	 * @return an SQL where clause
 	 */
 	protected String getSelector(T object) {
 		String idColumn = m_tableInfo.getPrimaryKeyColumn();
-		return idColumn + "=" + object.getID();
+		return idColumn + "=" + object.getId();
 	}
 	
 	/**
-	 * Gets selector for Storable with ids for primary keys.
+	 * Gets selector for Identifiable with ids for primary keys.
 	 * Unoverriden methods will only use the first argument, as the single primary key 
 	 * defined by the table attributes
 	 * @param ids
@@ -133,8 +134,8 @@ public abstract class BaseRepository<T extends Storable> {
 	 * @param object
 	 * @return true if the object has a set ID (one which is not 0), false otherwise
 	 */
-	protected boolean isIDSet(Storable object) {
-		return object.getID() != Storable.UNSET_ID;
+	protected boolean isIDSet(Identifiable object) {
+		return object.getId() != Identifiable.UNSET_ID;
 	}
 	
 	/**

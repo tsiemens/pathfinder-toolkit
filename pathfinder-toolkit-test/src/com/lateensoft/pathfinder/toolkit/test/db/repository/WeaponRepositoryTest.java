@@ -16,11 +16,11 @@ public class WeaponRepositoryTest extends BaseRepositoryTest {
 		m_repo = new WeaponRepository();
 		
 		m_weapon1 = new Weapon();
-		setValues(m_weapon1, m_weapon1.getID(), m_characterId, "Great Sword",
+		setValues(m_weapon1, m_weapon1.getId(), m_characterId, "Great Sword",
 				7.5, 5, "4/2", "x2", 5, "It's on fire!", 0, "Sword", "L");
 		
 		m_weapon2 = new Weapon();
-		setValues(m_weapon2, m_weapon2.getID(), m_characterId, "Long Bow",
+		setValues(m_weapon2, m_weapon2.getId(), m_characterId, "Long Bow",
 				4.0, 3, "5", "x3", 100, "None", 20, "Bow", "M");
 		
 		m_repo.insert(m_weapon1);
@@ -29,7 +29,7 @@ public class WeaponRepositoryTest extends BaseRepositoryTest {
 	
 	public void testInsert() {
 		Weapon toInsert = new Weapon();
-		setValues(toInsert, toInsert.getID(), m_characterId, "Longer Bow",
+		setValues(toInsert, toInsert.getId(), m_characterId, "Longer Bow",
 				5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
 		long id = m_repo.insert(toInsert);
 		assertTrue(id != INSERT_FAIL);
@@ -37,24 +37,24 @@ public class WeaponRepositoryTest extends BaseRepositoryTest {
 	
 	
 	public void testQuery() {
-		Weapon queried = m_repo.query(m_weapon1.getID());
+		Weapon queried = m_repo.query(m_weapon1.getId());
 		
 		assertEquals(queried, m_weapon1);
 	}
 	
 	public void testUpdate() {
 		Weapon toUpdate = m_weapon2;
-		setValues(toUpdate, m_weapon2.getID(), m_weapon2.getCharacterID(), "Longer Bow",
+		setValues(toUpdate, m_weapon2.getId(), m_weapon2.getCharacterID(), "Longer Bow",
 				5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
 		
 		m_repo.update(toUpdate);
-		Weapon updated = m_repo.query(toUpdate.getID());
+		Weapon updated = m_repo.query(toUpdate.getId());
 		assertEquals(toUpdate, updated);
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_weapon1.getID());
-		assertTrue(m_repo.query(m_weapon1.getID()) == null);
+		m_repo.delete(m_weapon1.getId());
+		assertTrue(m_repo.query(m_weapon1.getId()) == null);
 	}
 	
 	public void testQuerySet() {
@@ -66,7 +66,7 @@ public class WeaponRepositoryTest extends BaseRepositoryTest {
 	public static void setValues(Weapon toUpdate, long id, long characterId, String name,
 			double weight, int totalAttackB, String dmg, String crit, int range, String specProp,
 			int ammo, String type, String size) {
-		toUpdate.setID(id);
+		toUpdate.setId(id);
 		toUpdate.setCharacterID(characterId);
 		toUpdate.setName(name);
 		toUpdate.setWeight(weight);

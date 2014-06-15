@@ -6,14 +6,14 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
 
 @Deprecated
-public class CampaignParty extends ArrayList<PartyMember> implements Parcelable, Storable {
+public class CampaignParty extends ArrayList<PartyMember> implements Parcelable, Identifiable {
 	@SuppressWarnings("unused")
 	private final String TAG = CampaignParty.class.getSimpleName();
 
@@ -73,7 +73,7 @@ public class CampaignParty extends ArrayList<PartyMember> implements Parcelable,
 	 * Sets ID and IDs of all members
 	 */
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 		for (PartyMember member : this) {
 			member.setPartyID(id);
@@ -81,7 +81,7 @@ public class CampaignParty extends ArrayList<PartyMember> implements Parcelable,
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 	

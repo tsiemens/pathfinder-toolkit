@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -15,7 +16,7 @@ public class PartyMembershipRepository extends BaseRepository<PartyMembershipRep
     private static final String TABLE = "PartyMembership";
     private static final String PARTY_ID = "party_id";
 
-    public static class Membership implements Storable {
+    public static class Membership implements Identifiable {
         public long partyId;
         public long characterId;
 
@@ -24,9 +25,9 @@ public class PartyMembershipRepository extends BaseRepository<PartyMembershipRep
             this.characterId = characterId;
         }
 
-        @Override public void setID(long id) { partyId = id; }
+        @Override public void setId(long id) { partyId = id; }
 
-        @Override public long getID() { return partyId; }
+        @Override public long getId() { return partyId; }
     }
 
     public PartyMembershipRepository() {
@@ -47,7 +48,7 @@ public class PartyMembershipRepository extends BaseRepository<PartyMembershipRep
     @Override
     protected ContentValues getContentValues(Membership object) {
         ContentValues values = new ContentValues();
-        values.put(PARTY_ID, object.getID());
+        values.put(PARTY_ID, object.getId());
         values.put(CHARACTER_ID, object.characterId);
         return values;
     }
@@ -68,7 +69,7 @@ public class PartyMembershipRepository extends BaseRepository<PartyMembershipRep
 
     @Override
     protected String getSelector(Membership object) {
-        return getSelector(object.getID(), object.characterId);
+        return getSelector(object.getId(), object.characterId);
     }
 
     public List<Long> queryCharactersInParty(long partyId) {

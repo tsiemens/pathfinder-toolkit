@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.test.util;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
@@ -39,7 +39,7 @@ public class CharacterUtils {
 
     private static void populateTestCharacter(PathfinderCharacter.Builder builder) {
         builder.setName("test \nchar");
-        long id = Storable.UNSET_ID;
+        long id = Identifiable.UNSET_ID;
         builder.setId(id);
         builder.setGold(1131415.4);
 

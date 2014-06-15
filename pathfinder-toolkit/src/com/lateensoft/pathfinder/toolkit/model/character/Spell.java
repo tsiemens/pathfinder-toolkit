@@ -1,11 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Spell implements Parcelable, Storable, Comparable<Spell> {
+public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
 	@SuppressWarnings("unused")
 	private static final String TAG = Spell.class.getSimpleName();
 	
@@ -43,7 +43,7 @@ public class Spell implements Parcelable, Storable, Comparable<Spell> {
 	}
 	
 	public Spell(Spell spell) {
-		this(spell.getID(), spell.getCharacterID(), spell.getName(),
+		this(spell.getId(), spell.getCharacterID(), spell.getName(),
 				spell.getLevel(), spell.getPrepared(), spell.getDescription());
 	}
 	
@@ -114,12 +114,12 @@ public class Spell implements Parcelable, Storable, Comparable<Spell> {
 	}
 	
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 

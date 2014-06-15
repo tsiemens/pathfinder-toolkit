@@ -1,14 +1,14 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FluffInfo implements Parcelable, Storable {
+public class FluffInfo implements Parcelable, Identifiable {
 	private String m_name;
 	private String m_alignment;
 	private String m_XP;
@@ -292,12 +292,12 @@ public class FluffInfo implements Parcelable, Storable {
 	}
 	
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_characterId = id;
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_characterId;
 	}
 	

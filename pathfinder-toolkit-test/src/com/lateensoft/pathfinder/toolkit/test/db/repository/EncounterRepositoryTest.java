@@ -44,32 +44,32 @@ public class EncounterRepositoryTest extends AndroidTestCase {
 
     public void testDeleteEncounter() {
         m_encounterRepo.delete(m_encounter1);
-        assertTrue(m_encounterRepo.query(m_encounter1.getID()) == null);
-        assertTrue(m_participantRepo.query(m_participant1a.getID(), m_participant1a.getEncounterId()) == null);
-        assertTrue(m_participantRepo.query(m_participant1b.getID(), m_participant1a.getEncounterId()) == null);
+        assertTrue(m_encounterRepo.query(m_encounter1.getId()) == null);
+        assertTrue(m_participantRepo.query(m_participant1a.getId(), m_participant1a.getEncounterId()) == null);
+        assertTrue(m_participantRepo.query(m_participant1b.getId(), m_participant1a.getEncounterId()) == null);
 
         CharacterRepository charRepo = new CharacterRepository();
-        assertTrue(charRepo.doesExist(m_participant1a.getID()));
-        assertTrue(charRepo.doesExist(m_participant1b.getID()));
+        assertTrue(charRepo.doesExist(m_participant1a.getId()));
+        assertTrue(charRepo.doesExist(m_participant1b.getId()));
     }
 
     public void testQueryEncounter() {
-        NamedList<EncounterParticipant> encounter = m_encounterRepo.query(m_encounter1.getID());
+        NamedList<EncounterParticipant> encounter = m_encounterRepo.query(m_encounter1.getId());
         assertEquals(m_encounter1, encounter);
     }
 
     public void testQueryParticipant() {
-        EncounterParticipant participant1a = m_participantRepo.query(m_participant1a.getID(), m_encounter1.getID());
-        EncounterParticipant participant1b = m_participantRepo.query(m_participant1b.getID(), m_encounter1.getID());
+        EncounterParticipant participant1a = m_participantRepo.query(m_participant1a.getId(), m_encounter1.getId());
+        EncounterParticipant participant1b = m_participantRepo.query(m_participant1b.getId(), m_encounter1.getId());
         assertEquals(m_participant1a, participant1a);
         assertEquals(m_participant1b, participant1b);
     }
 
     public void testDeleteParticipant() {
         m_participantRepo.delete(m_participant1a);
-        assertTrue(m_participantRepo.query(m_participant1a.getID(), m_encounter1.getID()) == null);
+        assertTrue(m_participantRepo.query(m_participant1a.getId(), m_encounter1.getId()) == null);
 
         CharacterRepository charRepo = new CharacterRepository();
-        assertTrue(charRepo.doesExist(m_participant1a.getID()));
+        assertTrue(charRepo.doesExist(m_participant1a.getId()));
     }
 }

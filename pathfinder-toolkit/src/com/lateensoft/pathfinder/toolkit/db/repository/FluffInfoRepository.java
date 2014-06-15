@@ -73,7 +73,7 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 		String description = (String) hashTable.get(DESCRIPTION);
 		
 		FluffInfo fluff = new FluffInfo();
-		fluff.setID(characterId);
+		fluff.setId(characterId);
 		fluff.setName(name);
 		fluff.setAlignment(alignment);
 		fluff.setXP(xp);
@@ -96,7 +96,7 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 	@Override
 	protected ContentValues getContentValues(FluffInfo object) {
 		ContentValues values = new ContentValues();
-		values.put(CHARACTER_ID, object.getID());
+		values.put(CHARACTER_ID, object.getId());
 		values.put(NAME, object.getName());
 		values.put(ALIGNMENT, object.getAlignment());
 		values.put(XP, object.getXP());

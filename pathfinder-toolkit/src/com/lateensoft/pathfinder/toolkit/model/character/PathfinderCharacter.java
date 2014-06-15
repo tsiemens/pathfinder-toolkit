@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 
-public class PathfinderCharacter implements Parcelable, Storable {
+public class PathfinderCharacter implements Parcelable, Identifiable {
 	private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
 	private static final String PARCEL_BUNDLE_KEY_COMBAT_STATS = "combat_stats";
 	private static final String PARCEL_BUNDLE_KEY_SKILLS = "skills";
@@ -45,7 +45,7 @@ public class PathfinderCharacter implements Parcelable, Storable {
         if (builder.name != null) {
             setName(builder.name);
         }
-        this.setID(builder.id);
+        this.setId(builder.id);
     }
 
     public static PathfinderCharacter newDefaultCharacter(String name) {
@@ -149,7 +149,7 @@ public class PathfinderCharacter implements Parcelable, Storable {
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 	
@@ -157,13 +157,13 @@ public class PathfinderCharacter implements Parcelable, Storable {
 	 * Sets the character ID, and all character IDs of components
 	 */
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 		m_abilitySet.setCharacterID(id);
-		m_combatStatSet.setID(id);
+		m_combatStatSet.setId(id);
 		m_skillSet.setCharacterID(id);
 		m_saveSet.setCharacterID(id);
-		m_fluffInfo.setID(id);
+		m_fluffInfo.setId(id);
 		m_inventory.setCharacterID(id);
 		m_feats.setCharacterID(id);
 		m_spellBook.setCharacterID(id);

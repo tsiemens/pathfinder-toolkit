@@ -15,7 +15,7 @@ public class LitePartyRepository extends AbstractPartyRepository<IdStringPair> {
     protected long insertMembers(NamedList<IdStringPair> party) {
         for (IdStringPair member : party) {
             PartyMembershipRepository.Membership membership =
-                    new PartyMembershipRepository.Membership(party.getID(), member.getId());
+                    new PartyMembershipRepository.Membership(party.getId(), member.getId());
             if (!m_membersRepo.doesExist(membership)) {
                 if (m_membersRepo.insert(membership) == -1) {
                     return -1;

@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * @author tsiemens
  */
-public class NamedList<E> extends ArrayList<E> implements Storable {
+public class NamedList<E> extends ArrayList<E> implements Identifiable {
 
     private long m_id = UNSET_ID;
     private String m_name;
@@ -38,12 +38,12 @@ public class NamedList<E> extends ArrayList<E> implements Storable {
     }
 
     @Override
-    public void setID(long id) {
+    public void setId(long id) {
         m_id = id;
     }
 
     @Override
-    public long getID() {
+    public long getId() {
         return m_id;
     }
 

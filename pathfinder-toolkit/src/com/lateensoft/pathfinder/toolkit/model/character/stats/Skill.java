@@ -1,11 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Skill implements Parcelable, Storable, Comparable<Skill> {
+public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 	
 	boolean m_classSkill;
 	int m_rank;
@@ -155,7 +155,7 @@ public class Skill implements Parcelable, Storable, Comparable<Skill> {
 	}
 
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 	}
 	
@@ -163,7 +163,7 @@ public class Skill implements Parcelable, Storable, Comparable<Skill> {
 	 * This should not be used for identifying the type of skill, only the instance.
 	 */
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 	

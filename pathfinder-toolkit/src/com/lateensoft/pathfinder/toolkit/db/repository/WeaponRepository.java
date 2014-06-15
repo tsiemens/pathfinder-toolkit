@@ -104,7 +104,7 @@ public class WeaponRepository extends BaseRepository<Weapon> {
 	
 	@Override
 	public int delete(Weapon object) {
-		return delete(object.getID());
+		return delete(object.getId());
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class WeaponRepository extends BaseRepository<Weapon> {
 	@Override
 	protected ContentValues getContentValues(Weapon object) {
 		ContentValues values = new ContentValues();
-		values.put(ID, object.getID());
+		values.put(ID, object.getId());
 		values.put(TOTAL_ATTACK_BONUS, object.getTotalAttackBonus());
 		values.put(DAMAGE, object.getDamage());
 		values.put(CRITICAL, object.getCritical());

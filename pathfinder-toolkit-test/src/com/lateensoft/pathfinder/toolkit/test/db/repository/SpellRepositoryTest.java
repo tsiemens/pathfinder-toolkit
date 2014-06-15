@@ -29,20 +29,20 @@ public class SpellRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQuery() {
-		Spell queried = m_repo.query(m_spell1.getID());
+		Spell queried = m_repo.query(m_spell1.getId());
 		assertEquals(m_spell1, queried);
 	}
 	
 	public void testUpdate() {
-		Spell toUpdate = new Spell(m_spell2.getID(), m_characterId, "23425", 5, 7, "sdfsdf");
+		Spell toUpdate = new Spell(m_spell2.getId(), m_characterId, "23425", 5, 7, "sdfsdf");
 		m_repo.update(toUpdate);
-		Spell updated = m_repo.query(m_spell2.getID());
+		Spell updated = m_repo.query(m_spell2.getId());
 		assertEquals(updated, toUpdate);
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_spell1.getID());
-		assertTrue (m_repo.query(m_spell1.getID()) == null);
+		m_repo.delete(m_spell1.getId());
+		assertTrue (m_repo.query(m_spell1.getId()) == null);
 	}
 	
 	public void testQuerySet() {
@@ -52,7 +52,7 @@ public class SpellRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	private static void assertEquals(Spell spell1, Spell spell2) {
-		assertEquals(spell1.getID(), spell2.getID());
+		assertEquals(spell1.getId(), spell2.getId());
 		assertEquals(spell1.getCharacterID(), spell2.getCharacterID());
 		assertEquals(spell1.getName(), spell2.getName());
 		assertEquals(spell1.getLevel(), spell2.getLevel());

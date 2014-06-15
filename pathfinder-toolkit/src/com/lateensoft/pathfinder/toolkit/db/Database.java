@@ -108,26 +108,4 @@ public class Database extends SQLiteOpenHelper {
 		open();
 		return m_database.delete(table, selector, null);
 	}
-	
-	public void create(String name, TableAttribute[] attributes) {
-		StringBuilder sb = new StringBuilder();
-		String create = String.format("CREATE TABLE %s (", name);
-		sb.append(create);
-		String columnTemplate = "%s %s";
-		String primaryKeyAddition = "PRIMARY KEY AUTOINCREMENT";
-		String comma = ", ";
-		for(int i = 0; i < attributes.length; i++) {
-			String columnName = attributes[i].GetColumn();
-			String columnType = attributes[i].GetType().name();
-			String columnDefine = String.format(columnTemplate, columnName, columnType);
-			sb.append(columnDefine);
-			if (attributes[i].m_isPrimaryKey) {
-				sb.append(primaryKeyAddition);
-			}
-			if ((i + 1) < attributes.length) {
-				sb.append(comma);
-			}
-			//TODO foreign keys
-		}
-	}
 }

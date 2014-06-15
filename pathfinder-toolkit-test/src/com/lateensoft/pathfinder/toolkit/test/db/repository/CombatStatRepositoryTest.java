@@ -39,7 +39,7 @@ public class CombatStatRepositoryTest extends BaseRepositoryTest {
 	public void testQuery() {
 		CombatStatSet queried = m_repo.query(m_characterId);
 		
-		assertEquals("id", m_combatStatSet.getID(), queried.getID());
+		assertEquals("id", m_combatStatSet.getId(), queried.getId());
 		assertEquals("total hp", m_combatStatSet.getTotalHP(), queried.getTotalHP());
 		assertEquals("wounds", m_combatStatSet.getWounds(), queried.getWounds());
 		assertEquals("non leth dmg", m_combatStatSet.getNonLethalDamage(), queried.getNonLethalDamage());
@@ -88,7 +88,7 @@ public class CombatStatRepositoryTest extends BaseRepositoryTest {
 		
 		m_repo.update(toUpdate);
 		CombatStatSet updated = m_repo.query(m_characterId);
-		assertEquals("id", toUpdate.getID(), updated.getID());
+		assertEquals("id", toUpdate.getId(), updated.getId());
 		assertEquals("total hp", toUpdate.getTotalHP(), updated.getTotalHP());
 		assertEquals("wounds", toUpdate.getWounds(), updated.getWounds());
 		assertEquals("non leth dmg", toUpdate.getNonLethalDamage(), updated.getNonLethalDamage());

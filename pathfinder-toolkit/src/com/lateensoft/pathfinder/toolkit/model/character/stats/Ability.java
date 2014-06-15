@@ -1,12 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class Ability implements Parcelable, Storable, Comparable<Ability> {
+public class Ability implements Parcelable, Identifiable, Comparable<Ability> {
 	
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
@@ -131,7 +131,7 @@ public class Ability implements Parcelable, Storable, Comparable<Ability> {
 	}
 	
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_abilityKey = (int)id;
 	}
 
@@ -139,7 +139,7 @@ public class Ability implements Parcelable, Storable, Comparable<Ability> {
 	 * same as getAbilityKey()
 	 */
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_abilityKey;
 	}
 	

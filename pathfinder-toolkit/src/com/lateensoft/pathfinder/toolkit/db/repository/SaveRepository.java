@@ -111,7 +111,7 @@ public class SaveRepository extends BaseRepository<Save> {
 	
 	@Override
 	protected String getSelector(Save object) {
-		return getSelector(object.getID(), object.getCharacterID());
+		return getSelector(object.getId(), object.getCharacterID());
 	}
 
 	/**

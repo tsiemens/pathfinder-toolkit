@@ -42,7 +42,7 @@ public class ItemRepository extends BaseRepository<Item> {
 		int quantity = ((Long) hashTable.get(QUANTITY)).intValue();
 		boolean isContained = ((Long) hashTable.get(IS_CONTAINED)).intValue() != 0;
 		
-		item.setID(id);
+		item.setId(id);
 		item.setCharacterID(characterId);
 		item.setName(name);
 		item.setWeight(weight);
@@ -61,7 +61,7 @@ public class ItemRepository extends BaseRepository<Item> {
 	protected ContentValues getContentValues(Item object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
-			values.put(ID, object.getID());
+			values.put(ID, object.getId());
 		}
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(NAME, object.getName());

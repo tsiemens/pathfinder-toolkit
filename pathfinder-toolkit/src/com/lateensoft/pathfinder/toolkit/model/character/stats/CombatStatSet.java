@@ -1,11 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class CombatStatSet implements Parcelable, Storable {
+public class CombatStatSet implements Parcelable, Identifiable {
 	public static final int DEFAULT_INIT_ABILITY_KEY = AbilitySet.KEY_DEX;
 	public static final int DEFAULT_AC_ABILITY_KEY = AbilitySet.KEY_DEX;
 	public static final int DEFAULT_CMB_ABILITY_KEY = AbilitySet.KEY_STR;
@@ -369,7 +369,7 @@ public class CombatStatSet implements Parcelable, Storable {
 	 * Sets the character ID
 	 */
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_characterId = id;
 	}
 	
@@ -377,7 +377,7 @@ public class CombatStatSet implements Parcelable, Storable {
 	 * @return the character ID
 	 */
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_characterId;
 	}
 	

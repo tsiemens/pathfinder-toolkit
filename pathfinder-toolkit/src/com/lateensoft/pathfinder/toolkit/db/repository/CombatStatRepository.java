@@ -111,7 +111,7 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 	@Override
 	protected ContentValues getContentValues(CombatStatSet object) {
 		ContentValues values = new ContentValues();
-		values.put(CHARACTER_ID, object.getID());
+		values.put(CHARACTER_ID, object.getId());
 		values.put(TOTAL_HP, object.getTotalHP());
 		values.put(WOUNDS, object.getWounds());
 		values.put(NON_LETHAL_DAMAGE, object.getNonLethalDamage());

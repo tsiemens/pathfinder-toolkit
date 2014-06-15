@@ -140,7 +140,7 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 			Log.v(TAG, "Deleting a skill subtype");
 			if (m_skillSelectedForEdit != null && SkillSet.isSubtypedSkill(m_skillSelectedForEdit.getSkillKey())
 				&& m_skillSet.hasMultipleOfSkill(m_skillSelectedForEdit.getSkillKey())) {
-				if (m_skillRepo.delete(m_skillSelectedForEdit.getID())!= 0) {
+				if (m_skillRepo.delete(m_skillSelectedForEdit.getId())!= 0) {
 					m_skillSet.deleteSkill(m_skillSelectedForEdit);
 				}
 				// Adding is in case they delete the only unranked skill

@@ -62,7 +62,7 @@ public class PartyMemberRepository extends BaseRepository<PartyMember> {
 	protected PartyMember buildFromHashTable(
 			Hashtable<String, Object> hashTable) {
 		PartyMember member = new PartyMember((String) hashTable.get(NAME));
-		member.setID((Long) hashTable.get(ID));
+		member.setId((Long) hashTable.get(ID));
 		member.setPartyID(((Long) hashTable.get(PARTY_ID)).intValue());
 		member.setInitiative(((Long) hashTable.get(INIT)).intValue());
 		member.setAC(((Long) hashTable.get(AC)).intValue());
@@ -87,7 +87,7 @@ public class PartyMemberRepository extends BaseRepository<PartyMember> {
 	protected ContentValues getContentValues(PartyMember object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) {
-			values.put(ID, object.getID());
+			values.put(ID, object.getId());
 		}
 		values.put(PARTY_ID, object.getPartyID());
 		values.put(NAME, object.getName());

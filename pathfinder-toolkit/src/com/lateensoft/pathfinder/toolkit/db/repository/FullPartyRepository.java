@@ -1,8 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 
@@ -17,7 +15,7 @@ public class FullPartyRepository extends AbstractPartyRepository<PathfinderChara
     protected long insertMembers(NamedList<PathfinderCharacter> party) {
         CharacterRepository charRepo = new CharacterRepository();
         for (PathfinderCharacter member : party) {
-            if (!charRepo.doesExist(member.getID())) {
+            if (!charRepo.doesExist(member.getId())) {
                 if (charRepo.insert(member) == -1) {
                     return -1;
                 }

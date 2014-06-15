@@ -279,7 +279,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
 			if (m_characterRepo.insert(character) != -1) {
 				AppPreferences.getInstance().putLong(
-						AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getID());
+						AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getId());
 				switchToPage(CharacterAbilitiesFragment.class);
 			}
 			break;

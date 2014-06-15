@@ -40,7 +40,7 @@ public abstract class AbstractNamedListRepository<T> extends BaseRepository<Name
 	protected ContentValues getContentValues(NamedList<T> object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
-			values.put(getIdColumn(), object.getID());
+			values.put(getIdColumn(), object.getId());
 		}
 		values.put(getNameColumn(), object.getName());
 		return values;

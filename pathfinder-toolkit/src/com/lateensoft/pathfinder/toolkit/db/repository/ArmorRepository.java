@@ -104,7 +104,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
 	
 	@Override
 	public int delete(Armor object) {
-		return delete(object.getID());
+		return delete(object.getId());
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
 	@Override
 	protected ContentValues getContentValues(Armor object) {
 		ContentValues values = new ContentValues();
-		values.put(ID, object.getID());
+		values.put(ID, object.getId());
 		values.put(WORN, object.isWorn());
 		values.put(AC_BONUS, object.getACBonus());
 		values.put(CHECK_PEN, object.getCheckPen());

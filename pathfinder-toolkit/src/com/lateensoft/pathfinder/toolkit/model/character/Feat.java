@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +11,7 @@ import android.os.Parcelable;
  * @author trevsiemens
  *
  */
-public class Feat implements Parcelable, Storable, Comparable<Feat> {
+public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
 	private String m_name;
 	private String m_description;
 	
@@ -36,7 +36,7 @@ public class Feat implements Parcelable, Storable, Comparable<Feat> {
 	public Feat(Feat otherFeat){
 		m_name = otherFeat.getName();
 		m_description = otherFeat.getDescription();
-		m_id = otherFeat.getID();
+		m_id = otherFeat.getId();
 		m_characterId = otherFeat.getCharacterID();
 	}
 	
@@ -84,12 +84,12 @@ public class Feat implements Parcelable, Storable, Comparable<Feat> {
 	}
 	
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 	

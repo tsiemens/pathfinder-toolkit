@@ -1,11 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Save implements Parcelable, Storable {
+public class Save implements Parcelable, Identifiable {
 	private long m_characterId;
 	
 	private int m_saveKey;
@@ -147,12 +147,12 @@ public class Save implements Parcelable, Storable {
 	};
 
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		setSaveKey((int) id);
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return getSaveKey();
 	}
 

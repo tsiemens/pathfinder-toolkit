@@ -40,7 +40,7 @@ public class EncounterRepository extends AbstractNamedListRepository<EncounterPa
 
     @Override
     public int delete(NamedList<EncounterParticipant> object) {
-        return delete(object.getID());
+        return delete(object.getId());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class EncounterRepository extends AbstractNamedListRepository<EncounterPa
 
     @Override
     protected long insertListItem(NamedList<EncounterParticipant> list, EncounterParticipant item) {
-        item.setEncounterId(list.getID());
+        item.setEncounterId(list.getId());
         return m_participantRepo.insert(item);
     }
 }

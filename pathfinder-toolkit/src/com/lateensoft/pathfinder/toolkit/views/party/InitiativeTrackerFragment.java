@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 import com.lateensoft.pathfinder.toolkit.util.DiceSet;
@@ -217,12 +217,12 @@ public class InitiativeTrackerFragment extends BasePageFragment {
 		if(defaultParty != null && !defaultParty.isEmpty()) {
 			CampaignParty currentEncParty = m_partyRepo.queryEncounterParty();
 			if (currentEncParty != null) {
-				m_partyRepo.delete(currentEncParty.getID());
+				m_partyRepo.delete(currentEncParty.getId());
 			}
 
-			defaultParty.setID(Storable.UNSET_ID);
+			defaultParty.setId(Identifiable.UNSET_ID);
             for (PartyMember member : defaultParty) {
-                member.setID(Storable.UNSET_ID);
+                member.setId(Identifiable.UNSET_ID);
             }
 //			m_partyRepo.insert(defaultParty); tODO add to encounters table
 		} else {
@@ -271,12 +271,12 @@ public class InitiativeTrackerFragment extends BasePageFragment {
             if (member != null) {
                 if(m_partyMemberSelectedForEdit < 0) {
                     Log.v(TAG, "Adding a member");
-                    if (m_party.getID() == Storable.UNSET_ID) {
+                    if (m_party.getId() == Identifiable.UNSET_ID) {
                         // Party has not yet been added to database
                         m_party.add(member);
 //                        m_partyRepo.insert(m_party); TODO
                     } else {
-                        member.setPartyID(m_party.getID());
+                        member.setPartyID(m_party.getId());
                         if (m_memberRepo.insert(member) != -1) {
                             m_party.add(member);
                         }

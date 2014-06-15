@@ -16,11 +16,11 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 		m_repo = new ArmorRepository();
 		
 		m_armor1 = new Armor();
-		setValues(m_armor1, m_armor1.getID(), m_characterId, "Heavy armor",
+		setValues(m_armor1, m_armor1.getId(), m_characterId, "Heavy armor",
 				7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armor", "M");
 		
 		m_armor2 = new Armor();
-		setValues(m_armor2, m_armor2.getID(), m_characterId, "Hat",
+		setValues(m_armor2, m_armor2.getId(), m_characterId, "Hat",
 				1.0, false, 10, /*ACP*/-4, 100, 11, 20, "Hat", "S");
 		
 		m_repo.insert(m_armor1);
@@ -29,7 +29,7 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 	
 	public void testInsert() {
 		Armor toInsert = new Armor();
-		setValues(toInsert, toInsert.getID(), m_characterId, "Shoes",
+		setValues(toInsert, toInsert.getId(), m_characterId, "Shoes",
 				1.0, true, 10, 24, 100, 11, 20, "footwear", "L");
 		long id = m_repo.insert(toInsert);
 		assertTrue(id != INSERT_FAIL);
@@ -37,24 +37,24 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 	
 	
 	public void testQuery() {
-		Armor queried = m_repo.query(m_armor1.getID());
+		Armor queried = m_repo.query(m_armor1.getId());
 		
 		assertEquals(queried, m_armor1);
 	}
 	
 	public void testUpdate() {
 		Armor toUpdate = m_armor2;
-		setValues(m_armor2, m_armor2.getID(), m_characterId, "Larger Hat",
+		setValues(m_armor2, m_armor2.getId(), m_characterId, "Larger Hat",
 				2.0, true, 11, 25, 101, 12, 21, "Hat thing", "M");
 		
 		m_repo.update(toUpdate);
-		Armor updated = m_repo.query(toUpdate.getID());
+		Armor updated = m_repo.query(toUpdate.getId());
 		assertEquals(toUpdate, updated);
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_armor1.getID());
-		assertTrue(m_repo.query(m_armor1.getID()) == null);
+		m_repo.delete(m_armor1.getId());
+		assertTrue(m_repo.query(m_armor1.getId()) == null);
 	}
 	
 	public void testQuerySet() {
@@ -65,11 +65,11 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 	
 	public void testMaxDex() {
 		Armor armor1 = new Armor();
-		setValues(armor1, armor1.getID(), m_characterId, "Hat",
+		setValues(armor1, armor1.getId(), m_characterId, "Hat",
 				1.0, true, 10, 24, 2, 11, 20, "Hat", "S");	
 		m_repo.insert(armor1);
 		Armor armor2 = new Armor();
-		setValues(armor2, armor2.getID(), m_characterId, "Hat",
+		setValues(armor2, armor2.getId(), m_characterId, "Hat",
 				1.0, true, 10, 24, 42, 11, 20, "Hat", "S");	
 		m_repo.insert(armor2);
 		
@@ -86,7 +86,7 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 	
 	public void testArmorCheck() {
 		Armor armor1 = new Armor();
-		setValues(armor1, armor1.getID(), m_characterId, "Heavy armor",
+		setValues(armor1, armor1.getId(), m_characterId, "Heavy armor",
 				7.5, true, 1, /*ACP*/-5, 3, 4, 5, "armor", "M");
 		m_repo.insert(armor1);
 		assertEquals(-7, m_repo.getArmorCheckPenalty(m_characterId));
@@ -100,7 +100,7 @@ public class ArmorRespositoryTest extends BaseRepositoryTest {
 	public static void setValues(Armor toUpdate, long id, long characterId, String name,
 			double weight, boolean worn, int ACBonus, int checkPen, int maxDex, int spellFail,
 			int speed, String specProp, String size) {
-		toUpdate.setID(id);
+		toUpdate.setId(id);
 		toUpdate.setCharacterID(characterId);
 		toUpdate.setName(name);
 		toUpdate.setWeight(5.0);

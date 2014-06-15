@@ -29,22 +29,22 @@ public class ItemRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testQuery() {
-		Item queried = m_repo.query(m_item1.getID());
+		Item queried = m_repo.query(m_item1.getId());
 		
 		assertEquals(queried, m_item1);
 	}
 	
 	public void testUpdate() {
-		Item toUpdate = new Item(m_item2.getID(), m_characterId, "Big Wand", 2.0, 1, false);
+		Item toUpdate = new Item(m_item2.getId(), m_characterId, "Big Wand", 2.0, 1, false);
 		
 		m_repo.update(toUpdate);
-		Item updated = m_repo.query(toUpdate.getID());
+		Item updated = m_repo.query(toUpdate.getId());
 		assertEquals(toUpdate, updated);
 	}
 	
 	public void testDelete() {
-		m_repo.delete(m_item1.getID());
-		assertTrue (m_repo.query(m_item1.getID()) == null);
+		m_repo.delete(m_item1.getId());
+		assertTrue (m_repo.query(m_item1.getId()) == null);
 	}
 	
 	public void testQuerySet() {
@@ -54,7 +54,7 @@ public class ItemRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public static void assertEquals(Item item1, Item item2) {
-		assertEquals(item1.getID(), item2.getID());
+		assertEquals(item1.getId(), item2.getId());
 		assertEquals(item1.getCharacterID(), item2.getCharacterID());
 		assertEquals(item1.getName(), item2.getName());
 		assertEquals(item1.getWeight(), item2.getWeight());

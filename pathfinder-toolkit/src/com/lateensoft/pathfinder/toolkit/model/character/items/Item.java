@@ -2,12 +2,12 @@ package com.lateensoft.pathfinder.toolkit.model.character.items;
 
 import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.Storable;
+import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Item implements Parcelable, Storable, Comparable<Item> {
+public class Item implements Parcelable, Identifiable, Comparable<Item> {
     private String m_name;
     private double m_weight;
     private int m_quantity;
@@ -15,6 +15,8 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
     private boolean m_isContained;
 
     private long m_id;
+
+    @Deprecated
     private long m_characterId;
 	
 	public Item(long id, long characterId, String name, double weight, int quantity, boolean contained) {
@@ -105,12 +107,12 @@ public class Item implements Parcelable, Storable, Comparable<Item> {
 	}
 	
 	@Override
-	public void setID(long id) {
+	public void setId(long id) {
 		m_id = id;
 	}
 
 	@Override
-	public long getID() {
+	public long getId() {
 		return m_id;
 	}
 	

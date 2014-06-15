@@ -1,11 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -56,7 +54,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 		
 		if (id != -1) {
 			// Sets all character ids of components
-			object.setID(id);
+			object.setId(id);
 			
 			// Fluff
 			FluffInfoRepository fluffRepo = new FluffInfoRepository();
@@ -197,7 +195,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	protected ContentValues getContentValues(PathfinderCharacter object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
-			values.put(CHARACTER_ID, object.getID());
+			values.put(CHARACTER_ID, object.getId());
 		}
 		values.put(GOLD, object.getGold());
 		return values;
@@ -282,7 +280,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 
     public boolean doesExist(long id) {
         Cursor cursor= getDatabase().rawQuery("select count(*) count from " + TABLE + " where " +
-                        CHARACTER_ID + "=" + id, null);
+                CHARACTER_ID + "=" + id, null);
         cursor.moveToFirst();
         int count = cursor.getInt(cursor.getColumnIndex("count"));
         cursor.close();

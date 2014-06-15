@@ -119,7 +119,7 @@ public class PartyManagerFragment extends BasePageFragment {
                     m_party = m_partyRepo.query(id.getId());
                     if (m_party != null) {
                         AppPreferences.getInstance().putLong(
-                                AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+                                AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getId());
                         break;
                     }
                 }
@@ -184,7 +184,7 @@ public class PartyManagerFragment extends BasePageFragment {
             memberIds.add(pair.getId());
         }
 
-        int dels = m_partyRepo.removeCharactersFromParty(m_party.getID(), memberIds);
+        int dels = m_partyRepo.removeCharactersFromParty(m_party.getId(), memberIds);
         if (dels > 0) {
             m_party.removeAll(membersToRemove);
         }
@@ -198,7 +198,7 @@ public class PartyManagerFragment extends BasePageFragment {
 		m_party = new NamedList<IdStringPair>("New Party");
 		m_partyRepo.insert(m_party);
 		AppPreferences.getInstance().putLong(
-				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getID());
+				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getId());
 		refreshPartyView();
 	}
 
@@ -208,7 +208,7 @@ public class PartyManagerFragment extends BasePageFragment {
 	 */
 	private void deleteCurrentParty() {
 		int currentPartyIndex = 0;
-		long currentPartyID = m_party.getID();
+		long currentPartyID = m_party.getId();
 		List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
 
 		for (int i = 0; i < partyIDs.size(); i++) {
@@ -296,7 +296,7 @@ public class PartyManagerFragment extends BasePageFragment {
 
     private void showPartyPicker() {
         List<IdStringPair> parties = m_partyRepo.queryIdNameList();
-        parties.remove(new IdStringPair(m_party.getID(), m_party.getName()));
+        parties.remove(new IdStringPair(m_party.getId(), m_party.getName()));
         PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
                 .setSingleChoice(true)
@@ -361,12 +361,12 @@ public class PartyManagerFragment extends BasePageFragment {
                 if (membersToAdd != null) {
                     PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
                     for (IdStringPair member : membersToAdd) {
-                        long id = membersRepo.insert(new PartyMembershipRepository.Membership(m_party.getID(), member.getId()));
+                        long id = membersRepo.insert(new PartyMembershipRepository.Membership(m_party.getId(), member.getId()));
                         if (id >= 0) {
                             m_party.add(member);
                         } else {
                             Log.e(TAG, "Database returned " + id + " while adding character "
-                                    + member + " to " + m_party.getID());
+                                    + member + " to " + m_party.getId());
                         }
                     }
                     refreshPartyView();

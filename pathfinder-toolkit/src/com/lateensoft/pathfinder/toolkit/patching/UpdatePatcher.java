@@ -13,7 +13,6 @@ import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 
 public class UpdatePatcher {
 	private static final String TAG = UpdatePatcher.class.getSimpleName();
@@ -132,7 +131,7 @@ public class UpdatePatcher {
 				completeSuccess = false;
 				Log.e(TAG, "Error migrating character "+oldChar.getName());
 			} else if (id == oldSelectedCharacterID) {
-				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getID());
+				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getId());
 			}
 		}
 
@@ -147,7 +146,7 @@ public class UpdatePatcher {
 //				completeSuccess = false;
 //				Log.e(TAG, "Error migrating party "+oldParty.getName());
 //			} if (id == oldSelectedPartyID) {
-//				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getID());
+//				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_PARTY_ID, newParty.getId());
 //			}
 //		}
 

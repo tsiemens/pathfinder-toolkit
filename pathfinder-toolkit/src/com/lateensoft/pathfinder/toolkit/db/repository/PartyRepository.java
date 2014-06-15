@@ -44,15 +44,15 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
 		String table = m_tableInfo.getTable();
 		long id = getDatabase().insert(table, values);
 		if (id != -1 && !isIDSet(party)) {
-			party.setID(id);
+			party.setId(id);
 		}
 
         if (id != -1) {
-            party.setID(id);
+            party.setId(id);
 
             CharacterRepository charRepo = new CharacterRepository();
             for (PathfinderCharacter member : party) {
-                if (!charRepo.doesExist(member.getID())) {
+                if (!charRepo.doesExist(member.getId())) {
                     if (charRepo.insert(member) == -1) {
                         delete(id);
                         return -1;
@@ -83,7 +83,7 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
 	protected ContentValues getContentValues(NamedList<PathfinderCharacter> object) {
 		ContentValues values = new ContentValues();
 		if (isIDSet(object)) { 
-			values.put(PARTY_ID, object.getID());
+			values.put(PARTY_ID, object.getId());
 		}
 		values.put(NAME, object.getName());
 		return values;
