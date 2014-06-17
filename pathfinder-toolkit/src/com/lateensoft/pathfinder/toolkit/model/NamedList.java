@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model;
 
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,15 +1,19 @@
 package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.db.dao.WeakIdentifiableTableDAO;
+import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
+import java.util.List;
 
-public class ArmorDAO extends WeakIdentifiableTableDAO<Long, Armor> {
+public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
 
     protected static final String TABLE = "Armor";
     protected static final String ID = "item_id";
@@ -32,12 +36,12 @@ public class ArmorDAO extends WeakIdentifiableTableDAO<Long, Armor> {
     }
 
     @Override
-    protected String getIdSelector(IdPair<Long, Long> idPair) {
-        return TABLE + "." + ID + "=" + idPair.getWeakId();
+    protected String getIdSelector(Long id) {
+        return TABLE + "." + ID + "=" + id;
     }
 
     @Override
-    public String getStrongIdSelector(Long characterId) {
+    protected String getOwnerIdSelector(Long characterId) {
         return ItemDAO.TABLE + "." + ItemDAO.CHARACTER_ID + "=" + characterId;
     }
 
@@ -82,17 +86,47 @@ public class ArmorDAO extends WeakIdentifiableTableDAO<Long, Armor> {
     }
 
     @Override
-    protected ContentValues getContentValues(Long characterId, Armor entity) {
+    protected ContentValues getContentValues(OwnedObject<Long, Armor> rowData) {
+        Armor armor = rowData.getObject();
         ContentValues values = new ContentValues();
-        values.put(ID, entity.getId());
-        values.put(WORN, entity.isWorn());
-        values.put(AC_BONUS, entity.getACBonus());
-        values.put(CHECK_PEN, entity.getCheckPen());
-        values.put(MAX_DEX, entity.getMaxDex());
-        values.put(SPELL_FAIL, entity.getSpellFail());
-        values.put(SPEED, entity.getSpeed());
-        values.put(SPEC_PROPERTIES, entity.getSpecialProperties());
-        values.put(SIZE, entity.getSize());
+        values.put(ID, armor.getId());
+        values.put(WORN, armor.isWorn());
+        values.put(AC_BONUS, armor.getACBonus());
+        values.put(CHECK_PEN, armor.getCheckPen());
+        values.put(MAX_DEX, armor.getMaxDex());
+        values.put(SPELL_FAIL, armor.getSpellFail());
+        values.put(SPEED, armor.getSpeed());
+        values.put(SPEC_PROPERTIES, armor.getSpecialProperties());
+        values.put(SIZE, armor.getSize());
         return values;
+    }
+
+    /** the max dex permitted by of all worn armors */
+    public int getMaxDexForCharacter(long characterId) {
+        List<Armor> armors = findAllForOwner(characterId);
+        int maxDex = Integer.MAX_VALUE;
+        for (Armor armor : armors) {
+            if (armor.isWorn() && armor.getMaxDex() < maxDex) {
+                maxDex = armor.getMaxDex();
+            }
+        }
+        return maxDex;
+    }
+
+    /**  the total armor check penalty (negative) of all worn armor */
+    public int getArmorCheckPenaltyForCharacter(long characterId) {
+        String table = getFromQueryClause();
+        String selector = String.format("%s=%d AND %s.%s=%s.%s AND %s<>0",
+                ItemDAO.CHARACTER_ID, characterId,
+                TABLE, ID, ItemRepository.TABLE, ItemRepository.ID,
+                WORN);
+        String[] columns = {"SUM("+CHECK_PEN+")"};
+        Cursor cursor = getDatabase().query(table, columns, selector);
+
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            return cursor.getInt(0);
+        }
+        return 0;
     }
 }

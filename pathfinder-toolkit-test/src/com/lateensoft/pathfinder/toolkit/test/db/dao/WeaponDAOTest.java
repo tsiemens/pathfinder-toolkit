@@ -1,68 +1,75 @@
 package com.lateensoft.pathfinder.toolkit.test.db.dao;
 
-import com.lateensoft.pathfinder.toolkit.db.repository.WeaponRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.WeaponDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
-import com.lateensoft.pathfinder.toolkit.test.db.repository.BaseRepositoryTest;
 import com.lateensoft.pathfinder.toolkit.test.db.repository.ItemRepositoryTest;
 
 import java.util.List;
 
-public class WeaponDAOTest extends BaseRepositoryTest {
-	private Weapon m_weapon1;
-	private Weapon m_weapon2;
-	private WeaponRepository m_repo;
+public class WeaponDAOTest extends CharacterComponentDAOTest {
+	private Weapon weapon1;
+	private Weapon weapon2;
+	private WeaponDAO dao;
 	
 	@Override
-	public void setUp() {
+	public void setUp() throws Exception {
 		super.setUp();
-		m_repo = new WeaponRepository();
-		
-		m_weapon1 = new Weapon();
-		setValues(m_weapon1, m_weapon1.getId(), m_characterId, "Great Sword",
-				7.5, 5, "4/2", "x2", 5, "It's on fire!", 0, "Sword", "L");
-		
-		m_weapon2 = new Weapon();
-		setValues(m_weapon2, m_weapon2.getId(), m_characterId, "Long Bow",
-				4.0, 3, "5", "x3", 100, "None", 20, "Bow", "M");
-		
-		m_repo.insert(m_weapon1);
-		m_repo.insert(m_weapon2);
+        initAndTestAdd();
 	}
-	
-	public void testInsert() {
-		Weapon toInsert = new Weapon();
-		setValues(toInsert, toInsert.getId(), m_characterId, "Longer Bow",
-				5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
-		long id = m_repo.insert(toInsert);
-		assertTrue(id != INSERT_FAIL);
-	}
-	
-	
-	public void testQuery() {
-		Weapon queried = m_repo.query(m_weapon1.getId());
+
+    private void initAndTestAdd() {
+        try {
+            dao = new WeaponDAO();
+
+            weapon1 = new Weapon();
+            setValues(weapon1, weapon1.getId(), getTestCharacterId(), "Great Sword",
+                    7.5, 5, "4/2", "x2", 5, "It's on fire!", 0, "Sword", "L");
+
+            weapon2 = new Weapon();
+            setValues(weapon2, weapon2.getId(), getTestCharacterId(), "Long Bow",
+                    4.0, 3, "5", "x3", 100, "None", 20, "Bow", "M");
+
+            dao.add(getTestCharacterId(), weapon1);
+            dao.add(getTestCharacterId(), weapon2);
+        } catch (DataAccessException e) {
+            handleDataAccessException(e);
+        }
+    }
+
+	public void testFind() {
+		Weapon queried = dao.find(weapon1.getId());
 		
-		assertEquals(queried, m_weapon1);
+		assertEquals(queried, weapon1);
 	}
 	
 	public void testUpdate() {
-		Weapon toUpdate = m_weapon2;
-		setValues(toUpdate, m_weapon2.getId(), m_weapon2.getCharacterID(), "Longer Bow",
-				5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
-		
-		m_repo.update(toUpdate);
-		Weapon updated = m_repo.query(toUpdate.getId());
-		assertEquals(toUpdate, updated);
-	}
+        try {
+            Weapon toUpdate = weapon2;
+            setValues(toUpdate, weapon2.getId(), weapon2.getCharacterID(), "Longer Bow",
+                    5.0, 3, "6", "x3", 120, "N/A", 40, "Bow", "L");
+
+            dao.update(getTestCharacterId(), toUpdate);
+            Weapon updated = dao.find(toUpdate.getId());
+            assertEquals(toUpdate, updated);
+        } catch (DataAccessException e) {
+            handleDataAccessException(e);
+        }
+    }
 	
 	public void testDelete() {
-		m_repo.delete(m_weapon1.getId());
-		assertTrue(m_repo.query(m_weapon1.getId()) == null);
-	}
+        try {
+            dao.remove(weapon1);
+            assertTrue(dao.find(weapon1.getId()) == null);
+        } catch (DataAccessException e) {
+            handleDataAccessException(e);
+        }
+    }
 	
 	public void testQuerySet() {
-		List<Weapon> queriedItems = m_repo.querySet(m_characterId);
-		assertEquals(queriedItems.get(0), m_weapon1);
-		assertEquals(queriedItems.get(1), m_weapon2);
+		List<Weapon> queriedItems = dao.findAllForOwner(getTestCharacterId());
+		assertEquals(queriedItems.get(0), weapon1);
+		assertEquals(queriedItems.get(1), weapon2);
 	}
 
 	public static void setValues(Weapon toUpdate, long id, long characterId, String name,

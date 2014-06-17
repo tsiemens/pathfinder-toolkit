@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
 import com.lateensoft.pathfinder.toolkit.util.DiceSet;

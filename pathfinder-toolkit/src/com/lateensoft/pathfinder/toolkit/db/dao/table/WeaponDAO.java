@@ -2,14 +2,15 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.db.dao.WeakIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
 
-public class WeaponDAO extends WeakIdentifiableTableDAO<Long, Weapon> {
+public class WeaponDAO extends OwnedIdentifiableTableDAO<Long, Weapon> {
 
     protected static final String TABLE = "Weapon";
     protected static final String ID = "item_id";
@@ -32,12 +33,12 @@ public class WeaponDAO extends WeakIdentifiableTableDAO<Long, Weapon> {
     }
 
     @Override
-    protected String getIdSelector(IdPair<Long, Long> idPair) {
-        return TABLE + "." + ID + "=" + idPair.getWeakId();
+    protected String getIdSelector(Long id) {
+        return TABLE + "." + ID + "=" + id;
     }
 
     @Override
-    public String getStrongIdSelector(Long characterId) {
+    protected String getOwnerIdSelector(Long characterId) {
         return ItemDAO.TABLE + "." + ItemDAO.CHARACTER_ID + "=" + characterId;
     }
 
@@ -82,7 +83,8 @@ public class WeaponDAO extends WeakIdentifiableTableDAO<Long, Weapon> {
     }
 
     @Override
-    protected ContentValues getContentValues(Long characterId, Weapon entity) {
+    protected ContentValues getContentValues(OwnedObject<Long, Weapon> rowData) {
+        Weapon entity = rowData.getObject();
         ContentValues values = new ContentValues();
         values.put(ID, entity.getId());
         values.put(TOTAL_ATTACK_BONUS, entity.getTotalAttackBonus());

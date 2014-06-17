@@ -1,14 +1,15 @@
 package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.db.dao.WeakIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
 
-public class ItemDAO extends WeakIdentifiableTableDAO<Long, Item> {
+public class ItemDAO extends OwnedIdentifiableTableDAO<Long, Item> {
 
     protected static final String TABLE = "Item";
     protected static final String CHARACTER_ID = "character_id";
@@ -25,12 +26,12 @@ public class ItemDAO extends WeakIdentifiableTableDAO<Long, Item> {
     }
 
     @Override
-    protected String getIdSelector(IdPair<Long, Long> idPair) {
-        return ID + "=" + idPair.getWeakId();
+    protected String getIdSelector(Long id) {
+        return ID + "=" + id;
     }
 
     @Override
-    public String getStrongIdSelector(Long characterId) {
+    protected String getOwnerIdSelector(Long characterId) {
         return CHARACTER_ID + "=" + characterId;
     }
 
@@ -72,16 +73,17 @@ public class ItemDAO extends WeakIdentifiableTableDAO<Long, Item> {
     }
 
     @Override
-    protected ContentValues getContentValues(Long characterId, Item entity) {
+    protected ContentValues getContentValues(OwnedObject<Long, Item> rowData) {
+        Item item = rowData.getObject();
         ContentValues values = new ContentValues();
-        if (isIdSet(entity)) {
-            values.put(ID, entity.getId());
+        if (isIdSet(item)) {
+            values.put(ID, item.getId());
         }
-        values.put(CHARACTER_ID, characterId);
-        values.put(NAME, entity.getName());
-        values.put(WEIGHT, entity.getWeight());
-        values.put(QUANTITY, entity.getQuantity());
-        values.put(IS_CONTAINED, entity.isContained());
+        values.put(CHARACTER_ID, rowData.getOwnerId());
+        values.put(NAME, item.getName());
+        values.put(WEIGHT, item.getWeight());
+        values.put(QUANTITY, item.getQuantity());
+        values.put(IS_CONTAINED, item.isContained());
         return values;
     }
 }

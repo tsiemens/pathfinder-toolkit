@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import java.util.Hashtable;
 import java.util.List;

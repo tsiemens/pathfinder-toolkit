@@ -6,7 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.lateensoft.pathfinder.toolkit.db.Database;
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 public abstract class BaseRepository<T extends Identifiable> {
 	private Database m_database;

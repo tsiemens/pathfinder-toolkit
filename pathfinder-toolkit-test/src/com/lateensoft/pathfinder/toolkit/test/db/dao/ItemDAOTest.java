@@ -32,7 +32,7 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
     }
 
 	public void testFind() {
-		Item queried = dao.find(getTestCharacterId(), item1.getId());
+		Item queried = dao.find(item1.getId());
 		
 		assertEquals(queried, item1);
 	}
@@ -42,7 +42,7 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
 
         try {
             dao.update(getTestCharacterId(), toUpdate);
-            Item updated = dao.find(getTestCharacterId(), toUpdate.getId());
+            Item updated = dao.find(toUpdate.getId());
             assertEquals(toUpdate, updated);
         } catch (DataAccessException e) {
             handleDataAccessException(e);
@@ -51,15 +51,15 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
 	
 	public void testRemove() {
         try {
-            dao.remove(getTestCharacterId(), item1);
-            assertTrue(dao.find(getTestCharacterId(), item1.getId()) == null);
+            dao.remove(item1);
+            assertTrue(dao.find(item1.getId()) == null);
         } catch (DataAccessException e) {
             handleDataAccessException(e);
         }
     }
 	
 	public void testQuerySet() {
-		List<Item> queriedItems = dao.findAll(getTestCharacterId());
+		List<Item> queriedItems = dao.findAllForOwner(getTestCharacterId());
 		assertEquals(queriedItems.get(0), item1);
 		assertEquals(queriedItems.get(1), item2);
 	}

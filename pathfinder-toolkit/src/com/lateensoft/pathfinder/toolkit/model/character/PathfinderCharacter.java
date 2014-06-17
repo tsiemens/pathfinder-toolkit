@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;

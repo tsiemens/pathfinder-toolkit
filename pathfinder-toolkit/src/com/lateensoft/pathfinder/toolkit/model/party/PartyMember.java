@@ -2,7 +2,7 @@ package com.lateensoft.pathfinder.toolkit.model.party;
 
 import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import android.content.Context;
 import android.content.res.Resources;

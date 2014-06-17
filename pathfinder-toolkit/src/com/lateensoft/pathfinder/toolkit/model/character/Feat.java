@@ -1,6 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import com.lateensoft.pathfinder.toolkit.db.dao.Identifiable;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
