@@ -1,16 +1,16 @@
 package com.lateensoft.pathfinder.toolkit.test.db;
 
-import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
 
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 
 public class TableCreatorTest extends AndroidTestCase {
-	protected Database m_db;
+	protected DatabaseImpl m_db;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		m_db = Database.getInstance();
+		m_db = DatabaseImpl.getInstance();
 	}
 	
 	public void testDatabaseCreation() {

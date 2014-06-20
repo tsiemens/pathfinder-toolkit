@@ -1,14 +1,14 @@
 package com.lateensoft.pathfinder.toolkit.db.dao;
 
+import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.dao.IdentifiableGenericDAO;
 
 public abstract class RootIdentifiableTableDAO<T extends Identifiable> extends GenericTableDAO<Long, T, T>
         implements IdentifiableGenericDAO<T> {
 
-    @Override
-    protected T getEntityFromRowData(T rowData) {
-        return rowData;
+    public RootIdentifiableTableDAO(Context context) {
+        super(context);
     }
 
     @Override

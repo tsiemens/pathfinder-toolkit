@@ -5,11 +5,11 @@ import java.util.Hashtable;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 public abstract class BaseRepository<T extends Identifiable> {
-	private Database m_database;
+	private DatabaseImpl m_database;
 	protected TableInfo m_tableInfo;
 	
 	static final String CHARACTER_ID = "character_id";
@@ -18,7 +18,7 @@ public abstract class BaseRepository<T extends Identifiable> {
 	 * Must setup mTableAttributeSet here
 	 */
 	public BaseRepository() {
-		m_database = Database.getInstance();
+		m_database = DatabaseImpl.getInstance();
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public abstract class BaseRepository<T extends Identifiable> {
 	 */
 	protected abstract ContentValues getContentValues(T object);
 	
-	protected Database getDatabase() {
+	protected DatabaseImpl getDatabase() {
 		return m_database;
 	}
 }

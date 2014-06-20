@@ -43,7 +43,7 @@
 
     <TableRow android:id="@+id/strRow" android:layout_weight="0.10" >
         <TextView
-            android:text="@string/str"
+            android:text="@string/ability_name_str"
             android:padding="3dp"
             android:gravity="center" 
             android:layout_weight="0.20"
@@ -80,7 +80,7 @@
 	
 	<TableRow android:id="@+id/dexRow" android:layout_weight="0.10">
         <TextView
-            android:text="@string/dex"
+            android:text="@string/ability_name_dex"
             android:padding="3dp"
             android:gravity="center" 
             android:layout_weight="0.20"
@@ -117,7 +117,7 @@
 	
 	<TableRow android:id="@+id/conRow" android:layout_weight="0.10">
         <TextView
-            android:text="@string/con"
+            android:text="@string/ability_name_con"
             android:padding="3dp" 
             android:gravity="center"
             android:layout_weight="0.20"
@@ -154,7 +154,7 @@
 	
 	<TableRow android:id="@+id/intRow" android:layout_weight="0.10">
         <TextView
-            android:text="@string/inl"
+            android:text="@string/ability_name_int"
             android:padding="3dp" 
             android:gravity="center"
             android:layout_weight="0.20"
@@ -193,7 +193,7 @@
 	
 	<TableRow android:id="@+id/wisRow" android:layout_weight="0.10">
         <TextView
-            android:text="@string/wis"
+            android:text="@string/ability_name_wis"
             android:padding="3dp" 
             android:gravity="center"
             android:layout_weight="0.20"
@@ -230,7 +230,7 @@
 	
 	<TableRow android:id="@+id/chaRow" android:layout_weight="0.10">
         <TextView
-            android:text="@string/cha"
+            android:text="@string/ability_name_cha"
             android:padding="3dp" 
             android:gravity="center"
             android:layout_weight="0.20"

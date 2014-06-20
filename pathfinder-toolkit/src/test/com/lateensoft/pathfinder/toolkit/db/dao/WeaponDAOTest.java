@@ -1,26 +1,39 @@
-package com.lateensoft.pathfinder.toolkit.test.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao;
 
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.dao.table.WeaponDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
-import com.lateensoft.pathfinder.toolkit.test.db.repository.ItemRepositoryTest;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+@RunWith(RobolectricTestRunner.class)
 public class WeaponDAOTest extends CharacterComponentDAOTest {
 	private Weapon weapon1;
 	private Weapon weapon2;
 	private WeaponDAO dao;
-	
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
         initAndTestAdd();
 	}
 
+    @Override
+    protected GenericTableDAO getDAO() {
+        return dao;
+    }
+
     private void initAndTestAdd() {
         try {
-            dao = new WeaponDAO();
+            dao = new WeaponDAO(Robolectric.application);
 
             weapon1 = new Weapon();
             setValues(weapon1, weapon1.getId(), getTestCharacterId(), "Great Sword",
@@ -37,12 +50,14 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
         }
     }
 
+    @Test
 	public void testFind() {
 		Weapon queried = dao.find(weapon1.getId());
-		
+
 		assertEquals(queried, weapon1);
 	}
-	
+
+    @Test
 	public void testUpdate() {
         try {
             Weapon toUpdate = weapon2;
@@ -56,23 +71,25 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
             handleDataAccessException(e);
         }
     }
-	
+
+    @Test
 	public void testDelete() {
         try {
             dao.remove(weapon1);
-            assertTrue(dao.find(weapon1.getId()) == null);
+            assertNull(dao.find(weapon1.getId()));
         } catch (DataAccessException e) {
             handleDataAccessException(e);
         }
     }
-	
+
+    @Test
 	public void testQuerySet() {
 		List<Weapon> queriedItems = dao.findAllForOwner(getTestCharacterId());
 		assertEquals(queriedItems.get(0), weapon1);
 		assertEquals(queriedItems.get(1), weapon2);
 	}
 
-	public static void setValues(Weapon toUpdate, long id, long characterId, String name,
+	private void setValues(Weapon toUpdate, long id, long characterId, String name,
 			double weight, int totalAttackB, String dmg, String crit, int range, String specProp,
 			int ammo, String type, String size) {
 		toUpdate.setId(id);
@@ -87,18 +104,6 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
 		toUpdate.setAmmunition(ammo);
 		toUpdate.setType(type);
 		toUpdate.setSize(size);
-	}
-	
-	public static void assertEquals(Weapon item1, Weapon item2) {
-		ItemRepositoryTest.assertEquals(item1, item2);
-		assertEquals(item1.getTotalAttackBonus(), item2.getTotalAttackBonus());
-		assertEquals(item1.getDamage(), item2.getDamage());
-		assertEquals(item1.getCritical(), item2.getCritical());
-		assertEquals(item1.getRange(), item2.getRange());
-		assertEquals(item1.getSpecialProperties(), item2.getSpecialProperties());
-		assertEquals(item1.getAmmunition(), item2.getAmmunition());
-		assertEquals(item1.getType(), item2.getType());
-		assertEquals(item1.getSize(), item2.getSize());
 	}
 
 }

@@ -29,7 +29,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 		m_repo = new SaveRepository();
 		m_save = m_repo.queryAllForCharacter(m_characterId).get(SAVE_INDEX);
 		m_save.setBaseSave(BASE_VALUE);
-		m_save.setAbilityKey(ABILITY_KEY);
+		m_save.setAbilityType(ABILITY_KEY);
 		m_save.setMagicMod(MAGIC_MOD);
 		m_save.setMiscMod(MISC_MOD);
 		m_save.setTempMod(TEMP_MOD);
@@ -40,21 +40,21 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 		Save queried = m_repo.query(m_save.getId(), m_characterId);
 		assertEquals(m_save.getCharacterID(), queried.getCharacterID());
 		assertEquals(m_save.getBaseSave(), queried.getBaseSave());
-		assertEquals(m_save.getAbilityKey(), queried.getAbilityKey());
+		assertEquals(m_save.getAbilityType(), queried.getAbilityType());
 		assertEquals(m_save.getMagicMod(), queried.getMagicMod());
 		assertEquals(m_save.getMiscMod(), queried.getMiscMod());
 		assertEquals(m_save.getTempMod(), queried.getTempMod());
 	}
 	
 	public void testUpdate() {
-		Save toUpdate = new Save(m_save.getSaveKey(), m_characterId, NEW_BASE_VALUE,
+		Save toUpdate = new Save(m_save.getType(), m_characterId, NEW_BASE_VALUE,
 				NEW_ABILITY_KEY, NEW_MAGIC_MOD, NEW_MISC_MOD, NEW_TEMP_MOD);
 		m_repo.update(toUpdate);
 		Save updated = m_repo.query(m_save.getId(), m_characterId);
-		assertEquals(updated.getSaveKey(), toUpdate.getSaveKey());
+		assertEquals(updated.getType(), toUpdate.getType());
 		assertEquals(updated.getCharacterID(), toUpdate.getCharacterID());
 		assertEquals(updated.getBaseSave(), toUpdate.getBaseSave());
-		assertEquals(updated.getAbilityKey(), toUpdate.getAbilityKey());
+		assertEquals(updated.getAbilityType(), toUpdate.getAbilityType());
 		assertEquals(updated.getMagicMod(), toUpdate.getMagicMod());
 		assertEquals(updated.getMiscMod(), toUpdate.getMiscMod());
 		assertEquals(updated.getTempMod(), toUpdate.getTempMod());
@@ -64,7 +64,7 @@ public class SaveRepositoryTest extends BaseRepositoryTest {
 		List<Save> queriedSaves = m_repo.queryAllForCharacter(m_characterId);
 
         for (int i = 0; i < SaveSet.SAVE_KEYS.size(); i++){
-			assertEquals(queriedSaves.get(i).getSaveKey(), SaveSet.SAVE_KEYS.get(i).intValue());
+			assertEquals(queriedSaves.get(i).getType(), SaveSet.SAVE_KEYS.get(i).intValue());
 		}
 	}
 }

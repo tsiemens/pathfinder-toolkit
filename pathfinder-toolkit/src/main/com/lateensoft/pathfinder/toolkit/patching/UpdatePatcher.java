@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
-import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
@@ -29,9 +29,6 @@ public class UpdatePatcher {
 		Log.i(TAG, "Applying update patches...");
 		int prevVer = getPreviousVersion();
 		boolean completeSuccess = true;
-		
-		// For the sake of functionality, creating database is part of the patch.
-		Database.getInstance();
 		
 		if (prevVer != -1) {
             // Apply each patch in order, as required.

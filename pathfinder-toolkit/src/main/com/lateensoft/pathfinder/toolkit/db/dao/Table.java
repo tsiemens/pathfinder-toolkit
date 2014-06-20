@@ -18,7 +18,7 @@ public class Table {
         String[] colNames = new String[columns.size()];
         return columns.toArray(colNames);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -35,11 +35,15 @@ public class Table {
         List<String> combinedCols = Lists.newArrayList(this.columns);
         int joinColIndex = combinedCols.indexOf(ourColumnToJoin);
 
-        combinedCols.set(joinColIndex, this.getName() + "." + ourColumnToJoin + " " + ourColumnToJoin);
+        combinedCols.set(joinColIndex, getUnambiguousRenamedColumn(this.getName(), ourColumnToJoin));
         combinedCols.addAll(otherColsList);
 
         String[] colsArray = new String[combinedCols.size()];
         combinedCols.toArray(colsArray);
         return colsArray;
+    }
+
+    private static String getUnambiguousRenamedColumn(String table, String column) {
+        return table + "." + column + " " + column;
     }
 }

@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
+import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
@@ -18,6 +19,10 @@ public class ItemDAO extends OwnedIdentifiableTableDAO<Long, Item> {
     private static final String WEIGHT = "Weight";
     private static final String QUANTITY = "Quantity";
     private static final String IS_CONTAINED = "IsContained";
+
+    public ItemDAO(Context context) {
+        super(context);
+    }
 
     @Override
     protected Table initTable() {
@@ -76,7 +81,7 @@ public class ItemDAO extends OwnedIdentifiableTableDAO<Long, Item> {
     protected ContentValues getContentValues(OwnedObject<Long, Item> rowData) {
         Item item = rowData.getObject();
         ContentValues values = new ContentValues();
-        if (isIdSet(item)) {
+        if (isIdSet(rowData)) {
             values.put(ID, item.getId());
         }
         values.put(CHARACTER_ID, rowData.getOwnerId());

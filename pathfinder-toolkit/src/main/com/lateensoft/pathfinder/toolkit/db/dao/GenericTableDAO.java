@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.db.dao;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -8,6 +9,7 @@ import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.dao.GenericDAO;
 import com.lateensoft.pathfinder.toolkit.db.Database;
 import org.jetbrains.annotations.Nullable;
+import roboguice.RoboGuice;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -16,8 +18,8 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
     private Database database;
     private Table table;
 
-    public GenericTableDAO() {
-        database = Database.getInstance();
+    public GenericTableDAO(Context context) {
+        database = RoboGuice.getInjector(context).getInstance(Database.class);
         table = initTable();
     }
 
@@ -96,19 +98,20 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         ContentValues values = getContentValues(rowData);
         String table = getTable().getName();
         long id = getDatabase().insert(table, values);
-        Entity entity1 = getEntityFromRowData(rowData);
-        if (id != -1 && !isIdSet(entity1)) {
-            return setId(entity1, id);
+        if (id != -1) {
+            if (!isIdSet(rowData)) {
+                return setId(rowData, id);
+            } else {
+                return getIdFromRowData(rowData);
+            }
         } else {
             throw new DataAccessException("Failed to insert " + rowData);
         }
     }
 
-    protected abstract Entity getEntityFromRowData(RowData rowData);
+    protected abstract boolean isIdSet(RowData entity);
 
-    protected abstract boolean isIdSet(Entity entity);
-
-    protected abstract RowId setId(Entity entity, long id);
+    protected abstract RowId setId(RowData entity, long id);
 
     public void update(RowData rowData) throws DataAccessException {
         String selector = getIdSelector(getIdFromRowData(rowData));
@@ -140,7 +143,7 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         return database;
     }
 
-    protected Table getTable() {
+    public Table getTable() {
         return table;
     }
 

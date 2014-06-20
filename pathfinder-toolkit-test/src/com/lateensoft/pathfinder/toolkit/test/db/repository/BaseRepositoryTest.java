@@ -1,14 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.test.db.repository;
 
-import com.lateensoft.pathfinder.toolkit.BaseApplication;
-import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 
 import android.test.AndroidTestCase;
 
 public class BaseRepositoryTest extends AndroidTestCase {
-	protected Database m_db;
+	protected DatabaseImpl m_db;
 	protected final String CHARACTER_NAME = "Joe";
 	protected final double CHARACTER_GOLD = 40.0;
 	protected long m_characterId;
@@ -16,7 +15,7 @@ public class BaseRepositoryTest extends AndroidTestCase {
 	
 	@Override
 	protected void setUp() {
-		m_db = Database.getInstance();
+		m_db = DatabaseImpl.getInstance();
 		PathfinderCharacter joe = PathfinderCharacter.newDefaultCharacter(CHARACTER_NAME);
 		joe.setGold(CHARACTER_GOLD);
 		CharacterRepository repo = new CharacterRepository();

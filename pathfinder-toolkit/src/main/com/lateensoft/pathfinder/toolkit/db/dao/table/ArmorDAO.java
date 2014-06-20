@@ -1,13 +1,16 @@
 package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
@@ -26,7 +29,12 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
     private static final String SPEC_PROPERTIES = "SpecialProperties";
     private static final String SIZE = "Size";
 
-    private ItemDAO itemDAO = new ItemDAO();
+    private ItemDAO itemDAO;
+
+    public ArmorDAO(Context context) {
+        super(context);
+        itemDAO = new ItemDAO(context);
+    }
 
     @Override
     protected Table initTable() {
@@ -52,9 +60,25 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
     }
 
     @Override
-    public Long add(Long characterId, Armor entity) throws DataAccessException {
-        itemDAO.add(characterId, entity);
-        return super.add(characterId, entity);
+    protected List<String> getTablesForQuery() {
+        return Lists.newArrayList(TABLE, ItemDAO.TABLE);
+    }
+
+    @Override
+    protected String[] getColumnsForQuery() {
+        return getTable().union(itemDAO.getTable(), ID, ItemDAO.ID);
+    }
+
+    @Override
+    public Long add(OwnedObject<Long, Armor> rowData) throws DataAccessException {
+        itemDAO.add(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
+        return super.add(rowData);
+    }
+
+    @Override
+    public void update(OwnedObject<Long, Armor> rowData) throws DataAccessException {
+        itemDAO.update(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
+        super.update(rowData);
     }
 
     @Override

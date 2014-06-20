@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+import com.google.inject.util.Modules;
+import com.lateensoft.pathfinder.toolkit.db.Database;
+import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
+import com.lateensoft.pathfinder.toolkit.inject.ApplicationModule;
+import com.lateensoft.pathfinder.toolkit.inject.DatabaseModule;
+import roboguice.RoboGuice;
 
 public class BaseApplication extends Application{
 	private static final String TAG = BaseApplication.class.getSimpleName();
@@ -12,19 +18,31 @@ public class BaseApplication extends Application{
 	// Used for statically obtaining app context,
 	// treating the application as a singleton, which it is.
 	private static Context s_context;
+
+    private Database database;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "Starting application");
 		s_context = getApplicationContext();
+
+        database = new DatabaseImpl(this);
 		
 		// Application setup
+        initializeApplicationInjector();
 		
 		// Perform database migrations if necessary here
 	}
 
-	@Override
+    private void initializeApplicationInjector() {
+        RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE,
+                Modules.override(RoboGuice.newDefaultRoboModule(this))
+                        .with(  new ApplicationModule(this),
+                                new DatabaseModule(database)));
+    }
+
+    @Override
 	public void onTerminate() {
 		Log.d(TAG, "Terminating application");
 		super.onTerminate();
@@ -33,6 +51,7 @@ public class BaseApplication extends Application{
 	/**
 	 * Gets the application context.
 	 */
+    @Deprecated // Should use provided context, or RoboGuice
 	static public Context getAppContext() {
 		return s_context;
 	}
@@ -40,6 +59,7 @@ public class BaseApplication extends Application{
 	/**
 	 * @return: The the human readable app version, or null in the event of an error.
 	 */
+    @Deprecated
 	public static String getAppVersionName() {
 		Context context = BaseApplication.getAppContext();
 		PackageInfo pInfo;
@@ -55,6 +75,7 @@ public class BaseApplication extends Application{
 	/**
 	 * @return: The the incremental app version code, or -1 in the event of an error.
 	 */
+    @Deprecated
 	public static int getAppVersionCode() {
 		Context context = BaseApplication.getAppContext();
 		PackageInfo pInfo;

@@ -23,8 +23,8 @@ public class SkillRepositoryTest extends BaseRepositoryTest {
 	}
 	
 	public void testUpdate() {
-		Skill toUpdate = new Skill(m_skill.getId(), m_skill.getCharacterID(), m_skill.getSkillKey(),
-				"derp", true, 3, 4, m_skill.getAbilityKey());
+		Skill toUpdate = new Skill(m_skill.getId(), m_skill.getCharacterID(), m_skill.getType(),
+				"derp", true, 3, 4, m_skill.getAbility());
 	
 		m_repo.update(toUpdate);
 		Skill queried = m_repo.query(m_skill.getId(), m_skill.getCharacterID());
@@ -34,17 +34,17 @@ public class SkillRepositoryTest extends BaseRepositoryTest {
 	public void testQuerySet() {
 		List<Skill> queriedSkills = m_repo.queryAllForCharacter(m_characterId);
         for (int i = 0; i < SkillSet.SKILL_KEYS.size(); i++){
-			assertEquals(SkillSet.SKILL_KEYS.get(i).intValue(), queriedSkills.get(i).getSkillKey());
+			assertEquals(SkillSet.SKILL_KEYS.get(i).intValue(), queriedSkills.get(i).getType());
 		}
 	}
 	
 	private static void assertEquals(Skill expected, Skill actual) {
 		assertEquals(expected.getId(), actual.getId());
-		assertEquals(expected.getSkillKey(), actual.getSkillKey());
+		assertEquals(expected.getType(), actual.getType());
 		assertEquals(expected.getCharacterID(), actual.getCharacterID());
 		assertEquals(expected.getSubType(), actual.getSubType());
 		assertEquals(expected.isClassSkill(), actual.isClassSkill());
-		assertEquals(expected.getAbilityKey(), actual.getAbilityKey());
+		assertEquals(expected.getAbility(), actual.getAbility());
 		assertEquals(expected.getMiscMod(), actual.getMiscMod());
 	}
 }
