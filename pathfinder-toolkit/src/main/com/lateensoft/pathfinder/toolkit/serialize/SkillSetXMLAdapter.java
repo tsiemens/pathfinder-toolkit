@@ -26,6 +26,6 @@ public class SkillSetXMLAdapter extends IterableXMLAdapter<SkillSet, Skill, Skil
 
     @Override
     protected SkillSet createObjectFromItems(List<Skill> items) {
-        return SkillSet.newValidatedSkillSet(items, null);
+        return new SkillSet(items, null);
     }
 }

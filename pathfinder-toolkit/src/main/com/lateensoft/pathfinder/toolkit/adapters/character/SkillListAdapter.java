@@ -16,11 +16,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class SkillListAdapter extends ArrayAdapter<Skill> {
-	private Context m_context;
 	private int m_layoutResourceId;
-	private SparseArray<String> m_skillNameMap;
-	private SparseArray<String> m_abilityNameMap;
-	
+
 	private AbilitySet m_abilitySet;
 	private int m_maxDex;
 	private int m_armorCheckPenalty;
@@ -29,9 +26,6 @@ public class SkillListAdapter extends ArrayAdapter<Skill> {
                             List<Skill> skills, int maxDex, AbilitySet characterAbilities, int armorCheckPenalty) {
 		super(context, layoutResourceId, skills);
 		m_layoutResourceId = layoutResourceId;
-		m_context = context;
-		m_skillNameMap = SkillSet.getSkillNameMap();
-		m_abilityNameMap = AbilitySet.getAbilityShortNameMap();
 		m_abilitySet = characterAbilities;
 		m_maxDex = maxDex;
 		m_armorCheckPenalty = armorCheckPenalty;
@@ -43,7 +37,7 @@ public class SkillListAdapter extends ArrayAdapter<Skill> {
 		SkillHolder holder;
 
 		if (row == null) {
-			LayoutInflater inflater = LayoutInflater.from(m_context);
+			LayoutInflater inflater = LayoutInflater.from(getContext());
 
 			row = inflater.inflate(m_layoutResourceId, parent, false);
 			holder = new SkillHolder();
@@ -61,23 +55,24 @@ public class SkillListAdapter extends ArrayAdapter<Skill> {
 			holder = (SkillHolder) row.getTag();
 		}
 
-		String name = m_skillNameMap.get(getItem(position).getSkillKey());
-		if (SkillSet.isSubtypedSkill(getItem(position).getSkillKey()) &&
-				getItem(position).getSubType() != null && 
-				!getItem(position).getSubType().isEmpty()) {
+        Skill skill = getItem(position);
+
+		String name = getContext().getString(skill.getType().getNameResId());
+		if (skill.canBeSubTyped() && skill.getSubType() != null &&
+				!skill.getSubType().isEmpty()) {
 			name = name + " ("+ getItem(position).getSubType() + ")";
 		}
 		holder.name.setText(name);
 		holder.total.setText(Integer.toString(getItem(position).getSkillMod(m_abilitySet, m_maxDex, m_armorCheckPenalty)));
-		holder.abilityName.setText(m_abilityNameMap.get(getItem(position).getAbilityKey()));
-		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(getItem(position).getAbilityKey(), m_maxDex)));
+		holder.abilityName.setText(getItem(position).getAbility().getNameResId());
+		holder.abilityMod.setText(Integer.toString(m_abilitySet.getTotalAbilityMod(getItem(position).getAbility(), m_maxDex)));
 		holder.rank.setText(Integer.toString(getItem(position).getRank()));
 		holder.miscMod.setText(Integer.toString(getItem(position).getMiscMod()));
 		
 		if(getItem(position).isClassSkill() && getItem(position).getRank() > 0)
-			holder.classSkill.setText(new String("3"));
+			holder.classSkill.setText("3");
 		else
-			holder.classSkill.setText(new String("0"));
+			holder.classSkill.setText("0");
 
 		return row;
 	}

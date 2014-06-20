@@ -10,6 +10,8 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Ability;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedSet;
 
 public class AbilityRepository extends BaseRepository<Ability> {
 	private static final String TABLE = "Ability";
@@ -30,17 +32,17 @@ public class AbilityRepository extends BaseRepository<Ability> {
 	@Override
 	protected Ability buildFromHashTable(
 			Hashtable<String, Object> hashTable) {
-		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
+		AbilityType ability = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
 		long characterId  = (Long) hashTable.get(CHARACTER_ID);
 		int score = ((Long) hashTable.get(SCORE)).intValue();
 		int temp = ((Long) hashTable.get(TEMP)).intValue();
-		return new Ability(abilityKey, characterId, score, temp);
+		return new Ability(ability, characterId, score, temp);
 	}
 
 	@Override
 	protected ContentValues getContentValues(Ability object) {
 		ContentValues values = new ContentValues();
-		values.put(ABILITY_KEY, object.getAbilityKey());
+		values.put(ABILITY_KEY, object.getType().getKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(SCORE, object.getScore());
 		values.put(TEMP, object.getTempBonus());
@@ -79,15 +81,15 @@ public class AbilityRepository extends BaseRepository<Ability> {
 	}
 
     public AbilitySet querySet(long characterId) {
-        return AbilitySet.newValidatedAbilitySet(queryAllForCharacter(characterId),
-                new AbilitySet.CorrectionListener() {
+        return new AbilitySet(queryAllForCharacter(characterId),
+                new ValidatedTypedSet.CorrectionListener<Ability>() {
                     @Override
-                    public void onInvalidAbilityRemoved(Ability removedAbility) {
+                    public void onInvalidItemRemoved(Ability removedAbility) {
                         AbilityRepository.this.delete(removedAbility);
                     }
 
                     @Override
-                    public void onMissingAbilityAdded(Ability addedAbility) {
+                    public void onMissingItemAdded(Ability addedAbility) {
                         AbilityRepository.this.insert(addedAbility);
                     }
                 }

@@ -155,7 +155,7 @@
         <item>WIS</item>
         <item>CHA</item>
     </string-array>
-    
+
     <string name="max_dex_warning">\u26A0 max</string>
     
     <string name="select_ability_dialog_title">Select Ability</string>
@@ -167,13 +167,17 @@
         <item>Will</item>
     </string-array>
 
+    <string name="save_name_fort">Fortitude</string>
+    <string name="save_name_ref">Reflex</string>
+    <string name="save_name_will">Will</string>
+
     <string name="fluff_hint">Value</string>
-    <string name="str">STR</string>
-    <string name="dex">DEX</string>
-    <string name="con">CON</string>
-    <string name="inl">INT</string>
-    <string name="wis">WIS</string>
-    <string name="cha">CHA</string>
+    <string name="ability_name_str">STR</string>
+    <string name="ability_name_dex">DEX</string>
+    <string name="ability_name_con">CON</string>
+    <string name="ability_name_int">INT</string>
+    <string name="ability_name_wis">WIS</string>
+    <string name="ability_name_cha">CHA</string>
     <string name="final_score">Final\nScore</string>
     <string name="racial_mod">Racial\nMod</string>
     <string name="minus">-</string>
@@ -222,6 +226,42 @@
         <item>Swim</item>
         <item>Use Magic Device</item>
     </string-array>
+
+    <string name="skill_name_acro">Acrobatics</string>
+    <string name="skill_name_appraise">Appraise</string>
+    <string name="skill_name_bluff">Bluff</string>
+    <string name="skill_name_climb">Climb</string>
+    <string name="skill_name_craft">Craft</string>
+    <string name="skill_name_diplom">Diplomacy</string>
+    <string name="skill_name_disable_dev">Disable Device</string>
+    <string name="skill_name_disguise">Disguise</string>
+    <string name="skill_name_escape">Escape Artist</string>
+    <string name="skill_name_fly">Fly</string>
+    <string name="skill_name_handle_animal">Handle Animal</string>
+    <string name="skill_name_heal">Heal</string>
+    <string name="skill_name_intimidate">Intimidate</string>
+    <string name="skill_name_know_arcana">Knowledge (Arcana)</string>
+    <string name="skill_name_know_dungeon">Knowledge (Dungeoneering)</string>
+    <string name="skill_name_know_eng">Knowledge (Engineering)</string>
+    <string name="skill_name_know_geo">Knowledge (Geography)</string>
+    <string name="skill_name_know_hist">Knowledge (History)</string>
+    <string name="skill_name_know_local">Knowledge (Local)</string>
+    <string name="skill_name_know_nature">Knowledge (Nature)</string>
+    <string name="skill_name_know_nobility">Knowledge (Nobility)</string>
+    <string name="skill_name_know_planes">Knowledge (Planes)</string>
+    <string name="skill_name_know_religion">Knowledge (Religion)</string>
+    <string name="skill_name_ling">Linguistics</string>
+    <string name="skill_name_percept">Perception</string>
+    <string name="skill_name_perform">Perform</string>
+    <string name="skill_name_prof">Profession</string>
+    <string name="skill_name_ride">Ride</string>
+    <string name="skill_name_sense_motive">Sense Motive</string>
+    <string name="skill_name_sleight_of_hand">Sleight of Hand</string>
+    <string name="skill_name_spellcraft">Spellcraft</string>
+    <string name="skill_name_stealth">Stealth</string>
+    <string name="skill_name_survival">Survival</string>
+    <string name="skill_name_swim">Swim</string>
+    <string name="skill_name_use_magic_device">UseMagic Device</string>
 
     <!-- Point buy calc strings -->
     <string name="export_to_new_character">Export to new character</string>

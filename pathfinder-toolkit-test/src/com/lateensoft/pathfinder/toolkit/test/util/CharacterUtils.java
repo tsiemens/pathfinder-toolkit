@@ -78,11 +78,11 @@ public class CharacterUtils {
         combatStatSet.setNonLethalDamage(5);
         combatStatSet.setDamageReduction(8);
         combatStatSet.setBaseSpeed(30);
-        combatStatSet.setInitAbilityKey(1);
+        combatStatSet.setInitAbility(1);
         combatStatSet.setInitiativeMiscMod(2);
         combatStatSet.setACArmourBonus(10);
         combatStatSet.setACShieldBonus(11);
-        combatStatSet.setACAbilityKey(4);
+        combatStatSet.setACAbility(4);
         combatStatSet.setSizeModifier(13);
         combatStatSet.setNaturalArmour(14);
         combatStatSet.setDeflectionMod(15);
@@ -90,7 +90,7 @@ public class CharacterUtils {
         combatStatSet.setBABPrimary(17);
         combatStatSet.setBABSecondary("2/6/7");
         combatStatSet.setCMBAbilityKey(2);
-        combatStatSet.setCMDAbilityKey(5);
+        combatStatSet.setCMDAbility(5);
         combatStatSet.setCMDMiscMod(56);
         combatStatSet.setSpellResistance(67);
         builder.setCombatStatSet(combatStatSet);
@@ -124,7 +124,7 @@ public class CharacterUtils {
         SaveSet saveSet = new SaveSet();
         Save save = saveSet.getSaveByIndex(0);
         save.setBaseSave(7);
-        save.setAbilityKey(2);
+        save.setAbilityType(2);
         save.setMagicMod(3);
         save.setMiscMod(5);
         save.setTempMod(-11);
@@ -136,7 +136,7 @@ public class CharacterUtils {
         skill.setMiscMod(3);
         skill.setRank(2);
         skill.setClassSkill(true);
-        skill.setAbilityKey(5);
+        skill.setAbility(5);
 
         skillSet.addNewSubSkill(SkillSet.CRAFT).setSubType("slkdfj\nsjdhf");
         builder.setSkillSet(skillSet);

@@ -26,6 +26,6 @@ public class AbilitySetXMLAdapter extends IterableXMLAdapter<AbilitySet, Ability
 
     @Override
     protected AbilitySet createObjectFromItems(List<Ability> items) {
-        return AbilitySet.newValidatedAbilitySet(items, null);
+        return new AbilitySet(items, null);
     }
 }

@@ -5,41 +5,45 @@ import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
-	
-	boolean m_classSkill;
-	int m_rank;
-	int m_miscMod;
-	int m_abilityKey;
+import static com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType.*;
+
+public class Skill implements Typed<SkillType>, Parcelable, Identifiable, Comparable<Skill> {
+
+    private final SkillType type;
+
+	private boolean m_classSkill;
+	private int m_rank;
+	private int m_miscMod;
+    private AbilityType ability;
 	
 	// For use with skills such as craft, professions, perform
-	String m_subType;
-	
-	/** Defines the skill type/name, etc
-	 * These are defined in SkillSet
-	 */
-	int m_skillKey;
+	private String m_subType;
 	
 	// A unique id for all skills in the database
 	long m_id;
+    @Deprecated
 	long m_characterId;
 	
-	public Skill(int skillKey, int abilityKey) {
-		this(UNSET_ID, UNSET_ID, skillKey, false, 0, 0, abilityKey);
+	public Skill(SkillType type) {
+        this(type, type.getDefaultAbility());
+    }
+
+    public Skill(SkillType type, AbilityType abilityType) {
+        this(UNSET_ID, UNSET_ID, type, false, 0, 0, abilityType);
+    }
+	
+	public Skill(long id, long characterId, SkillType type, Boolean classSkill, int rank,
+                 int miscMod, AbilityType ability) {
+		this(id, characterId, type, null, classSkill, rank, miscMod, ability);
 	}
 	
-	public Skill(long id, long characterId, int skillId, Boolean classSkill, int rank,
-                 int miscMod, int abilityId) {
-		this(id, characterId, skillId, null, classSkill, rank, miscMod, abilityId);
-	}
-	
-	public Skill(long id, long characterId, int skillId, String subtype, Boolean classSkill,
-                 int rank, int miscMod, int abilityId) {
+	public Skill(long id, long characterId, SkillType type, String subtype, Boolean classSkill,
+                 int rank, int miscMod, AbilityType ability) {
 		m_classSkill = classSkill;
 		m_rank = rank;
 		m_miscMod = miscMod;
-		m_abilityKey = abilityId;
-		m_skillKey = skillId;
+		this.ability = ability;
+		this.type = type;
 		m_id = id;
 		m_characterId = characterId;
 		m_subType = subtype;
@@ -51,8 +55,8 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 		m_classSkill = classSkill[0];
 		m_rank = in.readInt();
 		m_miscMod = in.readInt();
-		m_abilityKey = in.readInt();
-		m_skillKey = in.readInt();
+		ability = forKey(in.readInt());
+		type = SkillType.forKey(in.readInt());
 		m_characterId = in.readLong();
 		m_id = in.readLong();
 		m_subType = in.readString();
@@ -65,22 +69,17 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 		out.writeBooleanArray(classSkill);
 		out.writeInt(m_rank);
 		out.writeInt(m_miscMod);
-		out.writeInt(m_abilityKey);
-		out.writeInt(m_skillKey);
+		out.writeInt(ability.getKey());
+		out.writeInt(type.getKey());
 		out.writeLong(m_characterId);
 		out.writeLong(m_id);
 		out.writeString(m_subType);
 	}
 	
-	/**
-	 * @return the classSkill
-	 */
 	public boolean isClassSkill() {
 		return m_classSkill;
 	}
-	/**
-	 * @param classSkill the classSkill to set
-	 */
+
 	public void setClassSkill(boolean classSkill) {
 		m_classSkill = classSkill;
 	}
@@ -92,13 +91,13 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 	 * @return the total skill mod for the skill
 	 */
 	public int getSkillMod(AbilitySet abilitySet, int maxDex, int armorCheckPenalty) {
-		int skillMod = abilitySet.getTotalAbilityMod(m_abilityKey, maxDex) + m_rank 
+		int skillMod = abilitySet.getTotalAbilityMod(ability, maxDex) + m_rank
 			+ m_miscMod;
 		
 		if(m_classSkill && m_rank > 0)
 			skillMod += 3;
 		
-		if (m_abilityKey == AbilitySet.KEY_DEX || m_abilityKey == AbilitySet.KEY_STR) {
+		if (ability == DEX || ability== STR) {
 			skillMod += armorCheckPenalty;
 		}
 		
@@ -113,55 +112,44 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 		m_subType = subType;
 	}
 	
-	/**
-	 * @return the rank
-	 */
 	public int getRank() {
 		return m_rank;
 	}
-	/**
-	 * @param rank the rank to set
-	 */
+
 	public void setRank(int rank) {
 		m_rank = rank;
 	}
-	/**
-	 * @return the miscMod
-	 */
+
 	public int getMiscMod() {
 		return m_miscMod;
 	}
-	/**
-	 * @param miscMod the miscMod to set
-	 */
+
 	public void setMiscMod(int miscMod) {
 		m_miscMod = miscMod;
 	}
 	
-	public int getAbilityKey() {
-		return m_abilityKey;
+	public AbilityType getAbility() {
+		return ability;
 	}
 	
-	public void setAbilityKey(int abilityKey) {
-		m_abilityKey = abilityKey;
+	public void setAbility(AbilityType ability) {
+		this.ability = ability;
 	}
 
-	public int getSkillKey() {
-		return m_skillKey;
+    @Override
+	public SkillType getType() {
+		return type;
 	}
 
-	public void setSkillKey(int skillId) {
-		m_skillKey = skillId;
-	}
+    public boolean canBeSubTyped() {
+        return type.canBeSubTyped();
+    }
 
 	@Override
 	public void setId(long id) {
 		m_id = id;
 	}
 	
-	/**
-	 * This should not be used for identifying the type of skill, only the instance.
-	 */
 	@Override
 	public long getId() {
 		return m_id;
@@ -192,22 +180,24 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 
 	@Override
 	public int compareTo(Skill another) {
-		if (another.getSkillKey() == this.getSkillKey()) {
-			if (this.getSubType() != null) {
-				if (another.getSubType() != null && !another.getSubType().isEmpty()) {
-					return this.getSubType().compareTo(another.getSubType());
-				} else {
-					return -1;
-				}
-			} else {
-				return 1;
-			}
-		} else if (another.getSkillKey() > this.getSkillKey()) {
-			return -1;
+		if (another.getType() == this.getType()) {
+            return compareStringsEmptyAndNullLast(this.getSubType(), another.getSubType());
 		} else {
-			return 1;
+			return this.getType().compareTo(another.getType());
 		}
 	}
+
+    private int compareStringsEmptyAndNullLast(String lhs, String rhs) {
+        if (this.getSubType() != null) {
+            if (rhs != null && !rhs.isEmpty()) {
+                return lhs.compareTo(rhs);
+            } else {
+                return -1;
+            }
+        } else {
+            return 1;
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -216,13 +206,13 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
 
         Skill skill = (Skill) o;
 
-        if (m_abilityKey != skill.m_abilityKey) return false;
+        if (ability != skill.ability) return false;
         if (m_characterId != skill.m_characterId) return false;
         if (m_classSkill != skill.m_classSkill) return false;
         if (m_id != skill.m_id) return false;
         if (m_miscMod != skill.m_miscMod) return false;
         if (m_rank != skill.m_rank) return false;
-        if (m_skillKey != skill.m_skillKey) return false;
+        if (type != skill.type) return false;
         if (m_subType != null ? !m_subType.equals(skill.m_subType) : skill.m_subType != null) return false;
 
         return true;
@@ -233,9 +223,9 @@ public class Skill implements Parcelable, Identifiable, Comparable<Skill> {
         int result = (m_classSkill ? 1 : 0);
         result = 31 * result + m_rank;
         result = 31 * result + m_miscMod;
-        result = 31 * result + m_abilityKey;
+        result = 31 * result + ability.hashCode();
         result = 31 * result + (m_subType != null ? m_subType.hashCode() : 0);
-        result = 31 * result + m_skillKey;
+        result = 31 * result + type.hashCode();
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
         result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;

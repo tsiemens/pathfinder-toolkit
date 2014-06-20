@@ -5,49 +5,44 @@ import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Save implements Parcelable, Identifiable {
+public class Save implements Typed<SaveType>, Parcelable, Identifiable, Comparable<Save> {
 	private long m_characterId;
 	
-	private int m_saveKey;
+	private final SaveType type;
 
 	private int m_baseSave;
-	private int m_abilityKey;
+	private AbilityType ability;
 	private int m_magicMod;
 	private int m_miscMod;
 	private int m_tempMod;
-	
-	public Save(int saveKey, int abilityKey) {
+
+    public Save(SaveType saveType) {
+        this(saveType, saveType.getDefaultAbility());
+    }
+
+	public Save(SaveType saveKey, AbilityType abilityKey) {
 		this(saveKey, UNSET_ID, abilityKey);
 	}
 	
-	public Save(int saveKey, long characterId, int abilityKey) {
+	public Save(SaveType saveKey, long characterId, AbilityType abilityKey) {
 		this(saveKey, characterId, 0, abilityKey, 0, 0, 0);
 	}
 	
-	public Save(int saveKey, long characterId, int baseSave, int abilityKey, int magicMod,
+	public Save(SaveType saveKey, long characterId, int baseSave, AbilityType abilityKey, int magicMod,
                 int miscMod, int tempMod) {
 		m_characterId = characterId;
-		m_saveKey = saveKey;
-		m_abilityKey = abilityKey;
+		type = saveKey;
+		ability = abilityKey;
 		m_baseSave = baseSave;
 		m_magicMod = magicMod;
 		m_miscMod = miscMod;
 		m_tempMod = tempMod;
 	}
 	
-	public Save(Save other) {
-		m_saveKey = other.getSaveKey();
-		m_abilityKey = other.getAbilityKey();
-		m_magicMod = other.getMagicMod();
-		m_miscMod = other.getMiscMod();
-		m_tempMod = other.getTempMod();
-		m_characterId = other.getCharacterID();
-	}
-	
 	public Save(Parcel in) {
-		m_saveKey = in.readInt();
+		type = SaveType.forKey(in.readInt());
 		m_baseSave = in.readInt();
-		m_abilityKey = in.readInt();
+		ability = AbilityType.forKey(in.readInt());
 		m_magicMod = in.readInt();
 		m_miscMod = in.readInt();
 		m_tempMod = in.readInt();
@@ -56,14 +51,19 @@ public class Save implements Parcelable, Identifiable {
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(m_saveKey);
+		out.writeInt(type.getKey());
 		out.writeInt(m_baseSave);
-		out.writeInt(m_abilityKey);
+		out.writeInt(ability.getKey());
 		out.writeInt(m_magicMod);
 		out.writeInt(m_miscMod);
 		out.writeInt(m_tempMod);
 		out.writeLong(m_characterId);
 	}
+
+    @Override
+    public SaveType getType() {
+        return type;
+    }
 	
 	public int getBaseSave() {
 		return m_baseSave;
@@ -73,8 +73,8 @@ public class Save implements Parcelable, Identifiable {
 		m_baseSave = baseSave;
 	}
 
-	public int getAbilityKey() {
-		return m_abilityKey;
+	public AbilityType getAbilityType() {
+		return ability;
 	}
 	
 	public int getMagicMod() {
@@ -92,15 +92,15 @@ public class Save implements Parcelable, Identifiable {
 	public int getTotal(AbilitySet abilitySet, int maxDex) {
 		int total = 0;
 		total += m_baseSave;
-		total += abilitySet.getTotalAbilityMod(m_abilityKey, maxDex);
+		total += abilitySet.getTotalAbilityMod(ability, maxDex);
 		total += m_magicMod;
 		total += m_miscMod;
 		total += m_tempMod;
 		return total;
 	}
 	
-	public void setAbilityKey(int abilityKey) {
-		m_abilityKey = abilityKey;
+	public void setAbilityType(AbilityType abilityType) {
+		ability = abilityType;
 	}
 	
 	public void setMagicMod(int magicMod) {
@@ -113,14 +113,6 @@ public class Save implements Parcelable, Identifiable {
 	
 	public void setTempMod(int tempMod) {
 		m_tempMod = tempMod;
-	}
-	
-	public int getSaveKey() {
-		return m_saveKey;
-	}
-	
-	public void setSaveKey(int saveKey) {
-		m_saveKey = saveKey;
 	}
 	
 	public void setCharacterID(long id) {
@@ -147,13 +139,14 @@ public class Save implements Parcelable, Identifiable {
 	};
 
 	@Override
+    @Deprecated
 	public void setId(long id) {
-		setSaveKey((int) id);
+//		setSaveKey((int) id);
 	}
 
 	@Override
 	public long getId() {
-		return getSaveKey();
+		return getType().getKey();
 	}
 
     @Override
@@ -163,12 +156,12 @@ public class Save implements Parcelable, Identifiable {
 
         Save save = (Save) o;
 
-        if (m_abilityKey != save.m_abilityKey) return false;
+        if (ability != save.ability) return false;
         if (m_baseSave != save.m_baseSave) return false;
         if (m_characterId != save.m_characterId) return false;
         if (m_magicMod != save.m_magicMod) return false;
         if (m_miscMod != save.m_miscMod) return false;
-        if (m_saveKey != save.m_saveKey) return false;
+        if (type != save.type) return false;
         if (m_tempMod != save.m_tempMod) return false;
 
         return true;
@@ -177,12 +170,17 @@ public class Save implements Parcelable, Identifiable {
     @Override
     public int hashCode() {
         int result = (int) (m_characterId ^ (m_characterId >>> 32));
-        result = 31 * result + m_saveKey;
+        result = 31 * result + type.getKey();
         result = 31 * result + m_baseSave;
-        result = 31 * result + m_abilityKey;
+        result = 31 * result + ability.getKey();
         result = 31 * result + m_magicMod;
         result = 31 * result + m_miscMod;
         result = 31 * result + m_tempMod;
         return result;
+    }
+
+    @Override
+    public int compareTo(Save another) {
+        return this.getType().compareTo(another.getType());
     }
 }

@@ -1,89 +1,100 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
+import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.jetbrains.annotations.NotNull;
 
 
-public class Ability implements Parcelable, Identifiable, Comparable<Ability> {
+public class Ability implements Typed<AbilityType>, Parcelable, Identifiable, Comparable<Ability> {
 	
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
+    private static final int MAX_SCORE = 18;
+    private static final int MIN_SCORE = 7;
 	
 	public static final int BASE_ABILITY_SCORE = 10;
-	
-	private int m_abilityKey;
-	private int m_score;
-	private int m_tempBonus;
 
+    private final AbilityType type;
+	private int score;
+	private int tempBonus;
+
+    @Deprecated
 	private long m_characterId;
+
+    @Deprecated
+    public Ability(@NotNull AbilityType type, long characterId, int score, int temp) {
+        Preconditions.checkNotNull(type);
+        this.type = type;
+        m_characterId = characterId;
+        this.score = score;
+        this.tempBonus = temp;
+    }
 	
-	public Ability(int abilityKey, long characterId, int score, int temp) {
-		m_abilityKey = abilityKey;
-		m_characterId = characterId;
-		m_score = score;
-		m_tempBonus = temp;
+	public Ability(@NotNull AbilityType type, int score, int temp) {
+		this(type, UNSET_ID, score, temp);
 	}
 	
-	public Ability(int abilityKey, int score, int temp) {
-		this(abilityKey, UNSET_ID, score, temp);
-	}
-	
-	public Ability(int abilityKey) {
-		this(abilityKey, BASE_ABILITY_SCORE, 0);
+	public Ability(@NotNull AbilityType type) {
+		this(type, BASE_ABILITY_SCORE, 0);
 	}
 	
 	public Ability(Parcel in) {
-		m_score = in.readInt();
-		m_tempBonus = in.readInt();
-		m_abilityKey = in.readInt();
+		score = in.readInt();
+		tempBonus = in.readInt();
+        type = AbilityType.forKey(in.readInt());
 		m_characterId = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(m_score);
-		out.writeInt(m_tempBonus);
-		out.writeInt(m_abilityKey);
+		out.writeInt(score);
+		out.writeInt(tempBonus);
+		out.writeInt(type.getKey());
 		out.writeLong(m_characterId);
 	}
-	
-	/**
+
+    @Override
+    public AbilityType getType() {
+        return type;
+    }
+
+    /**
 	 * @return The base score for the ability
 	 */
 	public int getScore() {
-		return m_score;
+		return score;
 	}
 	
 	public void setScore(int score) {
-		m_score = score;
+		this.score = score;
 	}
 	
 	/**
 	 * @return The temporary change to the base score
 	 */
 	public int getTempBonus() {
-		return m_tempBonus;
+		return tempBonus;
 	}
 
 	public void setTempBonus(int tempBonus) {
-		m_tempBonus = tempBonus;
+		this.tempBonus = tempBonus;
 	}
 
 	public int getAbilityModifier() {
-		return calculateMod(m_score);
+		return calculateModifier(score);
 	}
 	
 	/**
 	 * The modifier for the base + temp bonus
-	 * @return
 	 */
 	public int getTempModifier() {
-		return calculateMod(m_score + m_tempBonus);
+		return calculateModifier(score + tempBonus);
 	}
 	
-	private int calculateMod(int score) {
+	private int calculateModifier(int score) {
 		float mod = (float) ((score - 10)/2.0);
 		if (mod < 0) {
 			return (int) (mod - 0.5);
@@ -93,60 +104,44 @@ public class Ability implements Parcelable, Identifiable, Comparable<Ability> {
 	}
 	
 	public void incScore() {
-		if ((m_score + 1) > 18) {
-			return;
-		} else {
-			m_score++;
-			return;
-		}
+        if (score < MAX_SCORE) {
+            score++;
+        }
 	}
 	
 	public void decScore() {
-		if ((m_score - 1) < 7) {
-			return;
-		} else {
-			m_score--;
-			return;
+		if (score > MIN_SCORE) {
+            score--;
 		}
 	}
 	
-	/**
-	 * @return the cost for the base ability score
-	 */
 	public int getAbilityPointCost() {
 		for(int i = 0; i < SCORES.length; i++) {
-			if(m_score == SCORES[i]) {
+			if(score == SCORES[i]) {
 				return COSTS[i];
 			}
 		}
 		return 0;
 	}
 	
-	public void setAbilityKey(int abilityKey) {
-		m_abilityKey = abilityKey;
-	}
-
-	public int getAbilityKey() {
-		return m_abilityKey;
-	}
-	
 	@Override
+    @Deprecated
 	public void setId(long id) {
-		m_abilityKey = (int)id;
+//		type = AbilityType.forKey((int) id);
 	}
 
-	/**
-	 * same as getAbilityKey()
-	 */
 	@Override
+    @Deprecated
 	public long getId() {
-		return m_abilityKey;
+		return type.getKey();
 	}
-	
+
+    @Deprecated
 	public void setCharacterID(long id) {
 		m_characterId = id;
 	}
 
+    @Deprecated
 	public long getCharacterID() {
 		return m_characterId;
 	}
@@ -168,7 +163,7 @@ public class Ability implements Parcelable, Identifiable, Comparable<Ability> {
 
     @Override
     public int compareTo(Ability another) {
-        return this.getAbilityKey() - another.getAbilityKey();
+        return this.type.compareTo(another.type);
     }
 
     @Override
@@ -178,20 +173,25 @@ public class Ability implements Parcelable, Identifiable, Comparable<Ability> {
 
         Ability ability = (Ability) o;
 
-        if (m_abilityKey != ability.m_abilityKey) return false;
+        if (type != ability.type) return false;
         if (m_characterId != ability.m_characterId) return false;
-        if (m_score != ability.m_score) return false;
-        if (m_tempBonus != ability.m_tempBonus) return false;
+        if (score != ability.score) return false;
+        if (tempBonus != ability.tempBonus) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = m_abilityKey;
-        result = 31 * result + m_score;
-        result = 31 * result + m_tempBonus;
+        int result = type.hashCode();
+        result = 31 * result + score;
+        result = 31 * result + tempBonus;
         result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return type.toString() + "; score:" + score + "; temp:" + tempBonus;
     }
 }

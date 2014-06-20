@@ -29,6 +29,7 @@ import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 import com.lateensoft.pathfinder.toolkit.util.AbilitySetCalculator;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterAbilitiesFragment;
 
@@ -40,7 +41,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 	static final int INT_IDX = 3;
 	static final int WIS_IDX = 4;
 	static final int CHA_IDX = 5;
-	static final int NUM_ABILITIES = AbilitySet.ABILITY_KEYS.size();
+	static final int NUM_ABILITIES = AbilityType.values().length;
 	
 	static final int CUSTOM_RACE_INDEX = 7;
 	

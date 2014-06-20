@@ -5,11 +5,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 
 public class SkillRepository extends BaseRepository<Skill> {
 	private static final String TABLE = "Skill";
@@ -38,16 +37,16 @@ public class SkillRepository extends BaseRepository<Skill> {
 	@Override
 	protected Skill buildFromHashTable(Hashtable<String, Object> hashTable) {
 		long id = ((Long) hashTable.get(SKILL_ID));
-		int skillKey = ((Long) hashTable.get(SKILL_KEY)).intValue();
+		SkillType skillType = SkillType.forKey(((Long) hashTable.get(SKILL_KEY)).intValue());
 		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
 		String subType = (String) hashTable.get(SUB_TYPE);
 		boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
 		int rank = ((Long) hashTable.get(RANK)).intValue();
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
-		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
-		Skill skill = new Skill(id, characterId, skillKey, subType, classSkill, rank,
+		AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
+
+		return new Skill(id, characterId, skillType, subType, classSkill, rank,
 				miscMod, abilityKey);
-		return skill;
 	}
 	
 	@Override
@@ -56,7 +55,7 @@ public class SkillRepository extends BaseRepository<Skill> {
 		if (isIDSet(object)) {
 			values.put(SKILL_ID, object.getId());
 		}
-		values.put(SKILL_KEY, object.getSkillKey());
+		values.put(SKILL_KEY, object.getType().getKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
 		if (object.getSubType() != null) {
 			values.put(SUB_TYPE, object.getSubType());
@@ -64,7 +63,7 @@ public class SkillRepository extends BaseRepository<Skill> {
 		values.put(CLASS_SKILL, object.isClassSkill());
 		values.put(RANK, object.getRank());
 		values.put(MISC_MOD, object.getMiscMod());
-		values.put(ABILITY_KEY, object.getAbilityKey());
+		values.put(ABILITY_KEY, object.getAbility().getKey());
 		return values;
 	}
 	
@@ -93,21 +92,16 @@ public class SkillRepository extends BaseRepository<Skill> {
 	}
 
     public SkillSet querySet(long characterId) {
-        return SkillSet.newValidatedSkillSet(queryAllForCharacter(characterId),
-                new SkillSet.CorrectionListener() {
+        return new SkillSet(queryAllForCharacter(characterId),
+                new ValidatedTypedSet.CorrectionListener<Skill>() {
                     @Override
-                    public void onInvalidSkillRemoved(Skill removedSkill) {
+                    public void onInvalidItemRemoved(Skill removedSkill) {
                         SkillRepository.this.delete(removedSkill);
                     }
 
                     @Override
-                    public void onMissingSkillAdded(Skill addedSkill) {
+                    public void onMissingItemAdded(Skill addedSkill) {
                         SkillRepository.this.insert(addedSkill);
-                    }
-
-                    @Override
-                    public void onSkillModified(Skill modifiedSkill) {
-                        SkillRepository.this.update(modifiedSkill);
                     }
                 }
         );

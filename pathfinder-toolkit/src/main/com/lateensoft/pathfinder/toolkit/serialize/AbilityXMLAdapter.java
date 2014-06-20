@@ -1,8 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.google.common.collect.ImmutableBiMap;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Ability;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -17,7 +17,7 @@ public class AbilityXMLAdapter extends XMLObjectAdapter<Ability> {
     private static final String SCORE_ATTR = "score";
     private static final String TEMP_BONUS_ATTR = "temp-bonus";
 
-    public static final ImmutableBiMap<Integer, String> ABILITY_KEY_STRINGS = buildAbilityKeyStrings();
+    public static final ImmutableBiMap<AbilityType, String> ABILITY_TYPE_STRINGS = buildAbilityKeyStrings();
 
     @Override
     public String getElementName() {
@@ -28,8 +28,8 @@ public class AbilityXMLAdapter extends XMLObjectAdapter<Ability> {
     protected Ability createObjectForElement(Element element) throws InvalidObjectException {
         String abilityKeyString = getStringAttribute(element, ABILITY_ATTR);
 
-        ImmutableBiMap<String, Integer> abilityKeyStrings = ABILITY_KEY_STRINGS.inverse();
-        Integer abilityKey = abilityKeyStrings.get(abilityKeyString);
+        ImmutableBiMap<String, AbilityType> abilityKeyStrings = ABILITY_TYPE_STRINGS.inverse();
+        AbilityType abilityKey = abilityKeyStrings.get(abilityKeyString);
         if (abilityKey == null) {
             throw new InvalidObjectException("Invalid ability: " + abilityKeyString);
         }
@@ -41,20 +41,20 @@ public class AbilityXMLAdapter extends XMLObjectAdapter<Ability> {
     }
 
     @Override
-    protected void setElementContentForObject(Element element, Ability skill) {
-        element.addAttribute(ABILITY_ATTR, ABILITY_KEY_STRINGS.get(skill.getAbilityKey()));
-        element.addAttribute(SCORE_ATTR, Integer.toString(skill.getScore()));
-        element.addAttribute(TEMP_BONUS_ATTR, Integer.toString(skill.getTempBonus()));
+    protected void setElementContentForObject(Element element, Ability ability) {
+        element.addAttribute(ABILITY_ATTR, ABILITY_TYPE_STRINGS.get(ability.getType()));
+        element.addAttribute(SCORE_ATTR, Integer.toString(ability.getScore()));
+        element.addAttribute(TEMP_BONUS_ATTR, Integer.toString(ability.getTempBonus()));
     }
 
-    private static ImmutableBiMap<Integer, String> buildAbilityKeyStrings() {
-        ImmutableBiMap.Builder<Integer, String> builder = ImmutableBiMap.builder();
-        builder.put(AbilitySet.KEY_STR, "STR");
-        builder.put(AbilitySet.KEY_DEX, "DEX");
-        builder.put(AbilitySet.KEY_CON, "CON");
-        builder.put(AbilitySet.KEY_INT, "INT");
-        builder.put(AbilitySet.KEY_WIS, "WIS");
-        builder.put(AbilitySet.KEY_CHA, "CHA");
+    private static ImmutableBiMap<AbilityType, String> buildAbilityKeyStrings() {
+        ImmutableBiMap.Builder<AbilityType, String> builder = ImmutableBiMap.builder();
+        builder.put(AbilityType.STR, "STR");
+        builder.put(AbilityType.DEX, "DEX");
+        builder.put(AbilityType.CON, "CON");
+        builder.put(AbilityType.INT, "INT");
+        builder.put(AbilityType.WIS, "WIS");
+        builder.put(AbilityType.CHA, "CHA");
         return builder.build();
     }
 }

@@ -8,8 +8,7 @@ import android.database.Cursor;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.Save;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class SaveRepository extends BaseRepository<Save> {
 	static final String TABLE = "Save";
@@ -36,10 +35,10 @@ public class SaveRepository extends BaseRepository<Save> {
 
 	@Override
 	protected Save buildFromHashTable(Hashtable<String, Object> hashTable) {
-		int saveKey = ((Long) hashTable.get(SAVE_KEY)).intValue();
+		SaveType saveKey = SaveType.forKey(((Long) hashTable.get(SAVE_KEY)).intValue());
 		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
 		int baseValue = ((Long) hashTable.get(BASE_VALUE)).intValue();
-		int abilityKey = ((Long) hashTable.get(ABILITY_KEY)).intValue();
+		AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
 		int magicMod = ((Long) hashTable.get(MAGIC_MOD)).intValue();
 		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
 		int tempMod = ((Long) hashTable.get(TEMP_MOD)).intValue();
@@ -51,10 +50,10 @@ public class SaveRepository extends BaseRepository<Save> {
 	@Override
 	protected ContentValues getContentValues(Save object) {
 		ContentValues values = new ContentValues();
-		values.put(SAVE_KEY, object.getSaveKey());
+		values.put(SAVE_KEY, object.getType().getKey());
 		values.put(CHARACTER_ID, object.getCharacterID());
 		values.put(BASE_VALUE, object.getBaseSave());
-		values.put(ABILITY_KEY, object.getAbilityKey());
+		values.put(ABILITY_KEY, object.getAbilityType().getKey());
 		values.put(MAGIC_MOD, object.getMagicMod());
 		values.put(MISC_MOD, object.getMiscMod());
 		values.put(TEMP_MOD, object.getTempMod());
@@ -94,15 +93,15 @@ public class SaveRepository extends BaseRepository<Save> {
 	}
 
     public SaveSet querySet(long characterId) {
-        return SaveSet.newValidatedSaveSet(queryAllForCharacter(characterId),
-                new SaveSet.CorrectionListener() {
+        return new SaveSet(queryAllForCharacter(characterId),
+                new ValidatedTypedSet.CorrectionListener<Save>() {
                     @Override
-                    public void onInvalidSaveRemoved(Save removedSave) {
+                    public void onInvalidItemRemoved(Save removedSave) {
                         SaveRepository.this.delete(removedSave);
                     }
 
                     @Override
-                    public void onMissingSaveAdded(Save addedSave) {
+                    public void onMissingItemAdded(Save addedSave) {
                         SaveRepository.this.insert(addedSave);
                     }
                 }

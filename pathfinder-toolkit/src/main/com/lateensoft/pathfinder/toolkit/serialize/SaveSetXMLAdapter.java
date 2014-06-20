@@ -26,6 +26,6 @@ public class SaveSetXMLAdapter extends IterableXMLAdapter<SaveSet, Save, SaveXML
 
     @Override
     protected SaveSet createObjectFromItems(List<Save> items) {
-        return SaveSet.newValidatedSaveSet(items, null);
+        return new SaveSet(items, null);
     }
 }

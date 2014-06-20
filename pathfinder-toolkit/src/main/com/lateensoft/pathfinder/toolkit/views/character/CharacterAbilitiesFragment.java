@@ -14,6 +14,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.ArmorRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 
 // Untested
 public class CharacterAbilitiesFragment extends AbstractCharacterSheetFragment {
@@ -122,7 +123,7 @@ public class CharacterAbilitiesFragment extends AbstractCharacterSheetFragment {
 		for(int i = 0; i < viewIds.length; i++) {
 			tv = (TextView) getRootView().findViewById(viewIds[i]); 
 			if(isTemp) {
-				if(m_abilityScores.getAbilityAtIndex(i).getId() == AbilitySet.KEY_DEX &&
+				if(m_abilityScores.getAbilityAtIndex(i).getType() == AbilityType.DEX &&
 						m_abilityScores.getAbilityAtIndex(i).getTempModifier() > m_maxDex) {
 					tv.setText(Integer.toString(m_maxDex)+"\n"+getString(R.string.max_dex_warning));
 				} else {

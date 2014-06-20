@@ -1,53 +1,55 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
+
+import java.util.List;
 
 public class AbilitySelectionDialog {
 
 	private OnAbilitySelectedListener m_listener;
-	private AlertDialog.Builder m_builder;
+	private AlertDialog.Builder builder;
 	
-	public AbilitySelectionDialog(Context context, int checkedAbilityKey, int defaultAbilityKey) {
-		m_builder = new AlertDialog.Builder(context);
-		Resources r = m_builder.getContext().getResources();
-		String[] abilityNames = r.getStringArray(R.array.abilities_short);
+	public AbilitySelectionDialog(Context context, AbilityType checkedAbility, AbilityType defaultAbility) {
+		builder = new AlertDialog.Builder(context);
+		Resources r = builder.getContext().getResources();
+		String[] abilityNames = AbilityType.getKeySortedNames(r);
 		
 		// Making the default visible to user
-		int defaultAbilityIndex = getIndexForAbilityKey(defaultAbilityKey);
+		int defaultAbilityIndex = getIndexForAbilityKey(defaultAbility);
 		abilityNames[defaultAbilityIndex] = abilityNames[defaultAbilityIndex] +
 				r.getString(R.string.default_ability_label);
 		
 		OnClickListener clickListener = new OnClickListener() {	
-			private int m_selectedAbilityKey = 0;
+			private AbilityType selectedAbility = null;
 			
 			@Override public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (m_listener != null) {
-						m_listener.onAbilitySelected(m_selectedAbilityKey);
+						m_listener.onAbilitySelected(selectedAbility);
 					}
 					break;
 				case DialogInterface.BUTTON_NEGATIVE:
 					break;
 				default:
-                    m_selectedAbilityKey = AbilitySet.ABILITY_KEYS.get(which);
+                    selectedAbility = AbilityType.values()[which];
 					break;
 
 				}
 			}
 		};
-		m_builder.setSingleChoiceItems(abilityNames, 
-				getIndexForAbilityKey(checkedAbilityKey), clickListener);
-		m_builder.setTitle(R.string.select_ability_dialog_title);
-		m_builder.setPositiveButton(R.string.ok_button_text, clickListener);
-		m_builder.setNegativeButton(R.string.cancel_button_text, clickListener);
+		builder.setSingleChoiceItems(abilityNames,
+				getIndexForAbilityKey(checkedAbility), clickListener);
+		builder.setTitle(R.string.select_ability_dialog_title);
+		builder.setPositiveButton(R.string.ok_button_text, clickListener);
+		builder.setNegativeButton(R.string.cancel_button_text, clickListener);
 	}
 	
 	public AbilitySelectionDialog setOnAbilitySelectedListener(OnAbilitySelectedListener listener) {
@@ -56,12 +58,13 @@ public class AbilitySelectionDialog {
 	}
 	
 	public void show() {
-		m_builder.show();
+		builder.show();
 	}
 
-	protected int getIndexForAbilityKey(int abilityKey) {
-        for (int i = 0; i < AbilitySet.ABILITY_KEYS.size(); i++) {
-			if (AbilitySet.ABILITY_KEYS.get(i) == abilityKey) {
+	protected int getIndexForAbilityKey(AbilityType abilityType) {
+        List<AbilityType> abilities = AbilityType.getKeySortedValues();
+        for (int i = 0; i < abilities.size(); i++) {
+			if (abilities.get(i) == abilityType) {
 				return i;
 			}
 		}
@@ -70,9 +73,7 @@ public class AbilitySelectionDialog {
 	
 	public static interface OnAbilitySelectedListener {
 		
-		/**
-		 * @param abilityKey the id of the ability selected, or 0 if none selected.
-		 */
-		public void onAbilitySelected(int abilityKey);
+		/** @param abilityType the id of the ability selected, or null if none selected. */
+		public void onAbilitySelected(AbilityType abilityType);
 	}
 }

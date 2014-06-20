@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.google.common.collect.ImmutableBiMap;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import org.dom4j.Element;
 
@@ -45,7 +46,7 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
 
     @Override
     protected CombatStatSet createObjectForElement(Element element) throws InvalidObjectException {
-        ImmutableBiMap<String, Integer> abilityStringsToKeys = AbilityXMLAdapter.ABILITY_KEY_STRINGS.inverse();
+        ImmutableBiMap<String, AbilityType> abilityStringsToKeys = AbilityXMLAdapter.ABILITY_TYPE_STRINGS.inverse();
 
         CombatStatSet combatStats = new CombatStatSet();
         combatStats.setTotalHP(getIntAttribute(element, HP_ATTR));
@@ -54,13 +55,13 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
         combatStats.setDamageReduction(getIntAttribute(element, DMG_REDUCT_ATTR));
         combatStats.setBaseSpeed(getIntAttribute(element, SPEED_ATTR));
 
-        combatStats.setInitAbilityKey(getAbilityKey(abilityStringsToKeys,
+        combatStats.setInitAbility(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, INIT_ABILITY_ATTR)));
         combatStats.setInitiativeMiscMod(getIntAttribute(element, INIT_MISC_ATTR));
 
         combatStats.setACArmourBonus(getIntAttribute(element, AC_ARMOR_ATTR));
         combatStats.setACShieldBonus(getIntAttribute(element, AC_SHIELD_ATTR));
-        combatStats.setACAbilityKey(getAbilityKey(abilityStringsToKeys,
+        combatStats.setACAbility(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, AC_ABILITY_ATTR)));
         combatStats.setSizeModifier(getIntAttribute(element, SIZE_ATTR));
         combatStats.setNaturalArmour(getIntAttribute(element, AC_NATURAL_ATTR));
@@ -76,7 +77,7 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
 
         combatStats.setCMBAbilityKey(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, CMB_ABILITY_ATTR)));
-        combatStats.setCMDAbilityKey(getAbilityKey(abilityStringsToKeys,
+        combatStats.setCMDAbility(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, CMD_ABILITY_ATTR)));
         combatStats.setCMDMiscMod(getIntAttribute(element, CMD_MISC_ATTR));
         return combatStats;
@@ -89,11 +90,11 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
         element.addAttribute(NON_LETHAL_DMG_ATTR, Integer.toString(combatStats.getNonLethalDamage()));
         element.addAttribute(DMG_REDUCT_ATTR, Integer.toString(combatStats.getDamageReduction()));
         element.addAttribute(SPEED_ATTR, Integer.toString(combatStats.getBaseSpeed()));
-        element.addAttribute(INIT_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_KEY_STRINGS.get(combatStats.getInitAbilityKey()));
+        element.addAttribute(INIT_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_TYPE_STRINGS.get(combatStats.getInitAbility()));
         element.addAttribute(INIT_MISC_ATTR, Integer.toString(combatStats.getInitiativeMiscMod()));
         element.addAttribute(AC_ARMOR_ATTR, Integer.toString(combatStats.getACArmourBonus()));
         element.addAttribute(AC_SHIELD_ATTR, Integer.toString(combatStats.getACShieldBonus()));
-        element.addAttribute(AC_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_KEY_STRINGS.get(combatStats.getACAbilityKey()));
+        element.addAttribute(AC_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_TYPE_STRINGS.get(combatStats.getACAbility()));
         element.addAttribute(SIZE_ATTR, Integer.toString(combatStats.getSizeModifier()));
         element.addAttribute(AC_NATURAL_ATTR, Integer.toString(combatStats.getNaturalArmour()));
         element.addAttribute(DEFLECT_ATTR, Integer.toString(combatStats.getDeflectionMod()));
@@ -101,13 +102,13 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
         element.addAttribute(SPELL_RESIST_ATTR, Integer.toString(combatStats.getSpellResist()));
         element.addAttribute(BAB_P_ATTR, Integer.toString(combatStats.getBABPrimary()));
         element.addAttribute(BAB_S_ATTR, combatStats.getBABSecondary());
-        element.addAttribute(CMB_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_KEY_STRINGS.get(combatStats.getCMBAbilityKey()));
-        element.addAttribute(CMD_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_KEY_STRINGS.get(combatStats.getCMDAbilityKey()));
+        element.addAttribute(CMB_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_TYPE_STRINGS.get(combatStats.getCMBAbility()));
+        element.addAttribute(CMD_ABILITY_ATTR, AbilityXMLAdapter.ABILITY_TYPE_STRINGS.get(combatStats.getCMDAbility()));
         element.addAttribute(CMD_MISC_ATTR, Integer.toString(combatStats.getCMDMiscMod()));
     }
 
-    private int getAbilityKey(ImmutableBiMap<String, Integer> abilityStringsToKeys, String abilityString) throws InvalidObjectException {
-        Integer abilityKey = abilityStringsToKeys.get(abilityString);
+    private AbilityType getAbilityKey(ImmutableBiMap<String, AbilityType> abilityStringsToKeys, String abilityString) throws InvalidObjectException {
+        AbilityType abilityKey = abilityStringsToKeys.get(abilityString);
         if (abilityKey == null) {
             throw new InvalidObjectException("Invalid ability \"" + abilityString + "\" in combat stats");
         }

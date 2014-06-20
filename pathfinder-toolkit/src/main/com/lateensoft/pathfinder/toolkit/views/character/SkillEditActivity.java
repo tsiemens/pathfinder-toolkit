@@ -2,8 +2,6 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -12,9 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 import com.lateensoft.pathfinder.toolkit.views.character.AbilitySelectionDialog.OnAbilitySelectedListener;
 
@@ -32,7 +29,7 @@ public class SkillEditActivity extends ParcelableEditorActivity {
 	private Spinner m_miscModSpinner;
 	private CheckBox m_classSkillCheckBox;
 	
-	private Skill m_skill;
+	private Skill skill;
 	private boolean m_deletable;
 	
 	@Override
@@ -52,41 +49,39 @@ public class SkillEditActivity extends ParcelableEditorActivity {
 		m_miscModSpinner = (Spinner) findViewById(R.id.spinnerSkillMisc);
 		m_classSkillCheckBox = (CheckBox) findViewById(R.id.checkboxClassSkill);
 
-		m_subtypeET.setVisibility(SkillSet.isSubtypedSkill(
-                m_skill.getSkillKey()) ? View.VISIBLE : View.GONE);
+		m_subtypeET.setVisibility(
+                skill.canBeSubTyped() ? View.VISIBLE : View.GONE);
 		
-		SparseArray<String> nameMap = SkillSet.getSkillNameMap();
-		m_skillNameText.setText(nameMap.get(m_skill.getSkillKey()));
+		m_skillNameText.setText(skill.getType().getNameResId());
 		
-		m_subtypeET.setText(m_skill.getSubType());
+		m_subtypeET.setText(skill.getSubType());
 		updateAbilityTextView();
 		m_abilityTV.setOnClickListener(new OnClickListener() {
-			@Override public void onClick(View v) {
-				SparseIntArray map = SkillSet.getDefaultAbilityKeyMap();
-				AbilitySelectionDialog dialog = new AbilitySelectionDialog(
-						SkillEditActivity.this, m_skill.getAbilityKey(), map.get(m_skill.getSkillKey()));
-				dialog.setOnAbilitySelectedListener(new AbilityDialogListener());
-				dialog.show();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                AbilitySelectionDialog dialog = new AbilitySelectionDialog(
+                        SkillEditActivity.this, skill.getAbility(), skill.getType().getDefaultAbility());
+                dialog.setOnAbilitySelectedListener(new AbilityDialogListener());
+                dialog.show();
+            }
+        });
 		
 		setupSpinner(m_rankSpinner, R.array.skills_selectable_values_string,
-				m_skill.getRank() + MOD_SPINNER_OFFSET, null);
+				skill.getRank() + MOD_SPINNER_OFFSET, null);
 		setupSpinner(m_miscModSpinner, R.array.skills_selectable_values_string,
-				m_skill.getMiscMod() + MOD_SPINNER_OFFSET, null);
+                skill.getMiscMod() + MOD_SPINNER_OFFSET, null);
 
-		m_classSkillCheckBox.setChecked(m_skill.isClassSkill());
+		m_classSkillCheckBox.setChecked(skill.isClassSkill());
 	}
 	
 	private void updateAbilityTextView() {
-		m_abilityTV.setText(AbilitySet.getAbilityShortNameMap()
-				.get(m_skill.getAbilityKey()));
+		m_abilityTV.setText(skill.getAbility().getNameResId());
 	}
 	
 	private class AbilityDialogListener implements OnAbilitySelectedListener {
 
-		@Override public void onAbilitySelected(int abilityId) {
-			m_skill.setAbilityKey(abilityId);
+		@Override public void onAbilitySelected(AbilityType ability) {
+			skill.setAbility(ability);
 			updateAbilityTextView();
 		}
 		
@@ -95,20 +90,20 @@ public class SkillEditActivity extends ParcelableEditorActivity {
 
 	@Override
 	protected void updateEditedParcelableValues() throws InvalidValueException {
-		if (SkillSet.isSubtypedSkill(m_skill.getSkillKey())) {
-			m_skill.setSubType(m_subtypeET.getText().toString());
+		if (skill.canBeSubTyped()) {
+			skill.setSubType(m_subtypeET.getText().toString());
 		}
-		m_skill.setRank(m_rankSpinner
+		skill.setRank(m_rankSpinner
 				.getSelectedItemPosition() - MOD_SPINNER_OFFSET);
-		m_skill.setMiscMod(m_miscModSpinner
-				.getSelectedItemPosition() - MOD_SPINNER_OFFSET);
-		m_skill.setClassSkill(m_classSkillCheckBox
-				.isChecked());
+		skill.setMiscMod(m_miscModSpinner
+                .getSelectedItemPosition() - MOD_SPINNER_OFFSET);
+		skill.setClassSkill(m_classSkillCheckBox
+                .isChecked());
 	}
 
 	@Override
 	protected Parcelable getEditedParcelable() {
-		return m_skill;
+		return skill;
 	}
 
 	@Override
@@ -117,7 +112,7 @@ public class SkillEditActivity extends ParcelableEditorActivity {
 			// Should not happen usually, but could possibly due to lifecycle, in which case just leave
 			finish();
 		} else {
-			m_skill = (Skill) p;
+			skill = (Skill) p;
 		}
 		
 	}

@@ -6,10 +6,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CombatStatSet implements Parcelable, Identifiable {
-	public static final int DEFAULT_INIT_ABILITY_KEY = AbilitySet.KEY_DEX;
-	public static final int DEFAULT_AC_ABILITY_KEY = AbilitySet.KEY_DEX;
-	public static final int DEFAULT_CMB_ABILITY_KEY = AbilitySet.KEY_STR;
-	public static final int DEFAULT_CMD_ABILITY_KEY = AbilitySet.KEY_DEX;
+	public static final AbilityType DEFAULT_INIT_ABILITY = AbilityType.DEX;
+	public static final AbilityType DEFAULT_AC_ABILITY = AbilityType.DEX;
+	public static final AbilityType DEFAULT_CMB_ABILITY = AbilityType.STR;
+	public static final AbilityType DEFAULT_CMD_ABILITY = AbilityType.DEX;
 
 	private int m_totalHP;
 	private int m_wounds;
@@ -19,13 +19,13 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	//may need other for speed
 
 	/** Defaulted to dex */
-	private int m_initAbilityKey;
+	private AbilityType initAbility;
 	private int m_initMiscMod;
 
 	private int m_ACArmour;
 	private int m_ACShield;
 	/** Defaulted to dex */
-	private int m_ACAbilityKey;
+	private AbilityType ACAbility;
 	private int m_sizeMod;
 	private int m_ACNaturalArmour;
 	private int m_deflectionMod;
@@ -36,10 +36,10 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	private int m_BABPrimary;
 	private String m_BABSecondary;
 	/** Defaulted to strength */
-	private int m_CMBAbilityKey;
+	private AbilityType CMBAbility;
 
 	/** Defaulted to dex */
-	private int m_CMDAbilityKey;
+	private AbilityType CMDAbility;
 	private int m_CMDMiscMod;
 
 	private long m_characterId;
@@ -56,12 +56,12 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		m_damageReduction = 0;
 		m_baseSpeedFt = 0;
 
-		m_initAbilityKey = DEFAULT_INIT_ABILITY_KEY;
+		initAbility = DEFAULT_INIT_ABILITY;
 		m_initMiscMod = 0;
 
 		m_ACArmour = 0;
 		m_ACShield = 0;
-		m_ACAbilityKey = DEFAULT_AC_ABILITY_KEY;
+		ACAbility = DEFAULT_AC_ABILITY;
 		m_sizeMod = 0;
 		m_ACNaturalArmour = 0;
 		m_deflectionMod = 0;
@@ -69,9 +69,9 @@ public class CombatStatSet implements Parcelable, Identifiable {
 
 		m_BABPrimary = 0;
 		m_BABSecondary = "";
-		m_CMBAbilityKey = DEFAULT_CMB_ABILITY_KEY;
+		CMBAbility = DEFAULT_CMB_ABILITY;
 
-		m_CMDAbilityKey = DEFAULT_CMD_ABILITY_KEY;
+		CMDAbility = DEFAULT_CMD_ABILITY;
 		m_CMDMiscMod = 0;
 		
 		m_spellResist = 0;
@@ -86,12 +86,12 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		m_damageReduction = in.readInt();
 		m_baseSpeedFt = in.readInt();
 		
-		m_initAbilityKey = in.readInt();
+		initAbility = AbilityType.forKey(in.readInt());
 		m_initMiscMod = in.readInt();
 		
 		m_ACArmour = in.readInt();
 		m_ACShield = in.readInt();
-		m_ACAbilityKey = in.readInt();
+		ACAbility = AbilityType.forKey(in.readInt());
 		m_sizeMod = in.readInt();
 		m_ACNaturalArmour = in.readInt();
 		m_deflectionMod = in.readInt();
@@ -99,9 +99,9 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		
 		m_BABPrimary = in.readInt();
 		m_BABSecondary = in.readString();
-		m_CMBAbilityKey = in.readInt();
+		CMBAbility = AbilityType.forKey(in.readInt());
 		
-		m_CMDAbilityKey = in.readInt();
+		CMDAbility = AbilityType.forKey(in.readInt());
 		m_CMDMiscMod = in.readInt();
 		
 		m_spellResist = in.readInt();
@@ -117,12 +117,12 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		out.writeInt(m_damageReduction);
 		out.writeInt(m_baseSpeedFt);
 		
-		out.writeInt(m_initAbilityKey);
+		out.writeInt(initAbility.getKey());
 		out.writeInt(m_initMiscMod);
 		
 		out.writeInt(m_ACArmour);
 		out.writeInt(m_ACShield);
-		out.writeInt(m_ACAbilityKey);
+		out.writeInt(ACAbility.getKey());
 		out.writeInt(m_sizeMod);
 		out.writeInt(m_ACNaturalArmour);
 		out.writeInt(m_deflectionMod);
@@ -130,9 +130,9 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		
 		out.writeInt(m_BABPrimary);
 		out.writeString(m_BABSecondary);
-		out.writeInt(m_CMBAbilityKey);
+		out.writeInt(CMBAbility.getKey());
 		
-		out.writeInt(m_CMDAbilityKey);
+		out.writeInt(CMDAbility.getKey());
 		out.writeInt(m_CMDMiscMod);
 		
 		out.writeInt(m_spellResist);
@@ -184,12 +184,12 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		return m_baseSpeedFt;
 	}
 	
-	public void setInitAbilityKey(int abilityKey){
-		m_initAbilityKey = abilityKey;
+	public void setInitAbility(AbilityType ability){
+		initAbility = ability;
 	}
 	
-	public int getInitAbilityKey(){
-		return m_initAbilityKey;
+	public AbilityType getInitAbility(){
+		return initAbility;
 	}
 	
 	public void setInitiativeMiscMod(int initMiscMod){
@@ -205,7 +205,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	 * @return the totalled initiative mod, using the values in abilitySet
 	 */
 	public int getInitiativeMod(AbilitySet abilitySet, int maxDex){
-		return abilitySet.getTotalAbilityMod(m_initAbilityKey, maxDex) + m_initMiscMod;
+		return abilitySet.getTotalAbilityMod(initAbility, maxDex) + m_initMiscMod;
 	}
 	
 	public void setACArmourBonus(int armourBonus){
@@ -224,12 +224,12 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		return m_ACShield;
 	}
 	
-	public void setACAbilityKey(int abilityKey){
-		m_ACAbilityKey = abilityKey;
+	public void setACAbility(AbilityType abilityKey){
+		ACAbility = abilityKey;
 	}
 	
-	public int getACAbilityKey(){
-		return m_ACAbilityKey;
+	public AbilityType getACAbility(){
+		return ACAbility;
 	}
 	
 	public void setSizeModifier(int sizeMod){
@@ -269,7 +269,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	 * @return the net AC of the character. This is 10 + armour + shield + dexmod + sizemod + natural + defect + misc
 	 */
 	public int getTotalAC(AbilitySet abilitySet, int maxDex){
-		return 10 + m_ACArmour + m_ACShield + abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex) 
+		return 10 + m_ACArmour + m_ACShield + abilitySet.getTotalAbilityMod(ACAbility, maxDex)
 				+ m_sizeMod + m_ACNaturalArmour + m_deflectionMod + m_ACMiscMod;
 	}
 	
@@ -278,7 +278,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	 * @return the touch AC of the character. This is 10 + dexmod + sizemod + defect + misc
 	 */
 	public int getTouchAC(AbilitySet abilitySet, int maxDex){
-		return 10 + abilitySet.getTotalAbilityMod(m_ACAbilityKey, maxDex) + m_sizeMod + m_deflectionMod + m_ACMiscMod;
+		return 10 + abilitySet.getTotalAbilityMod(ACAbility, maxDex) + m_sizeMod + m_deflectionMod + m_ACMiscMod;
 	}
 	
 	/**
@@ -316,20 +316,20 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		return m_BABSecondary;
 	}
 	
-	public void setCMBAbilityKey(int abilityKey){
-		m_CMBAbilityKey = abilityKey;
+	public void setCMBAbilityKey(AbilityType abilityKey){
+		CMBAbility = abilityKey;
 	}
 	
-	public int getCMBAbilityKey(){
-		return m_CMBAbilityKey;
+	public AbilityType getCMBAbility(){
+		return CMBAbility;
 	}
 	
-	public void setCMDAbilityKey(int abilityKey){
-		m_CMDAbilityKey = abilityKey;
+	public void setCMDAbility(AbilityType abilityKey){
+		CMDAbility = abilityKey;
 	}
 	
-	public int getCMDAbilityKey(){
-		return m_CMDAbilityKey;
+	public AbilityType getCMDAbility(){
+		return CMDAbility;
 	}
 	
 	public void setSpellResistance(int spellResist){
@@ -353,7 +353,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	 * @return CMB = BAB + Strength mod - size mod
 	 */
 	public int getCombatManeuverBonus(AbilitySet abilitySet, int maxDex){
-		return m_BABPrimary + abilitySet.getTotalAbilityMod(m_CMBAbilityKey, maxDex) - m_sizeMod;
+		return m_BABPrimary + abilitySet.getTotalAbilityMod(CMBAbility, maxDex) - m_sizeMod;
 	}
 	
 	/**
@@ -362,7 +362,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 	 */
 	public int getCombatManeuverDefense(AbilitySet abilitySet, int maxDex){
 		return getCombatManeuverBonus(abilitySet, maxDex) 
-				+ abilitySet.getTotalAbilityMod(m_CMDAbilityKey, maxDex) + m_CMDMiscMod + 10;
+				+ abilitySet.getTotalAbilityMod(CMDAbility, maxDex) + m_CMDMiscMod + 10;
 	}
 
 	/**
@@ -403,20 +403,20 @@ public class CombatStatSet implements Parcelable, Identifiable {
 
         CombatStatSet that = (CombatStatSet) o;
 
-        if (m_ACAbilityKey != that.m_ACAbilityKey) return false;
+        if (ACAbility != that.ACAbility) return false;
         if (m_ACArmour != that.m_ACArmour) return false;
         if (m_ACMiscMod != that.m_ACMiscMod) return false;
         if (m_ACNaturalArmour != that.m_ACNaturalArmour) return false;
         if (m_ACShield != that.m_ACShield) return false;
         if (m_BABPrimary != that.m_BABPrimary) return false;
-        if (m_CMBAbilityKey != that.m_CMBAbilityKey) return false;
-        if (m_CMDAbilityKey != that.m_CMDAbilityKey) return false;
+        if (CMBAbility != that.CMBAbility) return false;
+        if (CMDAbility != that.CMDAbility) return false;
         if (m_CMDMiscMod != that.m_CMDMiscMod) return false;
         if (m_baseSpeedFt != that.m_baseSpeedFt) return false;
         if (m_characterId != that.m_characterId) return false;
         if (m_damageReduction != that.m_damageReduction) return false;
         if (m_deflectionMod != that.m_deflectionMod) return false;
-        if (m_initAbilityKey != that.m_initAbilityKey) return false;
+        if (initAbility != that.initAbility) return false;
         if (m_initMiscMod != that.m_initMiscMod) return false;
         if (m_nonLethalDamage != that.m_nonLethalDamage) return false;
         if (m_sizeMod != that.m_sizeMod) return false;
@@ -435,11 +435,11 @@ public class CombatStatSet implements Parcelable, Identifiable {
         result = 31 * result + m_nonLethalDamage;
         result = 31 * result + m_damageReduction;
         result = 31 * result + m_baseSpeedFt;
-        result = 31 * result + m_initAbilityKey;
+        result = 31 * result + initAbility.getKey();
         result = 31 * result + m_initMiscMod;
         result = 31 * result + m_ACArmour;
         result = 31 * result + m_ACShield;
-        result = 31 * result + m_ACAbilityKey;
+        result = 31 * result + ACAbility.getKey();
         result = 31 * result + m_sizeMod;
         result = 31 * result + m_ACNaturalArmour;
         result = 31 * result + m_deflectionMod;
@@ -447,8 +447,8 @@ public class CombatStatSet implements Parcelable, Identifiable {
         result = 31 * result + m_spellResist;
         result = 31 * result + m_BABPrimary;
         result = 31 * result + m_BABSecondary.hashCode();
-        result = 31 * result + m_CMBAbilityKey;
-        result = 31 * result + m_CMDAbilityKey;
+        result = 31 * result + CMBAbility.getKey();
+        result = 31 * result + CMDAbility.getKey();
         result = 31 * result + m_CMDMiscMod;
         result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;

@@ -130,29 +130,28 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	}
 	
 	private void updateAbilityView(TextView abilityTv) {
-		int abilityKey = -1;
+		AbilityType ability = null;
 		if (abilityTv == m_initAbilityTv) {
-			abilityKey = m_combatStats.getInitAbilityKey();
+			ability = m_combatStats.getInitAbility();
 		} else if (abilityTv == m_ACAbilityTv) {
-			abilityKey = m_combatStats.getACAbilityKey();
+			ability = m_combatStats.getACAbility();
 		} else if (abilityTv == m_CMBAbilityTv) {
-			abilityKey = m_combatStats.getCMBAbilityKey();
+			ability = m_combatStats.getCMBAbility();
 		} else if (abilityTv == m_CMDAbilityTv) {
-			abilityKey = m_combatStats.getCMDAbilityKey();
+			ability = m_combatStats.getCMDAbility();
 		}
 		// Saves
 		else if (abilityTv == m_fortAbilityTv) {
-			abilityKey = m_saveSet.getSave(SaveSet.KEY_FORT).getAbilityKey();
+			ability = m_saveSet.getSave(SaveType.FORT).getAbilityType();
 		} else if (abilityTv == m_refAbilityTv) {
-			abilityKey = m_saveSet.getSave(SaveSet.KEY_REF).getAbilityKey();
+			ability = m_saveSet.getSave(SaveType.REF).getAbilityType();
 		}else if (abilityTv == m_willAbilityTv) {
-			abilityKey = m_saveSet.getSave(SaveSet.KEY_WILL).getAbilityKey();
+			ability = m_saveSet.getSave(SaveType.WILL).getAbilityType();
 		}
 		
-		if (abilityKey != -1) {
-			AbilitySet.getAbilityShortNameMap();
-			abilityTv.setText(AbilitySet.getAbilityShortNameMap().get(abilityKey)
-					+ " (" + m_abilitySet.getTotalAbilityMod(abilityKey, m_maxDex) + ")");
+		if (ability != null) {
+			abilityTv.setText(getString(ability.getNameResId())
+					+ " (" + m_abilitySet.getTotalAbilityMod(ability, m_maxDex) + ")");
 		}
 	}
 
@@ -335,23 +334,23 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	}
 
 	private void updateFortSaveViews() {
-		updateSaveViews(SaveSet.KEY_FORT, m_fortTextView, m_fortBaseEditText, m_fortAbilityTv,
+		updateSaveViews(SaveType.FORT, m_fortTextView, m_fortBaseEditText, m_fortAbilityTv,
 				m_fortMagicModEditText, m_fortMiscModEditText, m_fortTempModEditText);
 	}
 
 	private void updateRefSaveViews() {
-		updateSaveViews(SaveSet.KEY_REF, m_refTextView, m_refBaseEditText, m_refAbilityTv,
+		updateSaveViews(SaveType.REF, m_refTextView, m_refBaseEditText, m_refAbilityTv,
 				m_refMagicModEditText, m_refMiscModEditText, m_refTempModEditText);
 	}
 
 	private void updateWillSaveViews() {
-		updateSaveViews(SaveSet.KEY_WILL, m_willTextView, m_willBaseEditText, m_willAbilityTv,
+		updateSaveViews(SaveType.WILL, m_willTextView, m_willBaseEditText, m_willAbilityTv,
 				m_willMagicModEditText, m_willMiscModEditText, m_willTempModEditText);
 	}
 	
-	private void updateSaveViews(int saveKey, TextView sumView, EditText baseEt, TextView abilityText,
+	private void updateSaveViews(SaveType saveType, TextView sumView, EditText baseEt, TextView abilityText,
 			EditText magicEt, EditText miscEt, EditText tempEt) {
-		Save save = m_saveSet.getSave(saveKey);
+		Save save = m_saveSet.getSave(saveType);
 		setIntText(sumView, save.getTotal(m_abilitySet, m_maxDex));
 		setIntText(baseEt, save.getBaseSave());
 		updateAbilityView(abilityText);
@@ -384,39 +383,39 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	private class OnAbilityTextClickListener implements OnClickListener {
 
 		@Override public void onClick(View v) {
-			int defaultAbilityKey = -1;
-			int currentAbility = AbilitySet.KEY_DEX;
+			AbilityType defaultAbilityKey = null;
+			AbilityType currentAbility = AbilityType.DEX;
 			if (v == m_initAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.INIT;
-				defaultAbilityKey = CombatStatSet.DEFAULT_INIT_ABILITY_KEY;
-				currentAbility = m_combatStats.getInitAbilityKey();
+				defaultAbilityKey = CombatStatSet.DEFAULT_INIT_ABILITY;
+				currentAbility = m_combatStats.getInitAbility();
 			} else if (v == m_ACAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.AC;
-				defaultAbilityKey = CombatStatSet.DEFAULT_AC_ABILITY_KEY;
-				currentAbility = m_combatStats.getACAbilityKey();
+				defaultAbilityKey = CombatStatSet.DEFAULT_AC_ABILITY;
+				currentAbility = m_combatStats.getACAbility();
 			} else if (v == m_CMBAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.CMB;
-				defaultAbilityKey = CombatStatSet.DEFAULT_CMB_ABILITY_KEY;
-				currentAbility = m_combatStats.getCMBAbilityKey();
+				defaultAbilityKey = CombatStatSet.DEFAULT_CMB_ABILITY;
+				currentAbility = m_combatStats.getCMBAbility();
 			} else if (v == m_CMDAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.CMD;
-				defaultAbilityKey = CombatStatSet.DEFAULT_CMD_ABILITY_KEY;
-				currentAbility = m_combatStats.getCMDAbilityKey();
+				defaultAbilityKey = CombatStatSet.DEFAULT_CMD_ABILITY;
+				currentAbility = m_combatStats.getCMDAbility();
 			} else if (v == m_fortAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.FORT;
-				defaultAbilityKey = SaveSet.getDefaultAbilityKeyMap().get(SaveSet.KEY_FORT);
-				currentAbility = m_saveSet.getSave(SaveSet.KEY_FORT).getAbilityKey();
+				defaultAbilityKey = SaveType.FORT.getDefaultAbility();
+				currentAbility = m_saveSet.getSave(SaveType.FORT).getAbilityType();
 			} else if (v == m_refAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.REF;
-				defaultAbilityKey = SaveSet.getDefaultAbilityKeyMap().get(SaveSet.KEY_REF);
-				currentAbility = m_saveSet.getSave(SaveSet.KEY_REF).getAbilityKey();
+				defaultAbilityKey = SaveType.REF.getDefaultAbility();
+				currentAbility = m_saveSet.getSave(SaveType.REF).getAbilityType();
 			} else if (v == m_willAbilityTv) {
 				m_abilityModSelectedForEdit = EAbilityMod.WILL;
-				defaultAbilityKey = SaveSet.getDefaultAbilityKeyMap().get(SaveSet.KEY_WILL);
-				currentAbility = m_saveSet.getSave(SaveSet.KEY_WILL).getAbilityKey();
+				defaultAbilityKey = SaveType.WILL.getDefaultAbility();
+				currentAbility = m_saveSet.getSave(SaveType.WILL).getAbilityType();
 			}
 			
-			if (defaultAbilityKey != -1) {
+			if (defaultAbilityKey != null) {
 				AbilitySelectionDialog dialog =
 						new AbilitySelectionDialog(getContext(), currentAbility, defaultAbilityKey);
 				dialog.setOnAbilitySelectedListener(new AbilityDialogListener());
@@ -428,12 +427,12 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 	
 	private class AbilityDialogListener implements AbilitySelectionDialog.OnAbilitySelectedListener {
 
-		@Override public void onAbilitySelected(int abilityKey) {
-			if (abilityKey != 0) {
+		@Override public void onAbilitySelected(AbilityType abilityKey) {
+			if (abilityKey != null) {
 				int viewID;
 				switch (m_abilityModSelectedForEdit) {
 				case AC:
-					m_combatStats.setACAbilityKey(abilityKey);
+					m_combatStats.setACAbility(abilityKey);
 					viewID = m_ACAbilityTv.getId();
 					break;
 				case CMB:
@@ -441,23 +440,23 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 					viewID = m_CMBAbilityTv.getId();
 					break;
 				case CMD:
-					m_combatStats.setCMDAbilityKey(abilityKey);
+					m_combatStats.setCMDAbility(abilityKey);
 					viewID = m_CMDAbilityTv.getId();
 					break;
 				case FORT:
-					m_saveSet.getSave(SaveSet.KEY_FORT).setAbilityKey(abilityKey);
+					m_saveSet.getSave(SaveType.FORT).setAbilityType(abilityKey);
 					viewID = m_fortAbilityTv.getId();
 					break;
 				case INIT:
-					m_combatStats.setInitAbilityKey(abilityKey);
+					m_combatStats.setInitAbility(abilityKey);
 					viewID = m_initAbilityTv.getId();
 					break;
 				case REF:
-					m_saveSet.getSave(SaveSet.KEY_REF).setAbilityKey(abilityKey);
+					m_saveSet.getSave(SaveType.REF).setAbilityType(abilityKey);
 					viewID = m_refAbilityTv.getId();
 					break;
 				case WILL:
-					m_saveSet.getSave(SaveSet.KEY_WILL).setAbilityKey(abilityKey);
+					m_saveSet.getSave(SaveType.WILL).setAbilityType(abilityKey);
 					viewID = m_willAbilityTv.getId();
 					break;
 				default:

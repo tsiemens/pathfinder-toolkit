@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import android.content.ContentValues;
 
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 
 public class CombatStatRepository extends BaseRepository<CombatStatSet> {
@@ -69,19 +70,19 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 		int nonLethalDamage = ((Long) hashTable.get(NON_LETHAL_DAMAGE)).intValue();
 		int damageReduction = ((Long) hashTable.get(DAMAGE_REDUCTION)).intValue();
 		int baseSpeedFt = ((Long) hashTable.get(BASE_SPEED_FT)).intValue();
-		int initAbilityKey = ((Long) hashTable.get(INIT_ABILITY_KEY)).intValue();
+		AbilityType initAbilityKey = AbilityType.forKey(((Long) hashTable.get(INIT_ABILITY_KEY)).intValue());
 		int initMiscMod = ((Long) hashTable.get(INIT_MISC_MOD)).intValue();
 		int acArmor = ((Long) hashTable.get(AC_ARMOR)).intValue();
 		int acShield = ((Long) hashTable.get(AC_SHIELD)).intValue();
-		int acAbilityKey = ((Long) hashTable.get(AC_ABILITY_KEY)).intValue();
+        AbilityType acAbilityKey = AbilityType.forKey(((Long) hashTable.get(AC_ABILITY_KEY)).intValue());
 		int sizeMod = ((Long) hashTable.get(SIZE_MOD)).intValue();
 		int acNaturalArmor = ((Long) hashTable.get(AC_NATURAL_ARMOR)).intValue();
 		int deflectionMod = ((Long) hashTable.get(DEFLECTION_MOD)).intValue();
 		int acMiscMod = ((Long) hashTable.get(AC_MISC_MOD)).intValue();
 		int babPrimary = ((Long) hashTable.get(BAB_PRIMARY)).intValue();
 		String babSecondary = (String) hashTable.get(BAB_SECONDARY);
-		int cmbAbilityKey = ((Long) hashTable.get(CMB_ABILITY_KEY)).intValue();
-		int cmdAbilityKey = ((Long) hashTable.get(CMD_ABILITY_KEY)).intValue();
+        AbilityType cmbAbilityKey = AbilityType.forKey(((Long) hashTable.get(CMB_ABILITY_KEY)).intValue());
+        AbilityType cmdAbilityKey = AbilityType.forKey(((Long) hashTable.get(CMD_ABILITY_KEY)).intValue());
 		int cmdMiscMod = ((Long) hashTable.get(CMD_MISC_MOD)).intValue();
 		int spellResist = ((Long) hashTable.get(SPELL_RESIST)).intValue();
 		
@@ -91,11 +92,11 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 		statSet.setNonLethalDamage(nonLethalDamage);
 		statSet.setDamageReduction(damageReduction);
 		statSet.setBaseSpeed(baseSpeedFt);
-		statSet.setInitAbilityKey(initAbilityKey);
+		statSet.setInitAbility(initAbilityKey);
 		statSet.setInitiativeMiscMod(initMiscMod);
 		statSet.setACArmourBonus(acArmor);
 		statSet.setACShieldBonus(acShield);
-		statSet.setACAbilityKey(acAbilityKey);
+		statSet.setACAbility(acAbilityKey);
 		statSet.setSizeModifier(sizeMod);
 		statSet.setNaturalArmour(acNaturalArmor);
 		statSet.setDeflectionMod(deflectionMod);
@@ -103,7 +104,7 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 		statSet.setBABPrimary(babPrimary);
 		statSet.setBABSecondary(babSecondary);
 		statSet.setCMBAbilityKey(cmbAbilityKey);
-		statSet.setCMDAbilityKey(cmdAbilityKey);
+		statSet.setCMDAbility(cmdAbilityKey);
 		statSet.setCMDMiscMod(cmdMiscMod);
 		statSet.setSpellResistance(spellResist);
 		return statSet;
@@ -117,19 +118,19 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 		values.put(NON_LETHAL_DAMAGE, object.getNonLethalDamage());
 		values.put(DAMAGE_REDUCTION, object.getDamageReduction());
 		values.put(BASE_SPEED_FT, object.getBaseSpeed());
-		values.put(INIT_ABILITY_KEY, object.getInitAbilityKey());
+		values.put(INIT_ABILITY_KEY, object.getInitAbility().getKey());
 		values.put(INIT_MISC_MOD, object.getInitiativeMiscMod());
 		values.put(AC_ARMOR, object.getACArmourBonus());
 		values.put(AC_SHIELD, object.getACShieldBonus());
-		values.put(AC_ABILITY_KEY, object.getACAbilityKey());
+		values.put(AC_ABILITY_KEY, object.getACAbility().getKey());
 		values.put(SIZE_MOD, object.getSizeModifier());
 		values.put(AC_NATURAL_ARMOR, object.getNaturalArmour());
 		values.put(DEFLECTION_MOD, object.getDeflectionMod());
 		values.put(AC_MISC_MOD, object.getACMiscMod());
 		values.put(BAB_PRIMARY, object.getBABPrimary());
 		values.put(BAB_SECONDARY, object.getBABSecondary());
-		values.put(CMB_ABILITY_KEY, object.getCMBAbilityKey());
-		values.put(CMD_ABILITY_KEY, object.getCMDAbilityKey());
+		values.put(CMB_ABILITY_KEY, object.getCMBAbility().getKey());
+		values.put(CMD_ABILITY_KEY, object.getCMDAbility().getKey());
 		values.put(CMD_MISC_MOD, object.getCMDMiscMod());
 		values.put(SPELL_RESIST, object.getSpellResist());
 		return values;

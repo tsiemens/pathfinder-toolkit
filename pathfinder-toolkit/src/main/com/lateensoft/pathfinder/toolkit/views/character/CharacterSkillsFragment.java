@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillType;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
 import java.util.List;
@@ -104,8 +105,8 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 		skillEditIntent.putExtra(
 				SkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE,skill);
 		skillEditIntent.putExtra(SkillEditActivity.INTENT_EXTRAS_KEY_SKILL_DELETABLE_BOOLEAN,
-				(SkillSet.isSubtypedSkill(skill.getSkillKey())
-				&& m_skillSet.hasMultipleOfSkill(skill.getSkillKey())) );
+				(skill.canBeSubTyped() && m_skillSet.hasMultipleOfSkill(skill.getType())));
+
 		startActivityForResult(skillEditIntent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
 	}
 	
@@ -119,12 +120,7 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 			Skill skill = ParcelableEditorActivity.getParcelableFromIntent(data);
 			if (m_skillSelectedForEdit != null && skill != null) {
 				m_skillSelectedForEdit.setSubType(skill.getSubType());
-                if (AbilitySet.isValidAbility(skill.getAbilityKey())) {
-				    m_skillSelectedForEdit.setAbilityKey(skill.getAbilityKey());
-                } else {
-                    m_skillSelectedForEdit.setAbilityKey(
-                            SkillSet.getDefaultAbilityKeyMap().get(m_skillSelectedForEdit.getSkillKey()));
-                }
+				m_skillSelectedForEdit.setAbility(skill.getAbility());
 				m_skillSelectedForEdit.setRank(skill.getRank());
 				m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
 				m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
@@ -138,8 +134,8 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 			break;
 		case SpellEditActivity.RESULT_DELETE:
 			Log.v(TAG, "Deleting a skill subtype");
-			if (m_skillSelectedForEdit != null && SkillSet.isSubtypedSkill(m_skillSelectedForEdit.getSkillKey())
-				&& m_skillSet.hasMultipleOfSkill(m_skillSelectedForEdit.getSkillKey())) {
+			if (m_skillSelectedForEdit != null && m_skillSelectedForEdit.canBeSubTyped()
+				&& m_skillSet.hasMultipleOfSkill(m_skillSelectedForEdit.getType())) {
 				if (m_skillRepo.delete(m_skillSelectedForEdit.getId())!= 0) {
 					m_skillSet.deleteSkill(m_skillSelectedForEdit);
 				}
@@ -199,9 +195,9 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 	
 	private void addNewSubSkills() {
 		Skill newSkill;
-        for (int key : SkillSet.SUBTYPED_SKILLS) {
-			if (m_skillSet.allSubSkillsUsed(key)) {
-				newSkill = m_skillSet.addNewSubSkill(key);
+        for (SkillType type : SkillType.values()) {
+			if (type.canBeSubTyped() && m_skillSet.allSubSkillsUsed(type)) {
+				newSkill = m_skillSet.addNewSubSkill(type);
 				m_skillRepo.insert(newSkill);
 			}
 		}
