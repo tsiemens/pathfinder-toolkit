@@ -31,8 +31,6 @@ public class BaseApplication extends Application{
 		
 		// Application setup
         initializeApplicationInjector();
-		
-		// Perform database migrations if necessary here
 	}
 
     private void initializeApplicationInjector() {
@@ -51,7 +49,7 @@ public class BaseApplication extends Application{
 	/**
 	 * Gets the application context.
 	 */
-    @Deprecated // Should use provided context, or RoboGuice
+    @Deprecated // Should use provided context. Static contexts are BAD
 	static public Context getAppContext() {
 		return s_context;
 	}
@@ -59,7 +57,7 @@ public class BaseApplication extends Application{
 	/**
 	 * @return: The the human readable app version, or null in the event of an error.
 	 */
-    @Deprecated
+    @Deprecated // Will be fetched from Guice, via PackageInfo.class. See ApplicationModule
 	public static String getAppVersionName() {
 		Context context = BaseApplication.getAppContext();
 		PackageInfo pInfo;
@@ -75,7 +73,7 @@ public class BaseApplication extends Application{
 	/**
 	 * @return: The the incremental app version code, or -1 in the event of an error.
 	 */
-    @Deprecated
+    @Deprecated // Will be fetched from Guice, via PackageInfo.class. See ApplicationModule
 	public static int getAppVersionCode() {
 		Context context = BaseApplication.getAppContext();
 		PackageInfo pInfo;

@@ -16,7 +16,7 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
 
     private long m_id;
 
-    @Deprecated
+    @Deprecated // once the DAOs are implemented, no owned objects will reference the character.
     private long m_characterId;
 	
 	public Item(long id, long characterId, String name, double weight, int quantity, boolean contained) {

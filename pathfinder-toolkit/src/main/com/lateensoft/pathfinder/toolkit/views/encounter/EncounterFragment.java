@@ -100,7 +100,7 @@ public class EncounterFragment extends BasePageFragment {
         }
     };
 
-    @Deprecated // TODO test
+    @Deprecated // TODO for testing layout right now. will remove when using actual data
     private List<EncounterParticipantRowModel> buildTestRows() {
         return Lists.newArrayList(
                 buildRowModel("Person 1", 20, 19),
@@ -112,7 +112,7 @@ public class EncounterFragment extends BasePageFragment {
         );
     }
 
-    @Deprecated // TODO test
+    @Deprecated // TODO for testing layout right now. will remove when using actual data
     private EncounterParticipantRowModel buildRowModel(String name, int init, int check) {
         EncounterParticipantRowModel row = new EncounterParticipantRowModel(EncounterParticipant.builder()
                 .setName(name)

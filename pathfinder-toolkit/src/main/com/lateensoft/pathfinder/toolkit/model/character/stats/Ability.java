@@ -21,7 +21,7 @@ public class Ability implements Typed<AbilityType>, Parcelable, Identifiable, Co
 	private int score;
 	private int tempBonus;
 
-    @Deprecated
+    @Deprecated // once the DAOs are implemented, no owned objects will reference the character.
 	private long m_characterId;
 
     @Deprecated
@@ -131,7 +131,8 @@ public class Ability implements Typed<AbilityType>, Parcelable, Identifiable, Co
 	}
 
 	@Override
-    @Deprecated
+    @Deprecated // The Identifiable interface will not be needed by ability once DAOs are used.
+    // It will use the OwnedWeakTableDAO, which does not expect a unique ID
 	public long getId() {
 		return type.getKey();
 	}

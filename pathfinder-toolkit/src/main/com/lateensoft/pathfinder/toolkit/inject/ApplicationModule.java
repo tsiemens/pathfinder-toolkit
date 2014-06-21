@@ -1,7 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.inject;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.AndroidRuntimeException;
@@ -24,9 +23,11 @@ public class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(Application.class).toInstance(application);
-        bind(Context.class).toInstance(application);
-        bind(AppPreferences.class).to(AppPreferences.class);
+        /* TODO will need to create interface for preferences.
+         * Not allowed to map to the same class. eg. Preferences.class (interface) -> AppPreferences (implements Preferences)
+         */
+//        bind(AppPreferences.class).to(AppPreferences.class);
+
 
         Provider<PackageInfo> infoProvider = packageInfoProvider == null ? new DefaultPackageInfoProvider() : packageInfoProvider;
         bind(PackageInfo.class).toProvider(infoProvider);

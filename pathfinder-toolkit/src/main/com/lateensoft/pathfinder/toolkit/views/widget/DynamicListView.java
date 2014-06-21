@@ -105,7 +105,7 @@ public class DynamicListView extends ListView {
     }
 
     @Override
-    @Deprecated
+    @Deprecated // Use setDynamicAdapter()
     public void setAdapter(ListAdapter adapter) {
         throw new UnsupportedOperationException(this.getClass().getName() + " must use " +
                 DynamicArrayAdapter.class.getName());

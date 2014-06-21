@@ -139,7 +139,7 @@ public class Save implements Typed<SaveType>, Parcelable, Identifiable, Comparab
 	};
 
 	@Override
-    @Deprecated
+    @Deprecated // Is a owned weak item. does not need to be identifiable
 	public void setId(long id) {
 //		setSaveKey((int) id);
 	}
