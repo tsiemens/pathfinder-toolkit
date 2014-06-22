@@ -10,6 +10,10 @@ Pathfinder Toolkit is an Android application for use with the Pathfinder Rolepla
 - All release versions have tags for reference, and their release APKs are available for testing updates.
 - General refactoring is appreciated as much as feature implementation.
 
+## Environment Setup Notes
+- The JUnit4 jar must be specified in the dependency list ABOVE the Android SDK, so it overrides the default JUnit libraries.
+- Mark the Robolectric library as "Provided", not "Compile" (This is IntelliJ terminology) in the dependency list. Otherwise, the android support libraries will conflict on compilation.
+
 ## Features:
 - Complete character sheet manager for all your characters.
 - Campaign party manager for GMs to keep track of their party members’ stats.
