@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="test-suite-libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/pathfinder-toolkit/libs/junit-4.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pathfinder-toolkit/libs/hamcrest-all-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pathfinder-toolkit/libs/robolectric-2.4-20140617.183128-37-jar-with-dependencies.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://hamcrest.org/JavaHamcrest/javadoc/1.3/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
