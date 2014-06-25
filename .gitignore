@@ -50,3 +50,4 @@ local.properties
 
 # IDEA Files
 .idea/dictionaries
+.idea/workspace.xml
