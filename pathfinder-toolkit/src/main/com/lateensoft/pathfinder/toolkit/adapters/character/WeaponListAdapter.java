@@ -54,8 +54,8 @@ public class WeaponListAdapter extends ArrayAdapter<Weapon> {
 		holder.damage.setText(getItem(position).getDamage());
 		holder.range.setText(Integer.toString(getItem(position).getRange()));
 		holder.specialProperties.setText(getItem(position).getSpecialProperties());
-		holder.type.setText(getItem(position).getType());
-		holder.size.setText(getItem(position).getSize());
+		holder.type.setText(getItem(position).getType().getDisplayNameResId());
+		holder.size.setText(getItem(position).getSize().getDisplayNameResId());
 		holder.critical.setText(getItem(position).getCritical());
 		holder.ammo.setText(Integer.toString(getItem(position).getAmmunition()));
 		

@@ -2,9 +2,7 @@ package com.lateensoft.pathfinder.toolkit.patching;
 
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 
@@ -123,19 +121,31 @@ public class CharacterConverter {
 		newWeapon.setCritical(oldWeapon.getCritical());
 		newWeapon.setDamage(oldWeapon.getDamage());
 		newWeapon.setRange(oldWeapon.getRange());
-		newWeapon.setSize(oldWeapon.getSize());
-		newWeapon.setSpecialProperties(oldWeapon.getSpecialProperties());
+        try {
+            newWeapon.setSize(Size.forKey(oldWeapon.getSize()));
+        } catch (Exception e) {
+            newWeapon.setSize(Size.MEDIUM);
+        }
+        newWeapon.setSpecialProperties(oldWeapon.getSpecialProperties());
 		newWeapon.setTotalAttackBonus(oldWeapon.getTotalAttackBonus());
-		newWeapon.setType(oldWeapon.getType());
-	}
+        try {
+            newWeapon.setType(WeaponType.forKey(oldWeapon.getType()));
+        } catch (Exception e) {
+            newWeapon.setType(WeaponType.SLASHING);
+        }
+    }
 	
 	private static void setArmor(Armor newArmor, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTArmor oldArmor) {
 		setItem(newArmor, oldArmor);
 		newArmor.setACBonus(oldArmor.getACBonus());
 		newArmor.setCheckPen(0 - oldArmor.getCheckPen()); // Changes this to negatives
 		newArmor.setMaxDex(oldArmor.getMaxDex());
-		newArmor.setSize(oldArmor.getSize());
-		newArmor.setSpecialProperties(oldArmor.getSpecialProperties());
+        try {
+            newArmor.setSize(Size.forKey(oldArmor.getSize()));
+        } catch (Exception e) {
+            newArmor.setSize(Size.MEDIUM);
+        }
+        newArmor.setSpecialProperties(oldArmor.getSpecialProperties());
 		newArmor.setSpeed(oldArmor.getSpeed());
 		newArmor.setSpellFail(oldArmor.getSpellFail());
 		newArmor.setWorn(oldArmor.isWorn());

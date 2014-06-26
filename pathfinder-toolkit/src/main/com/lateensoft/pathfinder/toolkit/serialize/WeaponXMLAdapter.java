@@ -1,7 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
-import com.lateensoft.pathfinder.toolkit.BaseApplication;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.WeaponType;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -45,17 +46,20 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
         weapon.setSpecialProperties(getSubElementText(element, ELMT_SPEC_PROPS));
 
         String typeString = getStringAttribute(element, ATTR_TYPE);
-        if (!Weapon.isValidType(BaseApplication.getAppContext(), typeString)) {
+        try {
+            WeaponType type = WeaponType.forKey(typeString);
+            weapon.setType(type);
+        } catch (Exception e) {
             throw new InvalidObjectException("Weapon attribute 'type' invalid. Reference weapon screens for valid options.");
         }
-        weapon.setType(typeString);
-
 
         String sizeString = getStringAttribute(element, ATTR_SIZE);
-        if (!Weapon.isValidSize(BaseApplication.getAppContext(), sizeString)) {
+        try {
+            Size size = Size.forKey(sizeString);
+            weapon.setSize(size);
+        } catch (Exception e) {
             throw new InvalidObjectException("Weapon attribute 'size' invalid. Must be 'S', 'M', or 'L'.");
         }
-        weapon.setSize(sizeString);
     }
 
     @Override
@@ -66,8 +70,8 @@ public class WeaponXMLAdapter extends XMLObjectAdapter<Weapon> {
         addSubElementText(element, ELMT_CRIT, weapon.getCritical());
         element.addAttribute(ATTR_RANGE, Integer.toString(weapon.getRange()));
         element.addAttribute(ATTR_AMMO, Integer.toString(weapon.getAmmunition()));
-        element.addAttribute(ATTR_TYPE, weapon.getType());
-        element.addAttribute(ATTR_SIZE, weapon.getSize());
+        element.addAttribute(ATTR_TYPE, weapon.getType().getKey());
+        element.addAttribute(ATTR_SIZE, weapon.getSize().getKey());
         addSubElementText(element, ELMT_SPEC_PROPS, weapon.getSpecialProperties());
     }
 }

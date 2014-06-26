@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit.views;
 import com.lateensoft.pathfinder.toolkit.R;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import roboguice.activity.RoboActivity;
 
 /**
  * Base class for any activity which can edit a Parcelable, and return it as a result.
@@ -28,7 +28,7 @@ import android.widget.Spinner;
  * @author trevsiemens
  *
  */
-public abstract class ParcelableEditorActivity extends Activity {
+public abstract class ParcelableEditorActivity extends RoboActivity {
 	
 	private static final String TAG = ParcelableEditorActivity.class.getSimpleName();
 	
@@ -122,23 +122,29 @@ public abstract class ParcelableEditorActivity extends Activity {
 		builder.show();
 	}
 	
-	/**
-	 * Sets up a generic spinner for the activity
-	 * @param spinner
-	 * @param optionResourceId - An id for a String array in resources
-	 * @param defaultSelection - the default selected value of the spinner
-	 */
 	protected void setupSpinner(Spinner spinner, int optionResourceId, int defaultSelection,
 			OnTouchListener touchListener) {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 				optionResourceId, android.R.layout.simple_spinner_item);
 
-		adapter.setDropDownViewResource(R.layout.spinner_centered_wrapped);
-		spinner.setGravity(Gravity.CENTER);
-		spinner.setAdapter(adapter);
-		spinner.setOnTouchListener(touchListener);
-		spinner.setSelection(defaultSelection, false);
+        setupSpinner(spinner, adapter, defaultSelection, touchListener);
 	}
+
+    protected void setupSpinner(Spinner spinner, String[] options, int defaultSelection,
+                                OnTouchListener touchListener) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options);
+
+        setupSpinner(spinner, adapter, defaultSelection, touchListener);
+    }
+
+    protected void setupSpinner(Spinner spinner, ArrayAdapter adapter, int defaultSelection,
+                                OnTouchListener touchListener) {
+        adapter.setDropDownViewResource(R.layout.spinner_centered_wrapped);
+        spinner.setGravity(Gravity.CENTER);
+        spinner.setAdapter(adapter);
+        spinner.setOnTouchListener(touchListener);
+        spinner.setSelection(defaultSelection, false);
+    }
 	
 	/**
 	 * Called by the ParcelableEditorActivity

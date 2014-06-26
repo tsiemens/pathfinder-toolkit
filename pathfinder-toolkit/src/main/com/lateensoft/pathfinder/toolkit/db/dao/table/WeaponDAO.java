@@ -8,7 +8,9 @@ import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.WeaponType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
@@ -103,8 +105,8 @@ public class WeaponDAO extends OwnedIdentifiableTableDAO<Long, Weapon> {
         weapon.setRange(range);
         weapon.setSpecialProperties(specialProperties);
         weapon.setAmmunition(ammunition);
-        weapon.setType(type);
-        weapon.setSize(size);
+        weapon.setType(WeaponType.forKey(type));
+        weapon.setSize(Size.forKey(size));
     }
 
     @Override
@@ -118,8 +120,8 @@ public class WeaponDAO extends OwnedIdentifiableTableDAO<Long, Weapon> {
         values.put(RANGE, entity.getRange());
         values.put(SPEC_PROPERTIES, entity.getSpecialProperties());
         values.put(AMMO, entity.getAmmunition());
-        values.put(TYPE, entity.getType());
-        values.put(SIZE, entity.getSize());
+        values.put(TYPE, entity.getType().getKey());
+        values.put(SIZE, entity.getSize().getKey());
         return values;
     }
 }

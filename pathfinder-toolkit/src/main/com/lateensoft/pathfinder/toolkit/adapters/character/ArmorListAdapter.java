@@ -60,7 +60,7 @@ public class ArmorListAdapter extends ArrayAdapter<Armor> {
 		holder.maxDex.setText(Integer.toString(getItem(position).getMaxDex()));
 		holder.specialProperties.setText(getItem(position).getSpecialProperties());
 		holder.speed.setText(getItem(position).getSpeedString());
-		holder.size.setText((getItem(position).getSize()));
+		holder.size.setText((getItem(position).getSize().getDisplayNameResId()));
 		holder.spellFail.setText(Integer.toString(getItem(position).getSpellFail()) + "%");
 		
 		return row;

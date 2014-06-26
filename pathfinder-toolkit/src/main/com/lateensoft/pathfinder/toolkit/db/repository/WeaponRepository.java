@@ -9,7 +9,9 @@ import android.database.Cursor;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.WeaponType;
 
 public class WeaponRepository extends BaseRepository<Weapon> {
 
@@ -60,8 +62,8 @@ public class WeaponRepository extends BaseRepository<Weapon> {
 		weapon.setRange(range);
 		weapon.setSpecialProperties(specialProperties);
 		weapon.setAmmunition(ammunition);
-		weapon.setType(type);
-		weapon.setSize(size);
+		weapon.setType(WeaponType.forKey(type));
+		weapon.setSize(Size.forKey(size));
 	}
 	
 	@Override
@@ -128,8 +130,8 @@ public class WeaponRepository extends BaseRepository<Weapon> {
 		values.put(RANGE, object.getRange());
 		values.put(SPEC_PROPERTIES, object.getSpecialProperties());
 		values.put(AMMO, object.getAmmunition());
-		values.put(TYPE, object.getType());
-		values.put(SIZE, object.getSize());
+		values.put(TYPE, object.getType().getKey());
+		values.put(SIZE, object.getSize().getKey());
 		return values;
 	}
 	

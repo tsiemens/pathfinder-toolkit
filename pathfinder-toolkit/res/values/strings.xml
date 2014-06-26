@@ -442,11 +442,10 @@
         <item>20</item>
 	</string-array>
 
-    <string-array name="size_spinner_options">
-        <item>S</item>
-        <item>M</item>
-        <item>L</item>
-    </string-array>
+    <string name="item_size_small">S</string>
+    <string name="item_size_med">M</string>
+    <string name="item_size_large">L</string>
+
     <string-array name="speed_spinner_options">
 		<item>0 ft.</item>
 		<item>5 ft.</item>
@@ -567,16 +566,14 @@
         <item>+39</item>
         <item>+40</item>
 	</string-array>
-	
-    <string-array name="weapon_type_options">
-        <item>S</item>
-        <item>P</item>
-        <item>B</item>
-        <item>P\/B</item>
-        <item>S\/B</item>
-        <item>S\/P</item>
-        <item>S\/P\/B</item>
-    </string-array>
+
+    <string name="weapon_type_slash">S</string>
+    <string name="weapon_type_pierce">P</string>
+    <string name="weapon_type_bludgeon">B</string>
+    <string name="weapon_type_pierce_bludgeon">P\/B</string>
+    <string name="weapon_type_slash_bludgeon">S\/B</string>
+    <string name="weapon_type_slash_pierce">S\/P</string>
+    <string name="weapon_type_slash_pierce_bludgeon">S\/P\/B</string>
 
     <!-- Feats/Special Abilities -->
     <string name="feats_add_button">Add Feat or Special Ability</string>

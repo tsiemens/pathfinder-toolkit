@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
@@ -67,7 +68,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
 
 		setupSpinner(m_ACSpinner, R.array.ac_spinner_options, AC_SPINNER_OFFSET, m_spinnerOnTouchListener);
 		setupSpinner(m_ACPSpinner, R.array.selectable_negative_values_strings, 0, m_spinnerOnTouchListener);
-		setupSpinner(m_sizeSpinner, R.array.size_spinner_options, 0, m_spinnerOnTouchListener);
+		setupSpinner(m_sizeSpinner, Size.getValuesSortedNames(getResources()), 0, m_spinnerOnTouchListener);
 		setupSpinner(m_speedSpinner, R.array.speed_spinner_options, 0, m_spinnerOnTouchListener);
 		setupSpinner(m_maxDexSpinner, R.array.selectable_whole_values_strings, 0, m_spinnerOnTouchListener);
 		setupSpinner(m_ASFSpinner, R.array.armor_spell_fail_options, 0, m_spinnerOnTouchListener);
@@ -80,7 +81,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
 		}
 		m_ACSpinner.setSelection(m_armor.getACBonus() + AC_SPINNER_OFFSET);
 		m_ACPSpinner.setSelection(m_armor.getCheckPen() + ACP_SPINNER_OFFSET);
-		m_sizeSpinner.setSelection(m_armor.getSizeInt());
+		m_sizeSpinner.setSelection(m_armor.getSize().getValuesIndex());
 		m_maxDexSpinner.setSelection(m_armor.getMaxDex());
 		m_speedSpinner.setSelection(m_armor.getSpeed()/5);
 		m_ASFSpinner.setSelection(m_armor.getSpellFail() / ASF_INCREMENT);
@@ -122,7 +123,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
             quantity = 1;
         }
         
-        int size = m_sizeSpinner.getSelectedItemPosition();
+        int sizeIndex = m_sizeSpinner.getSelectedItemPosition();
         int ac = m_ACSpinner.getSelectedItemPosition() - AC_SPINNER_OFFSET;
         int acp = m_ACPSpinner.getSelectedItemPosition() - ACP_SPINNER_OFFSET;
         int maxDex = m_maxDexSpinner.getSelectedItemPosition();
@@ -133,7 +134,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
         m_armor.setSpellFail(spellFail);
         m_armor.setWeight(weight);
         m_armor.setQuantity(quantity);
-        m_armor.setSizeInt(size);
+        m_armor.setSize(Size.forValuesIndex(sizeIndex));
         m_armor.setACBonus(ac);
         m_armor.setCheckPen(acp);
         m_armor.setMaxDex(maxDex);

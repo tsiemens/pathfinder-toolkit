@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.serialize;
 
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import org.dom4j.Element;
 
 import java.io.InvalidObjectException;
@@ -45,10 +46,12 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
         armor.setSpecialProperties(getSubElementText(element, ELMT_SPEC_PROPS));
 
         String sizeString = getStringAttribute(element, ATTR_SIZE);
-        if (!Armor.isValidSize(sizeString)) {
+        try {
+            Size size = Size.forKey(sizeString);
+            armor.setSize(size);
+        } catch (Exception e) {
             throw new InvalidObjectException("Armor attribute 'size' invalid. Must be 'S', 'M', or 'L'.");
         }
-        armor.setSize(sizeString);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
         element.addAttribute(ATTR_MAX_DEX, Integer.toString(armor.getMaxDex()));
         element.addAttribute(ATTR_SPELL_FAIL, Integer.toString(armor.getSpellFail()));
         element.addAttribute(ATTR_SPEED, Integer.toString(armor.getSpeed()));
-        element.addAttribute(ATTR_SIZE, armor.getSize());
+        element.addAttribute(ATTR_SIZE, armor.getSize().getKey());
         addSubElementText(element, ELMT_SPEC_PROPS, armor.getSpecialProperties());
     }
 }

@@ -10,6 +10,7 @@ import android.database.Cursor;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 
 public class ArmorRepository extends BaseRepository<Armor> {
 
@@ -61,7 +62,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
 		armor.setSpellFail(spellFail);
 		armor.setSpeed(speed);
 		armor.setSpecialProperties(specialProperties);
-		armor.setSize(size);
+		armor.setSize(Size.forKey(size));
 	}
 	
 	@Override
@@ -129,7 +130,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
 		values.put(SPELL_FAIL, object.getSpellFail());
 		values.put(SPEED, object.getSpeed());
 		values.put(SPEC_PROPERTIES, object.getSpecialProperties());
-		values.put(SIZE, object.getSize());
+		values.put(SIZE, object.getSize().getKey());
 		return values;
 	}
 	

@@ -11,6 +11,7 @@ import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
@@ -106,7 +107,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
         armor.setSpellFail(spellFail);
         armor.setSpeed(speed);
         armor.setSpecialProperties(specialProperties);
-        armor.setSize(size);
+        armor.setSize(Size.forKey(size));
     }
 
     @Override
@@ -121,7 +122,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
         values.put(SPELL_FAIL, armor.getSpellFail());
         values.put(SPEED, armor.getSpeed());
         values.put(SPEC_PROPERTIES, armor.getSpecialProperties());
-        values.put(SIZE, armor.getSize());
+        values.put(SIZE, armor.getSize().getKey());
         return values;
     }
 

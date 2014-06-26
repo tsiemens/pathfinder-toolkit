@@ -7,7 +7,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.WeaponType;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
 
 public class WeaponEditActivity extends ParcelableEditorActivity {
@@ -52,8 +54,9 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		
 		setupSpinner(m_highestAtkSpinner, R.array.weapon_attack_bonus_options,
 				ATK_BONUS_OFFSET, null);
-		setupSpinner(m_sizeSpinner, R.array.size_spinner_options, 0, null);
-		setupSpinner(m_typeSpinner, R.array.weapon_type_options, 0, null);
+        Resources resources = getResources();
+		setupSpinner(m_sizeSpinner, Size.getValuesSortedNames(resources), 0, null);
+		setupSpinner(m_typeSpinner, WeaponType.getValuesSortedNames(resources), 0, null);
 
 		if(m_weaponIsNew) {
 			setTitle(R.string.new_weapon_title);
@@ -65,16 +68,25 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 			m_highestAtkSpinner.setSelection(m_weapon.getTotalAttackBonus() + ATK_BONUS_OFFSET);
 			m_damageET.setText(m_weapon.getDamage());
 			m_criticalET.setText(m_weapon.getCritical());
-			m_sizeSpinner.setSelection(m_weapon.getSizeInt());
+			m_sizeSpinner.setSelection(m_weapon.getSize().getValuesIndex());
 			m_rangeET.setText(Integer.toString(m_weapon.getRange()));
-			m_typeSpinner.setSelection(m_weapon.getTypeInt(this));
+			m_typeSpinner.setSelection(getWeaponTypeIndex(m_weapon.getType()));
 			m_weightET.setText(Double.toString(m_weapon.getWeight()));
             m_quantityET.setText(Integer.toString(m_weapon.getQuantity()));
             m_itemContainedCheckbox.setChecked(m_weapon.isContained());
 			m_specialPropertiesET.setText(m_weapon.getSpecialProperties());
 		}
 	}
-	
+
+    public int getWeaponTypeIndex(WeaponType type) {
+        WeaponType[] types = WeaponType.values();
+        for(int i = 0; i < types.length; i++) {
+            if(type == types[i])
+                return i;
+        }
+        throw new IllegalArgumentException("Invalid weapon type");
+    }
+
 	private String getStringByResourceAndIndex(int resourceId, int position) {
 		Resources r = getResources();
 		String[] resource = r.getStringArray(resourceId);
@@ -120,10 +132,8 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		String damage = m_damageET.getText().toString();
 		String critical = m_criticalET.getText().toString();
 		String specialProperties = m_specialPropertiesET.getText().toString();
-		String type = getStringByResourceAndIndex(R.array.weapon_type_options,
-				m_typeSpinner.getSelectedItemPosition());
-		String size = getStringByResourceAndIndex(R.array.size_spinner_options,
-				m_sizeSpinner.getSelectedItemPosition());
+		int typeIndex = m_typeSpinner.getSelectedItemPosition();
+		int sizeIndex = m_sizeSpinner.getSelectedItemPosition();
         
 		m_weapon.setName(name);
 		m_weapon.setTotalAttackBonus(attack);
@@ -133,11 +143,15 @@ public class WeaponEditActivity extends ParcelableEditorActivity {
 		m_weapon.setDamage(damage);
 		m_weapon.setCritical(critical);
 		m_weapon.setSpecialProperties(specialProperties);
-		m_weapon.setType(type);
-		m_weapon.setSize(size);
+		m_weapon.setType(weaponTypeForIndex(typeIndex));
+		m_weapon.setSize(Size.forValuesIndex(sizeIndex));
         m_weapon.setQuantity(quantity);
         m_weapon.setContained(m_itemContainedCheckbox.isChecked());
 	}
+
+    public static WeaponType weaponTypeForIndex(int index) {
+        return WeaponType.values()[index];
+    }
 
 	@Override
 	protected Parcelable getEditedParcelable() {
