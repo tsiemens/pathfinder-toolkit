@@ -1,11 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.util.DiceSet;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import roboguice.RoboGuice;
 
 import java.util.Collections;
 
@@ -104,8 +106,8 @@ public class PartySkillCheckerFragment extends BasePageFragment implements OnCli
    	}
    	
 	public void loadDefaultParty(){
-		long currentPartyID = AppPreferences.getInstance().getLong(
-				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+        Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+		long currentPartyID = preferences.get(GlobalPrefs.SELECTED_PARTY_ID, -1L);
 		CampaignParty party = null;
 		if(currentPartyID > 0) {
 //			party = m_partyRepo.query(currentPartyID); // TODO this should use encounter repo

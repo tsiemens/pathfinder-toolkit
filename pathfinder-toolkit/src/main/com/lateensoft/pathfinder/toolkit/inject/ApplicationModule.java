@@ -6,28 +6,27 @@ import android.content.pm.PackageManager;
 import android.util.AndroidRuntimeException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
+import com.lateensoft.pathfinder.toolkit.pref.AppPreferences;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 
 public class ApplicationModule extends AbstractModule {
     private final Application application;
     private final Provider<PackageInfo> packageInfoProvider;
+    private final Preferences preferences;
 
-    public ApplicationModule(Application application, Provider<PackageInfo> packageInfoProvider) {
+    public ApplicationModule(Application application, Provider<PackageInfo> packageInfoProvider, Preferences preferences) {
         this.application = application;
         this.packageInfoProvider = packageInfoProvider;
+        this.preferences = preferences;
     }
 
-    public ApplicationModule(Application application) {
-        this(application, null);
+    public ApplicationModule(Application application, Preferences preferences) {
+        this(application, null, preferences);
     }
 
     @Override
     protected void configure() {
-        /* TODO will need to create interface for preferences.
-         * Not allowed to map to the same class. eg. Preferences.class (interface) -> AppPreferences (implements Preferences)
-         */
-//        bind(AppPreferences.class).to(AppPreferences.class);
-
+        bind(Preferences.class).toInstance(preferences);
 
         Provider<PackageInfo> infoProvider = packageInfoProvider == null ? new DefaultPackageInfoProvider() : packageInfoProvider;
         bind(PackageInfo.class).toProvider(infoProvider);

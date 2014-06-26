@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillType;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedStatSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,7 +90,7 @@ public class SkillSetTest {
         assertEquals(0, listener.adds);
     }
 
-    private class TestCorrectionListener implements ValidatedTypedSet.CorrectionListener<Skill> {
+    private class TestCorrectionListener implements ValidatedTypedStatSet.CorrectionListener<Skill> {
         public int removes = 0;
         public int adds = 0;
 

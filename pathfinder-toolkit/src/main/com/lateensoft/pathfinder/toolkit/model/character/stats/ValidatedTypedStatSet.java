@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ValidatedTypedSet<T extends Typed<E> & Comparable<T>, E extends Enum<E>>
+public abstract class ValidatedTypedStatSet<T extends TypedStat<E> & Comparable<T>, E extends Enum<E>>
         implements Iterable<T> {
 
     public interface CorrectionListener<T> {
@@ -16,7 +16,7 @@ public abstract class ValidatedTypedSet<T extends Typed<E> & Comparable<T>, E ex
         public void onMissingItemAdded(T addedItem);
     }
 
-    public ValidatedTypedSet() {
+    public ValidatedTypedStatSet() {
         List<E> types = getSortedTypes();
         List<T> validItems = Lists.newArrayListWithCapacity(types.size());
 
@@ -31,7 +31,7 @@ public abstract class ValidatedTypedSet<T extends Typed<E> & Comparable<T>, E ex
      * If an item of any type does not exist, will be added and set to default.
      * Invalid items are removed
      */
-    public ValidatedTypedSet(List<T> items, @Nullable CorrectionListener<T> listener) {
+    public ValidatedTypedStatSet(List<T> items, @Nullable CorrectionListener<T> listener) {
         List<T> itemsCopy = Lists.newArrayList(items);
         validate(itemsCopy, listener);
         initWithValidatedItems(itemsCopy);

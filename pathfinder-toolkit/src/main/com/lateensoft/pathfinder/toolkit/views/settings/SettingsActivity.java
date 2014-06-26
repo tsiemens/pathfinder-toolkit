@@ -4,8 +4,9 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
+import roboguice.activity.RoboPreferenceActivity;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends RoboPreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

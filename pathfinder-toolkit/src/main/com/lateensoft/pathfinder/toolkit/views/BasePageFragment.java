@@ -3,14 +3,14 @@ package com.lateensoft.pathfinder.toolkit.views;
 import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
-import com.lateensoft.pathfinder.toolkit.BaseApplication;
+import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.MainActivity;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.view.View;
+import roboguice.fragment.RoboFragment;
 
-public abstract class BasePageFragment extends Fragment{
+public abstract class BasePageFragment extends RoboFragment{
 
 	private View m_rootView;
 
@@ -57,9 +57,7 @@ public abstract class BasePageFragment extends Fragment{
         }
 	}
 
-    /**
-     * Sets the default title and subtitle for the fragment
-     */
+    /** Sets the default title and subtitle for the fragment */
     public abstract void updateTitle();
 	
 	public View getRootView() {
@@ -72,11 +70,7 @@ public abstract class BasePageFragment extends Fragment{
 
     public Context getContext() {
         Activity a = getActivity();
-        if (a != null) {
-            return a;
-        } else {
-            return BaseApplication.getAppContext();
-        }
+        return Preconditions.checkNotNull(a);
     }
 
     public void switchToPage(final Class<? extends BasePageFragment> fragment) {
@@ -106,5 +100,12 @@ public abstract class BasePageFragment extends Fragment{
         }
     }
 
-
+    /** There appears to be a conflict between some of the android SDK and JDK libraries, which
+     * causes some kind of ambiguity between Object.class() and Object.class(), especially for support fragments.
+     * This is a quick and dirty fix */
+    @Deprecated
+    @SuppressWarnings("unchecked")
+    public <T extends BasePageFragment> Class<T> getSupportClass() {
+        return (Class<T>) ((Object) this).getClass();
+    }
 }

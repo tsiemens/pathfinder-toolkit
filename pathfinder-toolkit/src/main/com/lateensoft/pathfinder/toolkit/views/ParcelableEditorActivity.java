@@ -43,7 +43,7 @@ public abstract class ParcelableEditorActivity extends RoboActivity {
 	 */
 	public static final String INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE = "parcelable_to_edit";
 
-    public static final int DEFAULT_REQUEST_CODE = 2093802093;
+    public static final int DEFAULT_REQUEST_CODE = 14692;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

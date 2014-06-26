@@ -1,6 +1,5 @@
 package com.lateensoft.pathfinder.toolkit.views.party;
 
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.party.PartyRollAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMemberRepository;
@@ -8,6 +7,8 @@ import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 import com.lateensoft.pathfinder.toolkit.model.party.PartyMember;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.util.DiceSet;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
@@ -30,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import roboguice.RoboGuice;
 
 import java.util.Collections;
 
@@ -50,10 +52,13 @@ public class InitiativeTrackerFragment extends BasePageFragment {
 	private PartyRepository m_partyRepo;
 	private PartyMemberRepository m_memberRepo;
 
+    private Preferences preferences;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+        preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+
 		m_partyRepo = new PartyRepository();
 		m_memberRepo = new PartyMemberRepository();
 	}
@@ -206,8 +211,8 @@ public class InitiativeTrackerFragment extends BasePageFragment {
 	}
 
 	private void loadDefaultParty() {
-		long currentPartyID = AppPreferences.getInstance().getLong(
-				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+        long currentPartyID = preferences.get(GlobalPrefs.SELECTED_PARTY_ID, -1L);
+
 		CampaignParty defaultParty = null;
 		if (currentPartyID > 0) {
 //			defaultParty = m_partyRepo.query(currentPartyID); TODO

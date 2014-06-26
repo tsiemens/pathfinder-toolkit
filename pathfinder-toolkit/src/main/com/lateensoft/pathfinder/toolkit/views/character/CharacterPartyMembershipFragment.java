@@ -25,7 +25,7 @@ import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRep
 public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFragment {
 
 	private static final String TAG = CharacterPartyMembershipFragment.class.getSimpleName();
-    public static final int GET_NEW_PARTIES_CODE = 104222030;
+    public static final int GET_NEW_PARTIES_CODE = 33091;
 
 	private ListView m_partyListView;
 	private Button m_addButton;

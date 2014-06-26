@@ -93,7 +93,7 @@ public class SkillRepository extends BaseRepository<Skill> {
 
     public SkillSet querySet(long characterId) {
         return new SkillSet(queryAllForCharacter(characterId),
-                new ValidatedTypedSet.CorrectionListener<Skill>() {
+                new ValidatedTypedStatSet.CorrectionListener<Skill>() {
                     @Override
                     public void onInvalidItemRemoved(Skill removedSkill) {
                         SkillRepository.this.delete(removedSkill);

@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
@@ -30,8 +29,11 @@ import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.util.AbilitySetCalculator;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterAbilitiesFragment;
+import roboguice.RoboGuice;
 
 public class PointbuyCalculatorFragment extends BasePageFragment {
 	
@@ -279,8 +281,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 					[m_racesSpinner.getSelectedItemPosition()]);
 
 			if (m_characterRepo.insert(character) != -1) {
-				AppPreferences.getInstance().putLong(
-						AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, character.getId());
+				setSelectedCharacter(character.getId());
 				switchToPage(CharacterAbilitiesFragment.class);
 			}
 			break;
@@ -304,6 +305,11 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 		}
 		return true;
 	}
+
+    private void setSelectedCharacter(long characterId) {
+        Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+        preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
+    }
 
 	private class OnCharacterExportSelectListener implements DialogInterface.OnClickListener {
 		long _characterIdSelectedInDialog;
@@ -331,8 +337,7 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 					}
 					m_fluffRepo.update(fluff);
 
-					AppPreferences.getInstance().putLong(
-							AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, _characterIdSelectedInDialog);
+					setSelectedCharacter(_characterIdSelectedInDialog);
                     switchToPage(CharacterAbilitiesFragment.class);
 				}
 				break;

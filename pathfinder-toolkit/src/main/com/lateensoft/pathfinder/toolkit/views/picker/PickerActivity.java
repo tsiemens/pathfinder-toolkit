@@ -4,7 +4,6 @@ import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +17,7 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
+import roboguice.activity.RoboFragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public class PickerActivity extends FragmentActivity {
+public class PickerActivity extends RoboFragmentActivity {
     private static final String TAG = PickerActivity.class.getSimpleName();
 
     public static final String PICKER_LISTS_KEY = "picker_lists";

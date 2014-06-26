@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Ability;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedStatSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +51,7 @@ public class AbilitySetTest {
         assertEquals(6, newAbilitySet.size());
     }
 
-    private class TestCorrectionListener implements ValidatedTypedSet.CorrectionListener<Ability> {
+    private class TestCorrectionListener implements ValidatedTypedStatSet.CorrectionListener<Ability> {
         public int removes = 0;
         public int adds = 0;
 

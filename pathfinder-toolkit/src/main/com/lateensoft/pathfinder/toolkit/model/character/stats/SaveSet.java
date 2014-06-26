@@ -7,7 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.Nullable;
 
-public class SaveSet extends ValidatedTypedSet<Save, SaveType> implements Parcelable, Iterable<Save> {
+public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Parcelable, Iterable<Save> {
 
 	private List<Save> saves;
 

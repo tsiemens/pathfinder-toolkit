@@ -11,7 +11,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataTyp
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Ability;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedStatSet;
 
 public class AbilityRepository extends BaseRepository<Ability> {
 	private static final String TABLE = "Ability";
@@ -82,7 +82,7 @@ public class AbilityRepository extends BaseRepository<Ability> {
 
     public AbilitySet querySet(long characterId) {
         return new AbilitySet(queryAllForCharacter(characterId),
-                new ValidatedTypedSet.CorrectionListener<Ability>() {
+                new ValidatedTypedStatSet.CorrectionListener<Ability>() {
                     @Override
                     public void onInvalidItemRemoved(Ability removedAbility) {
                         AbilityRepository.this.delete(removedAbility);

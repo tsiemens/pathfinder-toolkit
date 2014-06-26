@@ -2,30 +2,51 @@ package com.lateensoft.pathfinder.toolkit.patching;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
+import com.google.inject.Injector;
 import com.lateensoft.pathfinder.toolkit.BaseApplication;
-import com.lateensoft.pathfinder.toolkit.db.DatabaseImpl;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
 import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
+import roboguice.RoboGuice;
+import roboguice.util.RoboContext;
 
 public class UpdatePatcher {
 	private static final String TAG = UpdatePatcher.class.getSimpleName();
 
-	public static boolean isPatchRequired() {
-		return ( getPreviousVersion() < BaseApplication.getAppVersionCode() );
+    private Context context;
+    private Preferences preferences;
+    private PackageInfo packageInfo;
+
+    public UpdatePatcher(Context context) {
+        this.context = context;
+        Injector injector = RoboGuice.getInjector(context);
+        preferences = injector.getInstance(Preferences.class);
+        packageInfo = injector.getInstance(PackageInfo.class);
+    }
+
+	public boolean isPatchRequired() {
+		return ( getPreviousVersion() < packageInfo.versionCode );
 	}
+
+    public boolean updateLastUsedVersion(){
+        return preferences.put(GlobalPrefs.LAST_USED_VERSION, packageInfo.versionCode);
+    }
+
+    public int getPreviousVersion(){
+        return preferences.get(GlobalPrefs.LAST_USED_VERSION, -1);
+    }
 	
 	/**
 	 * Applies all necessary patches to the app.
 	 * @return false if was not 100% successful, and the user can expect some data loss.
 	 */
-	public static boolean applyUpdatePatches() {
+	public boolean applyUpdatePatches() {
 		Log.i(TAG, "Applying update patches...");
 		int prevVer = getPreviousVersion();
 		boolean completeSuccess = true;
@@ -66,7 +87,7 @@ public class UpdatePatcher {
      * All this should be done while avoiding the use of our datamodels to provide forward compatibility.
      * This may be unavoidable though with the transfer from partymember to character
      */
-    private static boolean applyV9ToV10Patch() {
+    private boolean applyV9ToV10Patch() {
 
         return false;
     }
@@ -83,12 +104,11 @@ public class UpdatePatcher {
 	 * 
 	 * @return false if was not 100% successful, and the user can expect some data loss.
 	 */
-	private static boolean applyV5ToCurrentPatch() {
+	private boolean applyV5ToCurrentPatch() {
 		Log.i(TAG, "Applying v5 patches...");
-		Context appContext = BaseApplication.getAppContext();
+		Context appContext = context.getApplicationContext();
 		CharacterRepository characterRepo = new CharacterRepository();
 		PartyRepository partyRepo = new PartyRepository();
-		AppPreferences newSharedPrefs = AppPreferences.getInstance();
 		PTUserPrefsManager oldPrefsManager = new PTUserPrefsManager(appContext);
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager oldDBManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager(appContext);
 		boolean completeSuccess = true;
@@ -99,7 +119,7 @@ public class UpdatePatcher {
         } catch (ClassCastException e) {
             // Cases in which this has become a long in preferences for unknown reason.
             oldSelectedCharacterID =
-                    Long.valueOf(newSharedPrefs.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER, -1)).intValue();
+                    Long.valueOf(preferences.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_CHARACTER, -1)).intValue();
         }
 
         int oldSelectedPartyID;
@@ -107,7 +127,7 @@ public class UpdatePatcher {
             oldSelectedPartyID = oldPrefsManager.getSelectedParty();
         } catch (ClassCastException e) {
             oldSelectedPartyID =
-                    Long.valueOf(newSharedPrefs.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY, -1)).intValue();
+                    Long.valueOf(preferences.getLong(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY, -1)).intValue();
         }
 		
 		// Delete, because need to convert to long later
@@ -115,7 +135,7 @@ public class UpdatePatcher {
 		oldPrefsManager.remove(PTUserPrefsManager.KEY_SHARED_PREFS_SELECTED_PARTY);
 		
 		// Give user a week before they are asked to rate again.
-		oldPrefsManager.remove(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME);
+		preferences.remove(GlobalPrefs.LAST_RATE_PROMPT_TIME);
 		
 		int[] oldCharIDs = oldDBManager.getCharacterIDs();
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldChar;
@@ -128,7 +148,7 @@ public class UpdatePatcher {
 				completeSuccess = false;
 				Log.e(TAG, "Error migrating character "+oldChar.getName());
 			} else if (id == oldSelectedCharacterID) {
-				newSharedPrefs.putLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, newChar.getId());
+				preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, newChar.getId());
 			}
 		}
 
@@ -168,53 +188,29 @@ public class UpdatePatcher {
 		return completeSuccess;
 	}
 	
-	private static void applyPreV5Patch() {
+	private void applyPreV5Patch() {
 		Log.i(TAG, "Applying pre v5 patch...");
-		Context appContext = BaseApplication.getAppContext();
+		Context appContext = context.getApplicationContext();
 		com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager oldDBManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager(appContext);
 		oldDBManager.performUpdates(appContext);
 		Log.i(TAG, "Pre v5 patch complete");
 	}
 	
-	/**
-	 * Sets the last used version in shared preferences to the current version
-	 * @return true if the save was successful, false otherwise
-	 */
-	public static boolean updateLastUsedVersion(){
-		Context context = BaseApplication.getAppContext();
-		PackageInfo pInfo;
-		try{
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return AppPreferences.getInstance().putInt(AppPreferences.KEY_INT_LAST_USED_VERSION, pInfo.versionCode);
-		}catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	/**
-	 * @return The last used version code, before patch application, or -1 if none exists.
-	 */
-	public static int getPreviousVersion(){
-		return AppPreferences.getInstance().getInt(AppPreferences.KEY_INT_LAST_USED_VERSION, -1);
-	}
-	
-	/**
-	 * AsyncTask that performs patch
-	 * Can have a single listener
-	 * @author trevsiemens
-	 *
-	 */
 	public static class PatcherTask extends AsyncTask<PatcherListener, Void, Boolean> {
 
 		private PatcherListener m_listener;
+        private UpdatePatcher patcher;
+
+        public PatcherTask(UpdatePatcher patcher) {
+            this.patcher = patcher;
+        }
 		
 		@Override
 		protected Boolean doInBackground(PatcherListener... params) {
 			if (params.length > 0) {
 				m_listener = params[0];
 			}
-			return applyUpdatePatches();
+			return patcher.applyUpdatePatches();
 		}
 
 		@Override

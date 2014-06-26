@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType.*;
 
-public class AbilitySet extends ValidatedTypedSet<Ability, AbilityType> implements Parcelable, Iterable<Ability> {
+public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> implements Parcelable, Iterable<Ability> {
 
 	private List<Ability> abilities;
 
@@ -19,7 +19,7 @@ public class AbilitySet extends ValidatedTypedSet<Ability, AbilityType> implemen
         super();
     }
 
-    public AbilitySet(List<Ability> items, @Nullable ValidatedTypedSet.CorrectionListener<Ability> listener) {
+    public AbilitySet(List<Ability> items, @Nullable ValidatedTypedStatSet.CorrectionListener<Ability> listener) {
         super(items, listener);
     }
 

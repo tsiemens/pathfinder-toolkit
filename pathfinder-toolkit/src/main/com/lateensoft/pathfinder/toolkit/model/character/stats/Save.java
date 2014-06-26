@@ -5,7 +5,7 @@ import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Save implements Typed<SaveType>, Parcelable, Identifiable, Comparable<Save> {
+public class Save implements TypedStat<SaveType>, Parcelable, Identifiable, Comparable<Save> {
 	private long m_characterId;
 	
 	private final SaveType type;

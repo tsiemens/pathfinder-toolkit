@@ -7,7 +7,7 @@ import android.os.Parcelable;
 
 import static com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType.*;
 
-public class Skill implements Typed<SkillType>, Parcelable, Identifiable, Comparable<Skill> {
+public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Comparable<Skill> {
 
     private final SkillType type;
 

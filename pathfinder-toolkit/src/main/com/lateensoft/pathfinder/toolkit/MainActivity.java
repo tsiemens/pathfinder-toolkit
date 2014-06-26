@@ -1,19 +1,18 @@
 package com.lateensoft.pathfinder.toolkit;
 
 import java.util.ArrayDeque;
-import java.util.Calendar;
 import java.util.Deque;
 import java.util.List;
 
-import android.app.*;
-import android.content.ActivityNotFoundException;
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.*;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -46,8 +45,9 @@ import com.lateensoft.pathfinder.toolkit.views.party.PartyManagerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PartySkillCheckerFragment;
 import com.lateensoft.pathfinder.toolkit.views.settings.SettingsActivity;
 import org.jetbrains.annotations.NotNull;
+import roboguice.activity.RoboFragmentActivity;
 
-public class MainActivity extends Activity implements OnChildClickListener, OnGroupClickListener,
+public class MainActivity extends RoboFragmentActivity implements OnChildClickListener, OnGroupClickListener,
 		OnGroupExpandListener, OnGroupCollapseListener {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -74,7 +74,8 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		getActionBar().setHomeButtonEnabled(true);
 		
 		// Patching
-		if (UpdatePatcher.isPatchRequired()) {
+        UpdatePatcher patcher = new UpdatePatcher(this);
+		if (patcher.isPatchRequired()) {
 
 			final ProgressDialog progDialog = new ProgressDialog(this);
 			progDialog.setCancelable(false);
@@ -82,7 +83,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 			progDialog.setTitle(getString(R.string.updating_dialog_message));
 			progDialog.show();
 
-			PatcherTask task = new PatcherTask();
+			PatcherTask task = new PatcherTask(patcher);
 			PatcherListener patchListener = new PatcherListener() {
 				@Override public void onPatchComplete(boolean completeSuccess) {
 					progDialog.dismiss();
@@ -100,10 +101,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(KEY_CURRENT_FRAGMENT, m_currentFragment.getClass().getCanonicalName());
+		outState.putString(KEY_CURRENT_FRAGMENT, m_currentFragment.getSupportClass().getCanonicalName());
 		super.onSaveInstanceState(outState);
 	}
-	
+
 	private void showStartupFragment(Bundle savedInstanceState) {
         String fragmentName = savedInstanceState != null ?
                 savedInstanceState.getString(KEY_CURRENT_FRAGMENT) : null;
@@ -181,23 +182,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	}
 
 	private void showRateDialogIfRequired() {
-		AppPreferences sharedPrefs = AppPreferences.getInstance();
-		if (sharedPrefs.isLastRateTimeLongEnough()
-				&& !sharedPrefs.hasRatedCurrentVersion()) {
-			showRateAppPromptDialog();
-		}
-	}
-
-	public void showRateAppPromptDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        OnClickListener listener = new RateDialogClickListener();
-		builder.setTitle(getString(R.string.rate_dialog_title))
-				.setMessage(R.string.rate_dialog_message)
-				.setPositiveButton(R.string.rate_dialog_positive_button, listener)
-				.setNegativeButton(R.string.rate_dialog_negative_button, listener);
-
-		AlertDialog alert = builder.create();
-		alert.show();
+		RateDialogHelper rateHelper = new RateDialogHelper(this);
+        if (rateHelper.shouldPromptToRate()) {
+            rateHelper.buildAndShowDialog();
+        }
 	}
 
 	@Override
@@ -280,12 +268,12 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
     }
 
     private void showFragment(BasePageFragment fragment, boolean pushCurrentToStack) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
         if (m_currentFragment != null && pushCurrentToStack) {
-            m_fragmentBackStack.push(m_currentFragment.getClass());
+            m_fragmentBackStack.push(m_currentFragment.getSupportClass());
         }
         m_currentFragment = fragment;
     }
@@ -379,36 +367,4 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		    }
 		 }, delayMs);
 	}
-
-    private class RateDialogClickListener implements OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int selection) {
-            AppPreferences sharedPrefs = AppPreferences.getInstance();
-
-            switch (selection) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    sharedPrefs.updateLastRatedVersion();
-                    sharedPrefs.putLong(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
-                            Calendar.getInstance().getTimeInMillis());
-                    Log.v(TAG, "Attempting to open market page");
-                    String appPackageName = MainActivity.this.getPackageName();
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=" + appPackageName)));
-                    } catch (ActivityNotFoundException e) {
-                        Log.v(TAG, "Failed to open market. Attempting in browser.");
-                        startActivity(new Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("http://play.google.com/store/apps/details?id="
-                                        + appPackageName)));
-                    }
-                    break;
-                default:
-                    Log.v(TAG, "Delaying rate dialog.");
-                    sharedPrefs.putLong(AppPreferences.KEY_LONG_LAST_RATE_PROMPT_TIME,
-                            Calendar.getInstance().getTimeInMillis());
-            }
-
-        }
-    }
 }

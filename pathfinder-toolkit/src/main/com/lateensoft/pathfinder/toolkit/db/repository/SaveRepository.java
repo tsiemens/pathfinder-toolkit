@@ -94,7 +94,7 @@ public class SaveRepository extends BaseRepository<Save> {
 
     public SaveSet querySet(long characterId) {
         return new SaveSet(queryAllForCharacter(characterId),
-                new ValidatedTypedSet.CorrectionListener<Save>() {
+                new ValidatedTypedStatSet.CorrectionListener<Save>() {
                     @Override
                     public void onInvalidItemRemoved(Save removedSave) {
                         SaveRepository.this.delete(removedSave);

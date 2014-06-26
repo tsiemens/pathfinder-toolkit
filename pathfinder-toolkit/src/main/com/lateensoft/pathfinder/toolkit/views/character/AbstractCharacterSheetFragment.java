@@ -8,11 +8,12 @@ import java.util.List;
 import android.app.Activity;
 import android.net.Uri;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.util.*;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 
@@ -30,12 +31,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import org.dom4j.DocumentException;
+import roboguice.RoboGuice;
 
 //This is a base class for all fragments in the character sheet activity
 public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	private static final String TAG = AbstractCharacterSheetFragment.class.getSimpleName();
 
-    public static final int GET_IMPORT_REQ_CODE = 309485039;
+    public static final int GET_IMPORT_REQ_CODE = 3056;
 	
 	public long m_currentCharacterID;
 
@@ -84,9 +86,9 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 		m_isWaitingForResult = true;
 	}
 
-    private void setSelectedCharacter(long currentCharacterID) {
-        AppPreferences.getInstance().putLong(
-                AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, currentCharacterID);
+    private void setSelectedCharacter(long characterId) {
+        Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+        preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
     }
 
 	/**
@@ -94,8 +96,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 	 * set in user prefs, it automatically generates a new one.
 	 */
 	public void loadSelectedCharacter() {
-		long currentCharacterID = AppPreferences.getInstance()
-				.getLong(AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, -1);
+        Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+		long currentCharacterID = preferences.get(GlobalPrefs.SELECTED_CHARACTER_ID, -1L);
 
 		if (currentCharacterID == -1) { 
 			// There was no current character set in shared prefs

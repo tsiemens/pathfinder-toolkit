@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.Nullable;
 
-public class SkillSet extends ValidatedTypedSet<Skill, SkillType> implements Parcelable, Iterable<Skill> {
+public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements Parcelable, Iterable<Skill> {
 
 	private List<Skill> skills;
 

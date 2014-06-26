@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
 
 
-public class Ability implements Typed<AbilityType>, Parcelable, Identifiable, Comparable<Ability> {
+public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable, Comparable<Ability> {
 	
 	private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 	private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};

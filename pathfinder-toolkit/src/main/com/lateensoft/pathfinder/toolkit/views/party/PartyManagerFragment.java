@@ -8,12 +8,13 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.AppPreferences;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.*;
 import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
+import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
+import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
 import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterCombatStatsFragment;
@@ -25,11 +26,12 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
+import roboguice.RoboGuice;
 
 public class PartyManagerFragment extends BasePageFragment {
 	private static final String TAG = PartyManagerFragment.class.getSimpleName();
-    private static final int GET_NEW_MEMBERS_CODE = 178792110;
-    private static final int GET_PARTY_CODE = 313923144;
+    private static final int GET_NEW_MEMBERS_CODE = 18880;
+    private static final int GET_PARTY_CODE = 54716;
 
 	public NamedList<IdStringPair> m_party;
 
@@ -41,7 +43,15 @@ public class PartyManagerFragment extends BasePageFragment {
     private ActionMode m_actionMode;
     private ActionModeCallback m_actionModeCallback;
 
-	@Override
+    private Preferences preferences;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
+    }
+
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -94,8 +104,7 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showMemberDetails(long characterId) {
-        AppPreferences.getInstance().putLong(
-                AppPreferences.KEY_LONG_SELECTED_CHARACTER_ID, characterId);
+        preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
         switchToPage(CharacterCombatStatsFragment.class);
     }
 
@@ -104,33 +113,42 @@ public class PartyManagerFragment extends BasePageFragment {
 	 * user prefs, it automatically generates a new one.
 	 */
 	private void loadCurrentParty() {
-		long currentPartyID = AppPreferences.getInstance().getLong(
-				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, -1);
+		long currentPartyID = getSelectedPartyId();
 
 		if (currentPartyID == -1) {
 			// There was no current party set in shared prefs
-			addNewParty();
+			addNewPartyAndSetSelected();
 		} else {
 			m_party = m_partyRepo.query(currentPartyID);
 			if (m_party == null) {
-				// Recovery for some kind of catastrophic failure.
-				List<IdStringPair> ids = m_partyRepo.queryIdNameList();
-                for (IdStringPair id : ids) {
-                    m_party = m_partyRepo.query(id.getId());
-                    if (m_party != null) {
-                        AppPreferences.getInstance().putLong(
-                                AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getId());
-                        break;
-                    }
-                }
-				if (m_party == null) {
-					addNewParty();
-				}
+				handleInvalidSelectedParty();
 			}
 			refreshPartyView();
 
 		}
 	}
+
+    private void setSelectedParty(long partyId) {
+        preferences.put(GlobalPrefs.SELECTED_PARTY_ID, partyId);
+    }
+
+    private long getSelectedPartyId() {
+        return preferences.get(GlobalPrefs.SELECTED_PARTY_ID, -1L);
+    }
+
+    private void handleInvalidSelectedParty() {
+        List<IdStringPair> ids = m_partyRepo.queryIdNameList();
+        for (IdStringPair id : ids) {
+            m_party = m_partyRepo.query(id.getId());
+            if (m_party != null) {
+                setSelectedParty(m_party.getId());
+                break;
+            }
+        }
+        if (m_party == null) {
+            addNewPartyAndSetSelected();
+        }
+    }
 
     private class ActionModeCallback extends MultiSelectActionModeCallback {
 
@@ -184,52 +202,30 @@ public class PartyManagerFragment extends BasePageFragment {
             memberIds.add(pair.getId());
         }
 
-        int dels = m_partyRepo.removeCharactersFromParty(m_party.getId(), memberIds);
-        if (dels > 0) {
+        int numberOfDeletions = m_partyRepo.removeCharactersFromParty(m_party.getId(), memberIds);
+        if (numberOfDeletions > 0) {
             m_party.removeAll(membersToRemove);
         }
         refreshPartyView();
     }
 
-	/**
-	 * Generates a new party and sets it to the current party.
-	 */
-	private void addNewParty() {
+	private void addNewPartyAndSetSelected() {
 		m_party = new NamedList<IdStringPair>("New Party");
 		m_partyRepo.insert(m_party);
-		AppPreferences.getInstance().putLong(
-				AppPreferences.KEY_LONG_SELECTED_PARTY_ID, m_party.getId());
+		setSelectedParty(m_party.getId());
 		refreshPartyView();
 	}
 
-	/**
-	 * Deletes the current party and loads the first in the list, or creates a
-	 * new blank one, if there was only one.
-	 */
-	private void deleteCurrentParty() {
-		int currentPartyIndex = 0;
-		long currentPartyID = m_party.getId();
+	private void deleteCurrentPartyAndSelectAnother() {
+        m_partyRepo.delete(m_party);
 		List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
 
-		for (int i = 0; i < partyIDs.size(); i++) {
-			if (currentPartyID == partyIDs.get(i).getId()) {
-                currentPartyIndex = i;
-            }
-		}
-
-		if (partyIDs.size() == 1) {
-			addNewParty();
-		} else if (currentPartyIndex == 0) {
-			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(1).getId());
-			loadCurrentParty();
+		if (partyIDs.isEmpty()) {
+			addNewPartyAndSetSelected();
 		} else {
-			AppPreferences.getInstance().putLong(
-					AppPreferences.KEY_LONG_SELECTED_PARTY_ID, partyIDs.get(0).getId());
+			setSelectedParty(partyIDs.get(0).getId());
 			loadCurrentParty();
 		}
-
-		m_partyRepo.delete(currentPartyID);
 	}
 
 	private void updateDatabase() {
@@ -323,7 +319,7 @@ public class PartyManagerFragment extends BasePageFragment {
                 .setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         updateDatabase();
-                        addNewParty();
+                        addNewPartyAndSetSelected();
                     }
                 })
                 .setNegativeButton(R.string.cancel_button_text, null);
@@ -336,7 +332,7 @@ public class PartyManagerFragment extends BasePageFragment {
                 m_party.getName()))
                 .setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
-                        deleteCurrentParty();
+                        deleteCurrentPartyAndSelectAnother();
                     }
                 })
                 .setNegativeButton(R.string.cancel_button_text, null);
@@ -348,12 +344,9 @@ public class PartyManagerFragment extends BasePageFragment {
         if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
             PickerUtils.ResultData pickerData = new PickerUtils.ResultData(data);
             if (requestCode == GET_PARTY_CODE) {
-                // Ensures any data changed on the party in the current fragment is saved
-                updateDatabase();
                 IdStringPair party = pickerData.getParty();
                 if (party != null) {
-                    AppPreferences.getInstance().putLong(
-                            AppPreferences.KEY_LONG_SELECTED_PARTY_ID, party.getId());
+                    setSelectedParty(party.getId());
                     loadCurrentParty();
                 }
             } else {
