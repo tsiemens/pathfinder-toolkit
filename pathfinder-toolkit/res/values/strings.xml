@@ -147,25 +147,10 @@
     <!-- Character Stats Strings -->
     
     <!-- Abilities -->
-    <string-array name="abilities_short">
-        <item>STR</item>
-        <item>DEX</item>
-        <item>CON</item>
-        <item>INT</item>
-        <item>WIS</item>
-        <item>CHA</item>
-    </string-array>
-
     <string name="max_dex_warning">\u26A0 max</string>
     
     <string name="select_ability_dialog_title">Select Ability</string>
     <string name="default_ability_label">\u0020(Default)</string>
-
-    <string-array name="save_names">
-        <item>Fortitude</item>
-        <item>Reflex</item>
-        <item>Will</item>
-    </string-array>
 
     <string name="save_name_fort">Fortitude</string>
     <string name="save_name_ref">Reflex</string>
@@ -189,44 +174,6 @@
 
     <string name="apply_armor_check">Apply Armor Check Penalty</string>
     
-    <string-array name="skills">
-        <item>Acrobatics</item>
-        <item>Appraise</item>
-        <item>Bluff</item>
-        <item>Climb</item>
-        <item>Craft</item>
-        <item>Diplomacy</item>
-        <item>Disable Device</item>
-        <item>Disguise</item>
-        <item>Escape Artist</item>
-        <item>Fly</item>
-        <item>Handle Animal</item>
-        <item>Heal</item>
-        <item>Intimidate</item>
-        <item>Knowledge (Arcana)</item>
-        <item>Knowledge (Dungeoneering)</item>
-        <item>Knowledge (Engineering)</item>
-        <item>Knowledge (Geography)</item>
-        <item>Knowledge (History)</item>
-        <item>Knowledge (Local)</item>
-        <item>Knowledge (Nature)</item>
-        <item>Knowledge (Nobility)</item>
-        <item>Knowledge (Planes)</item>
-        <item>Knowledge (Religion)</item>
-        <item>Linguistics</item>
-        <item>Perception</item>
-        <item>Perform</item>
-        <item>Profession</item>
-        <item>Ride</item>
-        <item>Sense Motive</item>
-        <item>Sleight of Hand</item>
-        <item>Spellcraft</item>
-        <item>Stealth</item>
-        <item>Survival</item>
-        <item>Swim</item>
-        <item>Use Magic Device</item>
-    </string-array>
-
     <string name="skill_name_acro">Acrobatics</string>
     <string name="skill_name_appraise">Appraise</string>
     <string name="skill_name_bluff">Bluff</string>
@@ -570,10 +517,10 @@
     <string name="weapon_type_slash">S</string>
     <string name="weapon_type_pierce">P</string>
     <string name="weapon_type_bludgeon">B</string>
-    <string name="weapon_type_pierce_bludgeon">P\/B</string>
-    <string name="weapon_type_slash_bludgeon">S\/B</string>
-    <string name="weapon_type_slash_pierce">S\/P</string>
-    <string name="weapon_type_slash_pierce_bludgeon">S\/P\/B</string>
+    <string name="weapon_type_pierce_bludgeon">P/B</string>
+    <string name="weapon_type_slash_bludgeon">S/B</string>
+    <string name="weapon_type_slash_pierce">S/P</string>
+    <string name="weapon_type_slash_pierce_bludgeon">S/P/B</string>
 
     <!-- Feats/Special Abilities -->
     <string name="feats_add_button">Add Feat or Special Ability</string>
