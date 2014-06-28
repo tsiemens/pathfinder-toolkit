@@ -58,6 +58,7 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
 	private ExpandableListView m_drawerList;
 	
 	private BasePageFragment m_currentFragment;
+    private NavDrawerItem m_toOpen;
 
     private Deque<Class<? extends BasePageFragment>> m_fragmentBackStack;
 
@@ -143,6 +144,7 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
 			public void onDrawerClosed(View view) {
                 if (m_currentFragment != null) {
                     m_currentFragment.updateTitle();
+                    showFragmentForNavItem(m_toOpen);
                 }
 				invalidateOptionsMenu();
 			}
@@ -295,7 +297,7 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
             NavDrawerGroupItem group = (NavDrawerGroupItem) adapter.getGroup(groupPosition);
             if (group != null && group.getChildren() == null && group != adapter.getSelectedItem()) {
                 // Group is selectable, and was not selected
-                showFragmentForNavItem(group);
+                m_toOpen = group;
                 setDrawerOpen(false);
             }
         }
@@ -307,10 +309,7 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
 			int childPosition, long id) {
         NavDrawerAdapter adapter = (NavDrawerAdapter) list.getExpandableListAdapter();
         if (adapter != null) {
-            NavDrawerChildItem child = (NavDrawerChildItem) adapter.getChild(groupPosition, childPosition);
-            if (child != adapter.getSelectedItem()) {
-                showFragmentForNavItem(child);
-            }
+            m_toOpen = (NavDrawerChildItem) adapter.getChild(groupPosition, childPosition);
         }
         setDrawerOpen(false);
 		return false;
