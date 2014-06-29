@@ -6,6 +6,9 @@ import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedStatSet;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Hashtable;
