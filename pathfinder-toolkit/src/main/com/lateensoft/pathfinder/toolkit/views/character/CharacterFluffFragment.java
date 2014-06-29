@@ -11,27 +11,36 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.FluffListAdapter;
+import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 
-public class CharacterFluffFragment extends AbstractCharacterSheetFragment implements
-OnItemClickListener, android.content.DialogInterface.OnClickListener{
+import java.util.List;
+
+public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
 	@SuppressWarnings("unused")
 	private static final String TAG = CharacterFluffFragment.class.getSimpleName();
-	private ListView m_fluffList;
-	private int m_fluffSelectedForEdit;
+	private ListView fluffList;
+	private int fluffIndexSelectedForEdit;
 	
-	private FluffInfoRepository m_fluffRepo;
-	private FluffInfo m_fluffModel;
+	private FluffInfoRepository fluffRepo;
+    private CharacterRepository characterRepo;
+	private FluffInfo fluffModel;
+
+    private String[] fluffNames;
+    private List<String> fluffValues;
 	
-	private EditText m_dialogET;
+	private EditText editDialogField;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		m_fluffRepo = new FluffInfoRepository();
+        characterRepo = new CharacterRepository();
+		fluffRepo = new FluffInfoRepository();
+        fluffNames = getResources().getStringArray(R.array.fluff_fields);
 	}
 
 	@Override
@@ -42,18 +51,19 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		setRootView(inflater.inflate(R.layout.character_fluff_fragment, 
 				container, false));
 		
-		m_fluffList = (ListView) getRootView().findViewById(R.id.fluff_list);
-		m_fluffList.setOnItemClickListener(this);
+		fluffList = (ListView) getRootView().findViewById(R.id.fluff_list);
+		fluffList.setOnItemClickListener(listItemClickListener);
 		
 		return getRootView();		
 	}
-	
-	//An items has been clicked in the list
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		m_fluffSelectedForEdit = position;
-		showItemDialog(position);
-	}
 
+    private OnItemClickListener listItemClickListener = new OnItemClickListener() {
+        @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            fluffIndexSelectedForEdit = position;
+            showItemDialog(position);
+        }
+    };
+	
 	private void showItemDialog(int fluffIndex) {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -61,54 +71,48 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 
 		View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
-		m_dialogET = (EditText) dialogView.findViewById(R.id.dialogFluffText);
+		editDialogField = (EditText) dialogView.findViewById(R.id.dialogFluffText);
 
-		builder.setTitle(m_fluffModel.getFluffFields(getContext())[fluffIndex]);
-		m_dialogET.append(m_fluffModel.getFluffArray()[fluffIndex]);
-		
+		builder.setTitle(fluffNames[fluffIndex]);
+		editDialogField.append(fluffValues.get(fluffIndex));
+
+        DialogInterface.OnClickListener listener = new EditDialogClickListener();
 		builder.setView(dialogView)
-				.setPositiveButton(R.string.ok_button_text, this)
-				.setNegativeButton(R.string.cancel_button_text, this);
+				.setPositiveButton(R.string.ok_button_text, listener)
+				.setNegativeButton(R.string.cancel_button_text, listener);
 		
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
-	private void refreshFluffListView() {
-		if (m_fluffModel != null) {
-			FluffListAdapter adapter = new FluffListAdapter(getContext(),
-					R.layout.character_fluff_row, 
-					m_fluffModel.getFluffArray());
-			m_fluffList.setAdapter(adapter);
-			setTitle(m_fluffModel.getName());
-		}
-	}
-	
-	public void onClick(DialogInterface dialogInterface, int selection) {
-		switch (selection) {
-		//OK button tapped
-		case DialogInterface.BUTTON_POSITIVE:
-			
-			m_fluffModel.setFluffByIndex(m_fluffSelectedForEdit, 
-					getFluffValueFromDialog());
-			updateDatabase();
-			refreshFluffListView();
 
-			
-			break;
-		//Cancel Button	tapped
-		case DialogInterface.BUTTON_NEGATIVE:
-			break;
-		default:
-			break;
+    private class EditDialogClickListener implements DialogInterface.OnClickListener {
+
+        @Override public void onClick(DialogInterface dialog, int which) {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                fluffValues.set(fluffIndexSelectedForEdit, getFluffValueFromDialog());
+                updateDatabase();
+                refreshFluffListView();
+            }
+            hideKeyboardDelayed(0);
+        }
+    }
+
+	private void refreshFluffListView() {
+		if (fluffValues != null) {
+			FluffListAdapter adapter = new FluffListAdapter(getContext(),
+					R.layout.character_fluff_row, fluffNames,
+					fluffValues);
+			fluffList.setAdapter(adapter);
+			setTitle(getCharacterName());
 		}
-		
-		//Close keyboard
-		hideKeyboardDelayed(0);
 	}
-	
+
+    private String getCharacterName() {
+        return fluffValues.get(0);
+    }
+
 	private String getFluffValueFromDialog() {
-		return m_dialogET.getText().toString();
+		return editDialogField.getText().toString();
 	}
 
 	@Override
@@ -123,14 +127,63 @@ OnItemClickListener, android.content.DialogInterface.OnClickListener{
 
 	@Override
 	public void updateDatabase() {
-		if (m_fluffModel != null) {
-			m_fluffRepo.update(m_fluffModel);
+		if (fluffValues != null) {
+            FluffInfo fluff = buildModelFromFluffValues();
+            characterRepo.updateName(getCurrentCharacterID(), getCharacterName());
+			fluffRepo.update(fluff);
 		}
 	}
 
+    private FluffInfo buildModelFromFluffValues() {
+        FluffInfo fluff = new FluffInfo();
+        fluff.setAlignment(fluffValues.get(1));
+        fluff.setXP(fluffValues.get(2));
+        fluff.setNextLevelXP(fluffValues.get(3));
+        fluff.setPlayerClass(fluffValues.get(4));
+        fluff.setRace(fluffValues.get(5));
+        fluff.setDeity(fluffValues.get(6));
+        fluff.setLevel(fluffValues.get(7));
+        fluff.setSize(fluffValues.get(8));
+        fluff.setGender(fluffValues.get(9));
+        fluff.setHeight(fluffValues.get(10));
+        fluff.setWeight(fluffValues.get(11));
+        fluff.setEyes(fluffValues.get(12));
+        fluff.setHair(fluffValues.get(13));
+        fluff.setLanguages(fluffValues.get(14));
+        fluff.setDescription(fluffValues.get(15));
+        return fluff;
+    }
+
 	@Override
 	public void loadFromDatabase() {
-		m_fluffModel = m_fluffRepo.query(getCurrentCharacterID());
+		FluffInfo fluff = fluffRepo.query(getCurrentCharacterID());
+        String name = characterRepo.queryName(getCurrentCharacterID());
+        setFluffFields(name, fluff);
 	}
-	
+
+    private void setFluffFields(String name, FluffInfo fluff) {
+        if (fluffValues == null) {
+            fluffValues = Lists.newArrayListWithCapacity(fluffNames.length);
+            for (String fluffName : fluffNames) {
+                fluffValues.add(null);
+            }
+        }
+
+        fluffValues.set(0, name);
+        fluffValues.set(1, fluff.getAlignment());
+        fluffValues.set(2, fluff.getXP());
+        fluffValues.set(3, fluff.getNextLevelXP());
+        fluffValues.set(4, fluff.getPlayerClass());
+        fluffValues.set(5, fluff.getRace());
+        fluffValues.set(6, fluff.getDeity());
+        fluffValues.set(7, fluff.getLevel());
+        fluffValues.set(8, fluff.getSize());
+        fluffValues.set(9, fluff.getGender());
+        fluffValues.set(10, fluff.getHeight());
+        fluffValues.set(11, fluff.getWeight());
+        fluffValues.set(12, fluff.getEyes());
+        fluffValues.set(13, fluff.getHair());
+        fluffValues.set(14, fluff.getLanguages());
+        fluffValues.set(15, fluff.getDescription());
+    }
 }

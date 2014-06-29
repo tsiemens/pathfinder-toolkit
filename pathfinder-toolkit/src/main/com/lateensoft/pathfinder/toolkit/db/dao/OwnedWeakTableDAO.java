@@ -44,6 +44,16 @@ public abstract class OwnedWeakTableDAO<OwnerId, ID, T>
     }
 
     @Override
+    protected boolean isIdSet(OwnedObject<OwnerId, T> entity) {
+        return true;
+    }
+
+    @Override
+    protected void setId(OwnedObject<OwnerId, T> entity, long id) {
+        // Do nothing, since weak entities do not use auto incremented Ids
+    }
+
+    @Override
     public List<T> findAllForOwner(OwnerId ownerId) {
         return findFiltered(andSelectors(getOwnerIdSelector(ownerId), getBaseSelector()),
                 getDefaultOrderBy());

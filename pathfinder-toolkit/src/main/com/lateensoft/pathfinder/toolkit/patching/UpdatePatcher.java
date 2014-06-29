@@ -84,6 +84,8 @@ public class UpdatePatcher {
      * TODO - create encounter, partymembership, encounterparticipation tables
      * TODO - migrate partymembers to characters with party membership, and delete partymembers table
      * TODO - convert single encounter in party database to an encounter, then remove
+     *
+     * TODO - move Name field from fluff to character table
      * All this should be done while avoiding the use of our datamodels to provide forward compatibility.
      * This may be unavoidable though with the transfer from partymember to character
      */

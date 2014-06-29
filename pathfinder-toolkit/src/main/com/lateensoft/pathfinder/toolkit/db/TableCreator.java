@@ -209,7 +209,6 @@ public class TableCreator {
 		Log.d(TAG, "Creating fluff info table");
 		return "CREATE TABLE FluffInfo (" +
 				"character_id INTEGER PRIMARY KEY, " +
-				"Name TEXT, " +
 				"Alignment TEXT, " +
 				"XP TEXT, " +
 				"NextLevelXP TEXT, " +
@@ -234,6 +233,7 @@ public class TableCreator {
 		Log.d(TAG, "Creating character table");
 		return "CREATE TABLE Character (" +
 				"character_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "Name TEXT, " +
 				"Gold REAL " +
 				");";
 	}

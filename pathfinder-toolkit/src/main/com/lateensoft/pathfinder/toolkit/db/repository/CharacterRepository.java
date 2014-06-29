@@ -21,6 +21,8 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	public static final String TABLE = "Character";
+
+    public static final String NAME = "Name";
 	private static final String GOLD = "Gold";
 
     private FluffInfoRepository m_fluffRepo = new FluffInfoRepository();
@@ -37,25 +39,26 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
     public CharacterRepository() {
 		super();
 		TableAttribute id = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
+        TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
 		TableAttribute gold = new TableAttribute(GOLD, SQLDataType.REAL);
-		TableAttribute[] columns = {id, gold};
+		TableAttribute[] columns = {id, name, gold};
 		m_tableInfo = new TableInfo(TABLE, columns);
 	}
-	
+
 	/**
 	 * Inserts the character, and all subcomponents into database
-	 * 
+	 *
 	 * @return the id of the character inserted, or -1 if failure occurred.
 	 */
 	@Override
 	public long insert(PathfinderCharacter object) {
 		long id = super.insert(object);
 		long subCompId;
-		
+
 		if (id != -1) {
 			// Sets all character ids of components
 			object.setId(id);
-			
+
 			// Fluff
 			FluffInfoRepository fluffRepo = new FluffInfoRepository();
 			subCompId = fluffRepo.insert(object.getFluff());
@@ -63,7 +66,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 				delete(id);
 				return subCompId;
 			}
-			
+
 			// AbilityScores
 			AbilityRepository abScoreRepo = new AbilityRepository();
 			AbilitySet abilitySet = object.getAbilitySet();
@@ -74,7 +77,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Combat Stats
 			CombatStatRepository csRepo = new CombatStatRepository();
 			subCompId = csRepo.insert(object.getCombatStatSet());
@@ -82,7 +85,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 				delete(id);
 				return subCompId;
 			}
-			
+
 			// Saves
 			SaveRepository saveRepo = new SaveRepository();
 			SaveSet saves = object.getSaveSet();
@@ -93,7 +96,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Skills
 			SkillRepository skillRepo = new SkillRepository();
 			SkillSet skills = object.getSkillSet();
@@ -115,7 +118,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Weapons
 			WeaponRepository weaponRepo = new WeaponRepository();
 			List<Weapon> weapons = object.getInventory().getWeapons();
@@ -126,7 +129,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Armor
 			ArmorRepository armorRepo = new ArmorRepository();
 			List<Armor> armors = object.getInventory().getArmors();
@@ -137,7 +140,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Feats
 			FeatRepository featRepo = new FeatRepository();
 			FeatList featList = object.getFeatList();
@@ -148,7 +151,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 					return subCompId;
 				}
 			}
-			
+
 			// Spells
 			SpellRepository spellRepo = new SpellRepository();
 			SpellBook spells = object.getSpellBook();
@@ -194,9 +197,10 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	@Override
 	protected ContentValues getContentValues(PathfinderCharacter object) {
 		ContentValues values = new ContentValues();
-		if (isIDSet(object)) { 
+		if (isIDSet(object)) {
 			values.put(CHARACTER_ID, object.getId());
 		}
+        values.put(NAME, object.getName());
 		values.put(GOLD, object.getGold());
 		return values;
 	}
@@ -206,45 +210,45 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	 */
 	public String queryName(long id) {
 		Locale l = null;
-		String selector = String.format(l, "%s.%s=%s.%s AND %s.%s=%d",
-                TABLE, CHARACTER_ID,
-                FluffInfoRepository.TABLE, CHARACTER_ID,
+		String selector = String.format(l, "%s.%s=%d",
                 TABLE, CHARACTER_ID, id);
-		String table = m_tableInfo.getTable()+", "+ FluffInfoRepository.TABLE;
-		String[] columns = {FluffInfoRepository.NAME};
-		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+		String table = m_tableInfo.getTable();
+		String[] columns = {NAME};
+		Cursor cursor = getDatabase().query(true, table, columns, selector,
 				null, null, null, null, null);
-		
+
 		cursor.moveToFirst();
 		if (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			return (String)hashTable.get(FluffInfoRepository.NAME);
+			return (String)hashTable.get(NAME);
 		}
 		return null;
 	}
-	
+
+    @Deprecated
+    public void updateName(long id, String name) {
+        ContentValues values = new ContentValues();
+        values.put(NAME, name);
+        getDatabase().update(TABLE, values, getSelector(id));
+    }
+
 	/**
 	 * Returns all characters
 	 * @return Array of IdNamePair, ordered alphabetically by name
 	 */
 	public List<IdStringPair> queryIdNameList() {
-		Locale l = null;
-		String selector = String.format(l, "%s.%s=%s.%s", 
-				TABLE, CHARACTER_ID,
-				 FluffInfoRepository.TABLE,  CHARACTER_ID);
-		String orderBy = FluffInfoRepository.NAME + " ASC";
-		String table = m_tableInfo.getTable()+", "+ FluffInfoRepository.TABLE;
-		String[] columns = {m_tableInfo.getTable()+"."+CHARACTER_ID+" "+CHARACTER_ID, 
-				FluffInfoRepository.NAME};
-		Cursor cursor = getDatabase().query(true, table, columns, selector, 
+		String orderBy = NAME + " ASC";
+		String table = m_tableInfo.getTable();
+		String[] columns = {CHARACTER_ID, NAME};
+		Cursor cursor = getDatabase().query(true, table, columns, null,
 				null, null, null, orderBy, null);
-		
+
 		ArrayList<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
 			characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
-					(String)hashTable.get(FluffInfoRepository.NAME)));
+					(String)hashTable.get(NAME)));
 			cursor.moveToNext();
 		}
         cursor.close();
@@ -252,18 +256,10 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
 	}
 
     protected List<IdStringPair> queryFilteredIdNameList(String selector) {
-        Locale l = null;
-        String baseSelector = String.format(l, "%s.%s=%s.%s",
-                TABLE, CHARACTER_ID,
-                FluffInfoRepository.TABLE,  CHARACTER_ID);
-        if (selector != null) {
-            baseSelector = baseSelector + " AND " + selector;
-        }
-        String orderBy = FluffInfoRepository.NAME + " ASC";
-        String table = m_tableInfo.getTable()+", "+ FluffInfoRepository.TABLE;
-        String[] columns = {m_tableInfo.getTable()+"."+CHARACTER_ID+" "+CHARACTER_ID,
-                FluffInfoRepository.NAME};
-        Cursor cursor = getDatabase().query(true, table, columns, baseSelector,
+        String orderBy = NAME + " ASC";
+        String table = m_tableInfo.getTable();
+        String[] columns = {CHARACTER_ID,NAME};
+        Cursor cursor = getDatabase().query(true, table, columns, selector,
                 null, null, null, orderBy, null);
 
         List<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
@@ -271,7 +267,7 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
         while (!cursor.isAfterLast()) {
             Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
             characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
-                    (String)hashTable.get(FluffInfoRepository.NAME)));
+                    (String)hashTable.get(NAME)));
             cursor.moveToNext();
         }
         cursor.close();

@@ -103,7 +103,7 @@ public class CombatStatRepository extends BaseRepository<CombatStatSet> {
 		statSet.setACMiscMod(acMiscMod);
 		statSet.setBABPrimary(babPrimary);
 		statSet.setBABSecondary(babSecondary);
-		statSet.setCMBAbilityKey(cmbAbilityKey);
+		statSet.setCMBAbility(cmbAbilityKey);
 		statSet.setCMDAbility(cmdAbilityKey);
 		statSet.setCMDMiscMod(cmdMiscMod);
 		statSet.setSpellResistance(spellResist);

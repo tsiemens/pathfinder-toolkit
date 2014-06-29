@@ -28,7 +28,7 @@ public class CombatStatRepositoryTest extends BaseRepositoryTest {
 		m_combatStatSet.setACMiscMod(16);
 		m_combatStatSet.setBABPrimary(17);
 		m_combatStatSet.setBABSecondary("2/6/7");
-		m_combatStatSet.setCMBAbilityKey(18);
+		m_combatStatSet.setCMBAbility(18);
 		m_combatStatSet.setCMDAbility(46);
 		m_combatStatSet.setCMDMiscMod(56);
 		m_combatStatSet.setSpellResistance(67);
@@ -81,7 +81,7 @@ public class CombatStatRepositoryTest extends BaseRepositoryTest {
 		toUpdate.setACMiscMod(17);
 		toUpdate.setBABPrimary(18);
 		toUpdate.setBABSecondary("2/6/8");
-		toUpdate.setCMBAbilityKey(19);
+		toUpdate.setCMBAbility(19);
 		toUpdate.setCMDAbility(47);
 		toUpdate.setCMDMiscMod(57);
 		toUpdate.setSpellResistance(68);

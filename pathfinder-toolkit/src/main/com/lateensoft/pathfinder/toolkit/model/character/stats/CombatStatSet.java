@@ -316,7 +316,7 @@ public class CombatStatSet implements Parcelable, Identifiable {
 		return m_BABSecondary;
 	}
 	
-	public void setCMBAbilityKey(AbilityType abilityKey){
+	public void setCMBAbility(AbilityType abilityKey){
 		CMBAbility = abilityKey;
 	}
 	

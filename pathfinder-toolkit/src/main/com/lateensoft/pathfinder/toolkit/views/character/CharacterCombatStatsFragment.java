@@ -436,7 +436,7 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
 					viewID = m_ACAbilityTv.getId();
 					break;
 				case CMB:
-					m_combatStats.setCMBAbilityKey(abilityKey);
+					m_combatStats.setCMBAbility(abilityKey);
 					viewID = m_CMBAbilityTv.getId();
 					break;
 				case CMD:

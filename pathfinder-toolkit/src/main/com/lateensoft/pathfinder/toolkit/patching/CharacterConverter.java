@@ -10,6 +10,7 @@ public class CharacterConverter {
 
 	public static PathfinderCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
 		PathfinderCharacter newCharacter = PathfinderCharacter.newDefaultCharacter("");
+        newCharacter.setName(oldCharacter.getFluff().getName());
 		newCharacter.setGold(oldCharacter.mGold);
 		setFluff(newCharacter.getFluff(), oldCharacter.getFluff());
 		setAbilities(newCharacter.getAbilitySet(), oldCharacter.getAbilitySet(), oldCharacter.getTempAbilitySet());
@@ -23,7 +24,6 @@ public class CharacterConverter {
 	}
 	
 	private static void setFluff(FluffInfo newFluff, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacterFluffInfo oldFluff) {
-		newFluff.setName(oldFluff.getName());
 		newFluff.setAlignment(oldFluff.getAlignment());
 		newFluff.setXP(oldFluff.getXP());
 		newFluff.setNextLevelXP(oldFluff.getNextLevelXP());

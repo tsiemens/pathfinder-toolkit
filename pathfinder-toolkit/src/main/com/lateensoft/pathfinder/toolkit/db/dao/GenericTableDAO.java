@@ -100,10 +100,9 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         long id = getDatabase().insert(table, values);
         if (id != -1) {
             if (!isIdSet(rowData)) {
-                return setId(rowData, id);
-            } else {
-                return getIdFromRowData(rowData);
+                setId(rowData, id);
             }
+            return getIdFromRowData(rowData);
         } else {
             throw new DataAccessException("Failed to insert " + rowData);
         }
@@ -111,7 +110,7 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
 
     protected abstract boolean isIdSet(RowData entity);
 
-    protected abstract RowId setId(RowData entity, long id);
+    protected abstract void setId(RowData entity, long id);
 
     public void update(RowData rowData) throws DataAccessException {
         String selector = getIdSelector(getIdFromRowData(rowData));

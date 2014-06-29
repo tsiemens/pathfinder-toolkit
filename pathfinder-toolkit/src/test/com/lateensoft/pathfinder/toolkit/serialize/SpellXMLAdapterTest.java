@@ -1,21 +1,24 @@
-package com.lateensoft.pathfinder.toolkit.test.serialize;
+package com.lateensoft.pathfinder.toolkit.serialize;
 
-import android.test.AndroidTestCase;
 import com.lateensoft.pathfinder.toolkit.model.character.Spell;
-import com.lateensoft.pathfinder.toolkit.serialize.SpellXMLAdapter;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.InvalidObjectException;
 
-/**
- * @author trevsiemens
- */
-public class SpellXMLAdapterTest extends AndroidTestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+@RunWith(JUnit4.class)
+public class SpellXMLAdapterTest {
 
     private static final SpellXMLAdapter m_adapter = new SpellXMLAdapter();
 
+    @Test
     public void tesConvert() throws InvalidObjectException, DocumentException {
         Spell expectedSpell = new Spell("fire", 3);
         expectedSpell.setPrepared(20);
@@ -26,6 +29,7 @@ public class SpellXMLAdapterTest extends AndroidTestCase {
         assertEquals(expectedSpell, generatedSpell);
     }
 
+    @Test
     public void testToObjectInvalid() throws InvalidObjectException, DocumentException {
         try {
             Element invalidElement1 = DocumentHelper.parseText("<spell >" +
@@ -55,13 +59,5 @@ public class SpellXMLAdapterTest extends AndroidTestCase {
                     "<desc>description and \nStuff</desc></spell>").getRootElement();
             m_adapter.toObject(invalidElement4);
         } catch (InvalidObjectException e) {}
-    }
-
-    private void assertEquals(Spell expected, Spell actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getLevel(), actual.getLevel());
-        assertEquals(expected.getPrepared(), actual.getPrepared());
-        assertEquals(expected.getDescription(), actual.getDescription());
     }
 }

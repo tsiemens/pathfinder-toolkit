@@ -11,7 +11,6 @@ import java.io.InvalidObjectException;
 public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
 
     public static final String ELEMENT_NAME = "fluff";
-    private static final String NAME_ELMT = "name";
     private static final String ALIGN_ELMT = "alignment";
     private static final String XP_ELMT = "xp";
     private static final String NEXT_XP_ELMT = "next-level-xp";
@@ -35,7 +34,6 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
 
     @Override
     protected void setElementContentForObject(Element element, FluffInfo fluff) {
-        addSubElementText(element, NAME_ELMT, fluff.getName());
         addSubElementText(element, ALIGN_ELMT, fluff.getAlignment());
         addSubElementText(element, XP_ELMT, fluff.getXP());
         addSubElementText(element, NEXT_XP_ELMT, fluff.getNextLevelXP());
@@ -56,7 +54,6 @@ public class FluffXMLAdapter extends XMLObjectAdapter<FluffInfo> {
     @Override
     protected FluffInfo createObjectForElement(Element element) throws InvalidObjectException {
         FluffInfo fluff = new FluffInfo();
-        fluff.setName(getSubElementText(element, NAME_ELMT));
         fluff.setAlignment(getSubElementText(element, ALIGN_ELMT));
         fluff.setXP(getSubElementText(element, XP_ELMT));
         fluff.setNextLevelXP(getSubElementText(element, NEXT_XP_ELMT));

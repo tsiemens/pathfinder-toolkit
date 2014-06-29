@@ -31,9 +31,8 @@ public abstract class OwnedIdentifiableTableDAO<OwnerId, T extends Identifiable>
     }
 
     @Override
-    protected Long setId(OwnedObject<OwnerId, T> entity, long id) {
+    protected void setId(OwnedObject<OwnerId, T> entity, long id) {
         entity.getObject().setId(id);
-        return id;
     }
 
     @Override

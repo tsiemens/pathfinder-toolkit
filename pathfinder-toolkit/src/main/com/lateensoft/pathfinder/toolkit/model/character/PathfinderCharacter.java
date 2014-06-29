@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.common.base.Objects;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
@@ -19,32 +20,32 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
 	private static final String PARCEL_BUNDLE_KEY_INVENTORY = "inventory";
 	private static final String PARCEL_BUNDLE_KEY_FEATS = "feats";
 	private static final String PARCEL_BUNDLE_KEY_SPELLS = "spells";
+
+    private String name;
+    private double gold;
+
+	private AbilitySet abilitySet;
+	private CombatStatSet combatStatSet;
+	private SkillSet skillSet;
+	private SaveSet saveSet;
+	private FluffInfo fluffInfo;
+	private Inventory inventory;
+	private FeatList feats;
+	private SpellBook spellBook;
 	
-	private AbilitySet m_abilitySet;
-	private CombatStatSet m_combatStatSet;
-	private SkillSet m_skillSet;
-	private SaveSet m_saveSet;
-	private FluffInfo m_fluffInfo;
-	private Inventory m_inventory;
-	private double m_gold;
-	private FeatList m_feats;
-	private SpellBook m_spellBook;
-	
-	private long m_id;
+	private long id;
 
     protected PathfinderCharacter(Builder builder) {
-        m_abilitySet = builder.abilitySet != null ? builder.abilitySet : new AbilitySet();
-        m_combatStatSet = builder.combatStatSet != null ? builder.combatStatSet : new CombatStatSet();
-        m_skillSet = builder.skillSet != null ? builder.skillSet : new SkillSet();
-        m_saveSet = builder.saveSet != null ? builder.saveSet : new SaveSet();
-        m_fluffInfo = builder.fluffInfo != null ? builder.fluffInfo : new FluffInfo();
-        m_inventory = builder.inventory != null ? builder.inventory : new Inventory();
-        m_feats = builder.feats != null ? builder.feats : new FeatList();
-        m_spellBook = builder.spellBook != null ? builder.spellBook : new SpellBook();
-        m_gold = builder.gold;
-        if (builder.name != null) {
-            setName(builder.name);
-        }
+        abilitySet = builder.abilitySet != null ? builder.abilitySet : new AbilitySet();
+        combatStatSet = builder.combatStatSet != null ? builder.combatStatSet : new CombatStatSet();
+        skillSet = builder.skillSet != null ? builder.skillSet : new SkillSet();
+        saveSet = builder.saveSet != null ? builder.saveSet : new SaveSet();
+        fluffInfo = builder.fluffInfo != null ? builder.fluffInfo : new FluffInfo();
+        inventory = builder.inventory != null ? builder.inventory : new Inventory();
+        feats = builder.feats != null ? builder.feats : new FeatList();
+        spellBook = builder.spellBook != null ? builder.spellBook : new SpellBook();
+        gold = builder.gold;
+        name = builder.name != null && !builder.name.isEmpty()? builder.name : "Character Name";
         this.setId(builder.id);
     }
 
@@ -54,103 +55,106 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
     }
 	
 	public PathfinderCharacter(Parcel in) {
+        name = in.readString();
 		Bundle objectBundle = in.readBundle();
-		m_abilitySet = (AbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
-		m_combatStatSet = (CombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
-		m_skillSet = (SkillSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SKILLS);
-		m_saveSet = (SaveSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SAVES);
-		m_fluffInfo = (FluffInfo) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FLUFF);
-		m_inventory = (Inventory) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_INVENTORY);
-		m_feats = (FeatList) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FEATS);
-		m_spellBook = (SpellBook) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SPELLS);
-		m_gold = in.readDouble();
-		m_id = in.readLong();
+		abilitySet = (AbilitySet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_ABILITIES);
+		combatStatSet = (CombatStatSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS);
+		skillSet = (SkillSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SKILLS);
+		saveSet = (SaveSet) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SAVES);
+		fluffInfo = (FluffInfo) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FLUFF);
+		inventory = (Inventory) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_INVENTORY);
+		feats = (FeatList) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_FEATS);
+		spellBook = (SpellBook) objectBundle.getParcelable(PARCEL_BUNDLE_KEY_SPELLS);
+		gold = in.readDouble();
+		id = in.readLong();
 	}
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
 		Bundle objectBundle = new Bundle();
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_ABILITIES, m_abilitySet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS, m_combatStatSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SKILLS, m_skillSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SAVES, m_saveSet);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FLUFF, m_fluffInfo);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_INVENTORY, m_inventory);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FEATS, m_feats);
-		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SPELLS, m_spellBook);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_ABILITIES, abilitySet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_COMBAT_STATS, combatStatSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SKILLS, skillSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SAVES, saveSet);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FLUFF, fluffInfo);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_INVENTORY, inventory);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_FEATS, feats);
+		objectBundle.putParcelable(PARCEL_BUNDLE_KEY_SPELLS, spellBook);
 		out.writeBundle(objectBundle);
-		out.writeDouble(m_gold);
-		out.writeLong(m_id);
+		out.writeDouble(gold);
+		out.writeLong(id);
 	}
 	
 	public void setAbilitySet(AbilitySet abilitySet) {
-		m_abilitySet = abilitySet;
+		this.abilitySet = abilitySet;
 	}
 	
 	public AbilitySet getAbilitySet() {
-		return m_abilitySet;
+		return abilitySet;
 	}
 	
 	public CombatStatSet getCombatStatSet(){
-		return m_combatStatSet;
+		return combatStatSet;
 	}
 	
 	public SkillSet getSkillSet() {
-		return m_skillSet;
+		return skillSet;
 	}
 	
 	public Inventory getInventory(){
-		return m_inventory;
+		return inventory;
 	}
 	
 	public void setInventory(Inventory newInventory){
-		m_inventory = newInventory;
+		inventory = newInventory;
 	}
 	
 	public FeatList getFeatList(){
-		return m_feats;
+		return feats;
 	}
 	
 	public void setFeatList(FeatList newFeats){
-		m_feats = newFeats;
+		feats = newFeats;
 	}
 
 	public FluffInfo getFluff() {
-		return m_fluffInfo;
+		return fluffInfo;
 	}
 	
 	public SaveSet getSaveSet(){
-		return m_saveSet;
+		return saveSet;
 	}
 	
 	public String getName(){
-		return m_fluffInfo.getName();
+		return name;
 	}
 	
 	public void setName(String name){
-		if(name != null && !name.isEmpty())
-			m_fluffInfo.setName(name);
+		if(name != null && !name.isEmpty()) {
+            this.name = name;
+        }
 	}
 
 	public SpellBook getSpellBook() {
-		return m_spellBook;
+		return spellBook;
 	}
 	
 	public void setSpellBook(SpellBook spellBook) {
-		m_spellBook = spellBook;
+		this.spellBook = spellBook;
 	}
 
 	public double getGold() {
-		return m_gold;
+		return gold;
 	}
 
 	public void setGold(double gold) {
-		m_gold = gold;
+		this.gold = gold;
 	}
 
 	@Override
 	public long getId() {
-		return m_id;
+		return id;
 	}
 	
 	/**
@@ -158,15 +162,15 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
 	 */
 	@Override
 	public void setId(long id) {
-		m_id = id;
-		m_abilitySet.setCharacterID(id);
-		m_combatStatSet.setId(id);
-		m_skillSet.setCharacterID(id);
-		m_saveSet.setCharacterID(id);
-		m_fluffInfo.setId(id);
-		m_inventory.setCharacterID(id);
-		m_feats.setCharacterID(id);
-		m_spellBook.setCharacterID(id);
+		this.id = id;
+		abilitySet.setCharacterID(id);
+		combatStatSet.setId(id);
+		skillSet.setCharacterID(id);
+		saveSet.setCharacterID(id);
+		fluffInfo.setId(id);
+		inventory.setCharacterID(id);
+		feats.setCharacterID(id);
+		spellBook.setCharacterID(id);
 	}
 	
 	@Override
@@ -191,16 +195,17 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
 
         PathfinderCharacter character = (PathfinderCharacter) o;
 
-        if (Double.compare(character.m_gold, m_gold) != 0) return false;
-        if (m_id != character.m_id) return false;
-        if (!m_abilitySet.equals(character.m_abilitySet)) return false;
-        if (!m_combatStatSet.equals(character.m_combatStatSet)) return false;
-        if (!m_feats.equals(character.m_feats)) return false;
-        if (!m_fluffInfo.equals(character.m_fluffInfo)) return false;
-        if (!m_inventory.equals(character.m_inventory)) return false;
-        if (!m_saveSet.equals(character.m_saveSet)) return false;
-        if (!m_skillSet.equals(character.m_skillSet)) return false;
-        if (!m_spellBook.equals(character.m_spellBook)) return false;
+        if (!Objects.equal(this.name, character.name)) return false;
+        if (Double.compare(character.gold, gold) != 0) return false;
+        if (id != character.id) return false;
+        if (!abilitySet.equals(character.abilitySet)) return false;
+        if (!combatStatSet.equals(character.combatStatSet)) return false;
+        if (!feats.equals(character.feats)) return false;
+        if (!fluffInfo.equals(character.fluffInfo)) return false;
+        if (!inventory.equals(character.inventory)) return false;
+        if (!saveSet.equals(character.saveSet)) return false;
+        if (!skillSet.equals(character.skillSet)) return false;
+        if (!spellBook.equals(character.spellBook)) return false;
 
         return true;
     }
@@ -209,17 +214,18 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
     public int hashCode() {
         int result;
         long temp;
-        result = m_abilitySet.hashCode();
-        result = 31 * result + m_combatStatSet.hashCode();
-        result = 31 * result + m_skillSet.hashCode();
-        result = 31 * result + m_saveSet.hashCode();
-        result = 31 * result + m_fluffInfo.hashCode();
-        result = 31 * result + m_inventory.hashCode();
-        temp = Double.doubleToLongBits(m_gold);
+        result = abilitySet.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + combatStatSet.hashCode();
+        result = 31 * result + skillSet.hashCode();
+        result = 31 * result + saveSet.hashCode();
+        result = 31 * result + fluffInfo.hashCode();
+        result = 31 * result + inventory.hashCode();
+        temp = Double.doubleToLongBits(gold);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + m_feats.hashCode();
-        result = 31 * result + m_spellBook.hashCode();
-        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
+        result = 31 * result + feats.hashCode();
+        result = 31 * result + spellBook.hashCode();
+        result = 31 * result + (int) (id ^ (id >>> 32));
         return result;
     }
 

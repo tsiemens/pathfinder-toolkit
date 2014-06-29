@@ -4,53 +4,54 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Longs;
+import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author tsiemens
  */
-public class IdStringPair implements Parcelable, Comparable<IdStringPair> {
+public class IdStringPair implements Parcelable, Comparable<IdStringPair>, Identifiable {
 
-    private long m_id;
-    private String m_value;
+    private long id;
+    private String value;
 
     public IdStringPair(long id, String value) {
-        m_id = id;
-        m_value = value;
+        this.id = id;
+        this.value = value;
     }
 
     public IdStringPair(IdStringPair toCopy) {
-        this(toCopy.m_id, toCopy.m_value);
+        this(toCopy.id, toCopy.value);
     }
 
     public IdStringPair(Parcel in) {
-        m_id = in.readLong();
-        m_value = in.readString();
+        id = in.readLong();
+        value = in.readString();
     }
 
     @Override
      public void writeToParcel(Parcel out, int flags) {
-        out.writeLong(m_id);
-        out.writeString(m_value);
+        out.writeLong(id);
+        out.writeString(value);
     }
 
+    @Override
     public long getId() {
-        return m_id;
+        return id;
     }
 
+    @Override
     public void setId(long id) {
-        m_id = id;
+        this.id = id;
     }
 
     public String getValue() {
-        return m_value;
+        return value;
     }
 
     public void setValue(String value) {
-        m_value = value;
+        this.value = value;
     }
 
     @Override
@@ -75,28 +76,28 @@ public class IdStringPair implements Parcelable, Comparable<IdStringPair> {
 
         IdStringPair that = (IdStringPair) o;
 
-        if (m_id != that.m_id) return false;
-        if (m_value != null ? !m_value.equals(that.m_value) : that.m_value != null) return false;
+        if (id != that.id) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (m_id ^ (m_id >>> 32));
-        result = 31 * result + (m_value != null ? m_value.hashCode() : 0);
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
 
     @Override
     public int compareTo(IdStringPair another) {
-        int comp = this.m_value.compareTo(another.m_value);
-        return comp != 0 ? comp : Longs.compare(this.m_id, another.m_id);
+        int comp = this.value.compareTo(another.value);
+        return comp != 0 ? comp : Longs.compare(this.id, another.id);
     }
 
     @Override
     public String toString() {
-        return Long.toString(m_id) + " : " + m_value;
+        return Long.toString(id) + " : " + value;
     }
 
     public static List<String> valueList(List<IdStringPair> idStringPairs) {

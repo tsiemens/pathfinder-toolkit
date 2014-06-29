@@ -1,10 +1,8 @@
-package com.lateensoft.pathfinder.toolkit.test.util;
+package com.lateensoft.pathfinder.toolkit.util;
 
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
-import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
+import com.lateensoft.pathfinder.toolkit.model.character.items.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 
@@ -60,15 +58,15 @@ public class CharacterUtils {
 
         // Armor
         inventory.getArmors().add(newArmor(id, "Heavy \narmor",
-                7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armo\nr", "M"));
+                7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armo\nr", Size.MEDIUM));
         inventory.getArmors().add(newArmor(id, "Hat",
-                1.0, false, 10, /*ACP*/-4, 39, 11, 20, "Hat", "S"));
+                1.0, false, 10, /*ACP*/-4, 39, 11, 20, "Hat", Size.SMALL));
 
         // Weapons
         inventory.getWeapons().add(newWeapon(id, "Great \nSword",
-                7.5, 5, "4/\n2", "x\n2", 5, "It's on \nfire!", 0, "S", "L"));
+                7.5, 5, "4/\n2", "x\n2", 5, "It's on \nfire!", 0, WeaponType.SLASHING, Size.LARGE));
         inventory.getWeapons().add(newWeapon(id, "Long Bow",
-                4.0, 3, "5", "x3", 30, "None", 20, "B", "M"));
+                4.0, 3, "5", "x3", 30, "None", 20, WeaponType.BLUDGEONING, Size.MEDIUM));
         builder.setInventory(inventory);
 
         // Combat stats
@@ -78,19 +76,19 @@ public class CharacterUtils {
         combatStatSet.setNonLethalDamage(5);
         combatStatSet.setDamageReduction(8);
         combatStatSet.setBaseSpeed(30);
-        combatStatSet.setInitAbility(1);
+        combatStatSet.setInitAbility(AbilityType.STR);
         combatStatSet.setInitiativeMiscMod(2);
         combatStatSet.setACArmourBonus(10);
         combatStatSet.setACShieldBonus(11);
-        combatStatSet.setACAbility(4);
+        combatStatSet.setACAbility(AbilityType.INT);
         combatStatSet.setSizeModifier(13);
         combatStatSet.setNaturalArmour(14);
         combatStatSet.setDeflectionMod(15);
         combatStatSet.setACMiscMod(16);
         combatStatSet.setBABPrimary(17);
         combatStatSet.setBABSecondary("2/6/7");
-        combatStatSet.setCMBAbilityKey(2);
-        combatStatSet.setCMDAbility(5);
+        combatStatSet.setCMBAbility(AbilityType.CON);
+        combatStatSet.setCMDAbility(AbilityType.WIS);
         combatStatSet.setCMDMiscMod(56);
         combatStatSet.setSpellResistance(67);
         builder.setCombatStatSet(combatStatSet);
@@ -124,7 +122,7 @@ public class CharacterUtils {
         SaveSet saveSet = new SaveSet();
         Save save = saveSet.getSaveByIndex(0);
         save.setBaseSave(7);
-        save.setAbilityType(2);
+        save.setAbilityType(AbilityType.DEX);
         save.setMagicMod(3);
         save.setMiscMod(5);
         save.setTempMod(-11);
@@ -136,9 +134,9 @@ public class CharacterUtils {
         skill.setMiscMod(3);
         skill.setRank(2);
         skill.setClassSkill(true);
-        skill.setAbility(5);
+        skill.setAbility(AbilityType.WIS);
 
-        skillSet.addNewSubSkill(SkillSet.CRAFT).setSubType("slkdfj\nsjdhf");
+        skillSet.addNewSubSkill(SkillType.CRAFT).setSubType("slkdfj\nsjdhf");
         builder.setSkillSet(skillSet);
 
         // Spells
@@ -150,7 +148,7 @@ public class CharacterUtils {
 
     private static Weapon newWeapon(long characterId, String name,
                                  double weight, int totalAttackB, String dmg, String crit, int range, String specProp,
-                                 int ammo, String type, String size) {
+                                 int ammo, WeaponType type, Size size) {
         Weapon weapon = new Weapon();
         weapon.setCharacterID(characterId);
         weapon.setName(name);
@@ -168,7 +166,7 @@ public class CharacterUtils {
 
     private static Armor newArmor(long characterId, String name,
                                  double weight, boolean worn, int ACBonus, int checkPen, int maxDex, int spellFail,
-                                 int speed, String specProp, String size) {
+                                 int speed, String specProp, Size size) {
         Armor armor = new Armor();
         armor.setCharacterID(characterId);
         armor.setName(name);

@@ -22,8 +22,7 @@ public abstract class RootIdentifiableTableDAO<T extends Identifiable> extends G
     }
 
     @Override
-    protected Long setId(T entity, long id) {
+    protected void setId(T entity, long id) {
         entity.setId(id);
-        return id;
     }
 }

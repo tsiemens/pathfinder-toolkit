@@ -1,15 +1,11 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class FluffInfo implements Parcelable, Identifiable {
-	private String m_name;
 	private String m_alignment;
 	private String m_XP;
 	private String m_nextLevelXP;
@@ -29,7 +25,6 @@ public class FluffInfo implements Parcelable, Identifiable {
 	private long m_characterId;
 	
 	public FluffInfo() {
-		m_name = "";
 		m_alignment = "";
 		m_XP = "";
 		m_nextLevelXP = "";
@@ -50,7 +45,6 @@ public class FluffInfo implements Parcelable, Identifiable {
 	}
 	
 	public FluffInfo(Parcel in) {
-		m_name = in.readString();
 		m_alignment = in.readString();
 		m_XP = in.readString();
 		m_nextLevelXP = in.readString();
@@ -72,7 +66,6 @@ public class FluffInfo implements Parcelable, Identifiable {
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(m_name);
 		out.writeString(m_alignment);
 		out.writeString(m_XP);
 		out.writeString(m_nextLevelXP);
@@ -90,80 +83,6 @@ public class FluffInfo implements Parcelable, Identifiable {
 		out.writeString(m_description);
 		
 		out.writeLong(m_characterId);
-	}
-	
-	public String[] getFluffArray() {
-		String[] fluffArray = {m_name, m_alignment, m_XP, m_nextLevelXP, m_playerClass, m_race, m_deity,
-			m_level, m_size, m_gender, m_height, m_weight, m_eyes, m_hair, m_languages, m_description};
-		return fluffArray;
-	}
-	
-	public void setFluffByIndex(int index, String fluffValue) {
-		switch (index) {
-		case 0:
-			m_name = fluffValue;
-			break;
-		case 1:
-			m_alignment = fluffValue;
-			break;
-		case 2:
-			m_XP = fluffValue;
-			break;
-		case 3:
-			m_nextLevelXP = fluffValue;
-			break;
-		case 4:
-			m_playerClass = fluffValue;
-			break;
-		case 5:
-			m_race = fluffValue;
-			break;
-		case 6:
-			m_deity = fluffValue;
-			break;
-		case 7:
-			m_level = fluffValue;
-			break;
-		case 8:
-			m_size = fluffValue;
-			break;
-		case 9:
-			m_gender = fluffValue;
-			break;
-		case 10:
-			m_height = fluffValue;
-			break;
-		case 11:
-			m_weight = fluffValue;
-			break;
-		case 12:
-			m_eyes = fluffValue;
-			break;
-		case 13:
-			m_hair = fluffValue;
-			break;
-		case 14:
-			m_languages = fluffValue;
-			break;
-		case 15:
-			m_description = fluffValue;
-			break;
-		}
-	}
-	
-	public String[] getFluffFields(Context context) {
-		Resources r = context.getResources();
-		
-		return r.getStringArray(R.array.fluff_fields);		
-	}
-	
-
-	public String getName() {
-		return m_name;
-	}
-	
-	public void setName(String name) {
-		m_name = name;
 	}
 	
 	public String getAlignment() {
@@ -332,7 +251,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         if (m_languages != null ? !m_languages.equals(fluffInfo.m_languages) : fluffInfo.m_languages != null)
             return false;
         if (m_level != null ? !m_level.equals(fluffInfo.m_level) : fluffInfo.m_level != null) return false;
-        if (m_name != null ? !m_name.equals(fluffInfo.m_name) : fluffInfo.m_name != null) return false;
         if (m_nextLevelXP != null ? !m_nextLevelXP.equals(fluffInfo.m_nextLevelXP) : fluffInfo.m_nextLevelXP != null)
             return false;
         if (m_playerClass != null ? !m_playerClass.equals(fluffInfo.m_playerClass) : fluffInfo.m_playerClass != null)
@@ -346,8 +264,7 @@ public class FluffInfo implements Parcelable, Identifiable {
 
     @Override
     public int hashCode() {
-        int result = m_name != null ? m_name.hashCode() : 0;
-        result = 31 * result + (m_alignment != null ? m_alignment.hashCode() : 0);
+        int result = m_alignment != null ? m_alignment.hashCode() : 0;
         result = 31 * result + (m_XP != null ? m_XP.hashCode() : 0);
         result = 31 * result + (m_nextLevelXP != null ? m_nextLevelXP.hashCode() : 0);
         result = 31 * result + (m_playerClass != null ? m_playerClass.hashCode() : 0);

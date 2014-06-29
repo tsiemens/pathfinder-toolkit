@@ -1,21 +1,24 @@
-package com.lateensoft.pathfinder.toolkit.test.serialize;
+package com.lateensoft.pathfinder.toolkit.serialize;
 
-import android.test.AndroidTestCase;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;
-import com.lateensoft.pathfinder.toolkit.serialize.FeatXMLAdapter;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.InvalidObjectException;
 
-/**
- * @author trevsiemens
- */
-public class FeatXMLAdapterTest extends AndroidTestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+@RunWith(JUnit4.class)
+public class FeatXMLAdapterTest {
 
     private static final FeatXMLAdapter m_adapter = new FeatXMLAdapter();
 
+    @Test
     public void testConversion() throws InvalidObjectException, DocumentException {
         Feat expectedFeat = new Feat();
         expectedFeat.setName("<feat1>");
@@ -26,6 +29,7 @@ public class FeatXMLAdapterTest extends AndroidTestCase {
         assertEquals(expectedFeat, generatedSpell);
     }
 
+    @Test
     public void testToObjectInvalid() throws InvalidObjectException, DocumentException {
 
         try {
@@ -41,11 +45,5 @@ public class FeatXMLAdapterTest extends AndroidTestCase {
             m_adapter.toObject(invalidElement2);
             fail();
         } catch (InvalidObjectException e) {}
-    }
-
-    private void assertEquals(Feat expected, Feat actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDescription(), actual.getDescription());
     }
 }

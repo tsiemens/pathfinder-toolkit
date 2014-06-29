@@ -10,7 +10,6 @@ import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 	
 	public static final String TABLE = "FluffInfo";
-	public static final String NAME = "Name";
 	private static final String ALIGNMENT = "Alignment";
 	private static final String XP = "XP";
 	private static final String NEXT_LEVEL_XP = "NextLevelXP";
@@ -30,7 +29,6 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 	public FluffInfoRepository() {
 		super();
 		TableAttribute characterId = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
-		TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
 		TableAttribute alignment = new TableAttribute(ALIGNMENT, SQLDataType.TEXT);
 		TableAttribute xp = new TableAttribute(XP, SQLDataType.TEXT);
 		TableAttribute nextLevelXp = new TableAttribute(NEXT_LEVEL_XP, SQLDataType.TEXT);
@@ -47,7 +45,7 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 		TableAttribute languages = new TableAttribute(LANGUAGES, SQLDataType.TEXT);
 		TableAttribute description = new TableAttribute(DESCRIPTION, SQLDataType.TEXT);
 		
-		TableAttribute[] columns = {characterId, name, alignment, xp, nextLevelXp, playerClass,
+		TableAttribute[] columns = {characterId, alignment, xp, nextLevelXp, playerClass,
 				race, deity, level, size, gender, height, weight, eyes, hair, languages, description};
 		m_tableInfo = new TableInfo(TABLE, columns);
 	}
@@ -55,7 +53,6 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 	@Override
 	protected FluffInfo buildFromHashTable(Hashtable<String, Object> hashTable) {
 		long characterId = (Long) hashTable.get(CHARACTER_ID);
-		String name = (String) hashTable.get(NAME);
 		String alignment = (String) hashTable.get(ALIGNMENT);
 		String xp = (String) hashTable.get(XP);
 		String nextLevelXp = (String) hashTable.get(NEXT_LEVEL_XP);
@@ -74,7 +71,6 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 		
 		FluffInfo fluff = new FluffInfo();
 		fluff.setId(characterId);
-		fluff.setName(name);
 		fluff.setAlignment(alignment);
 		fluff.setXP(xp);
 		fluff.setNextLevelXP(nextLevelXp);
@@ -97,7 +93,6 @@ public class FluffInfoRepository extends BaseRepository<FluffInfo> {
 	protected ContentValues getContentValues(FluffInfo object) {
 		ContentValues values = new ContentValues();
 		values.put(CHARACTER_ID, object.getId());
-		values.put(NAME, object.getName());
 		values.put(ALIGNMENT, object.getAlignment());
 		values.put(XP, object.getXP());
 		values.put(NEXT_LEVEL_XP, object.getNextLevelXP());
