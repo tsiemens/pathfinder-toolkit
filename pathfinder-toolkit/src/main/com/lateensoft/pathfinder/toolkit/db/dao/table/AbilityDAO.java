@@ -10,7 +10,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 
 import java.util.Hashtable;
 
-public class AbilityDAO extends OwnedWeakTableDAO<Long, Integer, Ability> {
+public class AbilityDAO extends OwnedWeakTableDAO<Long, AbilityType, Ability> {
     private static final String TABLE = "Ability";
 
     private static final String ABILITY_KEY = "ability_key";
@@ -33,14 +33,14 @@ public class AbilityDAO extends OwnedWeakTableDAO<Long, Integer, Ability> {
     }
 
     @Override
-    protected String getIdSelector(OwnedObject<Long, Integer> rowId) {
+    protected String getIdSelector(OwnedObject<Long, AbilityType> rowId) {
         return andSelectors(getOwnerIdSelector(rowId.getOwnerId()),
-                ABILITY_KEY + "=" + Integer.toString(rowId.getObject()));
+                ABILITY_KEY + "=" + Integer.toString(rowId.getObject().getKey()));
     }
 
     @Override
-    protected OwnedObject<Long, Integer> getIdFromRowData(OwnedObject<Long, Ability> rowData) {
-        return new OwnedObject<Long, Integer>(rowData.getOwnerId(), rowData.getObject().getType().getKey());
+    protected OwnedObject<Long, AbilityType> getIdFromRowData(OwnedObject<Long, Ability> rowData) {
+        return new OwnedObject<Long, AbilityType>(rowData.getOwnerId(), rowData.getObject().getType());
     }
 
     @Override
@@ -63,5 +63,10 @@ public class AbilityDAO extends OwnedWeakTableDAO<Long, Integer, Ability> {
         int score = ((Long) hashTable.get(SCORE)).intValue();
         int temp = ((Long) hashTable.get(TEMP)).intValue();
         return new Ability(ability, characterId, score, temp);
+    }
+
+    @Override
+    protected String getDefaultOrderBy() {
+        return ABILITY_KEY + " ASC";
     }
 }

@@ -3,13 +3,13 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import android.content.ContentValues;
 import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
-import com.lateensoft.pathfinder.toolkit.db.dao.OwnedWeakTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
+import com.lateensoft.pathfinder.toolkit.db.dao.UniqueOwnerTableDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 
 import java.util.Hashtable;
 
-public class FluffDAO extends OwnedWeakTableDAO<Long, Void, FluffInfo> {
+public class FluffDAO extends UniqueOwnerTableDAO<Long, FluffInfo> {
     public static final String TABLE = "FluffInfo";
 
     private static final String CHARACTER_ID = "character_id";
@@ -45,13 +45,13 @@ public class FluffDAO extends OwnedWeakTableDAO<Long, Void, FluffInfo> {
     }
 
     @Override
-    protected String getIdSelector(OwnedObject<Long, Void> rowId) {
-        return getOwnerIdSelector(rowId.getOwnerId());
+    protected String getIdSelector(Long rowId) {
+        return getOwnerIdSelector(rowId);
     }
 
     @Override
-    protected OwnedObject<Long, Void> getIdFromRowData(OwnedObject<Long, FluffInfo> rowData) {
-        return new OwnedObject<Long, Void>(rowData.getOwnerId(), null);
+    protected Long getIdFromRowData(OwnedObject<Long, FluffInfo> rowData) {
+        return rowData.getOwnerId();
     }
 
     @Override

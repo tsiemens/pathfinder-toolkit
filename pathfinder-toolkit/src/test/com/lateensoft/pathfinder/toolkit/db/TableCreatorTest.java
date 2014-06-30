@@ -23,6 +23,7 @@ public class TableCreatorTest extends BaseDatabaseTest {
         c.moveToFirst();
         while (!c.isAfterLast()) {
             tablesInDb.add(c.getString(0));
+            c.moveToNext();
         }
 
         assertThat(tablesInDb, containsInAnyOrder("Ability", "Armor", "Character", "CombatStatSet",

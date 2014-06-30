@@ -20,29 +20,29 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
     protected static final String CHARACTER_ID = "character_id";
     protected static final String GOLD = "Gold";
 
-    private FluffDAO fluffRepo;
+    private FluffDAO fluffDAO;
     private AbilitySetDAO abilitySetDAO;
-    private CombatStatDAO combatStatRepo;
+    private CombatStatDAO combatStatDAO;
     private SaveSetDAO saveSetDAO;
     private SkillSetDAO skillSetDAO;
-    private ItemDAO itemRepo;
-    private WeaponDAO weaponRepo;
-    private ArmorDAO armorRepo;
-    private FeatDAO featRepo;
-    private SpellDAO spellRepo;
+    private ItemDAO itemDAO;
+    private WeaponDAO weaponDAO;
+    private ArmorDAO armorDAO;
+    private FeatDAO featDAO;
+    private SpellDAO spellDAO;
 
     public CharacterModelDAO(Context context) {
         super(context);
-        fluffRepo = new FluffDAO(context);
+        fluffDAO = new FluffDAO(context);
         abilitySetDAO = new AbilitySetDAO(context);
-        combatStatRepo = new CombatStatDAO(context);
+        combatStatDAO = new CombatStatDAO(context);
         saveSetDAO = new SaveSetDAO(context);
         skillSetDAO = new SkillSetDAO(context);
-        itemRepo = new ItemDAO(context);
-        weaponRepo = new WeaponDAO(context);
-        armorRepo = new ArmorDAO(context);
-        featRepo = new FeatDAO(context);
-        spellRepo = new SpellDAO(context);
+        itemDAO = new ItemDAO(context);
+        weaponDAO = new WeaponDAO(context);
+        armorDAO = new ArmorDAO(context);
+        featDAO = new FeatDAO(context);
+        spellDAO = new SpellDAO(context);
     }
 
     @Override
@@ -50,36 +50,35 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
         long id = super.add(object);
 
         try {
-            fluffRepo.add(id, object.getFluff());
+            fluffDAO.add(id, object.getFluff());
             abilitySetDAO.add(id, object.getAbilitySet());
-            combatStatRepo.add(id, object.getCombatStatSet());
+            combatStatDAO.add(id, object.getCombatStatSet());
             saveSetDAO.add(id, object.getSaveSet());
             skillSetDAO.add(id, object.getSkillSet());
 
             List<Item> items = object.getInventory().getItems();
             for (Item item : items) {
-                itemRepo.add(id, item);
+                itemDAO.add(id, item);
             }
 
             List<Weapon> weapons = object.getInventory().getWeapons();
             for (Weapon weapon : weapons) {
-                weaponRepo.add(id, weapon);
+                weaponDAO.add(id, weapon);
             }
 
             List<Armor> armors = object.getInventory().getArmors();
             for (Armor armor : armors) {
-                armorRepo.add(id, armor);
+                armorDAO.add(id, armor);
             }
 
             FeatList featList = object.getFeatList();
             for (Feat feat : featList) {
-                featRepo.add(id, feat);
+                featDAO.add(id, feat);
             }
 
-            // Spells
             SpellBook spells = object.getSpellBook();
             for (Spell spell : spells) {
-                spellRepo.add(id, spell);
+                spellDAO.add(id, spell);
             }
         } catch (DataAccessException e) {
             removeById(id);
@@ -112,19 +111,19 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
         long id = (Long) hashTable.get(CHARACTER_ID);
         builder.setId(id)
                 .setGold((Double) hashTable.get(GOLD))
-                .setFluffInfo(fluffRepo.find(id, null))
+                .setFluffInfo(fluffDAO.find(id))
                 .setAbilitySet(abilitySetDAO.findSet(id))
-                .setCombatStatSet(combatStatRepo.find(id, null))
+                .setCombatStatSet(combatStatDAO.find(id))
                 .setSaveSet(saveSetDAO.findSet(id))
                 .setSkillSet(skillSetDAO.findSet(id));
 
         Inventory inventory = new Inventory();
-        inventory.getItems().addAll(itemRepo.findAllForOwner(id));
-        inventory.getWeapons().addAll(weaponRepo.findAllForOwner(id));
-        inventory.getArmors().addAll(armorRepo.findAllForOwner(id));
+        inventory.getItems().addAll(itemDAO.findAllForOwner(id));
+        inventory.getWeapons().addAll(weaponDAO.findAllForOwner(id));
+        inventory.getArmors().addAll(armorDAO.findAllForOwner(id));
 
         builder.setInventory(inventory)
-                .setFeats(new FeatList(featRepo.findAllForOwner(id)))
-                .setSpellBook(new SpellBook(spellRepo.findAllForOwner(id)));
+                .setFeats(new FeatList(featDAO.findAllForOwner(id)))
+                .setSpellBook(new SpellBook(spellDAO.findAllForOwner(id)));
     }
 }

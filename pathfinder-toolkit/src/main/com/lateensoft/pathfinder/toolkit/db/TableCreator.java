@@ -152,6 +152,7 @@ public class TableCreator {
 	}
 
     // TODO remove this
+    @Deprecated
 	public String createPartyMember() {
 		Log.d(TAG, "Creating party member table");
 		return "CREATE TABLE PartyMember (" +

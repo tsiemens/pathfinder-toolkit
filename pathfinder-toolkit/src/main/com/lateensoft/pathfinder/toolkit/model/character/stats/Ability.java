@@ -175,7 +175,6 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
         Ability ability = (Ability) o;
 
         if (type != ability.type) return false;
-        if (m_characterId != ability.m_characterId) return false;
         if (score != ability.score) return false;
         if (tempBonus != ability.tempBonus) return false;
 
@@ -187,7 +186,6 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
         int result = type.hashCode();
         result = 31 * result + score;
         result = 31 * result + tempBonus;
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 

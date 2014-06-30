@@ -4,7 +4,7 @@ import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.dao.*;
 
 public abstract class OwnedIdentifiableTableDAO<OwnerId, T extends Identifiable>
-        extends OwnedTableDAO<OwnerId, Long, T> implements IdentifiableGenericDAO<T>{
+        extends OwnedTableDAO<OwnerId, Long, Long, T> implements IdentifiableGenericDAO<T>{
 
     public OwnedIdentifiableTableDAO(Context context) {
         super(context);
