@@ -5,6 +5,10 @@ import android.database.Cursor;
 
 public interface Database {
 
+    public void beginTransaction();
+    public void setTransactionSuccessful();
+    public void endTransaction();
+
     public Cursor query(Boolean distinct, String table, String[] columns, String selection,
             String[] selectionArgs, String groupBy, String having, String orderBy, String limit);
     

@@ -65,6 +65,21 @@ public class DatabaseImpl extends SQLiteOpenHelper implements Database {
     }
 
     @Override
+    public void beginTransaction() {
+        database.beginTransaction();
+    }
+
+    @Override
+    public void setTransactionSuccessful() {
+        database.setTransactionSuccessful();
+    }
+
+    @Override
+    public void endTransaction() {
+        database.endTransaction();
+    }
+
+    @Override
     public Cursor query(Boolean distinct, String table, String[] columns, String selection, 
             String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
         return database.query(distinct, table, columns, selection, selectionArgs,

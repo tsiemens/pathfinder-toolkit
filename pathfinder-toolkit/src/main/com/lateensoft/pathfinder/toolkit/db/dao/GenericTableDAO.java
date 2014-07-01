@@ -95,17 +95,35 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
     }
 
     public RowId add(RowData rowData) throws DataAccessException {
-        ContentValues values = getContentValues(rowData);
-        String table = getTable().getName();
-        long id = getDatabase().insert(table, values);
-        if (id != -1) {
+        try {
+            beginTransaction();
+            ContentValues values = getContentValues(rowData);
+            String table = getTable().getName();
+            long id = getDatabase().insert(table, values);
+            if (id == -1) {
+                throw new DataAccessException("Failed to insert " + rowData);
+            }
+
             if (!isIdSet(rowData)) {
                 setId(rowData, id);
             }
-            return getIdFromRowData(rowData);
-        } else {
-            throw new DataAccessException("Failed to insert " + rowData);
+            setTransactionSuccessful();
+        } finally {
+            endTransaction();
         }
+        return getIdFromRowData(rowData);
+    }
+
+    protected void beginTransaction() {
+        database.beginTransaction();
+    }
+
+    protected void setTransactionSuccessful() {
+        database.setTransactionSuccessful();
+    }
+
+    protected void endTransaction() {
+        database.endTransaction();
     }
 
     protected abstract boolean isIdSet(RowData entity);
@@ -113,12 +131,18 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
     protected abstract void setId(RowData entity, long id);
 
     public void update(RowData rowData) throws DataAccessException {
-        String selector = getIdSelector(getIdFromRowData(rowData));
-        ContentValues values = getContentValues(rowData);
-        String table = getTable().getName();
-        int returnVal = getDatabase().update(table, values, selector);
-        if (returnVal <= 0) {
-            throw new DataAccessException("Failed to update (code " + returnVal + ") " + rowData);
+        try {
+            beginTransaction();
+            String selector = getIdSelector(getIdFromRowData(rowData));
+            ContentValues values = getContentValues(rowData);
+            String table = getTable().getName();
+            int returnVal = getDatabase().update(table, values, selector);
+            if (returnVal <= 0) {
+                throw new DataAccessException("Failed to update (code " + returnVal + ") " + rowData);
+            }
+            setTransactionSuccessful();
+        } finally {
+            endTransaction();
         }
     }
 

@@ -71,14 +71,28 @@ public class WeaponDAO extends OwnedIdentifiableTableDAO<Long, Weapon> {
 
     @Override
     public Long add(OwnedObject<Long, Weapon> rowData) throws DataAccessException {
-        itemDAO.add(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
-        return super.add(rowData);
+        long id = -1;
+        try {
+            beginTransaction();
+            itemDAO.add(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
+            id = super.add(rowData);
+            setTransactionSuccessful();
+        } finally {
+            endTransaction();
+        }
+        return id;
     }
 
     @Override
     public void update(OwnedObject<Long, Weapon> rowData) throws DataAccessException {
-        itemDAO.update(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
-        super.update(rowData);
+        try {
+            beginTransaction();
+            itemDAO.update(OwnedObject.of(rowData.getOwnerId(), (Item) rowData.getObject()));
+            super.update(rowData);
+            setTransactionSuccessful();
+        } finally {
+            endTransaction();
+        }
     }
 
     @Override

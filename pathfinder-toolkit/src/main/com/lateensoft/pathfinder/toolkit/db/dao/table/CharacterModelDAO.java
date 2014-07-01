@@ -47,9 +47,11 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
 
     @Override
     public Long add(PathfinderCharacter object) throws DataAccessException {
-        long id = super.add(object);
-
+        long id = -1;
         try {
+            beginTransaction();
+            id = super.add(object);
+
             fluffDAO.add(id, object.getFluff());
             abilitySetDAO.add(id, object.getAbilitySet());
             combatStatDAO.add(id, object.getCombatStatSet());
@@ -80,9 +82,10 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
             for (Spell spell : spells) {
                 spellDAO.add(id, spell);
             }
-        } catch (DataAccessException e) {
-            removeById(id);
-            throw new DataAccessException("Failed to insert " + id, e);
+
+            setTransactionSuccessful();
+        } finally {
+            endTransaction();
         }
 
         return id;
