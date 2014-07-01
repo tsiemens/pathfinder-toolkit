@@ -65,13 +65,13 @@
             android:name=".views.picker.PickerActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
-		<activity
+        <activity
             android:name=".views.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>
         <activity
-      		android:name=".views.settings.AboutActivity"
+              android:name=".views.settings.AboutActivity"
             android:label="@string/title_activity_about"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
         </activity>

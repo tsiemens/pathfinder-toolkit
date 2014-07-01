@@ -15,13 +15,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"/>
     
-	<View
+    <View
         android:layout_width="1dp"
         android:layout_height="fill_parent"
         android:background="#FF909090" />
-	
-	<TextView 
-	    android:id="@+id/textViewRollName"
+    
+    <TextView 
+        android:id="@+id/textViewRollName"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:paddingLeft="5dp"

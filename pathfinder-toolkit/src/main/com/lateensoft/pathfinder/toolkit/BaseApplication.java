@@ -12,21 +12,21 @@ import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import roboguice.RoboGuice;
 
 public class BaseApplication extends Application{
-	private static final String TAG = BaseApplication.class.getSimpleName();
-		
+    private static final String TAG = BaseApplication.class.getSimpleName();
+        
     private Database database;
     private Preferences preferences;
-	
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Log.d(TAG, "Starting application");
+    
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "Starting application");
 
         preferences = new AppPreferences(this);
         database = new DatabaseImpl(this);
 
         initializeApplicationInjector();
-	}
+    }
 
     private void initializeApplicationInjector() {
         RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE,
@@ -36,8 +36,8 @@ public class BaseApplication extends Application{
     }
 
     @Override
-	public void onTerminate() {
-		Log.d(TAG, "Terminating application");
-		super.onTerminate();
-	}
+    public void onTerminate() {
+        Log.d(TAG, "Terminating application");
+        super.onTerminate();
+    }
 }

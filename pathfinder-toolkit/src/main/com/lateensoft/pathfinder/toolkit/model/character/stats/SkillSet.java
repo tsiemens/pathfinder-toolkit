@@ -10,25 +10,25 @@ import org.jetbrains.annotations.Nullable;
 
 public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements Parcelable, Iterable<Skill> {
 
-	private List<Skill> skills;
+    private List<Skill> skills;
 
-	public SkillSet() {
+    public SkillSet() {
         super();
-	}
+    }
 
     public SkillSet(List<Skill> items, @Nullable CorrectionListener<Skill> listener) {
         super(items, listener);
     }
 
-	public SkillSet(Parcel in) {
+    public SkillSet(Parcel in) {
         skills = Lists.newArrayList();
         in.readTypedList(skills, Skill.CREATOR);
-	}
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
         out.writeTypedList(skills);
-	}
+    }
 
     @Override
     protected void initWithValidatedItems(List<Skill> items) {
@@ -55,21 +55,21 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
         };
     }
 
-	public Skill getSkillByIndex(int index) {
-	    return skills.get(index);
-	}
-	
-	public void setCharacterID(long id) {
-		for (Skill skill : skills) {
-			skill.setCharacterID(id);
-		}
-	}
-	
-	/**
-	 * @return reference to skill at index. Index corresponds to array created by getTrainedSkills
-	 */
-	public Skill getTrainedSkill(int index){
-		int trainedSkillIndex = 0;
+    public Skill getSkillByIndex(int index) {
+        return skills.get(index);
+    }
+    
+    public void setCharacterID(long id) {
+        for (Skill skill : skills) {
+            skill.setCharacterID(id);
+        }
+    }
+    
+    /**
+     * @return reference to skill at index. Index corresponds to array created by getTrainedSkills
+     */
+    public Skill getTrainedSkill(int index){
+        int trainedSkillIndex = 0;
         for (Skill m_skill : skills) {
             if (m_skill.getRank() > 0) {
                 if (trainedSkillIndex == index) {
@@ -79,12 +79,12 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
                 }
             }
         }
-		return null;
-	}
-	
-	public List<Skill> getSkills(){
-		return skills;
-	}
+        return null;
+    }
+    
+    public List<Skill> getSkills(){
+        return skills;
+    }
 
     @Override
     public Iterator<Skill> iterator() {
@@ -103,13 +103,13 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
             }
         };
     }
-	
-	public int size() {
-		return skills.size();
-	}
-	
-	public ArrayList<Skill> getTrainedSkills(){
-		ArrayList<Skill> trainedSkills = new ArrayList<Skill>();
+    
+    public int size() {
+        return skills.size();
+    }
+    
+    public ArrayList<Skill> getTrainedSkills(){
+        ArrayList<Skill> trainedSkills = new ArrayList<Skill>();
         for (Skill m_skill : skills) {
             if (m_skill.getRank() > 0) {
                 trainedSkills.add(m_skill);
@@ -117,60 +117,60 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
         }
 
         return trainedSkills;
-	}
-	
-	public Skill addNewSubSkill(SkillType skillType) {
-		Skill newSkill = new Skill(skillType);
-		newSkill.setCharacterID(skills.get(0).getCharacterID());
-		skills.add(newSkill);
-		Collections.sort(skills);
-		return newSkill;
-	}
-	
-	public void deleteSkill(Skill skill) {
-		skills.remove(skill);
-	}
+    }
+    
+    public Skill addNewSubSkill(SkillType skillType) {
+        Skill newSkill = new Skill(skillType);
+        newSkill.setCharacterID(skills.get(0).getCharacterID());
+        skills.add(newSkill);
+        Collections.sort(skills);
+        return newSkill;
+    }
+    
+    public void deleteSkill(Skill skill) {
+        skills.remove(skill);
+    }
 
-	public boolean hasMultipleOfSkill(SkillType skillType) {
-		int numOfSkill = 0;
-		for (Skill skill : skills) {
-			if (skill.getType() == skillType) {
-				numOfSkill++;
-			}
-			if (numOfSkill > 1) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * @return true if all subtypes of this skill are either trained or named
-	 */
-	public boolean allSubSkillsUsed(SkillType skillType) {
+    public boolean hasMultipleOfSkill(SkillType skillType) {
+        int numOfSkill = 0;
+        for (Skill skill : skills) {
+            if (skill.getType() == skillType) {
+                numOfSkill++;
+            }
+            if (numOfSkill > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * @return true if all subtypes of this skill are either trained or named
+     */
+    public boolean allSubSkillsUsed(SkillType skillType) {
         for (Skill m_skill : skills) {
             if (m_skill.getType() == skillType && m_skill.getRank() == 0
                     && (m_skill.getSubType() == null || m_skill.getSubType().isEmpty())) {
                 return false;
             }
         }
-		return true;
-	}
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	public static final Parcelable.Creator<SkillSet> CREATOR = new Parcelable.Creator<SkillSet>() {
-		public SkillSet createFromParcel(Parcel in) {
-			return new SkillSet(in);
-		}
-		
-		public SkillSet[] newArray(int size) {
-			return new SkillSet[size];
-		}
-	};
+        return true;
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    public static final Parcelable.Creator<SkillSet> CREATOR = new Parcelable.Creator<SkillSet>() {
+        public SkillSet createFromParcel(Parcel in) {
+            return new SkillSet(in);
+        }
+        
+        public SkillSet[] newArray(int size) {
+            return new SkillSet[size];
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

@@ -7,10 +7,10 @@ import android.preference.PreferenceFragment;
 
 public class GeneralPrefsFragment extends PreferenceFragment {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		addPreferencesFromResource(R.xml.prefs_general);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        addPreferencesFromResource(R.xml.prefs_general);
+    }
 }

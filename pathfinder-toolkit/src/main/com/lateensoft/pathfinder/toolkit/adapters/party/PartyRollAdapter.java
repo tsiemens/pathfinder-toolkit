@@ -16,7 +16,7 @@ import java.util.List;
 public class PartyRollAdapter extends ArrayAdapter<PartyMember>{
     public enum CritType {CRIT_FUMBLE, CRIT, NO_CRIT}
 
-	private int m_layoutResourceId;
+    private int m_layoutResourceId;
     private CritTypeValueGetter m_critGetter;
 
     public PartyRollAdapter(Context context, int layoutResourceId, List<PartyMember> partymembers, CritTypeValueGetter critGetter) {
@@ -24,27 +24,27 @@ public class PartyRollAdapter extends ArrayAdapter<PartyMember>{
         m_layoutResourceId = layoutResourceId;
         m_critGetter = critGetter;
     }
-	
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View row = convertView;
-		MemberRowHolder holder;
-		
-		if(row == null) {		
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			row = inflater.inflate(m_layoutResourceId, parent, false);
-			holder = new MemberRowHolder();
-			
-			holder.name = (TextView)row.findViewById(R.id.textViewRollName);
-			holder.rollValue = (TextView)row.findViewById(R.id.textViewRollValue);
-			
-			row.setTag(holder);
-		}
-		else {
-			holder = (MemberRowHolder)row.getTag();
-		}
-		
-		holder.name.setText(this.getItem(position).getName());
-		holder.rollValue.setText(Integer.toString(this.getItem(position).getLastRolledValue()));
+    
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        MemberRowHolder holder;
+        
+        if(row == null) {        
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            row = inflater.inflate(m_layoutResourceId, parent, false);
+            holder = new MemberRowHolder();
+            
+            holder.name = (TextView)row.findViewById(R.id.textViewRollName);
+            holder.rollValue = (TextView)row.findViewById(R.id.textViewRollValue);
+            
+            row.setTag(holder);
+        }
+        else {
+            holder = (MemberRowHolder)row.getTag();
+        }
+        
+        holder.name.setText(this.getItem(position).getName());
+        holder.rollValue.setText(Integer.toString(this.getItem(position).getLastRolledValue()));
 
         if(m_critGetter != null){
             CritType critType = m_critGetter.getCritTypeForMember(this.getItem(position));
@@ -58,15 +58,15 @@ public class PartyRollAdapter extends ArrayAdapter<PartyMember>{
                     break;
             }
             holder.rollValue.setTextColor(color);
-		}
-		
-		return row;
-	}
+        }
+        
+        return row;
+    }
 
-	private static class MemberRowHolder {
-		TextView name;
-		TextView rollValue;
-	}
+    private static class MemberRowHolder {
+        TextView name;
+        TextView rollValue;
+    }
 
     public interface CritTypeValueGetter {
         public CritType getCritTypeForMember(PartyMember member);

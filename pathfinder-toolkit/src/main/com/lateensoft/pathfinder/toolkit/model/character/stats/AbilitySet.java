@@ -13,7 +13,7 @@ import static com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityTyp
 
 public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> implements Parcelable, Iterable<Ability> {
 
-	private List<Ability> abilities;
+    private List<Ability> abilities;
 
     public AbilitySet() {
         super();
@@ -23,15 +23,15 @@ public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> impl
         super(items, listener);
     }
 
-	public AbilitySet(Parcel in) {
+    public AbilitySet(Parcel in) {
         abilities = Lists.newArrayListWithCapacity(values().length);
         in.readTypedList(abilities, Ability.CREATOR);
-	}
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		out.writeTypedList(abilities);
-	}
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeTypedList(abilities);
+    }
 
     @Override
     protected void initWithValidatedItems(List<Ability> items) {
@@ -57,46 +57,46 @@ public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> impl
         };
     }
 
-	public Ability getAbility(@NotNull AbilityType type) {
+    public Ability getAbility(@NotNull AbilityType type) {
         for (Ability ability : abilities) {
             if (type == ability.getType()) {
                 return ability;
             }
         }
-		throw new NullPointerException();
-	}
-	
-	/**
-	 * @return the ability at index. Note: indexes of the set are defined by ABILITY_KEYS
-	 */
-	public Ability getAbilityAtIndex(int index) {
-		return abilities.get(index);
-	}
-	
-	/**
-	 * @param maxDex maximum dex mod for the character
-	 * @return the final mod value of the ability
-	 */
-	public int getTotalAbilityMod(AbilityType type, int maxDex) {
-		int abilityMod = getAbility(type).getTempModifier();
-		if (type == DEX && abilityMod > maxDex) {
-			return maxDex;
-		} else {
-			return abilityMod;
-		}
-	}
+        throw new NullPointerException();
+    }
+    
+    /**
+     * @return the ability at index. Note: indexes of the set are defined by ABILITY_KEYS
+     */
+    public Ability getAbilityAtIndex(int index) {
+        return abilities.get(index);
+    }
+    
+    /**
+     * @param maxDex maximum dex mod for the character
+     * @return the final mod value of the ability
+     */
+    public int getTotalAbilityMod(AbilityType type, int maxDex) {
+        int abilityMod = getAbility(type).getTempModifier();
+        if (type == DEX && abilityMod > maxDex) {
+            return maxDex;
+        } else {
+            return abilityMod;
+        }
+    }
 
     @Override
-	public int size(){
-		return abilities.size();
-	}
+    public int size(){
+        return abilities.size();
+    }
 
     @Deprecated
-	public void setCharacterID(long id) {
-		for (Ability ability : abilities) {
-			ability.setCharacterID(id);
-		}
-	}
+    public void setCharacterID(long id) {
+        for (Ability ability : abilities) {
+            ability.setCharacterID(id);
+        }
+    }
 
     @Override
     public Iterator<Ability> iterator() {
@@ -115,21 +115,21 @@ public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> impl
             }
         };
     }
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	public static final Parcelable.Creator<AbilitySet> CREATOR = new Parcelable.Creator<AbilitySet>() {
-		public AbilitySet createFromParcel(Parcel in) {
-			return new AbilitySet(in);
-		}
-		
-		public AbilitySet[] newArray(int size) {
-			return new AbilitySet[size];
-		}
-	};
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    public static final Parcelable.Creator<AbilitySet> CREATOR = new Parcelable.Creator<AbilitySet>() {
+        public AbilitySet createFromParcel(Parcel in) {
+            return new AbilitySet(in);
+        }
+        
+        public AbilitySet[] newArray(int size) {
+            return new AbilitySet[size];
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

@@ -29,16 +29,16 @@ import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
 import roboguice.RoboGuice;
 
 public class PartyManagerFragment extends BasePageFragment {
-	private static final String TAG = PartyManagerFragment.class.getSimpleName();
+    private static final String TAG = PartyManagerFragment.class.getSimpleName();
     private static final int GET_NEW_MEMBERS_CODE = 18880;
     private static final int GET_PARTY_CODE = 54716;
 
-	public NamedList<IdStringPair> m_party;
+    public NamedList<IdStringPair> m_party;
 
-	private EditText m_partyNameEditText;
-	private ListView m_partyMemberList;
-	
-	private LitePartyRepository m_partyRepo = new LitePartyRepository();
+    private EditText m_partyNameEditText;
+    private ListView m_partyMemberList;
+    
+    private LitePartyRepository m_partyRepo = new LitePartyRepository();
 
     private ActionMode m_actionMode;
     private ActionModeCallback m_actionModeCallback;
@@ -52,18 +52,18 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
 
-		setRootView(inflater.inflate(R.layout.fragment_party_manager,
-				container, false));
+        setRootView(inflater.inflate(R.layout.fragment_party_manager,
+                container, false));
 
-		m_partyNameEditText = (EditText) getRootView()
-				.findViewById(R.id.editTextPartyName);
+        m_partyNameEditText = (EditText) getRootView()
+                .findViewById(R.id.editTextPartyName);
 
-		m_partyMemberList = (ListView) getRootView()
-				.findViewById(R.id.listViewPartyMembers);
-		m_partyMemberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        m_partyMemberList = (ListView) getRootView()
+                .findViewById(R.id.listViewPartyMembers);
+        m_partyMemberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (m_actionModeCallback == null) {
@@ -87,15 +87,15 @@ public class PartyManagerFragment extends BasePageFragment {
             }
         });
 
-		loadCurrentParty();
-		return getRootView();
-	}
-	
-	@Override
-	public void onPause() {
-		updateDatabase();
-		super.onPause();
-	}
+        loadCurrentParty();
+        return getRootView();
+    }
+    
+    @Override
+    public void onPause() {
+        updateDatabase();
+        super.onPause();
+    }
 
     @Override
     public void updateTitle() {
@@ -108,25 +108,25 @@ public class PartyManagerFragment extends BasePageFragment {
         switchToPage(CharacterCombatStatsFragment.class);
     }
 
-	/**
-	 * Load the currently set party in shared prefs If there is no party set in
-	 * user prefs, it automatically generates a new one.
-	 */
-	private void loadCurrentParty() {
-		long currentPartyID = getSelectedPartyId();
+    /**
+     * Load the currently set party in shared prefs If there is no party set in
+     * user prefs, it automatically generates a new one.
+     */
+    private void loadCurrentParty() {
+        long currentPartyID = getSelectedPartyId();
 
-		if (currentPartyID == -1) {
-			// There was no current party set in shared prefs
-			addNewPartyAndSetSelected();
-		} else {
-			m_party = m_partyRepo.query(currentPartyID);
-			if (m_party == null) {
-				handleInvalidSelectedParty();
-			}
-			refreshPartyView();
+        if (currentPartyID == -1) {
+            // There was no current party set in shared prefs
+            addNewPartyAndSetSelected();
+        } else {
+            m_party = m_partyRepo.query(currentPartyID);
+            if (m_party == null) {
+                handleInvalidSelectedParty();
+            }
+            refreshPartyView();
 
-		}
-	}
+        }
+    }
 
     private void setSelectedParty(long partyId) {
         preferences.put(GlobalPrefs.SELECTED_PARTY_ID, partyId);
@@ -209,32 +209,32 @@ public class PartyManagerFragment extends BasePageFragment {
         refreshPartyView();
     }
 
-	private void addNewPartyAndSetSelected() {
-		m_party = new NamedList<IdStringPair>("New Party");
-		m_partyRepo.insert(m_party);
-		setSelectedParty(m_party.getId());
-		refreshPartyView();
-	}
+    private void addNewPartyAndSetSelected() {
+        m_party = new NamedList<IdStringPair>("New Party");
+        m_partyRepo.insert(m_party);
+        setSelectedParty(m_party.getId());
+        refreshPartyView();
+    }
 
-	private void deleteCurrentPartyAndSelectAnother() {
+    private void deleteCurrentPartyAndSelectAnother() {
         m_partyRepo.delete(m_party);
-		List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
+        List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
 
-		if (partyIDs.isEmpty()) {
-			addNewPartyAndSetSelected();
-		} else {
-			setSelectedParty(partyIDs.get(0).getId());
-			loadCurrentParty();
-		}
-	}
+        if (partyIDs.isEmpty()) {
+            addNewPartyAndSetSelected();
+        } else {
+            setSelectedParty(partyIDs.get(0).getId());
+            loadCurrentParty();
+        }
+    }
 
-	private void updateDatabase() {
+    private void updateDatabase() {
         Editable text = m_partyNameEditText.getText();
-		m_party.setName(text != null ? text.toString() : "");
-		m_partyRepo.update(m_party);
-	}
+        m_party.setName(text != null ? text.toString() : "");
+        m_partyRepo.update(m_party);
+    }
 
-	private void refreshPartyView() {
+    private void refreshPartyView() {
         if (m_actionMode != null) {
             m_actionMode.finish();
             m_actionModeCallback = null;
@@ -242,7 +242,7 @@ public class PartyManagerFragment extends BasePageFragment {
         }
 
         Collections.sort(m_party);
-		m_partyNameEditText.setText(m_party.getName());
+        m_partyNameEditText.setText(m_party.getName());
         SimpleSelectableListAdapter<IdStringPair> adapter = new SimpleSelectableListAdapter<IdStringPair>(
                 getContext(), m_party,
                 new SimpleSelectableListAdapter.DisplayStringGetter<IdStringPair>() {
@@ -259,30 +259,30 @@ public class PartyManagerFragment extends BasePageFragment {
                 }
             }
         });
-		m_partyMemberList.setAdapter(adapter);
-	}
+        m_partyMemberList.setAdapter(adapter);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.mi_party_list:
-			showPartyPicker();
-			break;
-		case R.id.mi_new_member:
-			showMemberPicker();
-			break;
-		case R.id.mi_new_party:
-			showCreateNewPartyDialog();
-			break;
-		case R.id.mi_delete_party:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.mi_party_list:
+            showPartyPicker();
+            break;
+        case R.id.mi_new_member:
+            showMemberPicker();
+            break;
+        case R.id.mi_new_party:
+            showCreateNewPartyDialog();
+            break;
+        case R.id.mi_delete_party:
             showDeletePartyDialog();
-			break;
-		}
+            break;
+        }
 
-		super.onOptionsItemSelected(item);
-		return true;
+        super.onOptionsItemSelected(item);
+        return true;
 
-	}
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -339,8 +339,8 @@ public class PartyManagerFragment extends BasePageFragment {
         builder.create().show();
     }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
             PickerUtils.ResultData pickerData = new PickerUtils.ResultData(data);
             if (requestCode == GET_PARTY_CODE) {
@@ -367,6 +367,6 @@ public class PartyManagerFragment extends BasePageFragment {
             }
         }
 
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

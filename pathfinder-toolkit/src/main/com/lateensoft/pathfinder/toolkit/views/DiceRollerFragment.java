@@ -30,21 +30,21 @@ public class DiceRollerFragment extends BasePageFragment {
 
     private static enum RollMode {SINGLE, XDY, CUMULATIVE}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		m_diceSet = new DiceSet();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        m_diceSet = new DiceSet();
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
-		
-		setupContent();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        setRootView(inflater.inflate(R.layout.fragment_dice_roller, container, false));
+        
+        setupContent();
         setRollMode(RollMode.SINGLE);
-		return getRootView();
-	}
+        return getRootView();
+    }
 
     @Override
     public void updateTitle() {
@@ -88,46 +88,46 @@ public class DiceRollerFragment extends BasePageFragment {
         resetRolls();
     }
 
-	public void setRollMode(RollMode rollMode) {
-		switch (rollMode) {
-		case SINGLE:
-			m_rollMode = RollMode.SINGLE;
-			m_resetButton.setEnabled(false);
+    public void setRollMode(RollMode rollMode) {
+        switch (rollMode) {
+        case SINGLE:
+            m_rollMode = RollMode.SINGLE;
+            m_resetButton.setEnabled(false);
             m_dieQuantitySpinner.setEnabled(false);
             m_dieQuantityTv.setEnabled(false);
-			m_rollSumTv.setVisibility(View.INVISIBLE);
-			m_rollResultList.setVisibility(View.GONE);
-			break;
-		case XDY:
-			m_rollMode = RollMode.XDY;
-			m_resetButton.setEnabled(true);
+            m_rollSumTv.setVisibility(View.INVISIBLE);
+            m_rollResultList.setVisibility(View.GONE);
+            break;
+        case XDY:
+            m_rollMode = RollMode.XDY;
+            m_resetButton.setEnabled(true);
             m_dieQuantitySpinner.setEnabled(true);
             m_dieQuantityTv.setEnabled(true);
-			m_rollSumTv.setVisibility(View.INVISIBLE);
-			m_rollResultList.setVisibility(View.VISIBLE);
-			break;
-		case CUMULATIVE:
-			m_rollMode = RollMode.CUMULATIVE;
-			m_resetButton.setEnabled(true);
-			m_dieQuantitySpinner.setEnabled(true);
+            m_rollSumTv.setVisibility(View.INVISIBLE);
+            m_rollResultList.setVisibility(View.VISIBLE);
+            break;
+        case CUMULATIVE:
+            m_rollMode = RollMode.CUMULATIVE;
+            m_resetButton.setEnabled(true);
+            m_dieQuantitySpinner.setEnabled(true);
             m_dieQuantityTv.setEnabled(true);
-			m_rollSumTv.setVisibility(View.VISIBLE);
-			m_rollResultList.setVisibility(View.VISIBLE);
-			break;
-		}
-	}
+            m_rollSumTv.setVisibility(View.VISIBLE);
+            m_rollResultList.setVisibility(View.VISIBLE);
+            break;
+        }
+    }
 
-	public void resetRolls() {
-		m_rollSum = 0;
-		m_rollSumTv.setText(getString(R.string.roller_sum_label) + " "
+    public void resetRolls() {
+        m_rollSum = 0;
+        m_rollSumTv.setText(getString(R.string.roller_sum_label) + " "
                 + m_rollSum);
-		m_dieQuantitySpinner.setSelection(0);
-		refreshRollsListView(null);
-	}
+        m_dieQuantitySpinner.setSelection(0);
+        refreshRollsListView(null);
+    }
 
-	public void rollDice() {
-		int rollResult;
-		int[] rolls;
+    public void rollDice() {
+        int rollResult;
+        int[] rolls;
 
         switch (m_rollMode) {
             case SINGLE:
@@ -169,30 +169,30 @@ public class DiceRollerFragment extends BasePageFragment {
         }
     }
 
-	private int sumIntArray(int[] rollResults){
-		int rollSum = 0;
-		if(rollResults != null){
-			for(int i : rollResults){
-				rollSum += i;
-			}
-		}
-		return rollSum;
-	}
-	
-	private void refreshRollsListView(int[] rollResults){
-		if(rollResults != null){
-			String[] rollResultStrings = new String[rollResults.length];
-			for(int i = 0; i < rollResults.length; i++)
-				rollResultStrings[i] = Integer.toString(rollResults[i]);
-				
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, rollResultStrings);
-			m_rollResultList.setAdapter(adapter);
-		} else{
-			String[] emptyArray = new String[0];
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, emptyArray);
-			m_rollResultList.setAdapter(adapter);
-		}
-	}
+    private int sumIntArray(int[] rollResults){
+        int rollSum = 0;
+        if(rollResults != null){
+            for(int i : rollResults){
+                rollSum += i;
+            }
+        }
+        return rollSum;
+    }
+    
+    private void refreshRollsListView(int[] rollResults){
+        if(rollResults != null){
+            String[] rollResultStrings = new String[rollResults.length];
+            for(int i = 0; i < rollResults.length; i++)
+                rollResultStrings[i] = Integer.toString(rollResults[i]);
+                
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, rollResultStrings);
+            m_rollResultList.setAdapter(adapter);
+        } else{
+            String[] emptyArray = new String[0];
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, emptyArray);
+            m_rollResultList.setAdapter(adapter);
+        }
+    }
 
     private class RollTypeClickListener implements OnClickListener {
         @Override public void onClick(View view) {

@@ -69,10 +69,10 @@
     <string name="menu_item_export_character">Export Character</string>
     <string name="menu_item_export_all">Export All</string>
     <string name="menu_item_import_character">Import Character(s)</string>
-	<string name="select_character_dialog_header">Select Character</string>
-	<string name="new_character_dialog_message">Create new character?</string>
+    <string name="select_character_dialog_header">Select Character</string>
+    <string name="new_character_dialog_message">Create new character?</string>
 
-	<string name="confirm_delete_item_message">Are you sure you want to delete %s?\u000AThis action cannot be undone.</string>
+    <string name="confirm_delete_item_message">Are you sure you want to delete %s?\u000AThis action cannot be undone.</string>
 
     <!-- Import/Export Messages -->
     <string name="import_error_unknown">Errors occurred during import.</string>
@@ -246,7 +246,7 @@
         <item>+8</item>
         <item>+9</item>
         <item>+10</item>
-	</string-array>
+    </string-array>
     
     
     <!-- Character sheet strings -->
@@ -387,40 +387,40 @@
         <item>18</item>
         <item>19</item>
         <item>20</item>
-	</string-array>
+    </string-array>
 
     <string name="item_size_small">S</string>
     <string name="item_size_med">M</string>
     <string name="item_size_large">L</string>
 
     <string-array name="speed_spinner_options">
-		<item>0 ft.</item>
-		<item>5 ft.</item>
-		<item>10 ft.</item>
-		<item>15 ft.</item>
-		<item>20 ft.</item>
-		<item>25 ft.</item>
-		<item>30 ft.</item>
-		<item>35 ft.</item>
-		<item>40 ft.</item>
-		<item>45 ft.</item>
-		<item>50 ft.</item>
-		<item>55 ft.</item>
-		<item>60 ft.</item>
-		<item>65 ft.</item>
-		<item>70 ft.</item>
-		<item>75 ft.</item>
-		<item>80 ft.</item>
-		<item>85 ft.</item>
-		<item>90 ft.</item>
-		<item>95 ft.</item>
-		<item>100 ft.</item>
-		<item>105 ft.</item>
-		<item>110 ft.</item>
-		<item>115 ft.</item>
-		<item>120 ft.</item>
-	</string-array>
-	
+        <item>0 ft.</item>
+        <item>5 ft.</item>
+        <item>10 ft.</item>
+        <item>15 ft.</item>
+        <item>20 ft.</item>
+        <item>25 ft.</item>
+        <item>30 ft.</item>
+        <item>35 ft.</item>
+        <item>40 ft.</item>
+        <item>45 ft.</item>
+        <item>50 ft.</item>
+        <item>55 ft.</item>
+        <item>60 ft.</item>
+        <item>65 ft.</item>
+        <item>70 ft.</item>
+        <item>75 ft.</item>
+        <item>80 ft.</item>
+        <item>85 ft.</item>
+        <item>90 ft.</item>
+        <item>95 ft.</item>
+        <item>100 ft.</item>
+        <item>105 ft.</item>
+        <item>110 ft.</item>
+        <item>115 ft.</item>
+        <item>120 ft.</item>
+    </string-array>
+    
     <string-array name="armor_spell_fail_options">
         <item>0%</item>
         <item>5%</item>
@@ -442,7 +442,7 @@
         <item>85%</item>
         <item>90%</item>
         <item>95%</item>
-	</string-array>
+    </string-array>
     
     <!-- Weapons -->
     <string name="add_weapon_button">Add Weapon</string>
@@ -512,7 +512,7 @@
         <item>+38</item>
         <item>+39</item>
         <item>+40</item>
-	</string-array>
+    </string-array>
 
     <string name="weapon_type_slash">S</string>
     <string name="weapon_type_pierce">P</string>
@@ -658,7 +658,7 @@
         <item>+18</item>
         <item>+19</item>
         <item>+20</item>
-	</string-array>
+    </string-array>
     
     <string-array name="spell_level_selectable_values_string">
         <item>0</item>
@@ -672,7 +672,7 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
-  	</string-array>
+      </string-array>
     
     <string-array name="skills_selectable_values_string">
         <item>-10</item>
@@ -729,7 +729,7 @@
     </string-array>
     
     
-	<!-- Ability Header Strings -->
+    <!-- Ability Header Strings -->
     <string name="mod">Mod</string>
     <string name="temp_mod">Temp\nMod</string>
     <string name="temp_bonus">Temp\nBonus</string>
@@ -742,7 +742,7 @@
     <string name="spellbook_description">Description</string>
     <string name="spell_name_header">Spell Name</string>
     <string name="new_spell_title">New Spell</string>
-   	<string name="edit_spell_title">Edit Spell</string>
+       <string name="edit_spell_title">Edit Spell</string>
 
     <!-- Character Membership Strings -->
     <string name="membership_add_button">Add To Party</string>

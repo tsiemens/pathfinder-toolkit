@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Parcelable, Iterable<Save> {
 
-	private List<Save> saves;
+    private List<Save> saves;
 
     public SaveSet() {
         super();
@@ -22,12 +22,12 @@ public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Pa
     public SaveSet(Parcel in) {
         saves = Lists.newArrayListWithCapacity(getSortedTypes().size());
         in.readTypedList(saves, Save.CREATOR);
-	}
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
         out.writeTypedList(saves);
-	}
+    }
 
     @Override
     protected void initWithValidatedItems(List<Save> items) {
@@ -54,29 +54,29 @@ public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Pa
     }
 
     public Save getSave(SaveType saveKey) {
-		for (Save save : saves) {
-			if (save.getType() == saveKey) {
-				return save;
-			}
-		}
-		return null;
-	}
-	
-	public Save getSaveByIndex(int index) {
-		return saves.get(index);
-	}
+        for (Save save : saves) {
+            if (save.getType() == saveKey) {
+                return save;
+            }
+        }
+        return null;
+    }
+    
+    public Save getSaveByIndex(int index) {
+        return saves.get(index);
+    }
 
     @Override
-	public int size() {
-		return saves.size();
-	}
-	
+    public int size() {
+        return saves.size();
+    }
+    
     @Deprecated
-	public void setCharacterID(long id) {
-		for (Save save : saves) {
-			save.setCharacterID(id);
-		}
-	}
+    public void setCharacterID(long id) {
+        for (Save save : saves) {
+            save.setCharacterID(id);
+        }
+    }
 
     @Override
      public Iterator<Save> iterator() {
@@ -95,21 +95,21 @@ public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Pa
             }
         };
     }
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	public static final Parcelable.Creator<SaveSet> CREATOR = new Parcelable.Creator<SaveSet>() {
-		public SaveSet createFromParcel(Parcel in) {
-			return new SaveSet(in);
-		}
-		
-		public SaveSet[] newArray(int size) {
-			return new SaveSet[size];
-		}
-	};
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    public static final Parcelable.Creator<SaveSet> CREATOR = new Parcelable.Creator<SaveSet>() {
+        public SaveSet createFromParcel(Parcel in) {
+            return new SaveSet(in);
+        }
+        
+        public SaveSet[] newArray(int size) {
+            return new SaveSet[size];
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

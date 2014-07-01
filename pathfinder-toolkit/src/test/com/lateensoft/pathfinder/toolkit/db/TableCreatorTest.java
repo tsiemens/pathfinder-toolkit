@@ -15,8 +15,8 @@ import static org.hamcrest.Matchers.*;
 public class TableCreatorTest extends BaseDatabaseTest {
 
     @Test
-	public void testDatabaseCreation() {
-		Cursor c = getDatabase().query("sqlite_master", new String[]{"name"},
+    public void testDatabaseCreation() {
+        Cursor c = getDatabase().query("sqlite_master", new String[]{"name"},
                 "type='table' ORDER BY name ASC");
 
         List<String> tablesInDb = Lists.newArrayList();
@@ -29,5 +29,5 @@ public class TableCreatorTest extends BaseDatabaseTest {
         assertThat(tablesInDb, containsInAnyOrder("Ability", "Armor", "Character", "CombatStatSet",
                 "Feat", "FluffInfo", "Item", "Party", "Save", "Skill",
                 "Spell", "Weapon", "Encounter", "EncounterParticipant", "PartyMembership"));
-	}
+    }
 }

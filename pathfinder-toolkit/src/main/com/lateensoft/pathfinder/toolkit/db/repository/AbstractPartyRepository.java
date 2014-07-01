@@ -15,34 +15,34 @@ import java.util.List;
 import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository.Membership;
 
 public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedList<T>> {
-	private static final String TABLE = "Party";
-	private static final String PARTY_ID = "party_id";
-	private static final String NAME = "Name";
+    private static final String TABLE = "Party";
+    private static final String PARTY_ID = "party_id";
+    private static final String NAME = "Name";
 
     final PartyMembershipRepository m_membersRepo = new PartyMembershipRepository();
 
-	public AbstractPartyRepository() {
-		super();
-		TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
-		TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
-		TableAttribute[] columns = {id, name};
-		m_tableInfo = new TableInfo(TABLE, columns);
-	}
-	
-	/**
-	 * Inserts the character, and all subcomponents into database
-	 * 
-	 * @return the id of the character inserted, or -1 if failure occurred.
-	 */
+    public AbstractPartyRepository() {
+        super();
+        TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
+        TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
+        TableAttribute[] columns = {id, name};
+        m_tableInfo = new TableInfo(TABLE, columns);
+    }
+    
+    /**
+     * Inserts the character, and all subcomponents into database
+     * 
+     * @return the id of the character inserted, or -1 if failure occurred.
+     */
     @Override
-	public long insert(NamedList<T> party) {
-		ContentValues values = getContentValues(party);
+    public long insert(NamedList<T> party) {
+        ContentValues values = getContentValues(party);
 
-		String table = m_tableInfo.getTable();
-		long id = getDatabase().insert(table, values);
-		if (id != -1 && !isIDSet(party)) {
-			party.setId(id);
-		}
+        String table = m_tableInfo.getTable();
+        long id = getDatabase().insert(table, values);
+        if (id != -1 && !isIDSet(party)) {
+            party.setId(id);
+        }
 
         if (id != -1) {
             party.setId(id);
@@ -52,8 +52,8 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
                 return -1;
             }
         }
-		return id;
-	}
+        return id;
+    }
 
     /**
      * Inserts members into their database.
@@ -61,33 +61,33 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
      */
     protected abstract long insertMembers(NamedList<T> party);
 
-	@Override
-	protected NamedList<T> buildFromHashTable(Hashtable<String, Object> hashTable) {
-		long id = (Long) hashTable.get(PARTY_ID);
-		String name = (String) hashTable.get(NAME);
-			
-		List<T> members = queryMembers(id);
-		return new NamedList<T>(id, name, members);
-	}
+    @Override
+    protected NamedList<T> buildFromHashTable(Hashtable<String, Object> hashTable) {
+        long id = (Long) hashTable.get(PARTY_ID);
+        String name = (String) hashTable.get(NAME);
+            
+        List<T> members = queryMembers(id);
+        return new NamedList<T>(id, name, members);
+    }
 
     protected abstract List<T> queryMembers(long partyId);
 
-	@Override
-	protected ContentValues getContentValues(NamedList<T> object) {
-		ContentValues values = new ContentValues();
-		if (isIDSet(object)) { 
-			values.put(PARTY_ID, object.getId());
-		}
-		values.put(NAME, object.getName());
-		return values;
-	}
+    @Override
+    protected ContentValues getContentValues(NamedList<T> object) {
+        ContentValues values = new ContentValues();
+        if (isIDSet(object)) { 
+            values.put(PARTY_ID, object.getId());
+        }
+        values.put(NAME, object.getName());
+        return values;
+    }
 
     public PartyMembershipRepository getMembersRepo() { return m_membersRepo; }
 
-	/** @return ids and names of all parties **/
-	public List<IdStringPair> queryIdNameList() {
-		return queryFilteredIdNameList(null);
-	}
+    /** @return ids and names of all parties **/
+    public List<IdStringPair> queryIdNameList() {
+        return queryFilteredIdNameList(null);
+    }
 
     public List<IdStringPair> queryFilteredIdNameList(String selector) {
         String orderBy = NAME + " ASC";
@@ -106,11 +106,11 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
         }
         return members;
     }
-	
-	@Deprecated
-	public CampaignParty queryEncounterParty() {
-		throw new UnsupportedOperationException();
-	}
+    
+    @Deprecated
+    public CampaignParty queryEncounterParty() {
+        throw new UnsupportedOperationException();
+    }
 
     public int removeCharactersFromParty(long partyId, List<Long> characterIds) {
         int numRemoved = 0;

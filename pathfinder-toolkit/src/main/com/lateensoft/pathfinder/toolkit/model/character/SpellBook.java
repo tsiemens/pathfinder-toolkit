@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SpellBook extends ArrayList<Spell> implements Parcelable {
-	public static final int NUM_SPELL_LEVELS = 10;
+    public static final int NUM_SPELL_LEVELS = 10;
 
     public SpellBook() {
         super();
@@ -17,32 +17,32 @@ public class SpellBook extends ArrayList<Spell> implements Parcelable {
     }
 
     public SpellBook(Parcel in) {
-		in.readTypedList(this, Spell.CREATOR);
-	}
+        in.readTypedList(this, Spell.CREATOR);
+    }
 
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
         out.writeTypedList(this);
-	}
-	
-	public void setCharacterID(long id) {
-		for (Spell spell : this) {
-			spell.setCharacterID(id);
-		}
-	}
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	public static final Parcelable.Creator<SpellBook> CREATOR = new Parcelable.Creator<SpellBook>() {
-		public SpellBook createFromParcel(Parcel in) {
-			return new SpellBook(in);
-		}
-		
-		public SpellBook[] newArray(int size) {
-			return new SpellBook[size];
-		}
-	};
+    }
+    
+    public void setCharacterID(long id) {
+        for (Spell spell : this) {
+            spell.setCharacterID(id);
+        }
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    public static final Parcelable.Creator<SpellBook> CREATOR = new Parcelable.Creator<SpellBook>() {
+        public SpellBook createFromParcel(Parcel in) {
+            return new SpellBook(in);
+        }
+        
+        public SpellBook[] newArray(int size) {
+            return new SpellBook[size];
+        }
+    };
 }

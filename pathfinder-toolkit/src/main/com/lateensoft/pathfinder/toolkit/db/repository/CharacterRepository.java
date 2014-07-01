@@ -20,10 +20,10 @@ import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
-	public static final String TABLE = "Character";
+    public static final String TABLE = "Character";
 
     public static final String NAME = "Name";
-	private static final String GOLD = "Gold";
+    private static final String GOLD = "Gold";
 
     private FluffInfoRepository m_fluffRepo = new FluffInfoRepository();
     private AbilityRepository m_abilityRepo = new AbilityRepository();
@@ -37,141 +37,141 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
     private SpellRepository m_spellRepo = new SpellRepository();
 
     public CharacterRepository() {
-		super();
-		TableAttribute id = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
+        super();
+        TableAttribute id = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER, true);
         TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
-		TableAttribute gold = new TableAttribute(GOLD, SQLDataType.REAL);
-		TableAttribute[] columns = {id, name, gold};
-		m_tableInfo = new TableInfo(TABLE, columns);
-	}
+        TableAttribute gold = new TableAttribute(GOLD, SQLDataType.REAL);
+        TableAttribute[] columns = {id, name, gold};
+        m_tableInfo = new TableInfo(TABLE, columns);
+    }
 
-	/**
-	 * Inserts the character, and all subcomponents into database
-	 *
-	 * @return the id of the character inserted, or -1 if failure occurred.
-	 */
-	@Override
-	public long insert(PathfinderCharacter object) {
-		long id = super.insert(object);
-		long subCompId;
+    /**
+     * Inserts the character, and all subcomponents into database
+     *
+     * @return the id of the character inserted, or -1 if failure occurred.
+     */
+    @Override
+    public long insert(PathfinderCharacter object) {
+        long id = super.insert(object);
+        long subCompId;
 
-		if (id != -1) {
-			// Sets all character ids of components
-			object.setId(id);
+        if (id != -1) {
+            // Sets all character ids of components
+            object.setId(id);
 
-			// Fluff
-			FluffInfoRepository fluffRepo = new FluffInfoRepository();
-			subCompId = fluffRepo.insert(object.getFluff());
-			if (subCompId == -1) {
-				delete(id);
-				return subCompId;
-			}
+            // Fluff
+            FluffInfoRepository fluffRepo = new FluffInfoRepository();
+            subCompId = fluffRepo.insert(object.getFluff());
+            if (subCompId == -1) {
+                delete(id);
+                return subCompId;
+            }
 
-			// AbilityScores
-			AbilityRepository abScoreRepo = new AbilityRepository();
-			AbilitySet abilitySet = object.getAbilitySet();
-			for (int i = 0; i < abilitySet.size(); i++) {
-				subCompId = abScoreRepo.insert(abilitySet.getAbilityAtIndex(i));
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // AbilityScores
+            AbilityRepository abScoreRepo = new AbilityRepository();
+            AbilitySet abilitySet = object.getAbilitySet();
+            for (int i = 0; i < abilitySet.size(); i++) {
+                subCompId = abScoreRepo.insert(abilitySet.getAbilityAtIndex(i));
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Combat Stats
-			CombatStatRepository csRepo = new CombatStatRepository();
-			subCompId = csRepo.insert(object.getCombatStatSet());
-			if (subCompId == -1) {
-				delete(id);
-				return subCompId;
-			}
+            // Combat Stats
+            CombatStatRepository csRepo = new CombatStatRepository();
+            subCompId = csRepo.insert(object.getCombatStatSet());
+            if (subCompId == -1) {
+                delete(id);
+                return subCompId;
+            }
 
-			// Saves
-			SaveRepository saveRepo = new SaveRepository();
-			SaveSet saves = object.getSaveSet();
-			for (Save save : saves) {
-				subCompId = saveRepo.insert(save);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Saves
+            SaveRepository saveRepo = new SaveRepository();
+            SaveSet saves = object.getSaveSet();
+            for (Save save : saves) {
+                subCompId = saveRepo.insert(save);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Skills
-			SkillRepository skillRepo = new SkillRepository();
-			SkillSet skills = object.getSkillSet();
-			for (Skill skill : skills) {
-				subCompId = skillRepo.insert(skill);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Skills
+            SkillRepository skillRepo = new SkillRepository();
+            SkillSet skills = object.getSkillSet();
+            for (Skill skill : skills) {
+                subCompId = skillRepo.insert(skill);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Items
-			ItemRepository itemRepo = new ItemRepository();
-			List<Item> items = object.getInventory().getItems();
-			for (Item item : items) {
-				subCompId = itemRepo.insert(item);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Items
+            ItemRepository itemRepo = new ItemRepository();
+            List<Item> items = object.getInventory().getItems();
+            for (Item item : items) {
+                subCompId = itemRepo.insert(item);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Weapons
-			WeaponRepository weaponRepo = new WeaponRepository();
-			List<Weapon> weapons = object.getInventory().getWeapons();
-			for (Weapon weapon : weapons) {
-				subCompId = weaponRepo.insert(weapon);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Weapons
+            WeaponRepository weaponRepo = new WeaponRepository();
+            List<Weapon> weapons = object.getInventory().getWeapons();
+            for (Weapon weapon : weapons) {
+                subCompId = weaponRepo.insert(weapon);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Armor
-			ArmorRepository armorRepo = new ArmorRepository();
-			List<Armor> armors = object.getInventory().getArmors();
-			for (Armor armor : armors) {
-				subCompId = armorRepo.insert(armor);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Armor
+            ArmorRepository armorRepo = new ArmorRepository();
+            List<Armor> armors = object.getInventory().getArmors();
+            for (Armor armor : armors) {
+                subCompId = armorRepo.insert(armor);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Feats
-			FeatRepository featRepo = new FeatRepository();
-			FeatList featList = object.getFeatList();
-			for (Feat feat : featList) {
-				subCompId = featRepo.insert(feat);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
+            // Feats
+            FeatRepository featRepo = new FeatRepository();
+            FeatList featList = object.getFeatList();
+            for (Feat feat : featList) {
+                subCompId = featRepo.insert(feat);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
 
-			// Spells
-			SpellRepository spellRepo = new SpellRepository();
-			SpellBook spells = object.getSpellBook();
-			for (Spell spell : spells) {
-				subCompId = spellRepo.insert(spell);
-				if (subCompId == -1) {
-					delete(id);
-					return subCompId;
-				}
-			}
-		}
-		return id;
-	}
+            // Spells
+            SpellRepository spellRepo = new SpellRepository();
+            SpellBook spells = object.getSpellBook();
+            for (Spell spell : spells) {
+                subCompId = spellRepo.insert(spell);
+                if (subCompId == -1) {
+                    delete(id);
+                    return subCompId;
+                }
+            }
+        }
+        return id;
+    }
 
-	@Override
-	protected PathfinderCharacter buildFromHashTable(Hashtable<String, Object> hashTable) {
+    @Override
+    protected PathfinderCharacter buildFromHashTable(Hashtable<String, Object> hashTable) {
         PathfinderCharacter.Builder builder = new PathfinderCharacter.Builder();
         populateBuilderFromHashTable(hashTable, builder);
-		return builder.build();
-	}
+        return builder.build();
+    }
 
     protected void populateBuilderFromHashTable(Hashtable<String, Object> hashTable,
                                              PathfinderCharacter.Builder builder) {
@@ -194,36 +194,36 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
             .setSpellBook(new SpellBook(m_spellRepo.querySet(id)));
     }
 
-	@Override
-	protected ContentValues getContentValues(PathfinderCharacter object) {
-		ContentValues values = new ContentValues();
-		if (isIDSet(object)) {
-			values.put(CHARACTER_ID, object.getId());
-		}
+    @Override
+    protected ContentValues getContentValues(PathfinderCharacter object) {
+        ContentValues values = new ContentValues();
+        if (isIDSet(object)) {
+            values.put(CHARACTER_ID, object.getId());
+        }
         values.put(NAME, object.getName());
-		values.put(GOLD, object.getGold());
-		return values;
-	}
+        values.put(GOLD, object.getGold());
+        return values;
+    }
 
-	/**
-	 * @return name of character with id
-	 */
-	public String queryName(long id) {
-		Locale l = null;
-		String selector = String.format(l, "%s.%s=%d",
+    /**
+     * @return name of character with id
+     */
+    public String queryName(long id) {
+        Locale l = null;
+        String selector = String.format(l, "%s.%s=%d",
                 TABLE, CHARACTER_ID, id);
-		String table = m_tableInfo.getTable();
-		String[] columns = {NAME};
-		Cursor cursor = getDatabase().query(true, table, columns, selector,
-				null, null, null, null, null);
+        String table = m_tableInfo.getTable();
+        String[] columns = {NAME};
+        Cursor cursor = getDatabase().query(true, table, columns, selector,
+                null, null, null, null, null);
 
-		cursor.moveToFirst();
-		if (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			return (String)hashTable.get(NAME);
-		}
-		return null;
-	}
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            return (String)hashTable.get(NAME);
+        }
+        return null;
+    }
 
     @Deprecated
     public void updateName(long id, String name) {
@@ -232,28 +232,28 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
         getDatabase().update(TABLE, values, getSelector(id));
     }
 
-	/**
-	 * Returns all characters
-	 * @return Array of IdNamePair, ordered alphabetically by name
-	 */
-	public List<IdStringPair> queryIdNameList() {
-		String orderBy = NAME + " ASC";
-		String table = m_tableInfo.getTable();
-		String[] columns = {CHARACTER_ID, NAME};
-		Cursor cursor = getDatabase().query(true, table, columns, null,
-				null, null, null, orderBy, null);
+    /**
+     * Returns all characters
+     * @return Array of IdNamePair, ordered alphabetically by name
+     */
+    public List<IdStringPair> queryIdNameList() {
+        String orderBy = NAME + " ASC";
+        String table = m_tableInfo.getTable();
+        String[] columns = {CHARACTER_ID, NAME};
+        Cursor cursor = getDatabase().query(true, table, columns, null,
+                null, null, null, orderBy, null);
 
-		ArrayList<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
-					(String)hashTable.get(NAME)));
-			cursor.moveToNext();
-		}
+        ArrayList<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
+                    (String)hashTable.get(NAME)));
+            cursor.moveToNext();
+        }
         cursor.close();
-		return characters;
-	}
+        return characters;
+    }
 
     protected List<IdStringPair> queryFilteredIdNameList(String selector) {
         String orderBy = NAME + " ASC";

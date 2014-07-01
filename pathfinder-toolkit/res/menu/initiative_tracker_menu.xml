@@ -3,7 +3,7 @@
     <item 
         android:id="@+id/mi_reset"
         android:title="@string/menu_item_reset_encounter"
-       	android:icon="@drawable/ic_action_undo"
+           android:icon="@drawable/ic_action_undo"
         android:showAsAction="ifRoom" />
     <item 
         android:id="@+id/mi_new_member"

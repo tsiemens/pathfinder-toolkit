@@ -15,15 +15,15 @@ public abstract class AbstractNamedListRepository<T> extends BaseRepository<Name
     protected abstract String getNameColumn();
     protected abstract long insertListItem(NamedList<T> list, T item);
 
-	/**
-	 * Inserts the character, and all subcomponents into database
-	 * 
-	 * @return the id of the character inserted, or -1 if failure occurred.
-	 */
+    /**
+     * Inserts the character, and all subcomponents into database
+     * 
+     * @return the id of the character inserted, or -1 if failure occurred.
+     */
     @Override
-	public long insert(NamedList<T> list) {
+    public long insert(NamedList<T> list) {
         long id = super.insert(list);
-		if (id != -1) {
+        if (id != -1) {
             long subitemId ;
             for (T subItem : list) {
                 subitemId = insertListItem(list, subItem);
@@ -32,38 +32,38 @@ public abstract class AbstractNamedListRepository<T> extends BaseRepository<Name
                     return -1;
                 }
             }
-		}
-		return id;
-	}
+        }
+        return id;
+    }
 
-	@Override
-	protected ContentValues getContentValues(NamedList<T> object) {
-		ContentValues values = new ContentValues();
-		if (isIDSet(object)) { 
-			values.put(getIdColumn(), object.getId());
-		}
-		values.put(getNameColumn(), object.getName());
-		return values;
-	}
-	
-	/**
-	 * @return all lists as IdNamePairs, ordered alphabetically by name
-	 */
-	public List<IdStringPair> queryIdStringList() {
-		String orderBy = getNameColumn() + " ASC";
-		String table = m_tableInfo.getTable();
-		String[] columns = m_tableInfo.getColumns();
-		Cursor cursor = getDatabase().query(true, table, columns, null,
-				null, null, null, orderBy, null);
-		
-		List<IdStringPair> lists = Lists.newArrayListWithCapacity(cursor.getCount());
+    @Override
+    protected ContentValues getContentValues(NamedList<T> object) {
+        ContentValues values = new ContentValues();
+        if (isIDSet(object)) { 
+            values.put(getIdColumn(), object.getId());
+        }
+        values.put(getNameColumn(), object.getName());
+        return values;
+    }
+    
+    /**
+     * @return all lists as IdNamePairs, ordered alphabetically by name
+     */
+    public List<IdStringPair> queryIdStringList() {
+        String orderBy = getNameColumn() + " ASC";
+        String table = m_tableInfo.getTable();
+        String[] columns = m_tableInfo.getColumns();
+        Cursor cursor = getDatabase().query(true, table, columns, null,
+                null, null, null, orderBy, null);
+        
+        List<IdStringPair> lists = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			lists.add(new IdStringPair((Long) hashTable.get(getIdColumn()),
+        while (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            lists.add(new IdStringPair((Long) hashTable.get(getIdColumn()),
                     (String) hashTable.get(getNameColumn())));
-			cursor.moveToNext();
-		}
-		return lists;
-	}
+            cursor.moveToNext();
+        }
+        return lists;
+    }
 }

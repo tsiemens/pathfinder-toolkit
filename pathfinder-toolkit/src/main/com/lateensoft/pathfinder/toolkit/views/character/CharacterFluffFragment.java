@@ -21,41 +21,41 @@ import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import java.util.List;
 
 public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
-	@SuppressWarnings("unused")
-	private static final String TAG = CharacterFluffFragment.class.getSimpleName();
-	private ListView fluffList;
-	private int fluffIndexSelectedForEdit;
-	
-	private FluffInfoRepository fluffRepo;
+    @SuppressWarnings("unused")
+    private static final String TAG = CharacterFluffFragment.class.getSimpleName();
+    private ListView fluffList;
+    private int fluffIndexSelectedForEdit;
+    
+    private FluffInfoRepository fluffRepo;
     private CharacterRepository characterRepo;
-	private FluffInfo fluffModel;
+    private FluffInfo fluffModel;
 
     private String[] fluffNames;
     private List<String> fluffValues;
-	
-	private EditText editDialogField;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    
+    private EditText editDialogField;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         characterRepo = new CharacterRepository();
-		fluffRepo = new FluffInfoRepository();
+        fluffRepo = new FluffInfoRepository();
         fluffNames = getResources().getStringArray(R.array.fluff_fields);
-	}
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-		setRootView(inflater.inflate(R.layout.character_fluff_fragment, 
-				container, false));
-		
-		fluffList = (ListView) getRootView().findViewById(R.id.fluff_list);
-		fluffList.setOnItemClickListener(listItemClickListener);
-		
-		return getRootView();		
-	}
+        setRootView(inflater.inflate(R.layout.character_fluff_fragment, 
+                container, false));
+        
+        fluffList = (ListView) getRootView().findViewById(R.id.fluff_list);
+        fluffList.setOnItemClickListener(listItemClickListener);
+        
+        return getRootView();        
+    }
 
     private OnItemClickListener listItemClickListener = new OnItemClickListener() {
         @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,27 +63,27 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
             showItemDialog(position);
         }
     };
-	
-	private void showItemDialog(int fluffIndex) {
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-		//Set up dialog layout
-		LayoutInflater inflater = LayoutInflater.from(getContext());
+    
+    private void showItemDialog(int fluffIndex) {
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //Set up dialog layout
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
-		View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
-		editDialogField = (EditText) dialogView.findViewById(R.id.dialogFluffText);
+        View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
+        editDialogField = (EditText) dialogView.findViewById(R.id.dialogFluffText);
 
-		builder.setTitle(fluffNames[fluffIndex]);
-		editDialogField.append(fluffValues.get(fluffIndex));
+        builder.setTitle(fluffNames[fluffIndex]);
+        editDialogField.append(fluffValues.get(fluffIndex));
 
         DialogInterface.OnClickListener listener = new EditDialogClickListener();
-		builder.setView(dialogView)
-				.setPositiveButton(R.string.ok_button_text, listener)
-				.setNegativeButton(R.string.cancel_button_text, listener);
-		
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
+        builder.setView(dialogView)
+                .setPositiveButton(R.string.ok_button_text, listener)
+                .setNegativeButton(R.string.cancel_button_text, listener);
+        
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     private class EditDialogClickListener implements DialogInterface.OnClickListener {
 
@@ -97,42 +97,42 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
         }
     }
 
-	private void refreshFluffListView() {
-		if (fluffValues != null) {
-			FluffListAdapter adapter = new FluffListAdapter(getContext(),
-					R.layout.character_fluff_row, fluffNames,
-					fluffValues);
-			fluffList.setAdapter(adapter);
-			setTitle(getCharacterName());
-		}
-	}
+    private void refreshFluffListView() {
+        if (fluffValues != null) {
+            FluffListAdapter adapter = new FluffListAdapter(getContext(),
+                    R.layout.character_fluff_row, fluffNames,
+                    fluffValues);
+            fluffList.setAdapter(adapter);
+            setTitle(getCharacterName());
+        }
+    }
 
     private String getCharacterName() {
         return fluffValues.get(0);
     }
 
-	private String getFluffValueFromDialog() {
-		return editDialogField.getText().toString();
-	}
+    private String getFluffValueFromDialog() {
+        return editDialogField.getText().toString();
+    }
 
-	@Override
-	public void updateFragmentUI() {
-		refreshFluffListView();
-	}
-	
-	@Override
-	public String getFragmentTitle() {
-		return getString(R.string.tab_character_fluff);
-	}
+    @Override
+    public void updateFragmentUI() {
+        refreshFluffListView();
+    }
+    
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.tab_character_fluff);
+    }
 
-	@Override
-	public void updateDatabase() {
-		if (fluffValues != null) {
+    @Override
+    public void updateDatabase() {
+        if (fluffValues != null) {
             FluffInfo fluff = buildModelFromFluffValues();
             characterRepo.updateName(getCurrentCharacterID(), getCharacterName());
-			fluffRepo.update(fluff);
-		}
-	}
+            fluffRepo.update(fluff);
+        }
+    }
 
     private FluffInfo buildModelFromFluffValues() {
         FluffInfo fluff = new FluffInfo();
@@ -154,12 +154,12 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
         return fluff;
     }
 
-	@Override
-	public void loadFromDatabase() {
-		FluffInfo fluff = fluffRepo.query(getCurrentCharacterID());
+    @Override
+    public void loadFromDatabase() {
+        FluffInfo fluff = fluffRepo.query(getCurrentCharacterID());
         String name = characterRepo.queryName(getCurrentCharacterID());
         setFluffFields(name, fluff);
-	}
+    }
 
     private void setFluffFields(String name, FluffInfo fluff) {
         if (fluffValues == null) {

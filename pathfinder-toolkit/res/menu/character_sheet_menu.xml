@@ -3,7 +3,7 @@
     <item 
         android:id="@+id/mi_character_list"
         android:title="@string/menu_item_character_list"
-       	android:icon="@drawable/ic_action_group"
+           android:icon="@drawable/ic_action_group"
         android:showAsAction="ifRoom" />
 
     <item 

@@ -24,11 +24,11 @@ import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRep
 
 public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFragment {
 
-	private static final String TAG = CharacterPartyMembershipFragment.class.getSimpleName();
+    private static final String TAG = CharacterPartyMembershipFragment.class.getSimpleName();
     public static final int GET_NEW_PARTIES_CODE = 33091;
 
-	private ListView m_partyListView;
-	private Button m_addButton;
+    private ListView m_partyListView;
+    private Button m_addButton;
 
     private LitePartyRepository m_partyRepo;
     private List<IdStringPair> m_parties;
@@ -36,29 +36,29 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
     private ActionMode m_actionMode;
     private ActionModeCallback m_actionModeCallback;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         m_partyRepo = new LitePartyRepository();
-	}
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-		setRootView(inflater.inflate(R.layout.character_membership_fragment,
-				container, false));
+        setRootView(inflater.inflate(R.layout.character_membership_fragment,
+                container, false));
 
-		m_addButton = (Button) getRootView().findViewById(R.id.button_add);
-		m_addButton.setOnClickListener(new OnClickListener() {
+        m_addButton = (Button) getRootView().findViewById(R.id.button_add);
+        m_addButton.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
                 showPartyPicker();
             }
         });
 
-		m_partyListView = (ListView) getRootView()
-				.findViewById(R.id.lv_parties);
+        m_partyListView = (ListView) getRootView()
+                .findViewById(R.id.lv_parties);
         m_partyListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         m_partyListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -82,10 +82,10 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
             }
         });
 
-		return getRootView();
-	}
+        return getRootView();
+    }
 
-	private void refreshPartiesListView() {
+    private void refreshPartiesListView() {
         if (m_actionMode != null) {
             m_actionMode.finish();
             m_actionModeCallback = null;
@@ -110,8 +110,8 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
             }
         });
 
-		m_partyListView.setAdapter(adapter);
-	}
+        m_partyListView.setAdapter(adapter);
+    }
 
     private class ActionModeCallback extends MultiSelectActionModeCallback {
 
@@ -180,8 +180,8 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         startActivityForResult(pickerIntent, GET_NEW_PARTIES_CODE);
     }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_PARTIES_CODE && resultCode == Activity.RESULT_OK &&
                 data != null) {
@@ -203,24 +203,24 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         }
     }
 
-	@Override
-	public void updateFragmentUI() {
-		refreshPartiesListView();
-	}
-	
-	@Override
-	public String getFragmentTitle() {
-		return getString(R.string.tab_character_membership);
-	}
+    @Override
+    public void updateFragmentUI() {
+        refreshPartiesListView();
+    }
+    
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.tab_character_membership);
+    }
 
-	@Override
-	public void updateDatabase() {
-		// Done dynamically
-	}
+    @Override
+    public void updateDatabase() {
+        // Done dynamically
+    }
 
-	@Override
-	public void loadFromDatabase() {
+    @Override
+    public void loadFromDatabase() {
         m_parties = m_partyRepo.queryPartyNamesForCharacter(getCurrentCharacterID());
-	}
+    }
 
 }

@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-	
+    
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -241,7 +241,7 @@
         android:layout_height="@dimen/ability_calc_divider_height_small"
         android:background="#FF909090" />
 
-	<TableRow android:layout_weight="0.1">
+    <TableRow android:layout_weight="0.1">
         <TextView
             android:text="@string/ability_name_wis"
             android:padding="@dimen/ability_calc_padding"

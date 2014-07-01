@@ -35,98 +35,98 @@ import roboguice.RoboGuice;
 
 //This is a base class for all fragments in the character sheet activity
 public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
-	private static final String TAG = AbstractCharacterSheetFragment.class.getSimpleName();
+    private static final String TAG = AbstractCharacterSheetFragment.class.getSimpleName();
 
     public static final int GET_IMPORT_REQ_CODE = 3056;
-	
-	public long m_currentCharacterID;
+    
+    public long m_currentCharacterID;
 
-	private CharacterRepository m_characterRepo;
-	
-	private boolean m_isWaitingForResult = false;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		m_characterRepo = new CharacterRepository();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return super.onCreateView(inflater, container, savedInstanceState);
-	}
+    private CharacterRepository m_characterRepo;
+    
+    private boolean m_isWaitingForResult = false;
 
     @Override
-	public void updateTitle() {
-		setTitle(m_characterRepo.queryName(m_currentCharacterID));
-		setSubtitle(getFragmentTitle());
-	}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        m_characterRepo = new CharacterRepository();
+    }
 
-	@Override
-	public void onPause() {
-		updateDatabase();
-		super.onPause();
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (!m_isWaitingForResult) {
-			loadSelectedCharacter();
-			updateTitle();
-		}
+    @Override
+    public void updateTitle() {
+        setTitle(m_characterRepo.queryName(m_currentCharacterID));
+        setSubtitle(getFragmentTitle());
+    }
 
-		m_isWaitingForResult = false;
-	}
-	
-	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		super.startActivityForResult(intent, requestCode);
-		m_isWaitingForResult = true;
-	}
+    @Override
+    public void onPause() {
+        updateDatabase();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!m_isWaitingForResult) {
+            loadSelectedCharacter();
+            updateTitle();
+        }
+
+        m_isWaitingForResult = false;
+    }
+    
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        m_isWaitingForResult = true;
+    }
 
     private void setSelectedCharacter(long characterId) {
         Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
         preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
     }
 
-	/**
-	 * Load the currently set character in shared prefs If there is no character
-	 * set in user prefs, it automatically generates a new one.
-	 */
-	public void loadSelectedCharacter() {
+    /**
+     * Load the currently set character in shared prefs If there is no character
+     * set in user prefs, it automatically generates a new one.
+     */
+    public void loadSelectedCharacter() {
         Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
-		long currentCharacterID = preferences.get(GlobalPrefs.SELECTED_CHARACTER_ID, -1L);
+        long currentCharacterID = preferences.get(GlobalPrefs.SELECTED_CHARACTER_ID, -1L);
 
-		if (currentCharacterID == -1) { 
-			// There was no current character set in shared prefs
-			Log.v(TAG, "Default character add");
-			addNewCharacterAndSelect();
-		} else {
-			m_currentCharacterID = currentCharacterID;
-			loadFromDatabase();
-			if (getRootView() != null) {
-				updateFragmentUI();
-			}
-		}
-		updateTitle();
-	}
+        if (currentCharacterID == -1) { 
+            // There was no current character set in shared prefs
+            Log.v(TAG, "Default character add");
+            addNewCharacterAndSelect();
+        } else {
+            m_currentCharacterID = currentCharacterID;
+            loadFromDatabase();
+            if (getRootView() != null) {
+                updateFragmentUI();
+            }
+        }
+        updateTitle();
+    }
 
-	/**
-	 * Generates a new character and sets it to the current character. Reloads
-	 * the fragments.
-	 */
-	public void addNewCharacterAndSelect() {
-		PathfinderCharacter newChar = PathfinderCharacter.newDefaultCharacter("New Adventurer");
-		long id = addCharacterToDB(newChar);
-		if (id != -1) {
-			setSelectedCharacter(id);
-		} else {
-			Toast.makeText(getContext(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
-		}
-		performUpdateReset();
-	}
+    /**
+     * Generates a new character and sets it to the current character. Reloads
+     * the fragments.
+     */
+    public void addNewCharacterAndSelect() {
+        PathfinderCharacter newChar = PathfinderCharacter.newDefaultCharacter("New Adventurer");
+        long id = addCharacterToDB(newChar);
+        if (id != -1) {
+            setSelectedCharacter(id);
+        } else {
+            Toast.makeText(getContext(), "Error creating new character. Please contact developers for support if issue persists.", Toast.LENGTH_LONG).show();
+        }
+        performUpdateReset();
+    }
 
     public long addCharacterToDB(PathfinderCharacter character) {
         long id = m_characterRepo.insert(character);
@@ -138,35 +138,35 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         return id;
     }
 
-	/**
-	 * Deletes the current character and loads the first in the list, or creates
-	 * a new blank one, if there was only one.
-	 */
-	public void deleteCurrentCharacter() {
-		int currentCharacterIndex = 0;
-		List<IdStringPair> characters = m_characterRepo.queryIdNameList();
-		long characterForDeletion = m_currentCharacterID;
+    /**
+     * Deletes the current character and loads the first in the list, or creates
+     * a new blank one, if there was only one.
+     */
+    public void deleteCurrentCharacter() {
+        int currentCharacterIndex = 0;
+        List<IdStringPair> characters = m_characterRepo.queryIdNameList();
+        long characterForDeletion = m_currentCharacterID;
 
-		for (int i = 0; i < characters.size(); i++) {
-			if (characterForDeletion == characters.get(i).getId()){
-				currentCharacterIndex = i;
-				break;
-			}
-		}
+        for (int i = 0; i < characters.size(); i++) {
+            if (characterForDeletion == characters.get(i).getId()){
+                currentCharacterIndex = i;
+                break;
+            }
+        }
 
-		if (characters.size() == 1) {
-			addNewCharacterAndSelect();
-		} else {
-			int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
-			setSelectedCharacter(characters.get(charToSelect).getId());
-			loadSelectedCharacter();
-		}
+        if (characters.size() == 1) {
+            addNewCharacterAndSelect();
+        } else {
+            int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
+            setSelectedCharacter(characters.get(charToSelect).getId());
+            loadSelectedCharacter();
+        }
 
-		m_characterRepo.delete(characterForDeletion);
-		Log.i(TAG, "Deleted current character: " + characterForDeletion);
-	}
+        m_characterRepo.delete(characterForDeletion);
+        Log.i(TAG, "Deleted current character: " + characterForDeletion);
+    }
 
-	@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_character_list:
@@ -192,11 +192,11 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         return super.onOptionsItemSelected(item);
     }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.character_sheet_menu, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.character_sheet_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     private void showCharacterSelectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -344,41 +344,41 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     /**
-	 * Depending on the use, this forces the current tab to save its values to
-	 * mCharacter, and updates them. Ends with current tab set to Fluff.
-	 */
-	public void performUpdateReset() {
+     * Depending on the use, this forces the current tab to save its values to
+     * mCharacter, and updates them. Ends with current tab set to Fluff.
+     */
+    public void performUpdateReset() {
         switchToPage(CharacterFluffFragment.class);
-	}
+    }
 
-	public long getCurrentCharacterID() {
-		return m_currentCharacterID;
-	}
-	
-	public CharacterRepository getCharacterRepo() {
-		return m_characterRepo;
-	}
+    public long getCurrentCharacterID() {
+        return m_currentCharacterID;
+    }
+    
+    public CharacterRepository getCharacterRepo() {
+        return m_characterRepo;
+    }
 
-	/**
-	 * Refreshes the UI. Is automatically called onResume
-	 */
-	public abstract void updateFragmentUI();
-	
-	/**
-	 * @return The title of the fragment instance
-	 */
-	public abstract String getFragmentTitle();
-	
-	/**
-	 * Called to have the subclass update any relevant parts of the database.
-	 * Called onPause, among other areas.
-	 */
-	public abstract void updateDatabase();
-	
-	/**
-	 * Called to notify the base class that it should load its data from the database.
-	 * Called onResume
-	 */
-	public abstract void loadFromDatabase();
+    /**
+     * Refreshes the UI. Is automatically called onResume
+     */
+    public abstract void updateFragmentUI();
+    
+    /**
+     * @return The title of the fragment instance
+     */
+    public abstract String getFragmentTitle();
+    
+    /**
+     * Called to have the subclass update any relevant parts of the database.
+     * Called onPause, among other areas.
+     */
+    public abstract void updateDatabase();
+    
+    /**
+     * Called to notify the base class that it should load its data from the database.
+     * Called onResume
+     */
+    public abstract void loadFromDatabase();
 
 }

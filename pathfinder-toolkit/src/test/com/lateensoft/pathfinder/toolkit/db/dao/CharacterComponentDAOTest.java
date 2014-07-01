@@ -8,8 +8,8 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 
 public abstract class CharacterComponentDAOTest extends BaseDatabaseTest {
-	protected final String CHARACTER_NAME = "Test character";
-	protected final double CHARACTER_GOLD = 40.0;
+    protected final String CHARACTER_NAME = "Test character";
+    protected final double CHARACTER_GOLD = 40.0;
 
     private static PathfinderCharacter testCharacter;
     private static CharacterRepository charRepo;
@@ -28,15 +28,15 @@ public abstract class CharacterComponentDAOTest extends BaseDatabaseTest {
         return testCharacter;
     }
 
-	@Override
-	public void setUp() throws Exception {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         charRepo = new CharacterRepository();
         testCharacter = PathfinderCharacter.newDefaultCharacter(CHARACTER_NAME);
         testCharacter.setGold(CHARACTER_GOLD);
         long testCharacterId = getCharRepo().insert(testCharacter);
         Assert.assertTrue(testCharacterId != -1);
-	}
+    }
 
     @After
     public void tearDown() {

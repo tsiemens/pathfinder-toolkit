@@ -11,85 +11,85 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 public class SkillRepository extends BaseRepository<Skill> {
-	private static final String TABLE = "Skill";
-	private static final String SKILL_ID = "skill_id";
-	private static final String SKILL_KEY = "skill_key";
-	private static final String SUB_TYPE = "SubType";
-	private static final String CLASS_SKILL = "ClassSkill";
-	private static final String RANK = "Rank";
-	private static final String MISC_MOD = "MiscMod";
-	private static final String ABILITY_KEY = "ability_key";
-	
-	public SkillRepository() {
-		super();
-		TableAttribute id = new TableAttribute(SKILL_ID, SQLDataType.INTEGER, true);
-		TableAttribute skillKey = new TableAttribute(SKILL_KEY, SQLDataType.INTEGER);
-		TableAttribute characterId = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
-		TableAttribute subType = new TableAttribute(SUB_TYPE, SQLDataType.TEXT);
-		TableAttribute classSkill = new TableAttribute(CLASS_SKILL, SQLDataType.INTEGER);
-		TableAttribute rank = new TableAttribute(RANK, SQLDataType.INTEGER);
-		TableAttribute miscMod = new TableAttribute(MISC_MOD, SQLDataType.INTEGER);
-		TableAttribute abilityKey = new TableAttribute(ABILITY_KEY, SQLDataType.INTEGER);
-		TableAttribute[] attributes = {id, skillKey, characterId, subType, classSkill, rank, miscMod, abilityKey};
-		m_tableInfo = new TableInfo(TABLE, attributes);
-	}
-	
-	@Override
-	protected Skill buildFromHashTable(Hashtable<String, Object> hashTable) {
-		long id = ((Long) hashTable.get(SKILL_ID));
-		SkillType skillType = SkillType.forKey(((Long) hashTable.get(SKILL_KEY)).intValue());
-		int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
-		String subType = (String) hashTable.get(SUB_TYPE);
-		boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
-		int rank = ((Long) hashTable.get(RANK)).intValue();
-		int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
-		AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
+    private static final String TABLE = "Skill";
+    private static final String SKILL_ID = "skill_id";
+    private static final String SKILL_KEY = "skill_key";
+    private static final String SUB_TYPE = "SubType";
+    private static final String CLASS_SKILL = "ClassSkill";
+    private static final String RANK = "Rank";
+    private static final String MISC_MOD = "MiscMod";
+    private static final String ABILITY_KEY = "ability_key";
+    
+    public SkillRepository() {
+        super();
+        TableAttribute id = new TableAttribute(SKILL_ID, SQLDataType.INTEGER, true);
+        TableAttribute skillKey = new TableAttribute(SKILL_KEY, SQLDataType.INTEGER);
+        TableAttribute characterId = new TableAttribute(CHARACTER_ID, SQLDataType.INTEGER);
+        TableAttribute subType = new TableAttribute(SUB_TYPE, SQLDataType.TEXT);
+        TableAttribute classSkill = new TableAttribute(CLASS_SKILL, SQLDataType.INTEGER);
+        TableAttribute rank = new TableAttribute(RANK, SQLDataType.INTEGER);
+        TableAttribute miscMod = new TableAttribute(MISC_MOD, SQLDataType.INTEGER);
+        TableAttribute abilityKey = new TableAttribute(ABILITY_KEY, SQLDataType.INTEGER);
+        TableAttribute[] attributes = {id, skillKey, characterId, subType, classSkill, rank, miscMod, abilityKey};
+        m_tableInfo = new TableInfo(TABLE, attributes);
+    }
+    
+    @Override
+    protected Skill buildFromHashTable(Hashtable<String, Object> hashTable) {
+        long id = ((Long) hashTable.get(SKILL_ID));
+        SkillType skillType = SkillType.forKey(((Long) hashTable.get(SKILL_KEY)).intValue());
+        int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
+        String subType = (String) hashTable.get(SUB_TYPE);
+        boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
+        int rank = ((Long) hashTable.get(RANK)).intValue();
+        int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
+        AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
 
-		return new Skill(id, characterId, skillType, subType, classSkill, rank,
-				miscMod, abilityKey);
-	}
-	
-	@Override
-	protected ContentValues getContentValues(Skill object) {
-		ContentValues values = new ContentValues();
-		if (isIDSet(object)) {
-			values.put(SKILL_ID, object.getId());
-		}
-		values.put(SKILL_KEY, object.getType().getKey());
-		values.put(CHARACTER_ID, object.getCharacterID());
-		if (object.getSubType() != null) {
-			values.put(SUB_TYPE, object.getSubType());
-		}
-		values.put(CLASS_SKILL, object.isClassSkill());
-		values.put(RANK, object.getRank());
-		values.put(MISC_MOD, object.getMiscMod());
-		values.put(ABILITY_KEY, object.getAbility().getKey());
-		return values;
-	}
-	
-	/**
-	 * Returns all skills for the character with characterId
-	 *
+        return new Skill(id, characterId, skillType, subType, classSkill, rank,
+                miscMod, abilityKey);
+    }
+    
+    @Override
+    protected ContentValues getContentValues(Skill object) {
+        ContentValues values = new ContentValues();
+        if (isIDSet(object)) {
+            values.put(SKILL_ID, object.getId());
+        }
+        values.put(SKILL_KEY, object.getType().getKey());
+        values.put(CHARACTER_ID, object.getCharacterID());
+        if (object.getSubType() != null) {
+            values.put(SUB_TYPE, object.getSubType());
+        }
+        values.put(CLASS_SKILL, object.isClassSkill());
+        values.put(RANK, object.getRank());
+        values.put(MISC_MOD, object.getMiscMod());
+        values.put(ABILITY_KEY, object.getAbility().getKey());
+        return values;
+    }
+    
+    /**
+     * Returns all skills for the character with characterId
+     *
      * @param characterId
      * @return Array of Skill, ordered alphabetically by name
-	 */
-	public List<Skill> queryAllForCharacter(long characterId) {
-		String selector = CHARACTER_ID + "=" + characterId; 
-		String orderBy = SKILL_KEY+" ASC, "+SUB_TYPE+" ASC";
-		String table = m_tableInfo.getTable();
-		String[] columns = m_tableInfo.getColumns();
-		Cursor cursor = getDatabase().query(true, table, columns, selector, 
-				null, null, null, orderBy, null);
-		
-		List<Skill> skills = Lists.newArrayListWithCapacity(cursor.getCount());
+     */
+    public List<Skill> queryAllForCharacter(long characterId) {
+        String selector = CHARACTER_ID + "=" + characterId; 
+        String orderBy = SKILL_KEY+" ASC, "+SUB_TYPE+" ASC";
+        String table = m_tableInfo.getTable();
+        String[] columns = m_tableInfo.getColumns();
+        Cursor cursor = getDatabase().query(true, table, columns, selector, 
+                null, null, null, orderBy, null);
+        
+        List<Skill> skills = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-			skills.add(buildFromHashTable(hashTable));
-			cursor.moveToNext();
-		}
-		return skills;
-	}
+        while (!cursor.isAfterLast()) {
+            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            skills.add(buildFromHashTable(hashTable));
+            cursor.moveToNext();
+        }
+        return skills;
+    }
 
     public SkillSet querySet(long characterId) {
         return new SkillSet(queryAllForCharacter(characterId),

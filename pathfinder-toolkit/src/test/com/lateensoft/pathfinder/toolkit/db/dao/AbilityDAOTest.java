@@ -18,16 +18,16 @@ import static org.junit.Assert.assertEquals;
 @RunWith(RobolectricTestRunner.class)
 public class AbilityDAOTest extends CharacterComponentDAOTest {
 
-	private Ability m_ability;
-	private AbilityDAO dao;
+    private Ability m_ability;
+    private AbilityDAO dao;
 
-	@Override
-	public void setUp() throws Exception {
+    @Override
+    public void setUp() throws Exception {
         super.setUp();
         dao = new AbilityDAO(Robolectric.application);
 
         m_ability = dao.findAllForOwner(getTestCharacterId()).get(2);
-	}
+    }
 
     @Test
     public void findAbility() {

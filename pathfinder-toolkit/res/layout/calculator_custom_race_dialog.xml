@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/ability_calc_dialog_row_height"
         android:orientation="horizontal">
-    	
+        
         <TextView
             android:text="@string/ability_name_str"
             android:layout_height="match_parent"
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/ability_calc_dialog_row_height"
         android:orientation="horizontal">
-    	
+        
         <TextView
             android:text="@string/ability_name_dex"
             android:layout_height="match_parent"
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/ability_calc_dialog_row_height"
         android:orientation="horizontal">
-    	
+        
         <TextView
             android:text="@string/ability_name_con"
             android:layout_height="match_parent"

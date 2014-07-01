@@ -18,34 +18,34 @@ import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRep
 
 @Deprecated
 public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacter>> {
-	private static final String TABLE = "Party";
-	private static final String PARTY_ID = "party_id";
-	private static final String NAME = "Name";
+    private static final String TABLE = "Party";
+    private static final String PARTY_ID = "party_id";
+    private static final String NAME = "Name";
 
     PartyMembershipRepository m_membersRepo = new PartyMembershipRepository();
 
-	public PartyRepository() {
-		super();
-		TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
-		TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
-		TableAttribute[] columns = {id, name};
-		m_tableInfo = new TableInfo(TABLE, columns);
-	}
-	
-	/**
-	 * Inserts the character, and all subcomponents into database
-	 * 
-	 * @return the id of the character inserted, or -1 if failure occurred.
-	 */
+    public PartyRepository() {
+        super();
+        TableAttribute id = new TableAttribute(PARTY_ID, SQLDataType.INTEGER, true);
+        TableAttribute name = new TableAttribute(NAME, SQLDataType.TEXT);
+        TableAttribute[] columns = {id, name};
+        m_tableInfo = new TableInfo(TABLE, columns);
+    }
+    
+    /**
+     * Inserts the character, and all subcomponents into database
+     * 
+     * @return the id of the character inserted, or -1 if failure occurred.
+     */
     @Override
-	public long insert(NamedList<PathfinderCharacter> party) {
-		ContentValues values = getContentValues(party);
+    public long insert(NamedList<PathfinderCharacter> party) {
+        ContentValues values = getContentValues(party);
 
-		String table = m_tableInfo.getTable();
-		long id = getDatabase().insert(table, values);
-		if (id != -1 && !isIDSet(party)) {
-			party.setId(id);
-		}
+        String table = m_tableInfo.getTable();
+        long id = getDatabase().insert(table, values);
+        if (id != -1 && !isIDSet(party)) {
+            party.setId(id);
+        }
 
         if (id != -1) {
             party.setId(id);
@@ -60,41 +60,41 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
                 }
             }
         }
-		return id;
-	}
+        return id;
+    }
 
-	@Override
-	protected NamedList<PathfinderCharacter> buildFromHashTable(Hashtable<String, Object> hashTable) {
-		long id = (Long) hashTable.get(PARTY_ID);
-		String name = (String) hashTable.get(NAME);
-			
-		CharacterRepository charRepo = new CharacterRepository();
+    @Override
+    protected NamedList<PathfinderCharacter> buildFromHashTable(Hashtable<String, Object> hashTable) {
+        long id = (Long) hashTable.get(PARTY_ID);
+        String name = (String) hashTable.get(NAME);
+            
+        CharacterRepository charRepo = new CharacterRepository();
 
         List<Long> characterIds = m_membersRepo.queryCharactersInParty(id);
-		List<PathfinderCharacter> members = Lists.newArrayList();
+        List<PathfinderCharacter> members = Lists.newArrayList();
         for (Long characterId : characterIds) {
             members.add(charRepo.query(characterId));
         }
-		
-		return new NamedList<PathfinderCharacter>(id, name, members);
-	}
+        
+        return new NamedList<PathfinderCharacter>(id, name, members);
+    }
 
-	@Override
-	protected ContentValues getContentValues(NamedList<PathfinderCharacter> object) {
-		ContentValues values = new ContentValues();
-		if (isIDSet(object)) { 
-			values.put(PARTY_ID, object.getId());
-		}
-		values.put(NAME, object.getName());
-		return values;
-	}
+    @Override
+    protected ContentValues getContentValues(NamedList<PathfinderCharacter> object) {
+        ContentValues values = new ContentValues();
+        if (isIDSet(object)) { 
+            values.put(PARTY_ID, object.getId());
+        }
+        values.put(NAME, object.getName());
+        return values;
+    }
 
     public PartyMembershipRepository getMembersRepo() { return m_membersRepo; }
 
-	/** @return ids and names of all parties **/
-	public List<IdStringPair> queryIdNameList() {
-		return queryFilteredIdNameList(null);
-	}
+    /** @return ids and names of all parties **/
+    public List<IdStringPair> queryIdNameList() {
+        return queryFilteredIdNameList(null);
+    }
 
     public List<IdStringPair> queryFilteredIdNameList(String selector) {
         String orderBy = NAME + " ASC";
@@ -113,11 +113,11 @@ public class PartyRepository extends BaseRepository<NamedList<PathfinderCharacte
         }
         return members;
     }
-	
-	@Deprecated
-	public CampaignParty queryEncounterParty() {
-		throw new UnsupportedOperationException();
-	}
+    
+    @Deprecated
+    public CampaignParty queryEncounterParty() {
+        throw new UnsupportedOperationException();
+    }
 
     public int removeCharactersFromParty(long partyId, List<Long> characterIds) {
         int numRemoved = 0;
