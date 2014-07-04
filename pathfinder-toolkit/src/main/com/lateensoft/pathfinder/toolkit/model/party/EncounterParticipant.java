@@ -13,6 +13,7 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     private int m_initiativeScore;
     private int m_turnOrder;
 
+    @Deprecated // This should not be stored here
     private long m_encounterId;
 
     protected EncounterParticipant(Builder builder) {
@@ -53,10 +54,12 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
         m_turnOrder = turnOrder;
     }
 
+    @Deprecated
     public long getEncounterId() {
         return m_encounterId;
     }
 
+    @Deprecated
     public void setEncounterId(long encounterId) {
         m_encounterId = encounterId;
     }
@@ -91,7 +94,6 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
 
         EncounterParticipant that = (EncounterParticipant) o;
 
-        if (m_encounterId != that.m_encounterId) return false;
         if (m_initiativeScore != that.m_initiativeScore) return false;
         if (m_turnOrder != that.m_turnOrder) return false;
 
@@ -103,7 +105,6 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
         int result = super.hashCode();
         result = 31 * result + m_initiativeScore;
         result = 31 * result + m_turnOrder;
-        result = 31 * result + (int) (m_encounterId ^ (m_encounterId >>> 32));
         return result;
     }
 
@@ -115,6 +116,7 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     public static class Builder<T extends Builder> extends PathfinderCharacter.Builder<T> {
         private int initiativeScore = 0;
         private int turnOrder = 0;
+        @Deprecated
         private long encounterId = UNSET_ID;
 
         public Builder() {
@@ -135,6 +137,7 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
             return (T) this;
         }
 
+        @Deprecated
         public T setEncounterId(long encounterId) {
             this.encounterId = encounterId;
             return (T) this;

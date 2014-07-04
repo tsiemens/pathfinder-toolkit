@@ -16,14 +16,20 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
     private String m_description;
     
     private long m_id;
+    @Deprecated // TODO this should not be stored here
     private long m_characterId;
     
     public Feat(){
         this(UNSET_ID, UNSET_ID, "", "");
     }
-    
+
+    @Deprecated
     public Feat(long characterId, String name, String description){
         this(UNSET_ID, characterId, name, description);
+    }
+
+    public Feat(String name, String description){
+        this(UNSET_ID, -1, name, description);
     }
     
     public Feat(long id, long characterId, String name, String description){
@@ -74,11 +80,13 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
     public String getDescription(){
         return m_description;
     }
-    
+
+    @Deprecated
     public void setCharacterID(long characterId) {
         m_characterId = characterId;
     }
-    
+
+    @Deprecated
     public long getCharacterID() {
         return m_characterId;
     }
@@ -120,7 +128,6 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
 
         Feat feat = (Feat) o;
 
-        if (m_characterId != feat.m_characterId) return false;
         if (m_id != feat.m_id) return false;
         if (m_description != null ? !m_description.equals(feat.m_description) : feat.m_description != null)
             return false;
@@ -134,7 +141,6 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
         int result = m_name != null ? m_name.hashCode() : 0;
         result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 }

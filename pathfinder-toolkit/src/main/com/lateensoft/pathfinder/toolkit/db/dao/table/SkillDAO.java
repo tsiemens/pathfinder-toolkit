@@ -33,13 +33,13 @@ public class SkillDAO extends OwnedIdentifiableTableDAO<Long, Skill> {
     }
 
     @Override
-    protected String getOwnerIdSelector(Long aLong) {
-        return null;
+    protected String getOwnerIdSelector(Long characterId) {
+        return CHARACTER_ID + "=" + characterId;
     }
 
     @Override
-    protected String getIdSelector(Long aLong) {
-        return null;
+    protected String getIdSelector(Long id) {
+        return SKILL_ID + "=" + id;
     }
 
     @Override

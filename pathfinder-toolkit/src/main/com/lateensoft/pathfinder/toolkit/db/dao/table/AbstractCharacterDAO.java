@@ -18,7 +18,7 @@ public abstract class AbstractCharacterDAO<T extends Identifiable> extends RootI
 
     @Override
     protected Table initTable() {
-        return new Table(TABLE, CHARACTER_ID, GOLD);
+        return new Table(TABLE, CHARACTER_ID, NAME, GOLD);
     }
 
     @Override

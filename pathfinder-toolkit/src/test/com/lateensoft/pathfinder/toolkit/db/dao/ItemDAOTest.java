@@ -8,11 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@Config(manifest=Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class ItemDAOTest extends CharacterComponentDAOTest {
     private Item item1;
@@ -26,7 +28,7 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
         initAndTestAdd();
     }
 
-    public void initAndTestAdd() throws DataAccessException {
+    private void initAndTestAdd() throws DataAccessException {
         dao = new ItemDAO(Robolectric.application);
         item1 = new Item(getTestCharacterId(), "Cauldron", 5.0, 1, false);
         item2 = new Item(getTestCharacterId(), "Wands", 1.0, 2, true);

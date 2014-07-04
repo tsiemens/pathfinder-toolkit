@@ -9,7 +9,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
+@Config(manifest=Config.NONE)
 public abstract class CharacterComponentDAOTest extends BaseDatabaseTest {
     protected final String CHARACTER_NAME = "Test character";
     protected final double CHARACTER_GOLD = 40.0;

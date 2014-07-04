@@ -15,10 +15,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter> {
-    public static final String TABLE = "Character";
-
-    protected static final String CHARACTER_ID = "character_id";
-    protected static final String GOLD = "Gold";
 
     private FluffDAO fluffDAO;
     private AbilitySetDAO abilitySetDAO;
@@ -113,6 +109,7 @@ public class CharacterModelDAO extends AbstractCharacterDAO<PathfinderCharacter>
                                                 PathfinderCharacter.Builder builder) {
         long id = (Long) hashTable.get(CHARACTER_ID);
         builder.setId(id)
+                .setName((String) hashTable.get(NAME))
                 .setGold((Double) hashTable.get(GOLD))
                 .setFluffInfo(fluffDAO.find(id))
                 .setAbilitySet(abilitySetDAO.findSet(id))
