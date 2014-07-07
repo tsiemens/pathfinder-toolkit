@@ -28,6 +28,4 @@ public class CharacterNameDAO extends AbstractCharacterDAO<IdStringPair> {
         String name = (String) hashTable.get(NAME);
         return new IdStringPair(id, name);
     }
-
-
 }

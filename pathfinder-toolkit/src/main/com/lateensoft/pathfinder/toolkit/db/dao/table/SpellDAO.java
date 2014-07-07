@@ -45,7 +45,7 @@ public class SpellDAO extends OwnedIdentifiableTableDAO<Long, Spell> {
         if(isIdSet(rowData)) {
             values.put(ID, object.getId());
         }
-        values.put(CHARACTER_ID, object.getCharacterID());
+        values.put(CHARACTER_ID, rowData.getOwnerId());
         values.put(NAME, object.getName());
         values.put(PREPARED, object.getPrepared());
         values.put(LEVEL, object.getLevel());

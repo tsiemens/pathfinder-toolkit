@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import android.content.ContentValues;
 import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.dao.OwnedWeakGenericDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.RootIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
@@ -11,7 +12,7 @@ import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import java.util.Hashtable;
 import java.util.List;
 
-public class EncounterDAO extends RootIdentifiableTableDAO<NamedList<EncounterParticipant>> {
+public class EncounterDAO extends NamedListDAO<EncounterParticipant> {
     private static final String TABLE = "Encounter";
 
     private static final String ENCOUNTER_ID = "encounter_id";
@@ -35,20 +36,8 @@ public class EncounterDAO extends RootIdentifiableTableDAO<NamedList<EncounterPa
     }
 
     @Override
-    public Long add(NamedList<EncounterParticipant> encounterParticipants) throws DataAccessException {
-        long id = -1;
-        try {
-            beginTransaction();
-            id = super.add(encounterParticipants);
-            for (EncounterParticipant participant : encounterParticipants) {
-                participantDAO.add(id, participant);
-            }
-            setTransactionSuccessful();
-        } finally {
-            endTransaction();
-        }
-
-        return id;
+    protected OwnedWeakGenericDAO<Long, ?, EncounterParticipant> getElementDAO() {
+        return participantDAO;
     }
 
     @Override
@@ -65,7 +54,6 @@ public class EncounterDAO extends RootIdentifiableTableDAO<NamedList<EncounterPa
     protected NamedList<EncounterParticipant> buildFromHashTable(Hashtable<String, Object> hashTable) {
         long id = (Long) hashTable.get(ENCOUNTER_ID);
         String name = (String) hashTable.get(NAME);
-
         List<EncounterParticipant> participants = participantDAO.findAllForOwner(id);
 
         return new NamedList<EncounterParticipant>(id, name, participants);

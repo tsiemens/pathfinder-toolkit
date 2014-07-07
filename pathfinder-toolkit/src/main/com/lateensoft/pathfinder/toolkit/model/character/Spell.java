@@ -151,7 +151,6 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
 
         Spell spell = (Spell) o;
 
-        if (m_characterId != spell.m_characterId) return false;
         if (m_id != spell.m_id) return false;
         if (m_level != spell.m_level) return false;
         if (m_prepared != spell.m_prepared) return false;
@@ -169,7 +168,6 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
         result = 31 * result + m_level;
         result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 }
