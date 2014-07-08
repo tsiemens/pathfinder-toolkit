@@ -90,7 +90,7 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         String table = getTable().getName();
         int returnVal = database.delete(table, selector);
         if (returnVal <= 0) {
-            throw new DataAccessException("Database.delete for " + id + "returned " + returnVal);
+            throw new DataAccessException("Database.delete for " + id + " returned " + returnVal);
         }
     }
 

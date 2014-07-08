@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 
 import java.util.Hashtable;
@@ -49,18 +49,18 @@ public abstract class AbstractNamedListRepository<T> extends BaseRepository<Name
     /**
      * @return all lists as IdNamePairs, ordered alphabetically by name
      */
-    public List<IdStringPair> queryIdStringList() {
+    public List<IdNamePair> queryIdStringList() {
         String orderBy = getNameColumn() + " ASC";
         String table = m_tableInfo.getTable();
         String[] columns = m_tableInfo.getColumns();
         Cursor cursor = getDatabase().query(true, table, columns, null,
                 null, null, null, orderBy, null);
         
-        List<IdStringPair> lists = Lists.newArrayListWithCapacity(cursor.getCount());
+        List<IdNamePair> lists = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-            lists.add(new IdStringPair((Long) hashTable.get(getIdColumn()),
+            lists.add(new IdNamePair((Long) hashTable.get(getIdColumn()),
                     (String) hashTable.get(getNameColumn())));
             cursor.moveToNext();
         }

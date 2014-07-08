@@ -10,7 +10,7 @@ import android.net.Uri;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
@@ -39,16 +39,14 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
     public static final int GET_IMPORT_REQ_CODE = 3056;
     
-    public long m_currentCharacterID;
+    public long currentCharacterID;
 
-    private CharacterRepository m_characterRepo;
+    private CharacterRepository characterRepo;
     
-    private boolean m_isWaitingForResult = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_characterRepo = new CharacterRepository();
+        characterRepo = new CharacterRepository();
     }
 
     @Override
@@ -59,7 +57,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
     @Override
     public void updateTitle() {
-        setTitle(m_characterRepo.queryName(m_currentCharacterID));
+        setTitle(characterRepo.queryName(currentCharacterID));
         setSubtitle(getFragmentTitle());
     }
 
@@ -70,20 +68,9 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (!m_isWaitingForResult) {
-            loadSelectedCharacter();
-            updateTitle();
-        }
-
-        m_isWaitingForResult = false;
-    }
-    
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-        m_isWaitingForResult = true;
+    protected void onResumeWithoutResult() {
+        super.onResumeWithoutResult();
+        loadSelectedCharacter();
     }
 
     private void setSelectedCharacter(long characterId) {
@@ -104,7 +91,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
             Log.v(TAG, "Default character add");
             addNewCharacterAndSelect();
         } else {
-            m_currentCharacterID = currentCharacterID;
+            this.currentCharacterID = currentCharacterID;
             loadFromDatabase();
             if (getRootView() != null) {
                 updateFragmentUI();
@@ -129,7 +116,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public long addCharacterToDB(PathfinderCharacter character) {
-        long id = m_characterRepo.insert(character);
+        long id = characterRepo.insert(character);
         if (id != -1) {
             Log.i(TAG, "Added new character");
         } else {
@@ -144,8 +131,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
      */
     public void deleteCurrentCharacter() {
         int currentCharacterIndex = 0;
-        List<IdStringPair> characters = m_characterRepo.queryIdNameList();
-        long characterForDeletion = m_currentCharacterID;
+        List<IdNamePair> characters = characterRepo.queryIdNameList();
+        long characterForDeletion = currentCharacterID;
 
         for (int i = 0; i < characters.size(); i++) {
             if (characterForDeletion == characters.get(i).getId()){
@@ -162,7 +149,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
             loadSelectedCharacter();
         }
 
-        m_characterRepo.delete(characterForDeletion);
+        characterRepo.delete(characterForDeletion);
         Log.i(TAG, "Deleted current character: " + characterForDeletion);
     }
 
@@ -202,12 +189,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.select_character_dialog_header));
 
-        List<IdStringPair> characterEntries = m_characterRepo.queryIdNameList();
-        String[] characterNames = IdStringPair.valueArray(characterEntries);
+        List<IdNamePair> characterEntries = characterRepo.queryIdNameList();
+        String[] characterNames = IdNamePair.nameArray(characterEntries);
         int currentCharacterIndex = 0;
 
         for (int i = 0; i < characterEntries.size(); i++) {
-            if (m_currentCharacterID == characterEntries.get(i).getId()) {
+            if (currentCharacterID == characterEntries.get(i).getId()) {
                 currentCharacterIndex = i;
             }
         }
@@ -221,10 +208,10 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     private class CharacterSelectionClickListener implements OnClickListener {
-        private List<IdStringPair> characterEntries;
+        private List<IdNamePair> characterEntries;
         private long selectedCharacterId;
 
-        public CharacterSelectionClickListener(List<IdStringPair> characterEntries, int initialSelection) {
+        public CharacterSelectionClickListener(List<IdNamePair> characterEntries, int initialSelection) {
             this.characterEntries = characterEntries;
             this.selectedCharacterId = characterEntries.get(initialSelection).getId();
         }
@@ -232,7 +219,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                if (selectedCharacterId != m_currentCharacterID) {
+                if (selectedCharacterId != currentCharacterID) {
                     updateDatabase();
 
                     setSelectedCharacter(selectedCharacterId);
@@ -262,9 +249,10 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.menu_item_delete_character));
         builder.setMessage(String.format(getString(R.string.confirm_delete_item_message),
-                        m_characterRepo.queryName(m_currentCharacterID)))
+                        characterRepo.queryName(currentCharacterID)))
                 .setPositiveButton(R.string.delete_button_text, new OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         deleteCurrentCharacter();
                     }
                 })
@@ -273,15 +261,15 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public void exportCurrentCharacter() {
-        PathfinderCharacter character = m_characterRepo.query(getCurrentCharacterID());
+        PathfinderCharacter character = characterRepo.query(getCurrentCharacterID());
         ImportExportUtils.exportCharacterWithDialog(getContext(), character, new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
     public void exportAllCharacters() {
-        List<IdStringPair> charIds = m_characterRepo.queryIdNameList();
+        List<IdNamePair> charIds = characterRepo.queryIdNameList();
         List<PathfinderCharacter> characters = Lists.newArrayListWithCapacity(charIds.size());
-        for (IdStringPair id : charIds) {
-            characters.add(m_characterRepo.query(id.getId()));
+        for (IdNamePair id : charIds) {
+            characters.add(characterRepo.query(id.getId()));
         }
         ImportExportUtils.exportCharactersWithDialog(getContext(), characters, "All Characters", new ActivityLauncher.ActivityLauncherFragment(this));
     }
@@ -352,11 +340,11 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public long getCurrentCharacterID() {
-        return m_currentCharacterID;
+        return currentCharacterID;
     }
     
     public CharacterRepository getCharacterRepo() {
-        return m_characterRepo;
+        return characterRepo;
     }
 
     /**

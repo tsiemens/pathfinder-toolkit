@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.util.InputMethodUtils;
 import roboguice.activity.RoboFragmentActivity;
 
@@ -174,11 +174,11 @@ public class PickerActivity extends RoboFragmentActivity {
         return true;
     }
 
-    private ArrayList<IdStringPair> getCopyOfSelectedItems(PickerList pickerList) {
-        ArrayList<IdStringPair> selectedItems = Lists.newArrayList();
+    private ArrayList<IdNamePair> getCopyOfSelectedItems(PickerList pickerList) {
+        ArrayList<IdNamePair> selectedItems = Lists.newArrayList();
         for (SelectablePair pair : pickerList) {
             if (pair.isSelected()) {
-                selectedItems.add(new IdStringPair(pair));
+                selectedItems.add(new IdNamePair(pair));
             }
         }
         return selectedItems;

@@ -1,7 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.db.repository;
 
 import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 
 import java.util.List;
@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public class LitePartyRepository extends AbstractPartyRepository<IdStringPair> {
+public class LitePartyRepository extends AbstractPartyRepository<IdNamePair> {
 
     @Override
-    protected long insertMembers(NamedList<IdStringPair> party) {
-        for (IdStringPair member : party) {
+    protected long insertMembers(NamedList<IdNamePair> party) {
+        for (IdNamePair member : party) {
             PartyMembershipRepository.Membership membership =
                     new PartyMembershipRepository.Membership(party.getId(), member.getId());
             if (!m_membersRepo.doesExist(membership)) {
@@ -26,7 +26,7 @@ public class LitePartyRepository extends AbstractPartyRepository<IdStringPair> {
     }
 
     @Override
-    protected List<IdStringPair> queryMembers(long partyId) {
+    protected List<IdNamePair> queryMembers(long partyId) {
         List<Long> charactersInParty = m_membersRepo.queryCharactersInParty(partyId);
 
         CharacterRepository charRepo = new CharacterRepository();

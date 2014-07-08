@@ -43,7 +43,7 @@ public class EncounterDAOTest extends BaseDatabaseTest {
         encounter1 = new NamedList<EncounterParticipant>("Encounter 1",
                 Lists.newArrayList(participant1a, participant1b));
 
-        assertTrue(encounterDao.add(encounter1) != -1);
+        assertTrue(encounterDao.add(encounter1, participantDao) != -1);
     }
 
     @After
@@ -74,8 +74,8 @@ public class EncounterDAOTest extends BaseDatabaseTest {
     @Test
     public void updateValidEncounter() throws DataAccessException {
         encounter1.setName("new name");
-        encounterDao.update(encounter1);
-        NamedList<EncounterParticipant> updated = encounterDao.find(encounter1.getId());
+        encounterDao.update(encounter1.idNamePair());
+        NamedList<EncounterParticipant> updated = encounterDao.find(encounter1.getId(), participantDao);
         assertEquals(encounter1, updated);
     }
 
@@ -83,12 +83,12 @@ public class EncounterDAOTest extends BaseDatabaseTest {
     public void updateInvalidEncounter() throws DataAccessException {
         encounter1.setName("new name");
         encounter1.setId(-1L);
-        encounterDao.update(encounter1);
+        encounterDao.update(encounter1.idNamePair());
     }
 
     @Test
     public void findValidEncounter() {
-        NamedList<EncounterParticipant> encounter = encounterDao.find(encounter1.getId());
+        NamedList<EncounterParticipant> encounter = encounterDao.find(encounter1.getId(), participantDao);
         assertEquals(encounter1, encounter);
     }
 

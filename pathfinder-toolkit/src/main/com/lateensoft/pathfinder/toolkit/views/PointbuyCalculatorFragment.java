@@ -24,7 +24,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
@@ -288,8 +288,8 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
         case R.id.mi_export_to_existing:
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(getString(R.string.select_character_dialog_header));
-            List<IdStringPair> characterEntries = m_characterRepo.queryIdNameList();
-            String[] characterNames = IdStringPair.valueArray(characterEntries);
+            List<IdNamePair> characterEntries = m_characterRepo.queryIdNameList();
+            String[] characterNames = IdNamePair.nameArray(characterEntries);
 
             OnCharacterExportSelectListener exportListener = 
                     new OnCharacterExportSelectListener(characterEntries);
@@ -313,9 +313,9 @@ public class PointbuyCalculatorFragment extends BasePageFragment {
 
     private class OnCharacterExportSelectListener implements DialogInterface.OnClickListener {
         long _characterIdSelectedInDialog;
-        List<IdStringPair> _characterList;
+        List<IdNamePair> _characterList;
         
-        public OnCharacterExportSelectListener(List<IdStringPair> characterIds) {
+        public OnCharacterExportSelectListener(List<IdNamePair> characterIds) {
             _characterList = characterIds;
             _characterIdSelectedInDialog = 0;
         }

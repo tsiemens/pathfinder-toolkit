@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.*;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
-import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
+import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 import roboguice.RoboGuice;
 
 public class PartyManagerFragment extends BasePageFragment {
@@ -33,7 +33,7 @@ public class PartyManagerFragment extends BasePageFragment {
     private static final int GET_NEW_MEMBERS_CODE = 18880;
     private static final int GET_PARTY_CODE = 54716;
 
-    public NamedList<IdStringPair> m_party;
+    public NamedList<IdNamePair> m_party;
 
     private EditText m_partyNameEditText;
     private ListView m_partyMemberList;
@@ -137,8 +137,8 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void handleInvalidSelectedParty() {
-        List<IdStringPair> ids = m_partyRepo.queryIdNameList();
-        for (IdStringPair id : ids) {
+        List<IdNamePair> ids = m_partyRepo.queryIdNameList();
+        for (IdNamePair id : ids) {
             m_party = m_partyRepo.query(id.getId());
             if (m_party != null) {
                 setSelectedParty(m_party.getId());
@@ -179,7 +179,7 @@ public class PartyManagerFragment extends BasePageFragment {
         }
     }
 
-    private void showRemoveCharactersFromPartyDialog(final List<IdStringPair> membersToRemove) {
+    private void showRemoveCharactersFromPartyDialog(final List<IdNamePair> membersToRemove) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
                 .setMessage(String.format(getString(R.string.party_remove_members_dialog_msg),
@@ -196,9 +196,9 @@ public class PartyManagerFragment extends BasePageFragment {
                 .show();
     }
 
-    private void removeMembersFromParty(List<IdStringPair> membersToRemove) {
+    private void removeMembersFromParty(List<IdNamePair> membersToRemove) {
         List<Long> memberIds = Lists.newArrayList();
-        for (IdStringPair pair : membersToRemove) {
+        for (IdNamePair pair : membersToRemove) {
             memberIds.add(pair.getId());
         }
 
@@ -210,7 +210,7 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void addNewPartyAndSetSelected() {
-        m_party = new NamedList<IdStringPair>("New Party");
+        m_party = new NamedList<IdNamePair>("New Party");
         m_partyRepo.insert(m_party);
         setSelectedParty(m_party.getId());
         refreshPartyView();
@@ -218,7 +218,7 @@ public class PartyManagerFragment extends BasePageFragment {
 
     private void deleteCurrentPartyAndSelectAnother() {
         m_partyRepo.delete(m_party);
-        List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
+        List<IdNamePair> partyIDs = m_partyRepo.queryIdNameList();
 
         if (partyIDs.isEmpty()) {
             addNewPartyAndSetSelected();
@@ -243,11 +243,11 @@ public class PartyManagerFragment extends BasePageFragment {
 
         Collections.sort(m_party);
         m_partyNameEditText.setText(m_party.getName());
-        SimpleSelectableListAdapter<IdStringPair> adapter = new SimpleSelectableListAdapter<IdStringPair>(
+        SimpleSelectableListAdapter<IdNamePair> adapter = new SimpleSelectableListAdapter<IdNamePair>(
                 getContext(), m_party,
-                new SimpleSelectableListAdapter.DisplayStringGetter<IdStringPair>() {
-                    @Override public String getDisplayString(IdStringPair object) {
-                        return object.getValue();
+                new SimpleSelectableListAdapter.DisplayStringGetter<IdNamePair>() {
+                    @Override public String getDisplayString(IdNamePair object) {
+                        return object.getName();
                     }
                 });
         adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
@@ -291,9 +291,9 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showPartyPicker() {
-        List<IdStringPair> parties = m_partyRepo.queryIdNameList();
-        parties.remove(new IdStringPair(m_party.getId(), m_party.getName()));
-        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        List<IdNamePair> parties = m_partyRepo.queryIdNameList();
+        parties.remove(new IdNamePair(m_party.getId(), m_party.getName()));
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
                 .setSingleChoice(true)
                 .setPickableParties(parties);
@@ -303,9 +303,9 @@ public class PartyManagerFragment extends BasePageFragment {
 
     private void showMemberPicker() {
         CharacterRepository charRepo = new CharacterRepository();
-        List<IdStringPair> characters = charRepo.queryIdNameList();;
+        List<IdNamePair> characters = charRepo.queryIdNameList();;
         characters.removeAll(m_party);
-        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.select_members_picker_title)
                 .setSingleChoice(false)
                 .setPickableCharacters(characters);
@@ -342,18 +342,18 @@ public class PartyManagerFragment extends BasePageFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
-            PickerUtils.ResultData pickerData = new PickerUtils.ResultData(data);
+            PickerUtil.ResultData pickerData = new PickerUtil.ResultData(data);
             if (requestCode == GET_PARTY_CODE) {
-                IdStringPair party = pickerData.getParty();
+                IdNamePair party = pickerData.getParty();
                 if (party != null) {
                     setSelectedParty(party.getId());
                     loadCurrentParty();
                 }
             } else {
-                List<IdStringPair> membersToAdd = pickerData.getCharacters();
+                List<IdNamePair> membersToAdd = pickerData.getCharacters();
                 if (membersToAdd != null) {
                     PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
-                    for (IdStringPair member : membersToAdd) {
+                    for (IdNamePair member : membersToAdd) {
                         long id = membersRepo.insert(new PartyMembershipRepository.Membership(m_party.getId(), member.getId()));
                         if (id >= 0) {
                             m_party.add(member);

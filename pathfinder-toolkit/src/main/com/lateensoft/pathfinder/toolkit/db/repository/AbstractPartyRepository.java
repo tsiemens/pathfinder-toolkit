@@ -5,7 +5,7 @@ import android.database.Cursor;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.party.CampaignParty;
 
@@ -85,22 +85,22 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
     public PartyMembershipRepository getMembersRepo() { return m_membersRepo; }
 
     /** @return ids and names of all parties **/
-    public List<IdStringPair> queryIdNameList() {
+    public List<IdNamePair> queryIdNameList() {
         return queryFilteredIdNameList(null);
     }
 
-    public List<IdStringPair> queryFilteredIdNameList(String selector) {
+    public List<IdNamePair> queryFilteredIdNameList(String selector) {
         String orderBy = NAME + " ASC";
         String table = m_tableInfo.getTable();
         String[] columns = m_tableInfo.getColumns();
         Cursor cursor = getDatabase().query(true, table, columns, selector,
                 null, null, null, orderBy, null);
 
-        List<IdStringPair> members = Lists.newArrayListWithCapacity(cursor.getCount());
+        List<IdNamePair> members = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-            members.add(new IdStringPair((Long)hashTable.get(PARTY_ID),
+            members.add(new IdNamePair((Long)hashTable.get(PARTY_ID),
                     (String)hashTable.get(NAME)));
             cursor.moveToNext();
         }
@@ -127,14 +127,14 @@ public abstract class AbstractPartyRepository<T> extends BaseRepository<NamedLis
         }
     }
 
-    public List<IdStringPair> queryPartyNamesForCharacter(long characterId) {
+    public List<IdNamePair> queryPartyNamesForCharacter(long characterId) {
         List<Long> partyIds = m_membersRepo.queryPartiesForCharacter(characterId);
         String selector = QueryUtils.selectorForAll(PARTY_ID, partyIds);
         return queryFilteredIdNameList(selector);
     }
 
     // TODO this should be just query()
-    public List<IdStringPair> queryCharacterNamesForParty(long partyId) {
+    public List<IdNamePair> queryCharacterNamesForParty(long partyId) {
         List<Long> charactersInParty = m_membersRepo.queryCharactersInParty(partyId);
 
         CharacterRepository charRepo = new CharacterRepository();

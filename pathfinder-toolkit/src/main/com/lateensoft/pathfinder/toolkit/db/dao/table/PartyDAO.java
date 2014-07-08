@@ -3,18 +3,17 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import android.content.ContentValues;
 import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.model.NamedList;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
 import java.util.Hashtable;
-import java.util.List;
 
-public abstract class AbstractPartyDAO<Member> extends NamedListDAO<Member> {
+public class PartyDAO extends NamedListDAO {
     private static final String TABLE = "Party";
 
     private static final String PARTY_ID = "party_id";
     private static final String NAME = "Name";
 
-    public AbstractPartyDAO(Context context) {
+    public PartyDAO(Context context) {
         super(context);
     }
 
@@ -29,7 +28,7 @@ public abstract class AbstractPartyDAO<Member> extends NamedListDAO<Member> {
     }
 
     @Override
-    protected ContentValues getContentValues(NamedList<Member> party) {
+    protected ContentValues getContentValues(IdNamePair party) {
         ContentValues values = new ContentValues();
         if (isIdSet(party)) {
             values.put(PARTY_ID, party.getId());
@@ -39,12 +38,11 @@ public abstract class AbstractPartyDAO<Member> extends NamedListDAO<Member> {
     }
 
     @Override
-    protected NamedList<Member> buildFromHashTable(Hashtable<String, Object> hashTable) {
+    protected IdNamePair buildFromHashTable(Hashtable<String, Object> hashTable) {
         long id = (Long) hashTable.get(PARTY_ID);
         String name = (String) hashTable.get(NAME);
-        List<Member> members = getElementDAO().findAllForOwner(id);
 
-        return new NamedList<Member>(id, name, members);
+        return new IdNamePair(id, name);
     }
 
     @Override

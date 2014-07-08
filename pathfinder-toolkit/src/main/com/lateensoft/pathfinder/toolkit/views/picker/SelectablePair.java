@@ -3,25 +3,25 @@ package com.lateensoft.pathfinder.toolkit.views.picker;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
 import java.util.List;
 
 /**
  * @author tsiemens
  */
-public class SelectablePair extends IdStringPair {
+public class SelectablePair extends IdNamePair {
     private boolean m_isSelected;
 
-    public static List<SelectablePair> createSelectableObjects(List<IdStringPair> objects) {
+    public static List<SelectablePair> createSelectableObjects(List<IdNamePair> objects) {
         List<SelectablePair> selectablePairs = Lists.newArrayListWithCapacity(objects.size());
-        for (IdStringPair object : objects) {
+        for (IdNamePair object : objects) {
             selectablePairs.add(new SelectablePair(object));
         }
         return selectablePairs;
     }
 
-    public SelectablePair(IdStringPair pair) {
+    public SelectablePair(IdNamePair pair) {
         super(pair);
         m_isSelected = false;
     }

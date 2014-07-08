@@ -117,6 +117,5 @@ public class EncounterParticipantDAO extends OwnedWeakTableDAO<Long, Long, Encou
     public void populateBuilderFromHashTable(Hashtable<String, Object> hashTable, EncounterParticipant.Builder builder) {
         builder.setInitiativeScore(((Long) hashTable.get(INITIATIVE_SCORE)).intValue());
         builder.setTurnOrder(((Long) hashTable.get(TURN_ORDER)).intValue());
-        builder.setEncounterId((Long) hashTable.get(ENCOUNTER_ID));
     }
 }

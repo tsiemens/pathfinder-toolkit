@@ -48,7 +48,7 @@ public class PickerListAdapter extends ArrayAdapter<SelectablePair> {
             holder = (RowHolder)row.getTag();
         }
 
-        holder.checkBox.setText(itemAtPosition.getValue());
+        holder.checkBox.setText(itemAtPosition.getName());
         holder.checkBox.setChecked(itemAtPosition.isSelected());
 
         return row;
@@ -93,7 +93,7 @@ public class PickerListAdapter extends ArrayAdapter<SelectablePair> {
                 List<SelectablePair> filteredPairs = Lists.newArrayList();
 
                 for (SelectablePair pair : m_items) {
-                    if (pair.getValue().toLowerCase().contains(filterSeq))
+                    if (pair.getName().toLowerCase().contains(filterSeq))
                         filteredPairs.add(pair);
                 }
                 result.count = filteredPairs.size();

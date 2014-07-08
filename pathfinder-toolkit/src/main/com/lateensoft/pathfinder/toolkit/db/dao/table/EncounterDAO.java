@@ -2,27 +2,19 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
 import android.content.Context;
-import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
-import com.lateensoft.pathfinder.toolkit.dao.OwnedWeakGenericDAO;
-import com.lateensoft.pathfinder.toolkit.db.dao.RootIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.model.NamedList;
-import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
 import java.util.Hashtable;
-import java.util.List;
 
-public class EncounterDAO extends NamedListDAO<EncounterParticipant> {
+public class EncounterDAO extends NamedListDAO {
     private static final String TABLE = "Encounter";
 
     private static final String ENCOUNTER_ID = "encounter_id";
     private static final String NAME = "Name";
 
-    private EncounterParticipantDAO participantDAO;
-
     public EncounterDAO(Context context) {
         super(context);
-        participantDAO = new EncounterParticipantDAO(context);
     }
 
     @Override
@@ -36,12 +28,7 @@ public class EncounterDAO extends NamedListDAO<EncounterParticipant> {
     }
 
     @Override
-    protected OwnedWeakGenericDAO<Long, ?, EncounterParticipant> getElementDAO() {
-        return participantDAO;
-    }
-
-    @Override
-    protected ContentValues getContentValues(NamedList<EncounterParticipant> object) {
+    protected ContentValues getContentValues(IdNamePair object) {
         ContentValues values = new ContentValues();
         if (isIdSet(object)) {
             values.put(ENCOUNTER_ID, object.getId());
@@ -51,16 +38,17 @@ public class EncounterDAO extends NamedListDAO<EncounterParticipant> {
     }
 
     @Override
-    protected NamedList<EncounterParticipant> buildFromHashTable(Hashtable<String, Object> hashTable) {
+    protected IdNamePair buildFromHashTable(Hashtable<String, Object> hashTable) {
         long id = (Long) hashTable.get(ENCOUNTER_ID);
         String name = (String) hashTable.get(NAME);
-        List<EncounterParticipant> participants = participantDAO.findAllForOwner(id);
 
-        return new NamedList<EncounterParticipant>(id, name, participants);
+        return new IdNamePair(id, name);
     }
 
     @Override
     protected String getDefaultOrderBy() {
         return NAME + " ASC";
     }
+
+
 }

@@ -13,9 +13,9 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
 import com.lateensoft.pathfinder.toolkit.db.repository.LitePartyRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
-import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
+import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +31,7 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
     private Button m_addButton;
 
     private LitePartyRepository m_partyRepo;
-    private List<IdStringPair> m_parties;
+    private List<IdNamePair> m_parties;
 
     private ActionMode m_actionMode;
     private ActionModeCallback m_actionModeCallback;
@@ -94,10 +94,10 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 
         Collections.sort(m_parties);
 
-        SimpleSelectableListAdapter adapter = new SimpleSelectableListAdapter<IdStringPair>(getActivity(),
-                 m_parties, new SimpleSelectableListAdapter.DisplayStringGetter<IdStringPair>() {
-                    @Override public String getDisplayString(IdStringPair object) {
-                        return object.getValue();
+        SimpleSelectableListAdapter adapter = new SimpleSelectableListAdapter<IdNamePair>(getActivity(),
+                 m_parties, new SimpleSelectableListAdapter.DisplayStringGetter<IdNamePair>() {
+                    @Override public String getDisplayString(IdNamePair object) {
+                        return object.getName();
                     }
                 });
         adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
@@ -142,7 +142,7 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         }
     }
 
-    public void showRemoveCharacterFromPartyDialog(final List<IdStringPair> parties) {
+    public void showRemoveCharacterFromPartyDialog(final List<IdNamePair> parties) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
                 .setMessage(String.format(getString(R.string.membership_remove_dialog_msg), parties.size()));
@@ -158,10 +158,10 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                 .show();
     }
 
-    private void removeCharacterFromParties(List<IdStringPair> parties) {
+    private void removeCharacterFromParties(List<IdNamePair> parties) {
         PartyMembershipRepository memberRepo = m_partyRepo.getMembersRepo();
-        for (IdStringPair party : parties) {
-            int dels = memberRepo.delete(new Membership(party.getId(), m_currentCharacterID));
+        for (IdNamePair party : parties) {
+            int dels = memberRepo.delete(new Membership(party.getId(), currentCharacterID));
             if (dels > 0) {
                 m_parties.remove(party);
             }
@@ -170,9 +170,9 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
     }
 
     public void showPartyPicker() {
-        List<IdStringPair> parties = m_partyRepo.queryIdNameList();
+        List<IdNamePair> parties = m_partyRepo.queryIdNameList();
         parties.removeAll(m_parties);
-        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.membership_party_picker_title)
                 .setSingleChoice(false)
                 .setPickableParties(parties);
@@ -185,17 +185,17 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_PARTIES_CODE && resultCode == Activity.RESULT_OK &&
                 data != null) {
-            PickerUtils.ResultData resultData = new PickerUtils.ResultData(data);
-            List<IdStringPair> partiesToAdd = resultData.getParties();
+            PickerUtil.ResultData resultData = new PickerUtil.ResultData(data);
+            List<IdNamePair> partiesToAdd = resultData.getParties();
             if (partiesToAdd != null) {
                 PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
-                for (IdStringPair party : partiesToAdd) {
-                    long id = membersRepo.insert(new Membership(party.getId(), m_currentCharacterID));
+                for (IdNamePair party : partiesToAdd) {
+                    long id = membersRepo.insert(new Membership(party.getId(), currentCharacterID));
                     if (id >= 0) {
                         m_parties.add(party);
                     } else {
                         Log.e(TAG, "Database returned " + id + " while adding character "
-                                + m_currentCharacterID + " to " + party);
+                                + currentCharacterID + " to " + party);
                     }
                 }
                 refreshPartiesListView();

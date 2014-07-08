@@ -9,6 +9,7 @@ import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.views.widget.DynamicArrayAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.ListViewRowFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
     public EncounterParticipantListAdapter(Context context, List<EncounterParticipantRowModel> objects) {
         super(context, LAYOUT_RESOURCE_ID, objects);
         participantRows = objects;
+        Collections.sort(participantRows);
     }
 
     public void setDragIconTouchListener(RowTouchListener listener) {
@@ -36,10 +38,11 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
     }
 
     @Override
-    public void swapItems(int pos1, int pos2) {
-        EncounterParticipantRowModel tmp = participantRows.get(pos1);
-        participantRows.set(pos1, participantRows.get(pos2));
-        participantRows.set(pos2, tmp);
+    public void doItemSwap(int pos1, int pos2) {
+        EncounterParticipantRowModel tmp1 = participantRows.get(pos1);
+        EncounterParticipantRowModel tmp2 = participantRows.get(pos2);
+        participantRows.set(pos1, tmp2);
+        participantRows.set(pos2, tmp1);
     }
 
     private static class RowHolder {

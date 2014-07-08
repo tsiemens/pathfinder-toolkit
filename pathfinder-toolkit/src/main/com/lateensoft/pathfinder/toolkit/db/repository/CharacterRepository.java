@@ -10,7 +10,7 @@ import android.database.Cursor;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.db.repository.TableAttribute.SQLDataType;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
@@ -236,18 +236,18 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
      * Returns all characters
      * @return Array of IdNamePair, ordered alphabetically by name
      */
-    public List<IdStringPair> queryIdNameList() {
+    public List<IdNamePair> queryIdNameList() {
         String orderBy = NAME + " ASC";
         String table = m_tableInfo.getTable();
         String[] columns = {CHARACTER_ID, NAME};
         Cursor cursor = getDatabase().query(true, table, columns, null,
                 null, null, null, orderBy, null);
 
-        ArrayList<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
+        ArrayList<IdNamePair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-            characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
+            characters.add(new IdNamePair((Long)hashTable.get(CHARACTER_ID),
                     (String)hashTable.get(NAME)));
             cursor.moveToNext();
         }
@@ -255,18 +255,18 @@ public class CharacterRepository extends BaseRepository<PathfinderCharacter> {
         return characters;
     }
 
-    protected List<IdStringPair> queryFilteredIdNameList(String selector) {
+    protected List<IdNamePair> queryFilteredIdNameList(String selector) {
         String orderBy = NAME + " ASC";
         String table = m_tableInfo.getTable();
         String[] columns = {CHARACTER_ID,NAME};
         Cursor cursor = getDatabase().query(true, table, columns, selector,
                 null, null, null, orderBy, null);
 
-        List<IdStringPair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
+        List<IdNamePair> characters = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
-            characters.add(new IdStringPair((Long)hashTable.get(CHARACTER_ID),
+            characters.add(new IdNamePair((Long)hashTable.get(CHARACTER_ID),
                     (String)hashTable.get(NAME)));
             cursor.moveToNext();
         }

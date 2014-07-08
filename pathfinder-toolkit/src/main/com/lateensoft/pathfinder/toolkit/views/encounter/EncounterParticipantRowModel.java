@@ -3,16 +3,17 @@ package com.lateensoft.pathfinder.toolkit.views.encounter;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
 * @author tsiemens
 */
-public class EncounterParticipantRowModel {
+public class EncounterParticipantRowModel implements Comparable<EncounterParticipantRowModel> {
     private final EncounterParticipant participant;
     private int lastCheckRoll = 0;
 
-    public List<EncounterParticipantRowModel> fromList(List<EncounterParticipant> participants) {
+    public static List<EncounterParticipantRowModel> from(Collection<EncounterParticipant> participants) {
         List<EncounterParticipantRowModel> rows = Lists.newArrayListWithCapacity(participants.size());
         for (EncounterParticipant participant : participants) {
             rows.add(new EncounterParticipantRowModel(participant));
@@ -34,5 +35,10 @@ public class EncounterParticipantRowModel {
 
     public void setLastCheckRoll(int lastCheckRoll) {
         this.lastCheckRoll = lastCheckRoll;
+    }
+
+    @Override
+    public int compareTo(EncounterParticipantRowModel another) {
+        return participant.compareTo(another.participant);
     }
 }

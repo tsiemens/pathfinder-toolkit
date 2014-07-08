@@ -35,6 +35,20 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
     
     private long id;
 
+    public PathfinderCharacter(PathfinderCharacter toCopy) {
+        abilitySet = toCopy.abilitySet;
+        combatStatSet = toCopy.combatStatSet;
+        skillSet = toCopy.skillSet;
+        saveSet = toCopy.saveSet;
+        fluffInfo = toCopy.fluffInfo;
+        inventory = toCopy.inventory;
+        feats = toCopy.feats;
+        spellBook = toCopy.spellBook;
+        gold = toCopy.gold;
+        name = toCopy.name;
+        id = toCopy.id;
+    }
+
     protected PathfinderCharacter(Builder builder) {
         abilitySet = builder.abilitySet != null ? builder.abilitySet : new AbilitySet();
         combatStatSet = builder.combatStatSet != null ? builder.combatStatSet : new CombatStatSet();
