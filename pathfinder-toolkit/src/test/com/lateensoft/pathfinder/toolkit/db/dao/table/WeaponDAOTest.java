@@ -1,7 +1,6 @@
-package com.lateensoft.pathfinder.toolkit.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.WeaponDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Weapon;
 import com.lateensoft.pathfinder.toolkit.model.character.items.WeaponType;

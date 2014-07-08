@@ -1,9 +1,8 @@
-package com.lateensoft.pathfinder.toolkit.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.BaseDatabaseTest;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.*;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;

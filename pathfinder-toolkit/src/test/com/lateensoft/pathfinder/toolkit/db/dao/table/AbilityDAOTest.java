@@ -1,7 +1,6 @@
-package com.lateensoft.pathfinder.toolkit.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.AbilityDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Ability;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import org.junit.Test;

@@ -1,7 +1,6 @@
-package com.lateensoft.pathfinder.toolkit.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.ArmorDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
 import org.junit.Test;

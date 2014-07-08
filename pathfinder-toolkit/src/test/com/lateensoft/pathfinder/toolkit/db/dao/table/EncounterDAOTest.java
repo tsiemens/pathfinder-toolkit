@@ -1,11 +1,8 @@
-package com.lateensoft.pathfinder.toolkit.db.dao;
+package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.BaseDatabaseTest;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.EncounterDAO;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.EncounterParticipantDAO;
 import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
