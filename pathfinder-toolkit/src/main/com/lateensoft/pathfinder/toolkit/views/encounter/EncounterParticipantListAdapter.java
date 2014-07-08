@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.adapters.SelectableItemAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.DynamicArrayAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.ListViewRowFactory;
 
@@ -15,7 +16,8 @@ import java.util.List;
 /**
  * @author tsiemens
  */
-public class EncounterParticipantListAdapter extends DynamicArrayAdapter<EncounterParticipantRowModel> {
+public class EncounterParticipantListAdapter extends DynamicArrayAdapter<EncounterParticipantRowModel>
+    implements SelectableItemAdapter {
 
     private static final int LAYOUT_RESOURCE_ID = R.layout.encounter_participant_row;
 
@@ -23,6 +25,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         public void onTouch(View v, MotionEvent event, int position);
     }
 
+    private ItemSelectionGetter selectionGetter;
     private RowTouchListener dragIconTouchListener;
 
     private List<EncounterParticipantRowModel> participantRows;
@@ -31,6 +34,11 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         super(context, LAYOUT_RESOURCE_ID, objects);
         participantRows = objects;
         Collections.sort(participantRows);
+    }
+
+    @Override
+    public void setItemSelectionGetter(ItemSelectionGetter getter) {
+        selectionGetter = getter;
     }
 
     public void setDragIconTouchListener(RowTouchListener listener) {
@@ -46,6 +54,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
     }
 
     private static class RowHolder {
+        View row;
         TextView initRoll;
         TextView checkRoll;
         TextView textView;
@@ -67,6 +76,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         @Override
         protected RowHolder holderFrom(View row, int layoutResourceId) {
             RowHolder holder = new RowHolder();
+            holder.row = row;
             holder.initRoll = (TextView)row.findViewById(R.id.tv_init_roll);
             holder.checkRoll = (TextView)row.findViewById(R.id.tv_check_roll);
             holder.textView = (TextView)row.findViewById(R.id.tv_name);
@@ -93,6 +103,12 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
                     return false;
                 }
             });
+
+            if (selectionGetter != null) {
+                holder.row.setBackgroundColor(selectionGetter.isItemSelected(position) ?
+                        getContext().getResources().getColor(R.color.holo_blue_light_translucent) :
+                        getContext().getResources().getColor(android.R.color.transparent));
+            }
         }
     }
 

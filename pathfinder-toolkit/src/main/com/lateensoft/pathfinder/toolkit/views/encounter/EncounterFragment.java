@@ -1,5 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.views.encounter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +12,7 @@ import android.widget.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.lateensoft.pathfinder.toolkit.R;
+import com.lateensoft.pathfinder.toolkit.adapters.SelectableItemAdapter;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.dao.table.*;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
@@ -18,6 +22,8 @@ import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
+import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeController;
+import com.lateensoft.pathfinder.toolkit.views.character.CharacterCombatStatsFragment;
 import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 import com.lateensoft.pathfinder.toolkit.views.widget.DynamicArrayAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.DynamicListView;
@@ -66,18 +72,104 @@ public class EncounterFragment extends BasePageFragment {
         lastSkillCheckName = (TextView) getRootView().findViewById(R.id.tv_last_skill_check);
         nextTurnButton = (Button) getRootView().findViewById(R.id.button_next);
         participantList = (DynamicListView) getRootView().findViewById(R.id.listview);
+
+        participantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (actionModeController.isActionModeStarted()) {
+                    actionModeController.toggleListItemSelection(position);
+                } else {
+                    showParticipantDetails(encounter.get(position));
+                }
+            }
+        });
+        participantList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!actionModeController.isActionModeStarted()) {
+                    actionModeController.startActionModeWithInitialSelection(position);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private MultiSelectActionModeController actionModeController = new MultiSelectActionModeController() {
+        @Override public Activity getActivity() {
+            return EncounterFragment.this.getActivity();
+        }
+
+        @Override public int getActionMenuResourceId() {
+            return R.menu.membership_action_mode_menu;
+        }
+
+        @Override public ListView getListView() {
+            return participantList;
+        }
+
+        @Override public boolean onActionItemClicked(MultiSelectActionModeController controller, MenuItem item) {
+            if (item.getItemId() == R.id.mi_remove) {
+                showRemoveCharactersFromPartyDialog(getSelectedItems(encounter));
+                controller.finishActionMode();
+                return true;
+            }
+            return false;
+        }
+    };
+
+    private void showRemoveCharactersFromPartyDialog(final List<EncounterParticipantRowModel> participantsToRemove) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.membership_remove_dialog_title)
+                .setMessage(String.format("Remove (%d) participants from encounter?", // TODO strings.xml
+                        encounter.size()));
+
+        builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    removeParticipantsFromEncounter(participantsToRemove);
+                }
+            }
+        })
+                .setNegativeButton(R.string.cancel_button_text, null)
+                .show();
+    }
+
+    private void removeParticipantsFromEncounter(List<EncounterParticipantRowModel> participantsToRemove) {
+        for (EncounterParticipantRowModel row : participantsToRemove) {
+            try {
+                participantDao.remove(encounter.getId(), row.getParticipant());
+                encounter.remove(row);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Could not remove participant " + row.getParticipant().getId()
+                        + " from party " + encounter.getId(), e);
+            }
+        }
+    }
+
+    private void showParticipantDetails(EncounterParticipantRowModel row) {
+        preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, row.getParticipant().getId());
+        switchToPage(CharacterCombatStatsFragment.class);
     }
 
     private void refreshParticipantListContent() {
+        if (actionModeController.isActionModeStarted()) {
+            actionModeController.finishActionMode();
+        }
+
         EncounterParticipantListAdapter adapter = new EncounterParticipantListAdapter(getActivity(), encounter);
         participantList.setDynamicAdapter(adapter);
         adapter.setDragIconTouchListener(dragIconTouchListener);
         adapter.setOnItemsSwappedListener(itemsSwappedListener);
+        adapter.setItemSelectionGetter(new SelectableItemAdapter.ItemSelectionGetter() {
+            @Override public boolean isItemSelected(int position) {
+                return actionModeController.isListItemSelected(position);
+            }
+        });
     }
 
     private EncounterParticipantListAdapter.RowTouchListener dragIconTouchListener = new EncounterParticipantListAdapter.RowTouchListener() {
         @Override public void onTouch(View v, MotionEvent event, int position) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && participantList.canHoverRows()) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && participantList.canHoverRows()
+                    && !actionModeController.isActionModeStarted()) {
                 participantList.hoverRow(position);
             }
         }

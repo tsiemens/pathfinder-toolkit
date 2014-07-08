@@ -11,14 +11,11 @@ import com.lateensoft.pathfinder.toolkit.R;
 
 import java.util.List;
 
-public class SimpleSelectableListAdapter<T> extends ArrayAdapter<T>{
+public class SimpleSelectableListAdapter<T> extends ArrayAdapter<T>
+    implements SelectableItemAdapter {
 
     public interface DisplayStringGetter<T> {
         public String getDisplayString(T object);
-    }
-
-    public interface ItemSelectionGetter {
-        public boolean isItemSelected(int position);
     }
 
     private static int LAYOUT_RESOURCE_ID = R.layout.simple_list_item;
@@ -30,6 +27,7 @@ public class SimpleSelectableListAdapter<T> extends ArrayAdapter<T>{
         m_stringGetter = displayStringGetter;
     }
 
+    @Override
     public void setItemSelectionGetter(ItemSelectionGetter selectionGetter) {
         m_selectionGetter = selectionGetter;
     }

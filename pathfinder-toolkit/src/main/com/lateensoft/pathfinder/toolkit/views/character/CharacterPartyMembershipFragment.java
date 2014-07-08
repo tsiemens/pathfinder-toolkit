@@ -15,6 +15,7 @@ import com.lateensoft.pathfinder.toolkit.db.repository.LitePartyRepository;
 import com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
+import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeController;
 import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 
 import java.util.Collections;
@@ -32,9 +33,6 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 
     private LitePartyRepository m_partyRepo;
     private List<IdNamePair> m_parties;
-
-    private ActionMode m_actionMode;
-    private ActionModeCallback m_actionModeCallback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,21 +61,18 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         m_partyListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (m_actionMode != null) {
-                    return false;
+                if (!actionModeController.isActionModeStarted()) {
+                    actionModeController.startActionModeWithInitialSelection(position);
+                    return true;
                 }
-
-                m_actionModeCallback = new ActionModeCallback();
-                m_actionMode = getActivity().startActionMode(m_actionModeCallback);
-                m_actionModeCallback.selectListItem(position, true);
-                return true;
+                return false;
             }
         });
         m_partyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (m_actionModeCallback != null) {
-                    m_actionModeCallback.toggleListItemSelection(position);
+                if (actionModeController.isActionModeStarted()) {
+                    actionModeController.toggleListItemSelection(position);
                 }
             }
         });
@@ -85,11 +80,32 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         return getRootView();
     }
 
+    private MultiSelectActionModeController actionModeController = new MultiSelectActionModeController() {
+        @Override public Activity getActivity() {
+            return CharacterPartyMembershipFragment.this.getActivity();
+        }
+
+        @Override public int getActionMenuResourceId() {
+            return R.menu.membership_action_mode_menu;
+        }
+
+        @Override public ListView getListView() {
+            return m_partyListView;
+        }
+
+        @Override public boolean onActionItemClicked(MultiSelectActionModeController controller, MenuItem item) {
+            if (item.getItemId() == R.id.mi_remove) {
+                showRemoveCharacterFromPartyDialog(getSelectedItems(m_parties));
+                controller.finishActionMode();
+                return true;
+            }
+            return false;
+        }
+    };
+
     private void refreshPartiesListView() {
-        if (m_actionMode != null) {
-            m_actionMode.finish();
-            m_actionModeCallback = null;
-            m_actionMode = null;
+        if (actionModeController.isActionModeStarted()) {
+            actionModeController.finishActionMode();
         }
 
         Collections.sort(m_parties);
@@ -102,44 +118,11 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                 });
         adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
             @Override public boolean isItemSelected(int position) {
-                if (m_actionModeCallback != null) {
-                    return m_actionModeCallback.isListItemSelected(position);
-                } else {
-                    return false;
-                }
+                return actionModeController.isListItemSelected(position);
             }
         });
 
         m_partyListView.setAdapter(adapter);
-    }
-
-    private class ActionModeCallback extends MultiSelectActionModeCallback {
-
-        public ActionModeCallback() {
-            super(R.menu.membership_action_mode_menu);
-        }
-
-        @Override
-        public ListView getListView() {
-            return m_partyListView;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.mi_remove) {
-                showRemoveCharacterFromPartyDialog(getSelectedItems(m_parties));
-                mode.finish();
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            super.onDestroyActionMode(mode);
-            m_actionMode = null;
-            m_actionModeCallback = null;
-        }
     }
 
     public void showRemoveCharacterFromPartyDialog(final List<IdNamePair> parties) {
