@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class AbstractPartyMembershipDAO<Member> extends OwnedWeakTableDAO<Long, Long, Member> {
-    private static final String TABLE = "PartyMembership";
+    public static final String TABLE = "PartyMembership";
 
     protected static final String PARTY_ID = "party_id";
     protected static final String CHARACTER_ID = "character_id";
@@ -34,23 +34,4 @@ public abstract class AbstractPartyMembershipDAO<Member> extends OwnedWeakTableD
         return andSelectors(getOwnerIdSelector(rowId.getOwnerId()),
                 TABLE + "." + CHARACTER_ID + "=" + rowId.getObject());
     }
-
-    @Override
-    @Nullable
-    protected String getBaseSelector() {
-        return String.format("%s.%s=%s.%s",
-                TABLE, CHARACTER_ID, CharacterModelDAO.TABLE, CharacterModelDAO.CHARACTER_ID);
-    }
-
-    @Override
-    protected List<String> getTablesForQuery() {
-        return Lists.newArrayList(TABLE, CharacterModelDAO.TABLE);
-    }
-
-    @Override
-    protected String[] getColumnsForQuery() {
-        return getTable().union(getCharacterDAO().getTable(), CHARACTER_ID, CharacterModelDAO.CHARACTER_ID);
-    }
-
-    protected abstract AbstractCharacterDAO getCharacterDAO();
 }

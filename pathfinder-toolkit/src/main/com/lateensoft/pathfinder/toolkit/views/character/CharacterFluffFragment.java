@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import android.widget.ListView;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.FluffListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.FluffInfoRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.FluffDAO;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
 
 import java.util.List;
@@ -25,10 +28,9 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
     private static final String TAG = CharacterFluffFragment.class.getSimpleName();
     private ListView fluffList;
     private int fluffIndexSelectedForEdit;
-    
-    private FluffInfoRepository fluffRepo;
-    private CharacterRepository characterRepo;
-    private FluffInfo fluffModel;
+
+    private CharacterNameDAO characterNameDao;
+    private FluffDAO fluffDao;
 
     private String[] fluffNames;
     private List<String> fluffValues;
@@ -38,8 +40,8 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        characterRepo = new CharacterRepository();
-        fluffRepo = new FluffInfoRepository();
+        characterNameDao = new CharacterNameDAO(getContext());
+        fluffDao = new FluffDAO(getContext());
         fluffNames = getResources().getStringArray(R.array.fluff_fields);
     }
 
@@ -128,9 +130,14 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
     @Override
     public void updateDatabase() {
         if (fluffValues != null) {
-            FluffInfo fluff = buildModelFromFluffValues();
-            characterRepo.updateName(getCurrentCharacterID(), getCharacterName());
-            fluffRepo.update(fluff);
+            long currentCharacterId = getCurrentCharacterID();
+            try {
+                characterNameDao.update(new IdNamePair(currentCharacterId, getCharacterName()));
+                FluffInfo fluff = buildModelFromFluffValues();
+                fluffDao.update(currentCharacterId, fluff);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to update character " + currentCharacterId);
+            }
         }
     }
 
@@ -156,8 +163,8 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
 
     @Override
     public void loadFromDatabase() {
-        FluffInfo fluff = fluffRepo.query(getCurrentCharacterID());
-        String name = characterRepo.queryName(getCurrentCharacterID());
+        FluffInfo fluff = fluffDao.find(getCurrentCharacterID());
+        String name = characterNameDao.find(getCurrentCharacterID()).getName();
         setFluffFields(name, fluff);
     }
 

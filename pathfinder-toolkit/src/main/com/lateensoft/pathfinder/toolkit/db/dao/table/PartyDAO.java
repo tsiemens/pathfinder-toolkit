@@ -2,10 +2,14 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
 import java.util.Hashtable;
+import java.util.List;
 
 public class PartyDAO extends NamedListDAO {
     private static final String TABLE = "Party";
@@ -13,8 +17,11 @@ public class PartyDAO extends NamedListDAO {
     private static final String PARTY_ID = "party_id";
     private static final String NAME = "Name";
 
+    private AbstractPartyMembershipDAO memberDao;
+
     public PartyDAO(Context context) {
         super(context);
+        memberDao = new PartyMemberIdDAO(context);
     }
 
     @Override
@@ -48,5 +55,17 @@ public class PartyDAO extends NamedListDAO {
     @Override
     protected String getDefaultOrderBy() {
         return NAME + " ASC";
+    }
+
+    public List<IdNamePair> findAllWithMember(Long characterId) {
+        String tables = TABLE + ", " + AbstractPartyMembershipDAO.TABLE;
+        String[] columns = getTable().union(memberDao.getTable(), PARTY_ID, AbstractPartyMembershipDAO.PARTY_ID);
+
+        String partyMatchSelector = String.format("%s.%s=%s.%s", TABLE, PARTY_ID,
+                AbstractPartyMembershipDAO.TABLE, AbstractPartyMembershipDAO.PARTY_ID);
+        String characterSelector = AbstractPartyMembershipDAO.CHARACTER_ID + "=" + characterId;
+        String selector = andSelectors(partyMatchSelector, characterSelector);
+
+        return findFiltered(tables, columns, selector, null);
     }
 }

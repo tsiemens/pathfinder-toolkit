@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.BaseDatabaseTest;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import com.lateensoft.pathfinder.toolkit.util.CharacterUtils;
@@ -122,8 +121,8 @@ public class EncounterDAOTest extends BaseDatabaseTest {
         participantDao.remove(encounter1.getId(), participant1a);
         assertNull(participantDao.find(encounter1.getId(), participant1a.getId()));
 
-        CharacterRepository charRepo = new CharacterRepository();
-        assertTrue(charRepo.doesExist(participant1a.getId()));
+        CharacterModelDAO charRepo = new CharacterModelDAO(Robolectric.application);
+        assertTrue(charRepo.exists(participant1a.getId()));
     }
 
     @Test(expected = DataAccessException.class)

@@ -7,9 +7,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.net.Uri;
-import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterModelDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
@@ -39,14 +40,17 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
     public static final int GET_IMPORT_REQ_CODE = 3056;
     
-    public long currentCharacterID;
+    private long currentCharacterID;
 
-    private CharacterRepository characterRepo;
-    
+    private CharacterModelDAO characterModelDao;
+    private CharacterNameDAO characterNameDao;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        characterRepo = new CharacterRepository();
+        characterModelDao = new CharacterModelDAO(getContext());
+        characterNameDao = new CharacterNameDAO(getContext());
     }
 
     @Override
@@ -57,7 +61,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
 
     @Override
     public void updateTitle() {
-        setTitle(characterRepo.queryName(currentCharacterID));
+        setTitle(characterNameDao.find(currentCharacterID).getName());
         setSubtitle(getFragmentTitle());
     }
 
@@ -116,11 +120,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public long addCharacterToDB(PathfinderCharacter character) {
-        long id = characterRepo.insert(character);
-        if (id != -1) {
+        long id = -1;
+        try {
+            id = characterModelDao.add(character);
             Log.i(TAG, "Added new character");
-        } else {
-            Log.e(TAG, "Error occurred creating new character");
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Error occurred creating new character", e);
         }
         return id;
     }
@@ -131,7 +136,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
      */
     public void deleteCurrentCharacter() {
         int currentCharacterIndex = 0;
-        List<IdNamePair> characters = characterRepo.queryIdNameList();
+        List<IdNamePair> characters = characterNameDao.findAll();
         long characterForDeletion = currentCharacterID;
 
         for (int i = 0; i < characters.size(); i++) {
@@ -149,8 +154,13 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
             loadSelectedCharacter();
         }
 
-        characterRepo.delete(characterForDeletion);
-        Log.i(TAG, "Deleted current character: " + characterForDeletion);
+        try {
+            characterModelDao.removeById(characterForDeletion);
+            Log.i(TAG, "Deleted current character: " + characterForDeletion);
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to delete character " + characterForDeletion, e);
+            Toast.makeText(getContext(), "Failed to delete character", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -189,7 +199,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.select_character_dialog_header));
 
-        List<IdNamePair> characterEntries = characterRepo.queryIdNameList();
+        List<IdNamePair> characterEntries = characterNameDao.findAll();
         String[] characterNames = IdNamePair.nameArray(characterEntries);
         int currentCharacterIndex = 0;
 
@@ -249,7 +259,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.menu_item_delete_character));
         builder.setMessage(String.format(getString(R.string.confirm_delete_item_message),
-                        characterRepo.queryName(currentCharacterID)))
+                        characterNameDao.find(currentCharacterID)))
                 .setPositiveButton(R.string.delete_button_text, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -261,16 +271,12 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     public void exportCurrentCharacter() {
-        PathfinderCharacter character = characterRepo.query(getCurrentCharacterID());
+        PathfinderCharacter character = characterModelDao.find(getCurrentCharacterID());
         ImportExportUtils.exportCharacterWithDialog(getContext(), character, new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
     public void exportAllCharacters() {
-        List<IdNamePair> charIds = characterRepo.queryIdNameList();
-        List<PathfinderCharacter> characters = Lists.newArrayListWithCapacity(charIds.size());
-        for (IdNamePair id : charIds) {
-            characters.add(characterRepo.query(id.getId()));
-        }
+        List<PathfinderCharacter> characters = characterModelDao.findAll();
         ImportExportUtils.exportCharactersWithDialog(getContext(), characters, "All Characters", new ActivityLauncher.ActivityLauncherFragment(this));
     }
 
@@ -343,8 +349,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         return currentCharacterID;
     }
     
-    public CharacterRepository getCharacterRepo() {
-        return characterRepo;
+    public CharacterModelDAO getCharacterModelDAO() {
+        return characterModelDao;
     }
 
     /**

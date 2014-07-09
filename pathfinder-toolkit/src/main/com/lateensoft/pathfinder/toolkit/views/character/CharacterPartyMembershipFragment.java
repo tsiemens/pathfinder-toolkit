@@ -11,33 +11,33 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.LitePartyRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyMemberIdDAO;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
-import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
 import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeController;
 import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.lateensoft.pathfinder.toolkit.db.repository.PartyMembershipRepository.Membership;
-
 public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFragment {
 
     private static final String TAG = CharacterPartyMembershipFragment.class.getSimpleName();
     public static final int GET_NEW_PARTIES_CODE = 33091;
 
-    private ListView m_partyListView;
-    private Button m_addButton;
+    private ListView partyListView;
+    private Button addButton;
 
-    private LitePartyRepository m_partyRepo;
-    private List<IdNamePair> m_parties;
+    private PartyDAO partyDao;
+    private PartyMemberIdDAO partyMemberDao;
+    private List<IdNamePair> parties;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_partyRepo = new LitePartyRepository();
+        partyDao = new PartyDAO(getContext());
+        partyMemberDao = new PartyMemberIdDAO(getContext());
     }
 
     @Override
@@ -48,17 +48,18 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         setRootView(inflater.inflate(R.layout.character_membership_fragment,
                 container, false));
 
-        m_addButton = (Button) getRootView().findViewById(R.id.button_add);
-        m_addButton.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) {
+        addButton = (Button) getRootView().findViewById(R.id.button_add);
+        addButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 showPartyPicker();
             }
         });
 
-        m_partyListView = (ListView) getRootView()
+        partyListView = (ListView) getRootView()
                 .findViewById(R.id.lv_parties);
-        m_partyListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-        m_partyListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        partyListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        partyListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!actionModeController.isActionModeStarted()) {
@@ -68,7 +69,7 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
                 return false;
             }
         });
-        m_partyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        partyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (actionModeController.isActionModeStarted()) {
@@ -90,12 +91,12 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         }
 
         @Override public ListView getListView() {
-            return m_partyListView;
+            return partyListView;
         }
 
         @Override public boolean onActionItemClicked(MultiSelectActionModeController controller, MenuItem item) {
             if (item.getItemId() == R.id.mi_remove) {
-                showRemoveCharacterFromPartyDialog(getSelectedItems(m_parties));
+                showRemoveCharacterFromPartyDialog(getSelectedItems(parties));
                 controller.finishActionMode();
                 return true;
             }
@@ -108,10 +109,10 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
             actionModeController.finishActionMode();
         }
 
-        Collections.sort(m_parties);
+        Collections.sort(parties);
 
         SimpleSelectableListAdapter adapter = new SimpleSelectableListAdapter<IdNamePair>(getActivity(),
-                 m_parties, new SimpleSelectableListAdapter.DisplayStringGetter<IdNamePair>() {
+                parties, new SimpleSelectableListAdapter.DisplayStringGetter<IdNamePair>() {
                     @Override public String getDisplayString(IdNamePair object) {
                         return object.getName();
                     }
@@ -122,7 +123,7 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
             }
         });
 
-        m_partyListView.setAdapter(adapter);
+        partyListView.setAdapter(adapter);
     }
 
     public void showRemoveCharacterFromPartyDialog(final List<IdNamePair> parties) {
@@ -142,19 +143,21 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
     }
 
     private void removeCharacterFromParties(List<IdNamePair> parties) {
-        PartyMembershipRepository memberRepo = m_partyRepo.getMembersRepo();
         for (IdNamePair party : parties) {
-            int dels = memberRepo.delete(new Membership(party.getId(), currentCharacterID));
-            if (dels > 0) {
-                m_parties.remove(party);
+            try {
+                partyMemberDao.removeById(party.getId(), getCurrentCharacterID());
+                this.parties.remove(party);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Could not remove character " + getCurrentCharacterID() +
+                        " from party " + party.getId(), e);
             }
-            refreshPartiesListView();
         }
+        refreshPartiesListView();
     }
 
     public void showPartyPicker() {
-        List<IdNamePair> parties = m_partyRepo.queryIdNameList();
-        parties.removeAll(m_parties);
+        List<IdNamePair> parties = partyDao.findAll();
+        parties.removeAll(this.parties);
         PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.membership_party_picker_title)
                 .setSingleChoice(false)
@@ -171,19 +174,22 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
             PickerUtil.ResultData resultData = new PickerUtil.ResultData(data);
             List<IdNamePair> partiesToAdd = resultData.getParties();
             if (partiesToAdd != null) {
-                PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
-                for (IdNamePair party : partiesToAdd) {
-                    long id = membersRepo.insert(new Membership(party.getId(), currentCharacterID));
-                    if (id >= 0) {
-                        m_parties.add(party);
-                    } else {
-                        Log.e(TAG, "Database returned " + id + " while adding character "
-                                + currentCharacterID + " to " + party);
-                    }
-                }
-                refreshPartiesListView();
+                addCharacterToParties(partiesToAdd);
             }
         }
+    }
+
+    private void addCharacterToParties(List<IdNamePair> partiesToAdd) {
+        for (IdNamePair party : partiesToAdd) {
+            try {
+                partyMemberDao.add(party.getId(), getCurrentCharacterID());
+                parties.add(party);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to add character " + getCurrentCharacterID() +
+                        " to party " + party, e);
+            }
+        }
+        refreshPartiesListView();
     }
 
     @Override
@@ -203,7 +209,6 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
 
     @Override
     public void loadFromDatabase() {
-        m_parties = m_partyRepo.queryPartyNamesForCharacter(getCurrentCharacterID());
+        parties = partyDao.findAllWithMember(getCurrentCharacterID());
     }
-
 }

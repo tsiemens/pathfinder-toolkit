@@ -68,7 +68,11 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
     public List<Entity> findFiltered(String selector, String orderBy) {
         String table = getFromQueryClause();
         String[] columns = getColumnsForQuery();
-        Cursor cursor = database.query(true, table, columns, selector,
+        return findFiltered(table, columns, selector, orderBy);
+    }
+
+    public List<Entity> findFiltered(String tables, String[] columns, String selector, String orderBy) {
+        Cursor cursor = database.query(true, tables, columns, selector,
                 null, null, null, orderBy, null);
 
         List<Entity> entities = Lists.newArrayListWithCapacity(cursor.getCount());

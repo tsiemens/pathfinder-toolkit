@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import android.content.ContentValues;
 import android.content.Context;
 import com.google.common.base.Preconditions;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
 import java.util.Hashtable;
@@ -14,8 +15,12 @@ public class CharacterNameDAO extends AbstractCharacterDAO<IdNamePair> {
     }
 
     @Override
+    public Long add(IdNamePair idNamePair) throws DataAccessException {
+        throw new UnsupportedOperationException("To add characters, use " + CharacterModelDAO.class.getSimpleName());
+    }
+
+    @Override
     protected ContentValues getContentValues(IdNamePair object) {
-        Preconditions.checkArgument(isIdSet(object), "To add characters, use " + CharacterModelDAO.class.getSimpleName());
         ContentValues values = new ContentValues();
         values.put(CHARACTER_ID, object.getId());
         values.put(NAME, object.getName());

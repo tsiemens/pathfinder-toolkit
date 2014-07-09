@@ -7,6 +7,7 @@ import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.util.CharacterUtils;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
 
 @Config(manifest=Config.NONE)
@@ -104,5 +107,20 @@ public class PartyDAOTest extends BaseDatabaseTest {
     @Test
     public void findInvalidModel() {
         assertNull(partyDao.find(-1L, memberDao));
+    }
+
+    @Test
+    public void findAllWithMember() throws DataAccessException {
+        IdNamePair party2 = new IdNamePair("party 2");
+        IdNamePair party3 = new IdNamePair("party 3");
+        IdNamePair party4 = new IdNamePair("party 4");
+        partyDao.add(party2);
+        partyDao.add(party3);
+        partyDao.add(party4);
+        memberDao.add(party2.getId(), member1a);
+        memberDao.add(party4.getId(), member1a);
+
+        assertThat(partyDao.findAllWithMember(member1a.getId()),
+                containsInAnyOrder(party1.idNamePair(), party2, party4));
     }
 }

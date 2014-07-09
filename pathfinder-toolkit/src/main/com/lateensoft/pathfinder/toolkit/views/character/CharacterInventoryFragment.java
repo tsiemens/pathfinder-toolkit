@@ -2,6 +2,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.InventoryItemListAdapter;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
@@ -181,13 +182,17 @@ public class CharacterInventoryFragment extends AbstractCharacterSheetFragment {
     public void updateDatabase() {
         if (m_character != null) {
             updateGoldFromInput();
-            getCharacterRepo().update(m_character);
+            try {
+                getCharacterModelDAO().update(m_character);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to update gold for character " + m_character.getId(), e);
+            }
         }
     }
 
     @Override
     public void loadFromDatabase() {
-        m_character = getCharacterRepo().query(getCurrentCharacterID());
+        m_character = getCharacterModelDAO().find(getCurrentCharacterID());
     }
     
 }
