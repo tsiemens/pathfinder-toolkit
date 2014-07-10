@@ -1,6 +1,8 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +14,11 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.ArmorRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.CombatStatRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.SaveRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.AbilitySetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.SaveSetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.ArmorDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CombatStatDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Save;
@@ -86,10 +89,10 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
     
     private OnAbilityTextClickListener m_abilityTextListener;
     
-    private CombatStatRepository m_statsRepo;
-    private SaveRepository m_saveRepo;
-    private AbilityRepository m_abilityRepo;
-    private ArmorRepository m_armorRepo;
+    private CombatStatDAO combatStatsDao;
+    private SaveSetDAO saveSetDao;
+    private AbilitySetDAO abilitySetDao;
+    private ArmorDAO armorDao;
     
     private CombatStatSet m_combatStats;
     private SaveSet m_saveSet;
@@ -99,10 +102,11 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_statsRepo = new CombatStatRepository();
-        m_saveRepo = new SaveRepository();
-        m_abilityRepo = new AbilityRepository();
-        m_armorRepo = new ArmorRepository();
+        Context context = getContext();
+        combatStatsDao = new CombatStatDAO(context);
+        saveSetDao = new SaveSetDAO(context);
+        abilitySetDao = new AbilitySetDAO(context);
+        armorDao = new ArmorDAO(context);
         
         m_abilityTextListener = new OnAbilityTextClickListener();
     }
@@ -726,19 +730,23 @@ public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
         updateSaves();
         
         if (m_combatStats != null) {
-            m_statsRepo.update(m_combatStats);
-            for(Save save : m_saveSet) {
-                m_saveRepo.update(save);
+            try {
+                combatStatsDao.update(getCurrentCharacterID(), m_combatStats);
+                for(Save save : m_saveSet) {
+                    saveSetDao.getComponentDAO().update(getCurrentCharacterID(), save);
+                }
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to update stats", e);
             }
         }
     }
 
     @Override
     public void loadFromDatabase() {
-        m_combatStats = m_statsRepo.query(getCurrentCharacterID());
-        m_saveSet = m_saveRepo.querySet(getCurrentCharacterID());
-        m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
-        m_abilitySet = m_abilityRepo.querySet(getCurrentCharacterID());
+        m_combatStats = combatStatsDao.find(getCurrentCharacterID());
+        m_saveSet = saveSetDao.findSet(getCurrentCharacterID());
+        m_maxDex = armorDao.getMaxDexForCharacter(getCurrentCharacterID());
+        m_abilitySet = abilitySetDao.findSet(getCurrentCharacterID());
     }
 
 }

@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.InventoryItemListAdapter;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
-import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.ItemDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 
@@ -38,12 +38,12 @@ public class CharacterInventoryFragment extends AbstractCharacterSheetFragment {
     private int m_itemIndexSelectedForEdit;
     
     private PathfinderCharacter m_character;
-    private ItemRepository m_itemRepo;
+    private ItemDAO itemDao;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_itemRepo = new ItemRepository();
+        itemDao = new ItemDAO(getContext());
     }
 
     @Override
@@ -120,17 +120,24 @@ public class CharacterInventoryFragment extends AbstractCharacterSheetFragment {
                 if(m_itemIndexSelectedForEdit < 0) {
                     Log.i(TAG, "Adding item "+item.getName());
                     item.setCharacterID(getCurrentCharacterID());
-                    if (m_itemRepo.insert(item) != -1) {
+                    try {
+                        itemDao.add(getCurrentCharacterID(), item);
                         m_character.getInventory().getItems().add(item);
                         refreshItemsListView();
                         updateTotalWeight();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to add item", e);
                     }
+
                 } else {
                     Log.v(TAG, "Editing an item "+item.getName());
-                    if (m_itemRepo.update(item) != 0) {
+                    try {
+                        itemDao.update(getCurrentCharacterID(), item);
                         m_character.getInventory().getItems().set(m_itemIndexSelectedForEdit, item);
                         refreshItemsListView();
                         updateTotalWeight();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to update item", e);
                     }
                 }
             }
@@ -140,10 +147,13 @@ public class CharacterInventoryFragment extends AbstractCharacterSheetFragment {
         case InventoryItemEditActivity.RESULT_DELETE:
             Item itemToDelete = m_character.getInventory().getItems().get(m_itemIndexSelectedForEdit);
             Log.i(TAG, "Deleting item "+itemToDelete.getName());
-            if(itemToDelete != null && m_itemRepo.delete(itemToDelete) != 0 ) {
+            try {
+                itemDao.remove(itemToDelete);
                 m_character.getInventory().getItems().remove(m_itemIndexSelectedForEdit);
                 refreshItemsListView();
                 updateTotalWeight();
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to delete item", e);
             }
             break;
         

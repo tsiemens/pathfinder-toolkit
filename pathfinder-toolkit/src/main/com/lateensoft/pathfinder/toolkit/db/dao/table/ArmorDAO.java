@@ -8,7 +8,6 @@ import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedIdentifiableTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
-import com.lateensoft.pathfinder.toolkit.db.repository.ItemRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Item;
 import com.lateensoft.pathfinder.toolkit.model.character.items.Size;
@@ -157,7 +156,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
         String table = getFromQueryClause();
         String selector = String.format("%s=%d AND %s.%s=%s.%s AND %s<>0",
                 ItemDAO.CHARACTER_ID, characterId,
-                TABLE, ID, ItemRepository.TABLE, ItemRepository.ID,
+                TABLE, ID, ItemDAO.TABLE, ItemDAO.ID,
                 WORN);
         String[] columns = {"SUM("+CHECK_PEN+")"};
         Cursor cursor = getDatabase().query(table, columns, selector);

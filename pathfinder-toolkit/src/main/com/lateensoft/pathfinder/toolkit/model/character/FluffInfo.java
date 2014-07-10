@@ -21,9 +21,10 @@ public class FluffInfo implements Parcelable, Identifiable {
     private String m_hair;
     private String m_languages;
     private String m_description;
-    
+
+    @Deprecated // This should not be an identifiable class
     private long m_characterId;
-    
+
     public FluffInfo() {
         m_alignment = "";
         m_XP = "";
@@ -40,7 +41,7 @@ public class FluffInfo implements Parcelable, Identifiable {
         m_hair = "";
         m_languages = "";
         m_description = "";
-        
+
         m_characterId = UNSET_ID;
     }
     
@@ -60,7 +61,7 @@ public class FluffInfo implements Parcelable, Identifiable {
         m_hair = in.readString();
         m_languages = in.readString();
         m_description = in.readString();
-        
+
         m_characterId = in.readLong();
     }
 
@@ -81,7 +82,7 @@ public class FluffInfo implements Parcelable, Identifiable {
         out.writeString(m_hair);
         out.writeString(m_languages);
         out.writeString(m_description);
-        
+
         out.writeLong(m_characterId);
     }
     
@@ -209,17 +210,19 @@ public class FluffInfo implements Parcelable, Identifiable {
     public int describeContents() {
         return 0;
     }
-    
+
+    @Deprecated
     @Override
     public void setId(long id) {
         m_characterId = id;
     }
 
+    @Deprecated
     @Override
     public long getId() {
         return m_characterId;
     }
-    
+
     public static final Parcelable.Creator<FluffInfo> CREATOR = new Parcelable.Creator<FluffInfo>() {
         public FluffInfo createFromParcel(Parcel in) {
             return new FluffInfo(in);

@@ -15,7 +15,8 @@ import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.FeatListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.FeatRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.FeatDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;
 import com.lateensoft.pathfinder.toolkit.model.character.FeatList;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
@@ -31,13 +32,13 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
 
     private int m_featSelectedForEdit;
     
-    private FeatRepository m_featRepo;
+    private FeatDAO featDao;
     private FeatList m_featList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_featRepo = new FeatRepository();
+        featDao = new FeatDAO(getContext());
     }
 
     @Override
@@ -97,16 +98,21 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
             if (feat != null && m_featList != null) {
                 if(m_featSelectedForEdit < 0) {
                     Log.v(TAG, "Adding a feat");
-                    feat.setCharacterID(getCurrentCharacterID());
-                    if(m_featRepo.insert(feat) != -1) {
+                    try {
+                        featDao.add(getCurrentCharacterID(), feat);
                         m_featList.add(feat);
                         refreshFeatsListView();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to add feat", e);
                     }
                 } else {
                     Log.v(TAG, "Editing a feat");
-                    if(m_featRepo.update(feat) != 0) {
+                    try {
+                        featDao.update(getCurrentCharacterID(), feat);
                         m_featList.set(m_featSelectedForEdit, feat);
                         refreshFeatsListView();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to update feat", e);
                     }
                 }
             }
@@ -116,9 +122,14 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
         case FeatEditActivity.RESULT_DELETE:
             Log.v(TAG, "Deleting an item");
             Feat featToDelete = m_featList.get(m_featSelectedForEdit);
-            if(featToDelete != null && m_featRepo.delete(featToDelete) != 0) {
-                m_featList.remove(m_featSelectedForEdit);
-                refreshFeatsListView();
+            if(featToDelete != null) {
+                try {
+                    featDao.remove(featToDelete);
+                    m_featList.remove(m_featSelectedForEdit);
+                    refreshFeatsListView();
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to delete feat", e);
+                }
             }
             break;
         
@@ -149,7 +160,7 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
 
     @Override
     public void loadFromDatabase() {
-        m_featList = new FeatList(m_featRepo.querySet(getCurrentCharacterID()));
+        m_featList = new FeatList(featDao.findAllForOwner(getCurrentCharacterID()));
     }
 
 }

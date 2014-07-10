@@ -2,11 +2,8 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.BaseDatabaseTest;
-import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterModelDAO;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;

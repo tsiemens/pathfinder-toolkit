@@ -6,15 +6,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.inject.Injector;
-import com.lateensoft.pathfinder.toolkit.BaseApplication;
-import com.lateensoft.pathfinder.toolkit.db.repository.CharacterRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.PartyRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterModelDAO;
 import com.lateensoft.pathfinder.toolkit.deprecated.v1.PTUserPrefsManager;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 public class UpdatePatcher {
     private static final String TAG = UpdatePatcher.class.getSimpleName();
@@ -109,8 +107,7 @@ public class UpdatePatcher {
     private boolean applyV5ToCurrentPatch() {
         Log.i(TAG, "Applying v5 patches...");
         Context appContext = context.getApplicationContext();
-        CharacterRepository characterRepo = new CharacterRepository();
-        PartyRepository partyRepo = new PartyRepository();
+        CharacterModelDAO characterDao = new CharacterModelDAO(context);
         PTUserPrefsManager oldPrefsManager = new PTUserPrefsManager(appContext);
         com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager oldDBManager = new com.lateensoft.pathfinder.toolkit.deprecated.v1.db.PTDatabaseManager(appContext);
         boolean completeSuccess = true;
@@ -145,12 +142,15 @@ public class UpdatePatcher {
         for (int id : oldCharIDs) {
             oldChar = oldDBManager.getCharacter(id);
             newChar = CharacterConverter.convertCharacter(oldChar);
-            
-            if (characterRepo.insert(newChar) == -1){
+
+            try {
+                characterDao.add(newChar);
+                if (id == oldSelectedCharacterID) {
+                    preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, newChar.getId());
+                }
+            } catch (DataAccessException e) {
                 completeSuccess = false;
-                Log.e(TAG, "Error migrating character "+oldChar.getName());
-            } else if (id == oldSelectedCharacterID) {
-                preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, newChar.getId());
+                Log.e(TAG, "Error migrating character " + oldChar.getName(), e);
             }
         }
 

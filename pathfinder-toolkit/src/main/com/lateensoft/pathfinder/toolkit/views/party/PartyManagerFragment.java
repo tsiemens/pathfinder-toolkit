@@ -8,10 +8,12 @@ import android.text.Editable;
 import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
-import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.*;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyMemberNameDAO;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
@@ -39,13 +41,16 @@ public class PartyManagerFragment extends BasePageFragment {
     private EditText partyNameEditText;
     private ListView partyMemberList;
     
-    private LitePartyRepository partyRepo = new LitePartyRepository();
+    private PartyDAO partyDao;
+    private PartyMemberNameDAO memberDao;
 
     private Preferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        partyDao = new PartyDAO(getContext());
+        memberDao = new PartyMemberNameDAO(getContext());
         preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
     }
 
@@ -137,7 +142,7 @@ public class PartyManagerFragment extends BasePageFragment {
             // There was no current party set in shared prefs
             addNewPartyAndSetSelected();
         } else {
-            party = partyRepo.query(currentPartyID);
+            party = partyDao.find(currentPartyID, memberDao);
             if (party == null) {
                 handleInvalidSelectedParty();
             }
@@ -155,9 +160,9 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void handleInvalidSelectedParty() {
-        List<IdNamePair> ids = partyRepo.queryIdNameList();
+        List<IdNamePair> ids = partyDao.findAll();
         for (IdNamePair id : ids) {
-            party = partyRepo.query(id.getId());
+            party = partyDao.find(id.getId(), memberDao);
             if (party != null) {
                 setSelectedParty(party.getId());
                 break;
@@ -186,41 +191,53 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void removeMembersFromParty(List<IdNamePair> membersToRemove) {
-        List<Long> memberIds = Lists.newArrayList();
-        for (IdNamePair pair : membersToRemove) {
-            memberIds.add(pair.getId());
-        }
-
-        int numberOfDeletions = partyRepo.removeCharactersFromParty(party.getId(), memberIds);
-        if (numberOfDeletions > 0) {
-            party.removeAll(membersToRemove);
+        for (IdNamePair member : membersToRemove) {
+            try {
+                memberDao.remove(party.getId(), member);
+                party.remove(member);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to remove member" + member, e);
+            }
         }
         refreshPartyView();
     }
 
     private void addNewPartyAndSetSelected() {
-        party = new NamedList<IdNamePair>("New Party");
-        partyRepo.insert(party);
-        setSelectedParty(party.getId());
-        refreshPartyView();
+        try {
+            NamedList<IdNamePair> newParty = new NamedList<IdNamePair>("New Party");
+            partyDao.add(newParty.idNamePair());
+            party = newParty;
+            setSelectedParty(newParty.getId());
+            refreshPartyView();
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to add party", e);
+        }
     }
 
     private void deleteCurrentPartyAndSelectAnother() {
-        partyRepo.delete(party);
-        List<IdNamePair> partyIDs = partyRepo.queryIdNameList();
+        try {
+            partyDao.remove(party.idNamePair());
+            List<IdNamePair> partyIDs = partyDao.findAll();
 
-        if (partyIDs.isEmpty()) {
-            addNewPartyAndSetSelected();
-        } else {
-            setSelectedParty(partyIDs.get(0).getId());
-            loadCurrentParty();
+            if (partyIDs.isEmpty()) {
+                addNewPartyAndSetSelected();
+            } else {
+                setSelectedParty(partyIDs.get(0).getId());
+                loadCurrentParty();
+            }
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to delete party " + party.idNamePair(), e);
         }
     }
 
     private void updateDatabase() {
         Editable text = partyNameEditText.getText();
         party.setName(text != null ? text.toString() : "");
-        partyRepo.update(party);
+        try {
+            partyDao.update(party.idNamePair());
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to update party", e);
+        }
     }
 
     private void refreshPartyView() {
@@ -274,7 +291,7 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showPartyPicker() {
-        List<IdNamePair> parties = partyRepo.queryIdNameList();
+        List<IdNamePair> parties = partyDao.findAll();
         parties.remove(new IdNamePair(party.getId(), party.getName()));
         PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
@@ -285,8 +302,8 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showMemberPicker() {
-        CharacterRepository charRepo = new CharacterRepository();
-        List<IdNamePair> characters = charRepo.queryIdNameList();;
+        CharacterNameDAO charDao = new CharacterNameDAO(getContext());
+        List<IdNamePair> characters = charDao.findAll();
         characters.removeAll(party);
         PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.select_members_picker_title)
@@ -336,14 +353,11 @@ public class PartyManagerFragment extends BasePageFragment {
             } else {
                 List<IdNamePair> membersToAdd = pickerData.getCharacters();
                 if (membersToAdd != null) {
-                    PartyMembershipRepository membersRepo = partyRepo.getMembersRepo();
                     for (IdNamePair member : membersToAdd) {
-                        long id = membersRepo.insert(new PartyMembershipRepository.Membership(party.getId(), member.getId()));
-                        if (id >= 0) {
-                            party.add(member);
-                        } else {
-                            Log.e(TAG, "Database returned " + id + " while adding character "
-                                    + member + " to " + party.getId());
+                        try {
+                            memberDao.add(party.getId(), member);
+                        } catch (DataAccessException e) {
+                            Log.e(TAG, "Failed to add member", e);
                         }
                     }
                     refreshPartyView();

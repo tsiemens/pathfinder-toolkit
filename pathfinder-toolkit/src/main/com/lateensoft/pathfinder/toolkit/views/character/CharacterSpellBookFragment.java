@@ -2,7 +2,8 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.SpellBookListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.SpellRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.SpellDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.Spell;
 import com.lateensoft.pathfinder.toolkit.model.character.SpellBook;
 
@@ -26,15 +27,15 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
     
     private static final String TAG = CharacterSpellBookFragment.class.getSimpleName();
     
-    private ListView m_listView;
-    private int m_spellSelectedForEdit;
+    private ListView spellList;
+    private int spellIndexSelectedForEdit;
 
-    private SpellRepository m_spellRepo;
-    private SpellBook m_spellBook;
+    private SpellDAO spellDao;
+    private SpellBook spellBook;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_spellRepo = new SpellRepository();
+        spellDao = new SpellDAO(getContext());
     }
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,16 +48,17 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
         Button m_addButton = (Button) getRootView().findViewById(R.id.addSpell);
         m_addButton.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
-                m_spellSelectedForEdit = -1;
+                spellIndexSelectedForEdit = -1;
                 showSpellEditor(null);
             }
         });
         
-        m_listView = (ListView) getRootView().findViewById(R.id.spells);
-        m_listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                m_spellSelectedForEdit = position;
-                showSpellEditor(m_spellBook.get(position));
+        spellList = (ListView) getRootView().findViewById(R.id.spells);
+        spellList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                spellIndexSelectedForEdit = position;
+                showSpellEditor(spellBook.get(position));
             }
         });
         
@@ -64,14 +66,14 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
     }
 
     private void refreshSpellListView() {
-        Collections.sort(m_spellBook);
+        Collections.sort(spellBook);
         SpellBookListAdapter adapter = new SpellBookListAdapter(getContext(),
                 R.layout.character_spellbook_row,
-                m_spellBook);
+                spellBook);
         
         Log.v(TAG, "Called refreshSpellListView");
         
-        m_listView.setAdapter(adapter);
+        spellList.setAdapter(adapter);
     }
     
     private void showSpellEditor(Spell spell) {
@@ -91,19 +93,27 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
         case Activity.RESULT_OK:
             Spell spell = ParcelableEditorActivity.getParcelableFromIntent(data);
             if (spell != null) {
-                if(m_spellSelectedForEdit < 0) {
+                if(spellIndexSelectedForEdit < 0) {
                     Log.v(TAG, "Adding a spell");
                     spell.setCharacterID(getCurrentCharacterID());
-                    if (m_spellRepo.insert(spell) != -1 ) {
-                        m_spellBook.add(spell);
+                    try {
+                        spellDao.add(getCurrentCharacterID(), spell);
+                        spellBook.add(spell);
                         refreshSpellListView();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to add spell", e);
                     }
+
                 } else {
                     Log.v(TAG, "Editing a spell");
-                    if (m_spellRepo.update(spell) != 0 ) {
-                        m_spellBook.set(m_spellSelectedForEdit, spell);
+                    try {
+                        spellDao.update(getCurrentCharacterID(), spell);
+                        spellBook.set(spellIndexSelectedForEdit, spell);
                         refreshSpellListView();
+                    } catch (DataAccessException e) {
+                        Log.e(TAG, "Failed to update spell", e);
                     }
+
                 }
             }
 
@@ -111,10 +121,15 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
         
         case SpellEditActivity.RESULT_DELETE:
             Log.v(TAG, "Deleting a spell");
-            Spell spellToDelete = m_spellBook.get(m_spellSelectedForEdit);
-            if (spellToDelete != null && m_spellRepo.delete(spellToDelete) != 0) {
-                m_spellBook.remove(m_spellSelectedForEdit);
-                refreshSpellListView();
+            Spell spellToDelete = spellBook.get(spellIndexSelectedForEdit);
+            if (spellToDelete != null) {
+                try {
+                    spellDao.remove(spellToDelete);
+                    spellBook.remove(spellIndexSelectedForEdit);
+                    refreshSpellListView();
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to remove spell " + spellToDelete.getId(), e);
+                }
             }
             break;
         
@@ -146,7 +161,7 @@ public class CharacterSpellBookFragment extends AbstractCharacterSheetFragment {
 
     @Override
     public void loadFromDatabase() {
-        m_spellBook = new SpellBook(m_spellRepo.querySet(getCurrentCharacterID()));
+        spellBook = new SpellBook(spellDao.findAllForOwner(getCurrentCharacterID()));
     }
 
 }

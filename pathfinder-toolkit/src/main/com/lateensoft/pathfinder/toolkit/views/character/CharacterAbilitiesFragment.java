@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.ArmorRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.AbilitySetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.ArmorDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
 
@@ -39,17 +41,17 @@ public class CharacterAbilitiesFragment extends AbstractCharacterSheetFragment {
     private Spinner[] m_baseScoreSpinners;
     private Spinner[] m_tempScoreSpinners;
 
-    private AbilityRepository m_abilityRepo;
+    private AbilitySetDAO abilitySetDao;
 
-    private ArmorRepository m_armorRepo;
+    private ArmorDAO armorDAO;
     private int m_maxDex = Integer.MAX_VALUE;
 
     private AbilitySet m_abilityScores;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_abilityRepo = new AbilityRepository();
-        m_armorRepo = new ArmorRepository();
+        abilitySetDao = new AbilitySetDAO(getContext());
+        armorDAO = new ArmorDAO(getContext());
 
         m_baseScoreSpinners = new Spinner[baseScoreSpinnerIds.length];
         m_tempScoreSpinners = new Spinner[tempBonusSpinnerIds.length];
@@ -184,15 +186,20 @@ public class CharacterAbilitiesFragment extends AbstractCharacterSheetFragment {
     @Override
     public void updateDatabase() {
         if (m_abilityScores != null) {
+            long characterid = getCurrentCharacterID();
             for (int i = 0; i < m_abilityScores.size(); i++) {
-                m_abilityRepo.update(m_abilityScores.getAbilityAtIndex(i));
+                try {
+                    abilitySetDao.getComponentDAO().update(characterid, m_abilityScores.getAbilityAtIndex(i));
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to update ability " + m_abilityScores.getAbilityAtIndex(i), e);
+                }
             }
         }
     }
 
     @Override
     public void loadFromDatabase() {
-        m_abilityScores = m_abilityRepo.querySet(getCurrentCharacterID());
-        m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
+        m_abilityScores = abilitySetDao.findSet(getCurrentCharacterID());
+        m_maxDex = armorDAO.getMaxDexForCharacter(getCurrentCharacterID());
     }
 }

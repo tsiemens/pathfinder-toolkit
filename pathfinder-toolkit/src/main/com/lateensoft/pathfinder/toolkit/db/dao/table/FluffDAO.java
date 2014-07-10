@@ -58,7 +58,7 @@ public class FluffDAO extends UniqueOwnerTableDAO<Long, FluffInfo> {
     protected ContentValues getContentValues(OwnedObject<Long, FluffInfo> rowData) {
         FluffInfo object = rowData.getObject();
         ContentValues values = new ContentValues();
-        values.put(CHARACTER_ID, object.getId());
+        values.put(CHARACTER_ID, rowData.getOwnerId());
         values.put(ALIGNMENT, object.getAlignment());
         values.put(XP, object.getXP());
         values.put(NEXT_LEVEL_XP, object.getNextLevelXP());
@@ -79,7 +79,6 @@ public class FluffDAO extends UniqueOwnerTableDAO<Long, FluffInfo> {
 
     @Override
     protected FluffInfo buildFromHashTable(Hashtable<String, Object> hashTable) {
-        long characterId = (Long) hashTable.get(CHARACTER_ID);
         String alignment = (String) hashTable.get(ALIGNMENT);
         String xp = (String) hashTable.get(XP);
         String nextLevelXp = (String) hashTable.get(NEXT_LEVEL_XP);
@@ -97,7 +96,6 @@ public class FluffDAO extends UniqueOwnerTableDAO<Long, FluffInfo> {
         String description = (String) hashTable.get(DESCRIPTION);
 
         FluffInfo fluff = new FluffInfo();
-        fluff.setId(characterId);
         fluff.setAlignment(alignment);
         fluff.setXP(xp);
         fluff.setNextLevelXP(nextLevelXp);

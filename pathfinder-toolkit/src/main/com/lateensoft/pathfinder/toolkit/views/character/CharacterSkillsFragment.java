@@ -2,9 +2,10 @@ package com.lateensoft.pathfinder.toolkit.views.character;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.SkillListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.ArmorRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.SkillRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.AbilitySetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.SkillSetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.ArmorDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
@@ -31,29 +32,30 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
         implements OnItemClickListener {
     private static final String TAG = CharacterSkillsFragment.class.getSimpleName();
 
-    private ListView m_skillsListView;
+    private ListView skillsListView;
 
-    private CheckBox m_applyACPCheckBox;
-    private CheckBox m_trainedFilterCheckBox;
+    private CheckBox applyACPCheckBox;
+    private CheckBox trainedFilterCheckBox;
 
-    private Skill m_skillSelectedForEdit;
+    private Skill skillSelectedForEdit;
     
-    private SkillRepository m_skillRepo;
-    private SkillSet m_skillSet;
+    private SkillSetDAO skillSetDao;
+
+    private SkillSet skillSet;
     
-    private ArmorRepository m_armorRepo;
-    private AbilityRepository m_abilityRepo;
+    private ArmorDAO armorDao;
+    private AbilitySetDAO abilitySetDao;
     
-    private AbilitySet m_abilitySet;
-    private int m_maxDex = Integer.MAX_VALUE;
-    private int m_armorCheckPenalty = 0;
+    private AbilitySet abilitySet;
+    private int maxDex = Integer.MAX_VALUE;
+    private int armorCheckPenalty = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_skillRepo = new SkillRepository();
-        m_armorRepo = new ArmorRepository();
-        m_abilityRepo = new AbilityRepository();
+        skillSetDao = new SkillSetDAO(getContext());
+        armorDao = new ArmorDAO(getContext());
+        abilitySetDao = new AbilitySetDAO(getContext());
     }
 
     @Override
@@ -63,40 +65,42 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
         setRootView(inflater.inflate(
                 R.layout.character_skills_fragment, container, false));
 
-        m_applyACPCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxApplyACP);
-        m_applyACPCheckBox.setChecked(false);
-        m_applyACPCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView == m_applyACPCheckBox) {
-                    ((SkillListAdapter) m_skillsListView.getAdapter())
-                    .setArmorCheckPenalty(isChecked ? m_armorCheckPenalty : 0);
+        applyACPCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxApplyACP);
+        applyACPCheckBox.setChecked(false);
+        applyACPCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView == applyACPCheckBox) {
+                    ((SkillListAdapter) skillsListView.getAdapter())
+                            .setArmorCheckPenalty(isChecked ? armorCheckPenalty : 0);
                 }
             }
         });
         
-        m_trainedFilterCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxFilterTrained);
-        m_trainedFilterCheckBox.setChecked(true);
-        m_trainedFilterCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        trainedFilterCheckBox = (CheckBox) getRootView().findViewById(R.id.checkboxFilterTrained);
+        trainedFilterCheckBox.setChecked(true);
+        trainedFilterCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 updateFragmentUI();
             }
         });
 
-        m_skillsListView = (ListView) getRootView()
+        skillsListView = (ListView) getRootView()
                 .findViewById(R.id.listViewCharacterSkills);
-        m_skillsListView.setOnItemClickListener(this);
+        skillsListView.setOnItemClickListener(this);
 
         return getRootView();
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        if (m_trainedFilterCheckBox.isChecked()) {
-            m_skillSelectedForEdit = m_skillSet.getTrainedSkill(position);
+        if (trainedFilterCheckBox.isChecked()) {
+            skillSelectedForEdit = skillSet.getTrainedSkill(position);
         } else {
-            m_skillSelectedForEdit = m_skillSet.getSkillByIndex(position);
+            skillSelectedForEdit = skillSet.getSkillByIndex(position);
         }
-        showSkillEditor(m_skillSelectedForEdit);
+        showSkillEditor(skillSelectedForEdit);
     }
     
     private void showSkillEditor(Skill skill) {
@@ -105,7 +109,7 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
         skillEditIntent.putExtra(
                 SkillEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE,skill);
         skillEditIntent.putExtra(SkillEditActivity.INTENT_EXTRAS_KEY_SKILL_DELETABLE_BOOLEAN,
-                (skill.canBeSubTyped() && m_skillSet.hasMultipleOfSkill(skill.getType())));
+                (skill.canBeSubTyped() && skillSet.hasMultipleOfSkill(skill.getType())));
 
         startActivityForResult(skillEditIntent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
     }
@@ -118,27 +122,35 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
         switch (resultCode) {
         case Activity.RESULT_OK:
             Skill skill = ParcelableEditorActivity.getParcelableFromIntent(data);
-            if (m_skillSelectedForEdit != null && skill != null) {
-                m_skillSelectedForEdit.setSubType(skill.getSubType());
-                m_skillSelectedForEdit.setAbility(skill.getAbility());
-                m_skillSelectedForEdit.setRank(skill.getRank());
-                m_skillSelectedForEdit.setMiscMod(skill.getMiscMod());
-                m_skillSelectedForEdit.setClassSkill(skill.isClassSkill());
-                
-                m_skillRepo.update(m_skillSelectedForEdit);
-                addNewSubSkills();
-                updateSkillsList();
-                
-                m_skillSelectedForEdit = null;
+            if (skillSelectedForEdit != null && skill != null) {
+                skillSelectedForEdit.setSubType(skill.getSubType());
+                skillSelectedForEdit.setAbility(skill.getAbility());
+                skillSelectedForEdit.setRank(skill.getRank());
+                skillSelectedForEdit.setMiscMod(skill.getMiscMod());
+                skillSelectedForEdit.setClassSkill(skill.isClassSkill());
+
+                try {
+                    skillSetDao.getComponentDAO().update(getCurrentCharacterID(), skillSelectedForEdit);
+                    addNewSubSkills();
+                    updateSkillsList();
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to update skill " + skill.getId(), e);
+                }
+
+                skillSelectedForEdit = null;
             }        
             break;
         case SpellEditActivity.RESULT_DELETE:
             Log.v(TAG, "Deleting a skill subtype");
-            if (m_skillSelectedForEdit != null && m_skillSelectedForEdit.canBeSubTyped()
-                && m_skillSet.hasMultipleOfSkill(m_skillSelectedForEdit.getType())) {
-                if (m_skillRepo.delete(m_skillSelectedForEdit.getId())!= 0) {
-                    m_skillSet.deleteSkill(m_skillSelectedForEdit);
+            if (skillSelectedForEdit != null && skillSelectedForEdit.canBeSubTyped()
+                && skillSet.hasMultipleOfSkill(skillSelectedForEdit.getType())) {
+                try {
+                    skillSetDao.getComponentDAO().remove(skillSelectedForEdit);
+                    skillSet.deleteSkill(skillSelectedForEdit);
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to update skill " + skillSelectedForEdit.getId(), e);
                 }
+
                 // Adding is in case they delete the only unranked skill
                 addNewSubSkills();
                 updateSkillsList();
@@ -155,17 +167,17 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
     }
 
     private void updateSkillsList() {
-        if (m_skillSet == null || m_abilitySet == null) return;
-        List<Skill> skills = m_trainedFilterCheckBox.isChecked() ?
-                m_skillSet.getTrainedSkills() : m_skillSet.getSkills();
+        if (skillSet == null || abilitySet == null) return;
+        List<Skill> skills = trainedFilterCheckBox.isChecked() ?
+                skillSet.getTrainedSkills() : skillSet.getSkills();
         SkillListAdapter adapter = new SkillListAdapter(getContext(),
                 R.layout.character_skill_row, skills,
-                m_maxDex, m_abilitySet, getAppliedArmorCheckPenalty());
-        m_skillsListView.setAdapter(adapter);
+                maxDex, abilitySet, getAppliedArmorCheckPenalty());
+        skillsListView.setAdapter(adapter);
     }
     
     private int getAppliedArmorCheckPenalty() {
-        return m_applyACPCheckBox.isChecked() ? m_armorCheckPenalty : 0;
+        return applyACPCheckBox.isChecked() ? armorCheckPenalty : 0;
     }
 
     @Override
@@ -185,20 +197,25 @@ public class CharacterSkillsFragment extends AbstractCharacterSheetFragment
 
     @Override
     public void loadFromDatabase() {
-        m_skillSet = m_skillRepo.querySet(getCurrentCharacterID());
+        long characterId = getCurrentCharacterID();
+        skillSet = skillSetDao.findSet(characterId);
 
         addNewSubSkills();
-        m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
-        m_armorCheckPenalty = m_armorRepo.getArmorCheckPenalty(getCurrentCharacterID());
-        m_abilitySet = m_abilityRepo.querySet(getCurrentCharacterID());
+        maxDex = armorDao.getMaxDexForCharacter(characterId);
+        armorCheckPenalty = armorDao.getArmorCheckPenaltyForCharacter(characterId);
+        abilitySet = abilitySetDao.findSet(characterId);
     }
     
     private void addNewSubSkills() {
         Skill newSkill;
         for (SkillType type : SkillType.values()) {
-            if (type.canBeSubTyped() && m_skillSet.allSubSkillsUsed(type)) {
-                newSkill = m_skillSet.addNewSubSkill(type);
-                m_skillRepo.insert(newSkill);
+            if (type.canBeSubTyped() && skillSet.allSubSkillsUsed(type)) {
+                try {
+                    newSkill = skillSet.addNewSubSkill(type);
+                    skillSetDao.getComponentDAO().add(getCurrentCharacterID(), newSkill);
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to add skill ", e);
+                }
             }
         }
     }
