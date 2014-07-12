@@ -1,9 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,25 +12,23 @@ import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.FeatListAdapter;
-import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.dao.table.FeatDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;
 import com.lateensoft.pathfinder.toolkit.model.character.FeatList;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 
-public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
-        implements OnClickListener, OnItemClickListener {
-
+public class CharacterFeatsFragment extends IndexedParcelableListFragment<Feat, FeatDAO> {
     private static final String TAG = CharacterFeatsFragment.class.getSimpleName();
-    private ListView m_featsListView;
-    private Button m_addButton;
 
-    private int m_featSelectedForEdit;
-    
+    private ListView featsListView;
+    private Button addButton;
+
     private FeatDAO featDao;
-    private FeatList m_featList;
+    private FeatList feats;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,103 +44,42 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
         setRootView(inflater.inflate(R.layout.character_feats_fragment,
                 container, false));
 
-        m_addButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
-        m_addButton.setOnClickListener(this);
+        addButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
+        addButton.setOnClickListener(getAddButtonClickListener());
 
-        m_featsListView = (ListView) getRootView()
+        featsListView = (ListView) getRootView()
                 .findViewById(R.id.listViewFeats);
-        m_featsListView.setOnItemClickListener(this);
+        featsListView.setOnItemClickListener(getListItemClickListener());
 
         return getRootView();
     }
 
-    private void refreshFeatsListView() {
-        Collections.sort(m_featList);
-        FeatListAdapter adapter = new FeatListAdapter(getActivity(),
-                R.layout.character_feats_row, m_featList);
-
-        m_featsListView.setAdapter(adapter);
-    }
-
-    // Add Feat button was tapped
-    public void onClick(View button) {
-        m_featSelectedForEdit = -1;
-        showFeatEditor(null);
-    }
-
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        m_featSelectedForEdit = position;
-        showFeatEditor(m_featList.get(position));
-    }
-
-    private void showFeatEditor(Feat feat) {
-        Intent featEditIntent = new Intent(getContext(),
-                FeatEditActivity.class);
-        featEditIntent.putExtra(
-                FeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);
-        startActivityForResult(featEditIntent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
+    @Override
+    protected Class<? extends ParcelableEditorActivity> getParcelableEditorActivity() {
+        return FeatEditActivity.class;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != ParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
-            return;
-        }
-        switch (resultCode) {
-        case Activity.RESULT_OK:
-            Feat feat = ParcelableEditorActivity.getParcelableFromIntent(data);
-            if (feat != null && m_featList != null) {
-                if(m_featSelectedForEdit < 0) {
-                    Log.v(TAG, "Adding a feat");
-                    try {
-                        featDao.add(getCurrentCharacterID(), feat);
-                        m_featList.add(feat);
-                        refreshFeatsListView();
-                    } catch (DataAccessException e) {
-                        Log.e(TAG, "Failed to add feat", e);
-                    }
-                } else {
-                    Log.v(TAG, "Editing a feat");
-                    try {
-                        featDao.update(getCurrentCharacterID(), feat);
-                        m_featList.set(m_featSelectedForEdit, feat);
-                        refreshFeatsListView();
-                    } catch (DataAccessException e) {
-                        Log.e(TAG, "Failed to update feat", e);
-                    }
-                }
-            }
-            
-            break;
-        
-        case FeatEditActivity.RESULT_DELETE:
-            Log.v(TAG, "Deleting an item");
-            Feat featToDelete = m_featList.get(m_featSelectedForEdit);
-            if(featToDelete != null) {
-                try {
-                    featDao.remove(featToDelete);
-                    m_featList.remove(m_featSelectedForEdit);
-                    refreshFeatsListView();
-                } catch (DataAccessException e) {
-                    Log.e(TAG, "Failed to delete feat", e);
-                }
-            }
-            break;
-        
-        case Activity.RESULT_CANCELED:
-            break;
-        
-        default:
-            break;
-        }
-        updateDatabase();
-        super.onActivityResult(requestCode, resultCode, data);
+    protected FeatDAO getDAO() {
+        return featDao;
+    }
+
+    @Override
+    protected List<Feat> getModel() {
+        return feats;
     }
 
     @Override
     public void updateFragmentUI() {
         refreshFeatsListView();
+    }
+
+    private void refreshFeatsListView() {
+        Collections.sort(feats);
+        FeatListAdapter adapter = new FeatListAdapter(getActivity(),
+                R.layout.character_feats_row, feats);
+
+        featsListView.setAdapter(adapter);
     }
     
     @Override
@@ -154,13 +88,7 @@ public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
     }
 
     @Override
-    public void updateDatabase() {
-        // Done dynamically
-    }
-
-    @Override
     public void loadFromDatabase() {
-        m_featList = new FeatList(featDao.findAllForOwner(getCurrentCharacterID()));
+        feats = new FeatList(featDao.findAllForOwner(getCurrentCharacterID()));
     }
-
 }
