@@ -173,7 +173,7 @@ public class CharacterUtils {
         armor.setWeight(weight);
         armor.setWorn(worn);
         armor.setACBonus(ACBonus);
-        armor.setCheckPen(checkPen);
+        armor.setArmorCheckPenalty(checkPen);
         armor.setMaxDex(maxDex);
         armor.setSpellFail(spellFail);
         armor.setSpeed(speed);

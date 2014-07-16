@@ -25,8 +25,13 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         public void onTouch(View v, MotionEvent event, int position);
     }
 
+    public interface RowComponentClickListener {
+        public void onClick(View v, int position);
+    }
+
     private ItemSelectionGetter selectionGetter;
     private RowTouchListener dragIconTouchListener;
+    private RowComponentClickListener rollsClickListener;
 
     private List<EncounterParticipantRowModel> participantRows;
 
@@ -45,6 +50,10 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         dragIconTouchListener = listener;
     }
 
+    public void setRollsClickListener(RowComponentClickListener listener) {
+        rollsClickListener = listener;
+    }
+
     @Override
     public void doItemSwap(int pos1, int pos2) {
         EncounterParticipantRowModel tmp1 = participantRows.get(pos1);
@@ -55,6 +64,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
 
     private static class RowHolder {
         View row;
+        View rolls;
         TextView initRoll;
         TextView checkRoll;
         TextView textView;
@@ -77,6 +87,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         protected RowHolder holderFrom(View row, int layoutResourceId) {
             RowHolder holder = new RowHolder();
             holder.row = row;
+            holder.rolls = row.findViewById(R.id.ll_rolls);
             holder.initRoll = (TextView)row.findViewById(R.id.tv_init_roll);
             holder.checkRoll = (TextView)row.findViewById(R.id.tv_check_roll);
             holder.textView = (TextView)row.findViewById(R.id.tv_name);
@@ -85,7 +96,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         }
 
         @Override
-        protected void setRowContent(RowHolder holder, final int position) {
+        protected void setRowContent(final RowHolder holder, final int position) {
             EncounterParticipantRowModel rowModel = getItem(position);
             holder.textView.setText(rowModel.getParticipant().getName());
             holder.initRoll.setText(Integer.toString(rowModel.getParticipant().getInitiativeScore()));
@@ -101,6 +112,12 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
                         dragIconTouchListener.onTouch(v, event, position);
                     }
                     return false;
+                }
+            });
+
+            holder.rolls.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    rollsClickListener.onClick(v, position);
                 }
             });
 

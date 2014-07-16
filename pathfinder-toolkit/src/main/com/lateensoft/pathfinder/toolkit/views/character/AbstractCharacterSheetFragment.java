@@ -80,6 +80,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     private void setSelectedCharacter(long characterId) {
         Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
         preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
+        currentCharacterID = characterId;
     }
 
     /**

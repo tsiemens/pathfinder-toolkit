@@ -97,7 +97,7 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         if(m_classSkill && m_rank > 0)
             skillMod += 3;
         
-        if (ability == DEX || ability== STR) {
+        if (ability == DEX || ability == STR) {
             skillMod += armorCheckPenalty;
         }
         

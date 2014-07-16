@@ -58,6 +58,15 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
     public Skill getSkillByIndex(int index) {
         return skills.get(index);
     }
+
+    public Skill getSkillByType(SkillType type) {
+        for (Skill skill : skills) {
+            if (skill.getType() == type) {
+                return skill;
+            }
+        }
+        throw new IllegalStateException("No skill of type " + type + " found");
+    }
     
     public void setCharacterID(long id) {
         for (Skill skill : skills) {

@@ -1,15 +1,43 @@
 package com.lateensoft.pathfinder.toolkit.util;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Random;
 
 public class DiceSet {
 
-    private Random mNumberGenerator;
+    public enum Die {
+        D4(4), D6(6), D8(8), D10(10), D12(12), D20(20), D100(100);
+
+        private int sides;
+
+        Die(int sides) {
+            this.sides = sides;
+        }
+
+        public int getSides() {
+            return sides;
+        }
+    }
+
+    private Random randGenerator = new Random();
+
+    @Deprecated
     final private int mDiceInSet[] = { 4, 6, 8, 10, 12, 20, 100 };
+    @Deprecated
     final private int TOTAL_DICE_IN_SET = 7;
 
-    public DiceSet() {
-        mNumberGenerator = new Random();
+    public int roll(Die die) {
+        return randGenerator.nextInt(die.getSides()) + 1;
+    }
+
+    public List<Integer> rollMany(Die die, int numberOfRolls) {
+        List<Integer> rolls = Lists.newArrayListWithCapacity(numberOfRolls);
+        for (int i = 0; i < numberOfRolls; i++) {
+            rolls.add(roll(die));
+        }
+        return rolls;
     }
 
     /**
@@ -18,10 +46,11 @@ public class DiceSet {
      *         valid polyhedral die (4, 6, 8, 10, 12, 20, 100). Returns 0 if
      *         dieType is invalid.
      */
+    @Deprecated
     public int singleRoll(int dieType) {
         for (int i = 0; i < TOTAL_DICE_IN_SET; i++) {
             if (dieType == mDiceInSet[i])
-                return mNumberGenerator.nextInt(dieType) + 1;
+                return randGenerator.nextInt(dieType) + 1;
         }
 
         return 0;
@@ -42,7 +71,7 @@ public class DiceSet {
         for (int i = 0; i < TOTAL_DICE_IN_SET; i++) {
             if (dieType == mDiceInSet[i]) {
                 for (int j = 0; j < rolls; j++)
-                    rollTotal += (mNumberGenerator.nextInt(dieType) + 1);
+                    rollTotal += (randGenerator.nextInt(dieType) + 1);
                 return rollTotal;
             }
         }
@@ -60,13 +89,14 @@ public class DiceSet {
      *         a valid polyhedral die (4, 6, 8, 10, 12, 20, 100). Returns null if
      *         dieType is invalid.
      */
+    @Deprecated
     public int[] multiRollWithResults(int rolls, int dieType){
         int[] rollResults = new int[rolls];
         
         for (int i = 0; i < TOTAL_DICE_IN_SET; i++) {
             if (dieType == mDiceInSet[i]) {
                 for (int j = 0; j < rolls; j++)
-                    rollResults[j] = (mNumberGenerator.nextInt(dieType) + 1);
+                    rollResults[j] = (randGenerator.nextInt(dieType) + 1);
                 return rollResults;
             }
         }

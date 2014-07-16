@@ -118,7 +118,7 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
         toUpdate.setWeight(weight);
         toUpdate.setWorn(worn);
         toUpdate.setACBonus(ACBonus);
-        toUpdate.setCheckPen(checkPen);
+        toUpdate.setArmorCheckPenalty(checkPen);
         toUpdate.setMaxDex(maxDex);
         toUpdate.setSpellFail(spellFail);
         toUpdate.setSpeed(speed);

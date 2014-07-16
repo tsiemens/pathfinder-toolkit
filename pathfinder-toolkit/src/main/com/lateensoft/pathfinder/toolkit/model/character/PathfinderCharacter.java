@@ -6,10 +6,8 @@ import android.os.Parcelable;
 
 import com.google.common.base.Objects;
 import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilitySet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveSet;
-import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillSet;
+import com.lateensoft.pathfinder.toolkit.model.character.items.Armor;
+import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 
 public class PathfinderCharacter implements Parcelable, Identifiable {
     private static final String PARCEL_BUNDLE_KEY_ABILITIES = "abilities";
@@ -186,7 +184,31 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
         feats.setCharacterID(id);
         spellBook.setCharacterID(id);
     }
-    
+
+    public int getMaxDex() {
+        return Armor.maxDexForAll(getInventory().getArmors());
+    }
+
+    public int getInitiativeMod() {
+        return getCombatStatSet().getInitiativeMod(getAbilitySet(), getMaxDex());
+    }
+
+    public int getSaveMod(SaveType type) {
+        return getSaveSet().getSave(type).getTotal(getAbilitySet(), getMaxDex());
+    }
+
+    public int getSkillMod(SkillType type) {
+        return getSkillSet().getSkillByType(type).getSkillMod(getAbilitySet(), getMaxDex(), getArmorCheckPenalty());
+    }
+
+    public int getArmorCheckPenalty() {
+        int penalty = 0;
+        for (Armor armor : getInventory().getArmors()) {
+            penalty += armor.getArmorCheckPenalty();
+        }
+        return penalty;
+    }
+
     @Override
     public int describeContents() {
         return 0;

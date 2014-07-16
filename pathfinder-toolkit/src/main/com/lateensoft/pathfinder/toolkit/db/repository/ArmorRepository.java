@@ -57,7 +57,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
         
         armor.setWorn(worn);
         armor.setACBonus(acBonus);
-        armor.setCheckPen(checkPen);
+        armor.setArmorCheckPenalty(checkPen);
         armor.setMaxDex(maxDex);
         armor.setSpellFail(spellFail);
         armor.setSpeed(speed);
@@ -125,7 +125,7 @@ public class ArmorRepository extends BaseRepository<Armor> {
         values.put(ID, object.getId());
         values.put(WORN, object.isWorn());
         values.put(AC_BONUS, object.getACBonus());
-        values.put(CHECK_PEN, object.getCheckPen());
+        values.put(CHECK_PEN, object.getArmorCheckPenalty());
         values.put(MAX_DEX, object.getMaxDex());
         values.put(SPELL_FAIL, object.getSpellFail());
         values.put(SPEED, object.getSpeed());

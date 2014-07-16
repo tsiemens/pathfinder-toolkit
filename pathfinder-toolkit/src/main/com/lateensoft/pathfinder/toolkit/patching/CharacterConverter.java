@@ -138,7 +138,7 @@ public class CharacterConverter {
     private static void setArmor(Armor newArmor, com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.items.PTArmor oldArmor) {
         setItem(newArmor, oldArmor);
         newArmor.setACBonus(oldArmor.getACBonus());
-        newArmor.setCheckPen(0 - oldArmor.getCheckPen()); // Changes this to negatives
+        newArmor.setArmorCheckPenalty(0 - oldArmor.getCheckPen()); // Changes this to negatives
         newArmor.setMaxDex(oldArmor.getMaxDex());
         try {
             newArmor.setSize(Size.forKey(oldArmor.getSize()));

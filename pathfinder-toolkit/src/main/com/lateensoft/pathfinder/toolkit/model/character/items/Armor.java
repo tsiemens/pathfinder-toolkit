@@ -3,6 +3,8 @@ package com.lateensoft.pathfinder.toolkit.model.character.items;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Collection;
+
 public class Armor extends Item {
     private boolean worn;
     private int ACBonus;
@@ -86,11 +88,11 @@ public class Armor extends Item {
         this.ACBonus = ACBonus;
     }
     
-    public int getCheckPen() {
+    public int getArmorCheckPenalty() {
         return checkPen;
     }
     
-    public void setCheckPen(int checkPen) {
+    public void setArmorCheckPenalty(int checkPen) {
         this.checkPen = checkPen;
     }
     
@@ -100,6 +102,16 @@ public class Armor extends Item {
     
     public void setMaxDex(int maxDex) {
         this.maxDex = maxDex;
+    }
+
+    public static int maxDexForAll(Collection<Armor> armors) {
+        int maxDex = Integer.MAX_VALUE;
+        for (Armor armor : armors) {
+            if (armor.isWorn() && armor.getMaxDex() < maxDex) {
+                maxDex = armor.getMaxDex();
+            }
+        }
+        return maxDex;
     }
     
     public int getSpellFail() {

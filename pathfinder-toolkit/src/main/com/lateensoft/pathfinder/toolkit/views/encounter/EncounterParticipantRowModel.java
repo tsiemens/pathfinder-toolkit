@@ -13,7 +13,7 @@ public class EncounterParticipantRowModel implements Comparable<EncounterPartici
     private final EncounterParticipant participant;
     private int lastCheckRoll = 0;
 
-    public static List<EncounterParticipantRowModel> from(Collection<EncounterParticipant> participants) {
+    public static List<EncounterParticipantRowModel> listFrom(Collection<EncounterParticipant> participants) {
         List<EncounterParticipantRowModel> rows = Lists.newArrayListWithCapacity(participants.size());
         for (EncounterParticipant participant : participants) {
             rows.add(new EncounterParticipantRowModel(participant));

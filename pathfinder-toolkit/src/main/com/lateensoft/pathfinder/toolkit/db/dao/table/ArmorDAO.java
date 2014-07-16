@@ -115,7 +115,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
 
         armor.setWorn(worn);
         armor.setACBonus(acBonus);
-        armor.setCheckPen(checkPen);
+        armor.setArmorCheckPenalty(checkPen);
         armor.setMaxDex(maxDex);
         armor.setSpellFail(spellFail);
         armor.setSpeed(speed);
@@ -130,7 +130,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
         values.put(ID, armor.getId());
         values.put(WORN, armor.isWorn());
         values.put(AC_BONUS, armor.getACBonus());
-        values.put(CHECK_PEN, armor.getCheckPen());
+        values.put(CHECK_PEN, armor.getArmorCheckPenalty());
         values.put(MAX_DEX, armor.getMaxDex());
         values.put(SPELL_FAIL, armor.getSpellFail());
         values.put(SPEED, armor.getSpeed());
@@ -142,13 +142,7 @@ public class ArmorDAO extends OwnedIdentifiableTableDAO<Long, Armor> {
     /** the max dex permitted by of all worn armors */
     public int getMaxDexForCharacter(long characterId) {
         List<Armor> armors = findAllForOwner(characterId);
-        int maxDex = Integer.MAX_VALUE;
-        for (Armor armor : armors) {
-            if (armor.isWorn() && armor.getMaxDex() < maxDex) {
-                maxDex = armor.getMaxDex();
-            }
-        }
-        return maxDex;
+        return Armor.maxDexForAll(armors);
     }
 
     /**  the total armor check penalty (negative) of all worn armor */

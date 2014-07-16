@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.encounter;
 
 import com.google.common.collect.Lists;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 
@@ -39,5 +40,14 @@ public class EncounterViewModel extends NamedList<EncounterParticipantRowModel> 
             participants.add(row.getParticipant());
         }
         return new NamedList<EncounterParticipant>(this.getId(), this.getName(), participants);
+    }
+
+    public List<IdNamePair> getParticipantIds() {
+        List<IdNamePair> participantIds = Lists.newArrayList();
+        for (EncounterParticipantRowModel row : this) {
+            EncounterParticipant participant = row.getParticipant();
+            participantIds.add(new IdNamePair(participant.getId(), participant.getName()));
+        }
+        return participantIds;
     }
 }

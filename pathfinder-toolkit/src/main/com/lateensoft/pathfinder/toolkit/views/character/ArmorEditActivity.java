@@ -80,7 +80,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
             m_nameET.setText(m_armor.getName());
         }
         m_ACSpinner.setSelection(m_armor.getACBonus() + AC_SPINNER_OFFSET);
-        m_ACPSpinner.setSelection(m_armor.getCheckPen() + ACP_SPINNER_OFFSET);
+        m_ACPSpinner.setSelection(m_armor.getArmorCheckPenalty() + ACP_SPINNER_OFFSET);
         m_sizeSpinner.setSelection(m_armor.getSize().getValuesIndex());
         m_maxDexSpinner.setSelection(m_armor.getMaxDex());
         m_speedSpinner.setSelection(m_armor.getSpeed()/5);
@@ -136,7 +136,7 @@ public class ArmorEditActivity extends ParcelableEditorActivity {
         m_armor.setQuantity(quantity);
         m_armor.setSize(Size.forValuesIndex(sizeIndex));
         m_armor.setACBonus(ac);
-        m_armor.setCheckPen(acp);
+        m_armor.setArmorCheckPenalty(acp);
         m_armor.setMaxDex(maxDex);
         m_armor.setWorn(m_wornCheckbox.isChecked());
         m_armor.setContained(m_itemContainedCheckbox.isChecked());

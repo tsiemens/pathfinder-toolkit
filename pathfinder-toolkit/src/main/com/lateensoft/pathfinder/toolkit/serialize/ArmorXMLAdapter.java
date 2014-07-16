@@ -39,7 +39,7 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
         m_itemXMLAdapter.setObjectContentForElement(armor, element);
         armor.setWorn(getBooleanAttribute(element, ATTR_WORN));
         armor.setACBonus(getBoundedIntAttribute(element, ATTR_AC_BONUS, -20, 20));
-        armor.setCheckPen(getBoundedIntAttribute(element, ATTR_ARMOR_CHECK_PENALTY, -20, 0));
+        armor.setArmorCheckPenalty(getBoundedIntAttribute(element, ATTR_ARMOR_CHECK_PENALTY, -20, 0));
         armor.setMaxDex(getBoundedIntAttribute(element, ATTR_MAX_DEX, 0, 40));
         armor.setSpellFail(getBoundedIntAttribute(element, ATTR_SPELL_FAIL, 0, 95));
         armor.setSpeed(getBoundedIntAttribute(element, ATTR_SPEED, 0, 120));
@@ -60,7 +60,7 @@ public class ArmorXMLAdapter extends XMLObjectAdapter<Armor> {
 
         element.addAttribute(ATTR_WORN, Boolean.toString(armor.isWorn()));
         element.addAttribute(ATTR_AC_BONUS, Integer.toString(armor.getACBonus()));
-        element.addAttribute(ATTR_ARMOR_CHECK_PENALTY, Integer.toString(armor.getCheckPen()));
+        element.addAttribute(ATTR_ARMOR_CHECK_PENALTY, Integer.toString(armor.getArmorCheckPenalty()));
         element.addAttribute(ATTR_MAX_DEX, Integer.toString(armor.getMaxDex()));
         element.addAttribute(ATTR_SPELL_FAIL, Integer.toString(armor.getSpellFail()));
         element.addAttribute(ATTR_SPEED, Integer.toString(armor.getSpeed()));
