@@ -30,8 +30,6 @@
 
     <!-- Main Menu Strings -->
     <string name="main_menu_character_group">Characters</string>
-    <string name="main_menu_init_tracker">Initiative Tracker</string>
-    <string name="main_menu_party_skill_checker">Party Skill Checker</string>
     <string name="main_menu_encounters">Encounters</string>
     <string name="main_menu_party_manager">Party Manager</string>
     <string name="main_menu_pointbuy">Pointbuy Calculator</string>

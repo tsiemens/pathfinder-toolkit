@@ -2,9 +2,6 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import com.google.common.collect.Lists;
-import com.lateensoft.pathfinder.toolkit.db.QueryUtils;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 
