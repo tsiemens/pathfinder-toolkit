@@ -22,7 +22,6 @@ public class TableCreator {
         db.execSQL(createFeat());
         db.execSQL(createFluffInfo());
 
-        db.execSQL(createPartyMember());
         db.execSQL(createParty());
         db.execSQL(createEncounter());
         db.execSQL(createEncounterParticipant());
@@ -151,35 +150,6 @@ public class TableCreator {
                 ");";
     }
 
-    // TODO remove this
-    @Deprecated
-    public String createPartyMember() {
-        Log.d(TAG, "Creating party member table");
-        return "CREATE TABLE PartyMember (" +
-                "party_member_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "party_id INTEGER, " +
-                "Name TEXT, " +
-                "Initiative INTEGER, " +
-                "AC INTEGER, " +
-                "Touch INTEGER, " +
-                "FlatFooted INTEGER, " +
-                "SpellResist INTEGER, " +
-                "DamageReduction INTEGER, " +
-                "CMD INTEGER, " +
-                "FortSave INTEGER, " +
-                "ReflexSave INTEGER, " +
-                "WillSave INTEGER, " +
-                "BluffSkillBonus INTEGER, " +
-                "DisguiseSkillBonus INTEGER, " +
-                "PerceptionSkillBonus INTEGER, " +
-                "SenseMotiveSkillBonus INTEGER, " +
-                "StealthSkillBonus INTEGER, " +
-                "RolledValue INTEGER, " +
-                "FOREIGN KEY (party_id) REFERENCES Party(party_id) " +
-                    "ON DELETE CASCADE " +
-                ");";
-    }
-    
     public String createSpell() {
         Log.d(TAG, "Creating spell table");
         return "CREATE TABLE Spell (" +

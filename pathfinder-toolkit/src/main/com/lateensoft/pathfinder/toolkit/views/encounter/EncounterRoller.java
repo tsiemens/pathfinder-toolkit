@@ -37,6 +37,7 @@ public class EncounterRoller {
     public enum SkillCheckType { FORT, REFLEX, WILL, BLUFF, DISGUISE, PERCEPTION, SENSE, STEALTH }
 
     public void rollSkillChecks(SkillCheckType checkType) {
+        // TODO account for crit values
         for (EncounterParticipantRowModel row : encounter) {
             row.setLastCheckRoll(rollSkillCheck(row.getParticipant(), checkType));
         }

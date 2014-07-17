@@ -95,7 +95,7 @@ public class EncounterFragment extends BasePageFragment {
         }
 
         @Override public int getActionMenuResourceId() {
-            return R.menu.membership_action_mode_menu;
+            return R.menu.remove_action_mode_menu;
         }
 
         @Override public ListView getListView() {
@@ -356,10 +356,6 @@ public class EncounterFragment extends BasePageFragment {
     @Override
     public void updateTitle() {
         setTitle("Encounters"); // TODO strings.xml
-        String subtitle = null;
-        if (presenter != null && presenter.getModel() != null) {
-            subtitle = presenter.getModel().getName();
-        }
-        setSubtitle(subtitle);
+        setSubtitle(null);
     }
 }

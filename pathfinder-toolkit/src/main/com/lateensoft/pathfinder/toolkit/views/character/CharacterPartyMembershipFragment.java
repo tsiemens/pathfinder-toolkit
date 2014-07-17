@@ -87,7 +87,7 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
         }
 
         @Override public int getActionMenuResourceId() {
-            return R.menu.membership_action_mode_menu;
+            return R.menu.remove_action_mode_menu;
         }
 
         @Override public ListView getListView() {

@@ -8,12 +8,19 @@
         android:id="@+id/icon_drag"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+
         android:padding="5dp"
         android:scaleType="fitCenter"
+        android:clickable="true"
         android:contentDescription="@null"
         android:src="@drawable/ic_drag_row_holo_dark"/>
+
+    <View
+        android:layout_height="fill_parent"
+        android:layout_width="@dimen/small_divider"
+        android:layout_marginTop="@dimen/small_divider_margin"
+        android:layout_marginBottom="@dimen/small_divider_margin"
+        android:background="@color/divider_line"/>
 
     <LinearLayout
         android:id="@+id/ll_rolls"
@@ -33,7 +40,7 @@
             android:paddingBottom="2dp"
             android:maxLines="1"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
 
@@ -52,8 +59,8 @@
     <View
         android:layout_height="fill_parent"
         android:layout_width="@dimen/small_divider"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="@dimen/small_divider_margin"
+        android:layout_marginBottom="@dimen/small_divider_margin"
         android:background="@color/divider_line"/>
     
     <TextView 
