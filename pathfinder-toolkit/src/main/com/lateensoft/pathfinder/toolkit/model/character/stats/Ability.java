@@ -1,14 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
 import com.google.common.base.Preconditions;
-import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
 
 
-public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable, Comparable<Ability> {
+public class Ability implements TypedStat<AbilityType>, Parcelable, Comparable<Ability> {
     
     private static final int[] SCORES = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
     private static final int[] COSTS = {-4, -2, -1, 0, 1, 2, 3, 5, 7, 10, 13, 17};
@@ -21,20 +20,11 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
     private int score;
     private int tempBonus;
 
-    @Deprecated // once the DAOs are implemented, no owned objects will reference the character.
-    private long m_characterId;
-
-    @Deprecated
-    public Ability(@NotNull AbilityType type, long characterId, int score, int temp) {
+    public Ability(@NotNull AbilityType type, int score, int temp) {
         Preconditions.checkNotNull(type);
         this.type = type;
-        m_characterId = characterId;
         this.score = score;
         this.tempBonus = temp;
-    }
-    
-    public Ability(@NotNull AbilityType type, int score, int temp) {
-        this(type, UNSET_ID, score, temp);
     }
     
     public Ability(@NotNull AbilityType type) {
@@ -45,7 +35,6 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
         score = in.readInt();
         tempBonus = in.readInt();
         type = AbilityType.forKey(in.readInt());
-        m_characterId = in.readLong();
     }
 
     @Override
@@ -53,7 +42,6 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
         out.writeInt(score);
         out.writeInt(tempBonus);
         out.writeInt(type.getKey());
-        out.writeLong(m_characterId);
     }
 
     @Override
@@ -122,29 +110,6 @@ public class Ability implements TypedStat<AbilityType>, Parcelable, Identifiable
             }
         }
         return 0;
-    }
-    
-    @Override
-    @Deprecated
-    public void setId(long id) {
-//        type = AbilityType.forKey((int) id);
-    }
-
-    @Override
-    @Deprecated // The Identifiable interface will not be needed by ability once DAOs are used.
-    // It will use the OwnedWeakTableDAO, which does not expect a unique ID
-    public long getId() {
-        return type.getKey();
-    }
-
-    @Deprecated
-    public void setCharacterID(long id) {
-        m_characterId = id;
-    }
-
-    @Deprecated
-    public long getCharacterID() {
-        return m_characterId;
     }
     
     @Override

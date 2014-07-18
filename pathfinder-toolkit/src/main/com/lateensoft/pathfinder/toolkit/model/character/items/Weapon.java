@@ -25,10 +25,10 @@ public class Weapon extends Item implements Parcelable {
         size = Size.MEDIUM;
     }
     
-    public Weapon(long characterId, String name) {
-        super(characterId, name);
+    public Weapon(String name) {
+        super(name);
     }
-    
+
     public Weapon(Parcel in) {
         super(in);
         totalAttackBonus = in.readInt();

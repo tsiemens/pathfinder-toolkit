@@ -37,8 +37,6 @@ public class CharacterUtils {
 
     private static void populateTestCharacter(PathfinderCharacter.Builder builder) {
         builder.setName("test \nchar");
-        long id = Identifiable.UNSET_ID;
-        builder.setId(id);
         builder.setGold(1131415.4);
 
         // Abilities
@@ -53,19 +51,19 @@ public class CharacterUtils {
 
         // Items
         Inventory inventory = new Inventory();
-        inventory.getItems().add(new Item(id, "Cauld\n ron", 5.0, 1, false));
-        inventory.getItems().add(new Item(id, "Wands \n ", 1.3, 2, true));
+        inventory.getItems().add(new Item("Cauld\n ron", 5.0, 1, false));
+        inventory.getItems().add(new Item("Wands \n ", 1.3, 2, true));
 
         // Armor
-        inventory.getArmors().add(newArmor(id, "Heavy \narmor",
+        inventory.getArmors().add(newArmor("Heavy \narmor",
                 7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armo\nr", Size.MEDIUM));
-        inventory.getArmors().add(newArmor(id, "Hat",
+        inventory.getArmors().add(newArmor("Hat",
                 1.0, false, 10, /*ACP*/-4, 39, 11, 20, "Hat", Size.SMALL));
 
         // Weapons
-        inventory.getWeapons().add(newWeapon(id, "Great \nSword",
+        inventory.getWeapons().add(newWeapon("Great \nSword",
                 7.5, 5, "4/\n2", "x\n2", 5, "It's on \nfire!", 0, WeaponType.SLASHING, Size.LARGE));
-        inventory.getWeapons().add(newWeapon(id, "Long Bow",
+        inventory.getWeapons().add(newWeapon("Long Bow",
                 4.0, 3, "5", "x3", 30, "None", 20, WeaponType.BLUDGEONING, Size.MEDIUM));
         builder.setInventory(inventory);
 
@@ -95,8 +93,8 @@ public class CharacterUtils {
 
         // Feats
         FeatList featList = new FeatList();
-        featList.add(new Feat(id, "A \n Feat", "description\n 1"));
-        featList.add(new Feat(id, "B Feat", ""));
+        featList.add(new Feat("A \n Feat", "description\n 1"));
+        featList.add(new Feat("B Feat", ""));
         builder.setFeats(featList);
 
         // Fluff
@@ -141,16 +139,15 @@ public class CharacterUtils {
 
         // Spells
         SpellBook spellBook = new SpellBook();
-        spellBook.add(new Spell(id, "B\n Spell", 1, 4, "description\n 1"));
-        spellBook.add(new Spell(id, "A Spell", 2, 5, "description 2"));
+        spellBook.add(new Spell("B\n Spell", 1, 4, "description\n 1"));
+        spellBook.add(new Spell("A Spell", 2, 5, "description 2"));
         builder.setSpellBook(spellBook);
     }
 
-    private static Weapon newWeapon(long characterId, String name,
+    private static Weapon newWeapon(String name,
                                  double weight, int totalAttackB, String dmg, String crit, int range, String specProp,
                                  int ammo, WeaponType type, Size size) {
         Weapon weapon = new Weapon();
-        weapon.setCharacterID(characterId);
         weapon.setName(name);
         weapon.setWeight(weight);
         weapon.setTotalAttackBonus(totalAttackB);
@@ -164,11 +161,10 @@ public class CharacterUtils {
         return weapon;
     }
 
-    private static Armor newArmor(long characterId, String name,
+    private static Armor newArmor(String name,
                                  double weight, boolean worn, int ACBonus, int checkPen, int maxDex, int spellFail,
                                  int speed, String specProp, Size size) {
         Armor armor = new Armor();
-        armor.setCharacterID(characterId);
         armor.setName(name);
         armor.setWeight(weight);
         armor.setWorn(worn);

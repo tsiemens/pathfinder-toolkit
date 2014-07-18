@@ -71,13 +71,6 @@ public class SaveSet extends ValidatedTypedStatSet<Save, SaveType> implements Pa
         return saves.size();
     }
     
-    @Deprecated
-    public void setCharacterID(long id) {
-        for (Save save : saves) {
-            save.setCharacterID(id);
-        }
-    }
-
     @Override
      public Iterator<Save> iterator() {
         return new Iterator<Save>() {

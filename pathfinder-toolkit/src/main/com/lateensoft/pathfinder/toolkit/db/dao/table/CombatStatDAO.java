@@ -3,7 +3,6 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import android.content.ContentValues;
 import android.content.Context;
 import com.lateensoft.pathfinder.toolkit.db.dao.OwnedObject;
-import com.lateensoft.pathfinder.toolkit.db.dao.OwnedWeakTableDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.db.dao.UniqueOwnerTableDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType;
@@ -95,7 +94,6 @@ public class CombatStatDAO extends UniqueOwnerTableDAO<Long, CombatStatSet> {
 
     @Override
     protected CombatStatSet buildFromHashTable(Hashtable<String, Object> hashTable) {
-        long characterId = (Long) hashTable.get(CHARACTER_ID);
         int totalHP = ((Long) hashTable.get(TOTAL_HP)).intValue();
         int wounds = ((Long) hashTable.get(WOUNDS)).intValue();
         int nonLethalDamage = ((Long) hashTable.get(NON_LETHAL_DAMAGE)).intValue();
@@ -117,7 +115,7 @@ public class CombatStatDAO extends UniqueOwnerTableDAO<Long, CombatStatSet> {
         int cmdMiscMod = ((Long) hashTable.get(CMD_MISC_MOD)).intValue();
         int spellResist = ((Long) hashTable.get(SPELL_RESIST)).intValue();
 
-        CombatStatSet statSet = new CombatStatSet(characterId);
+        CombatStatSet statSet = new CombatStatSet();
         statSet.setTotalHP(totalHP);
         statSet.setWounds(wounds);
         statSet.setNonLethalDamage(nonLethalDamage);

@@ -52,7 +52,7 @@ public class FeatDAOTest extends  CharacterComponentDAOTest {
 
     @Test
     public void updateValid() throws DataAccessException {
-        Feat toUpdate = new Feat(feat2.getId(), -1, "sidkjf", "sdfsdf");
+        Feat toUpdate = new Feat(feat2.getId(), "sidkjf", "sdfsdf");
         dao.update(getTestCharacterId(), toUpdate);
         Feat updated = dao.find(feat2.getId());
         assertEquals(updated, toUpdate);
@@ -60,7 +60,7 @@ public class FeatDAOTest extends  CharacterComponentDAOTest {
 
     @Test(expected = DataAccessException.class)
     public void updateInvalid() throws DataAccessException {
-        Feat toUpdate = new Feat(-1, -1, "sidkjf", "sdfsdf");
+        Feat toUpdate = new Feat(-1, "sidkjf", "sdfsdf");
         dao.update(getTestCharacterId(), toUpdate);
     }
 

@@ -5,8 +5,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.stats.TypedStat;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.ValidatedTypedStatSet;
 
 public abstract class WeakValidatedTypedSetDAO<SetID, Set extends ValidatedTypedStatSet<Comp, ?>,
-        Comp extends TypedStat<? extends Enum<?>> & Comparable<Comp> & Identifiable>
-
+        Comp extends TypedStat<? extends Enum<?>> & Comparable<Comp>>
         extends ValidatedTypedSetDAO<SetID, Set, Comp, OwnedWeakGenericDAO<SetID, ?, Comp>> {
 
     @Override

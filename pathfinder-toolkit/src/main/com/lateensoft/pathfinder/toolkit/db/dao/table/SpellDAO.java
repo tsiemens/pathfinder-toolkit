@@ -56,12 +56,11 @@ public class SpellDAO extends OwnedIdentifiableTableDAO<Long, Spell> {
     @Override
     protected Spell buildFromHashTable(Hashtable<String, Object> hashTable) {
         int id = ((Long) hashTable.get(ID)).intValue();
-        int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
         String name = (String) hashTable.get(NAME);
         int prepared = ((Long) hashTable.get(PREPARED)).intValue();
         int level = ((Long) hashTable.get(LEVEL)).intValue();
         String desc = (String) hashTable.get(DESC);
 
-        return new Spell(id, characterId, name, level, prepared, desc);
+        return new Spell(id, name, level, prepared, desc);
     }
 }

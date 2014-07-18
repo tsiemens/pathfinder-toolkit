@@ -74,22 +74,6 @@ public class Inventory implements Parcelable {
         return totalWeight;
     }
     
-    /**
-     * Sets character id of all items in inventory
-     * @param id
-     */
-    public void setCharacterID(long id) {
-        for(Item item : m_items) {
-            item.setCharacterID(id);
-        }
-        for(Item item : m_weapons) {
-            item.setCharacterID(id);
-        }
-        for(Item item : m_armor) {
-            item.setCharacterID(id);
-        }
-    }
-    
     @Override
     public int describeContents() {
         return 0;

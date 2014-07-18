@@ -25,12 +25,6 @@ public class SpellBook extends ArrayList<Spell> implements Parcelable {
         out.writeTypedList(this);
     }
     
-    public void setCharacterID(long id) {
-        for (Spell spell : this) {
-            spell.setCharacterID(id);
-        }
-    }
-    
     @Override
     public int describeContents() {
         return 0;

@@ -68,12 +68,6 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
         throw new IllegalStateException("No skill of type " + type + " found");
     }
     
-    public void setCharacterID(long id) {
-        for (Skill skill : skills) {
-            skill.setCharacterID(id);
-        }
-    }
-    
     /**
      * @return reference to skill at index. Index corresponds to array created by getTrainedSkills
      */
@@ -130,7 +124,6 @@ public class SkillSet extends ValidatedTypedStatSet<Skill, SkillType> implements
     
     public Skill addNewSubSkill(SkillType skillType) {
         Skill newSkill = new Skill(skillType);
-        newSkill.setCharacterID(skills.get(0).getCharacterID());
         skills.add(newSkill);
         Collections.sort(skills);
         return newSkill;

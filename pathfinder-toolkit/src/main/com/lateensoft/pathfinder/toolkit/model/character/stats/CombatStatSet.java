@@ -1,11 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.model.character.stats;
 
-import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class CombatStatSet implements Parcelable, Identifiable {
+public class CombatStatSet implements Parcelable {
     public static final AbilityType DEFAULT_INIT_ABILITY = AbilityType.DEX;
     public static final AbilityType DEFAULT_AC_ABILITY = AbilityType.DEX;
     public static final AbilityType DEFAULT_CMB_ABILITY = AbilityType.STR;
@@ -42,13 +40,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
     private AbilityType CMDAbility;
     private int m_CMDMiscMod;
 
-    private long m_characterId;
-
-    public CombatStatSet(long characterId) {
-        this();
-        m_characterId = characterId;
-    }
-
     public CombatStatSet(){
         m_totalHP = 0;
         m_wounds = 0;
@@ -75,8 +66,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
         m_CMDMiscMod = 0;
         
         m_spellResist = 0;
-        
-        m_characterId = UNSET_ID;
     }
     
     public CombatStatSet(Parcel in) {
@@ -105,8 +94,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
         m_CMDMiscMod = in.readInt();
         
         m_spellResist = in.readInt();
-        
-        m_characterId = in.readLong();
     }
 
     @Override
@@ -136,8 +123,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
         out.writeInt(m_CMDMiscMod);
         
         out.writeInt(m_spellResist);
-        
-        out.writeLong(m_characterId);
     }
     
     public void setTotalHP(int totalHP){
@@ -365,22 +350,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
                 + abilitySet.getTotalAbilityMod(CMDAbility, maxDex) + m_CMDMiscMod + 10;
     }
 
-    /**
-     * Sets the character ID
-     */
-    @Override
-    public void setId(long id) {
-        m_characterId = id;
-    }
-    
-    /**
-     * @return the character ID
-     */
-    @Override
-    public long getId() {
-        return m_characterId;
-    }
-    
     @Override
     public int describeContents() {
         return 0;
@@ -413,7 +382,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
         if (CMDAbility != that.CMDAbility) return false;
         if (m_CMDMiscMod != that.m_CMDMiscMod) return false;
         if (m_baseSpeedFt != that.m_baseSpeedFt) return false;
-        if (m_characterId != that.m_characterId) return false;
         if (m_damageReduction != that.m_damageReduction) return false;
         if (m_deflectionMod != that.m_deflectionMod) return false;
         if (initAbility != that.initAbility) return false;
@@ -450,7 +418,6 @@ public class CombatStatSet implements Parcelable, Identifiable {
         result = 31 * result + CMBAbility.getKey();
         result = 31 * result + CMDAbility.getKey();
         result = 31 * result + m_CMDMiscMod;
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 }

@@ -5,7 +5,6 @@ import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 /**
  * Representation for both Feats and Special  abilities
  * @author trevsiemens
@@ -16,25 +15,17 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
     private String m_description;
     
     private long m_id;
-    @Deprecated // TODO this should not be stored here
-    private long m_characterId;
     
     public Feat(){
-        this(UNSET_ID, UNSET_ID, "", "");
-    }
-
-    @Deprecated
-    public Feat(long characterId, String name, String description){
-        this(UNSET_ID, characterId, name, description);
+        this("", "");
     }
 
     public Feat(String name, String description){
-        this(UNSET_ID, -1, name, description);
+        this(UNSET_ID, name, description);
     }
-    
-    public Feat(long id, long characterId, String name, String description){
+
+    public Feat(long id, String name, String description){
         m_id = id;
-        m_characterId = characterId;
         m_name = name;
         m_description = description;
     }
@@ -43,14 +34,12 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
         m_name = otherFeat.getName();
         m_description = otherFeat.getDescription();
         m_id = otherFeat.getId();
-        m_characterId = otherFeat.getCharacterID();
     }
     
     public Feat(Parcel in) {
         m_name = in.readString();
         m_description = in.readString();
         m_id = in.readLong();
-        m_characterId = in.readLong();
     }
     
     @Override
@@ -58,7 +47,6 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
         out.writeString(m_name);
         out.writeString(m_description);
         out.writeLong(m_id);
-        out.writeLong(m_characterId);
     }
     
     public void setName(String name){
@@ -81,16 +69,6 @@ public class Feat implements Parcelable, Identifiable, Comparable<Feat> {
         return m_description;
     }
 
-    @Deprecated
-    public void setCharacterID(long characterId) {
-        m_characterId = characterId;
-    }
-
-    @Deprecated
-    public long getCharacterID() {
-        return m_characterId;
-    }
-    
     @Override
     public void setId(long id) {
         m_id = id;

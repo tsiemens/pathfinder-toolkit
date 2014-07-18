@@ -1,11 +1,9 @@
 package com.lateensoft.pathfinder.toolkit.model.character;
 
-import com.lateensoft.pathfinder.toolkit.dao.Identifiable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FluffInfo implements Parcelable, Identifiable {
+public class FluffInfo implements Parcelable {
     private String m_alignment;
     private String m_XP;
     private String m_nextLevelXP;
@@ -21,9 +19,6 @@ public class FluffInfo implements Parcelable, Identifiable {
     private String m_hair;
     private String m_languages;
     private String m_description;
-
-    @Deprecated // This should not be an identifiable class
-    private long m_characterId;
 
     public FluffInfo() {
         m_alignment = "";
@@ -41,8 +36,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         m_hair = "";
         m_languages = "";
         m_description = "";
-
-        m_characterId = UNSET_ID;
     }
     
     public FluffInfo(Parcel in) {
@@ -61,8 +54,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         m_hair = in.readString();
         m_languages = in.readString();
         m_description = in.readString();
-
-        m_characterId = in.readLong();
     }
 
     @Override
@@ -82,8 +73,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         out.writeString(m_hair);
         out.writeString(m_languages);
         out.writeString(m_description);
-
-        out.writeLong(m_characterId);
     }
     
     public String getAlignment() {
@@ -211,18 +200,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         return 0;
     }
 
-    @Deprecated
-    @Override
-    public void setId(long id) {
-        m_characterId = id;
-    }
-
-    @Deprecated
-    @Override
-    public long getId() {
-        return m_characterId;
-    }
-
     public static final Parcelable.Creator<FluffInfo> CREATOR = new Parcelable.Creator<FluffInfo>() {
         public FluffInfo createFromParcel(Parcel in) {
             return new FluffInfo(in);
@@ -240,7 +217,6 @@ public class FluffInfo implements Parcelable, Identifiable {
 
         FluffInfo fluffInfo = (FluffInfo) o;
 
-        if (m_characterId != fluffInfo.m_characterId) return false;
         if (m_XP != null ? !m_XP.equals(fluffInfo.m_XP) : fluffInfo.m_XP != null) return false;
         if (m_alignment != null ? !m_alignment.equals(fluffInfo.m_alignment) : fluffInfo.m_alignment != null)
             return false;
@@ -282,7 +258,6 @@ public class FluffInfo implements Parcelable, Identifiable {
         result = 31 * result + (m_hair != null ? m_hair.hashCode() : 0);
         result = 31 * result + (m_languages != null ? m_languages.hashCode() : 0);
         result = 31 * result + (m_description != null ? m_description.hashCode() : 0);
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 }

@@ -16,39 +16,24 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
 
     private long id;
 
-    @Deprecated // once the DAOs are implemented, no owned objects will reference the character.
-    private long characterId;
-    
-    public Item(long id, long characterId, String name, double weight, int quantity, boolean contained) {
+    public Item(long id, String name, double weight, int quantity, boolean contained) {
         this.id = id;
-        this.characterId = characterId;
         this.name = name;
         this.weight = weight;
         this.quantity = quantity;
         isContained = contained;
     }
     
-    public Item(long characterId, String name, double weight, int quantity, boolean contained) {
-        this(UNSET_ID, characterId, name, weight, quantity, contained);
+    public Item(String name, double weight, int quantity, boolean contained) {
+        this(UNSET_ID, name, weight, quantity, contained);
     }
     
-    /**
-     * Creates new instance of an Item. Defaults quantity to 1 and contained to false.
-     */
-    public Item(long characterId, String name, double weight) {
-        this(characterId, name, weight, 1, false);
-    }
-    
-    public Item(long characterId, String name) {
-        this(characterId, name, 1);
-    }
-    
-    public Item(long characterId) {
-        this(characterId, "");
+    public Item(String name) {
+        this(name, 1, 1, false);
     }
     
     public Item() {
-        this(UNSET_ID);
+        this("");
     }
     
     @Override
@@ -60,7 +45,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
         contained[0] = isContained;
         out.writeBooleanArray(contained);
         out.writeLong(id);
-        out.writeLong(characterId);
     }
     
     public Item(Parcel in) {
@@ -71,7 +55,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
         in.readBooleanArray(contained);
         isContained = contained[0];
         id = in.readLong();
-        characterId = in.readLong();
     }
     
     public String getName() {
@@ -116,14 +99,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
         return id;
     }
     
-    public void setCharacterID (long id) {
-        characterId = id;
-    }
-    
-    public long getCharacterID() {
-        return characterId;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -151,7 +126,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
 
         Item item = (Item) o;
 
-        if (characterId != item.characterId) return false;
         if (id != item.id) return false;
         if (isContained != item.isContained) return false;
         if (quantity != item.quantity) return false;
@@ -171,7 +145,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
         result = 31 * result + quantity;
         result = 31 * result + (isContained ? 1 : 0);
         result = 31 * result + (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (characterId ^ (characterId >>> 32));
         return result;
     }
 

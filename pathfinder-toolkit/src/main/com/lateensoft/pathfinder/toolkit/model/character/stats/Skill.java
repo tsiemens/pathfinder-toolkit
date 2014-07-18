@@ -21,31 +21,26 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
     
     // A unique id for all skills in the database
     long m_id;
-    @Deprecated
-    long m_characterId;
-    
+
     public Skill(SkillType type) {
         this(type, type.getDefaultAbility());
     }
 
     public Skill(SkillType type, AbilityType abilityType) {
-        this(UNSET_ID, UNSET_ID, type, false, 0, 0, abilityType);
+        this(UNSET_ID,  type, false, 0, 0, abilityType);
     }
     
-    public Skill(long id, long characterId, SkillType type, Boolean classSkill, int rank,
-                 int miscMod, AbilityType ability) {
-        this(id, characterId, type, null, classSkill, rank, miscMod, ability);
+    public Skill(long id, SkillType type, Boolean classSkill, int rank, int miscMod, AbilityType ability) {
+        this(id, type, null, classSkill, rank, miscMod, ability);
     }
     
-    public Skill(long id, long characterId, SkillType type, String subtype, Boolean classSkill,
-                 int rank, int miscMod, AbilityType ability) {
+    public Skill(long id, SkillType type, String subtype, Boolean classSkill, int rank, int miscMod, AbilityType ability) {
         m_classSkill = classSkill;
         m_rank = rank;
         m_miscMod = miscMod;
         this.ability = ability;
         this.type = type;
         m_id = id;
-        m_characterId = characterId;
         m_subType = subtype;
     }
 
@@ -57,7 +52,6 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         m_miscMod = in.readInt();
         ability = forKey(in.readInt());
         type = SkillType.forKey(in.readInt());
-        m_characterId = in.readLong();
         m_id = in.readLong();
         m_subType = in.readString();
     }
@@ -71,7 +65,6 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         out.writeInt(m_miscMod);
         out.writeInt(ability.getKey());
         out.writeInt(type.getKey());
-        out.writeLong(m_characterId);
         out.writeLong(m_id);
         out.writeString(m_subType);
     }
@@ -155,14 +148,6 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         return m_id;
     }
     
-    public void setCharacterID(long id) {
-        m_characterId = id;
-    }
-    
-    public long getCharacterID() {
-        return m_characterId;
-    }
-    
     @Override
     public int describeContents() {
         return 0;
@@ -207,7 +192,6 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         Skill skill = (Skill) o;
 
         if (ability != skill.ability) return false;
-        if (m_characterId != skill.m_characterId) return false;
         if (m_classSkill != skill.m_classSkill) return false;
         if (m_id != skill.m_id) return false;
         if (m_miscMod != skill.m_miscMod) return false;
@@ -227,7 +211,6 @@ public class Skill implements TypedStat<SkillType>, Parcelable, Identifiable, Co
         result = 31 * result + (m_subType != null ? m_subType.hashCode() : 0);
         result = 31 * result + type.hashCode();
         result = 31 * result + (int) (m_id ^ (m_id >>> 32));
-        result = 31 * result + (int) (m_characterId ^ (m_characterId >>> 32));
         return result;
     }
 }

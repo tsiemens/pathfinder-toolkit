@@ -53,7 +53,7 @@ public class SaveDAO extends OwnedWeakTableDAO<Long, Integer, Save> {
         Save object = rowData.getObject();
         ContentValues values = new ContentValues();
         values.put(SAVE_KEY, object.getType().getKey());
-        values.put(CHARACTER_ID, object.getCharacterID());
+        values.put(CHARACTER_ID, rowData.getOwnerId());
         values.put(BASE_VALUE, object.getBaseSave());
         values.put(ABILITY_KEY, object.getAbilityType().getKey());
         values.put(MAGIC_MOD, object.getMagicMod());
@@ -65,14 +65,13 @@ public class SaveDAO extends OwnedWeakTableDAO<Long, Integer, Save> {
     @Override
     protected Save buildFromHashTable(Hashtable<String, Object> hashTable) {
         SaveType saveKey = SaveType.forKey(((Long) hashTable.get(SAVE_KEY)).intValue());
-        int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
         int baseValue = ((Long) hashTable.get(BASE_VALUE)).intValue();
         AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
         int magicMod = ((Long) hashTable.get(MAGIC_MOD)).intValue();
         int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
         int tempMod = ((Long) hashTable.get(TEMP_MOD)).intValue();
 
-        return new Save(saveKey, characterId, baseValue, abilityKey, magicMod,
+        return new Save(saveKey, baseValue, abilityKey, magicMod,
                 miscMod, tempMod);
     }
 }

@@ -50,7 +50,7 @@ public class SkillDAO extends OwnedIdentifiableTableDAO<Long, Skill> {
             values.put(SKILL_ID, object.getId());
         }
         values.put(SKILL_KEY, object.getType().getKey());
-        values.put(CHARACTER_ID, object.getCharacterID());
+        values.put(CHARACTER_ID, rowData.getOwnerId());
         if (object.getSubType() != null) {
             values.put(SUB_TYPE, object.getSubType());
         }
@@ -65,14 +65,13 @@ public class SkillDAO extends OwnedIdentifiableTableDAO<Long, Skill> {
     protected Skill buildFromHashTable(Hashtable<String, Object> hashTable) {
         long id = ((Long) hashTable.get(SKILL_ID));
         SkillType skillType = SkillType.forKey(((Long) hashTable.get(SKILL_KEY)).intValue());
-        int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
         String subType = (String) hashTable.get(SUB_TYPE);
         boolean classSkill = ((Long) hashTable.get(CLASS_SKILL)).intValue() == 1;
         int rank = ((Long) hashTable.get(RANK)).intValue();
         int miscMod = ((Long) hashTable.get(MISC_MOD)).intValue();
         AbilityType abilityKey = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
 
-        return new Skill(id, characterId, skillType, subType, classSkill, rank,
+        return new Skill(id, skillType, subType, classSkill, rank,
                 miscMod, abilityKey);
     }
 }

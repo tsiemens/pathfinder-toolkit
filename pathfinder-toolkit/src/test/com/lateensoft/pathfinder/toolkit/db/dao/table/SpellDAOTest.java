@@ -31,8 +31,8 @@ public class SpellDAOTest extends  CharacterComponentDAOTest {
     private void initAndTestAdd() throws DataAccessException {
         dao = new SpellDAO(Robolectric.application);
 
-        spell1 = new Spell(-1L, "A Spell", 1, 3, "description 1");
-        spell2 = new Spell(-1L, "B Spell", 5, -1, "description 2");
+        spell1 = new Spell("A Spell", 1, 3, "description 1");
+        spell2 = new Spell("B Spell", 5, -1, "description 2");
 
         assertTrue(-1 != dao.add(getTestCharacterId(), spell1));
         assertTrue(-1 != dao.add(getTestCharacterId(), spell2));
@@ -52,7 +52,7 @@ public class SpellDAOTest extends  CharacterComponentDAOTest {
 
     @Test
     public void updateValid() throws DataAccessException {
-        Spell toUpdate = new Spell(spell2.getId(), -1, "sidkjf", 5, 7000, "sdfsdf");
+        Spell toUpdate = new Spell(spell2.getId(), "sidkjf", 5, 7000, "sdfsdf");
         dao.update(getTestCharacterId(), toUpdate);
         Spell updated = dao.find(spell2.getId());
         assertEquals(updated, toUpdate);
@@ -60,7 +60,7 @@ public class SpellDAOTest extends  CharacterComponentDAOTest {
 
     @Test(expected = DataAccessException.class)
     public void updateInvalid() throws DataAccessException {
-        Spell toUpdate = new Spell(-1, -1, "sidkjf", 6, 9, "sdfsdf");
+        Spell toUpdate = new Spell(-1, "sidkjf", 6, 9, "sdfsdf");
         dao.update(getTestCharacterId(), toUpdate);
     }
 

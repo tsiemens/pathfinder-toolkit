@@ -52,10 +52,9 @@ public class FeatDAO extends OwnedIdentifiableTableDAO<Long, Feat> {
     @Override
     protected Feat buildFromHashTable(Hashtable<String, Object> hashTable) {
         int id = ((Long) hashTable.get(ID)).intValue();
-        int characterId = ((Long) hashTable.get(CHARACTER_ID)).intValue();
         String name = (String) hashTable.get(NAME);
         String desc = (String) hashTable.get(DESC);
 
-        return new Feat(id, characterId, name, desc);
+        return new Feat(id, name, desc);
     }
 }

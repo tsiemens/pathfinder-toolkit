@@ -24,12 +24,6 @@ public class FeatList extends ArrayList<Feat> implements Parcelable {
         out.writeTypedList(this);
     }
     
-    public void setCharacterID(long id) {
-        for (Feat feat : this) {
-            feat.setCharacterID(id);
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;

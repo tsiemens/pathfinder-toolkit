@@ -28,6 +28,9 @@ public class TableCreatorTest extends BaseDatabaseTest {
             c.moveToNext();
         }
 
+        tablesInDb.remove("android_metadata");
+        tablesInDb.remove("sqlite_sequence");
+
         assertThat(tablesInDb, containsInAnyOrder("Ability", "Armor", "Character", "CombatStatSet",
                 "Feat", "FluffInfo", "Item", "Party", "Save", "Skill",
                 "Spell", "Weapon", "Encounter", "EncounterParticipant", "PartyMembership"));

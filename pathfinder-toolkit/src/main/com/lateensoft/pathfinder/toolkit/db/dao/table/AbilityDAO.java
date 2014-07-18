@@ -59,10 +59,9 @@ public class AbilityDAO extends OwnedWeakTableDAO<Long, AbilityType, Ability> {
     @Override
     protected Ability buildFromHashTable(Hashtable<String, Object> hashTable) {
         AbilityType ability = AbilityType.forKey(((Long) hashTable.get(ABILITY_KEY)).intValue());
-        long characterId  = (Long) hashTable.get(CHARACTER_ID);
         int score = ((Long) hashTable.get(SCORE)).intValue();
         int temp = ((Long) hashTable.get(TEMP)).intValue();
-        return new Ability(ability, characterId, score, temp);
+        return new Ability(ability, score, temp);
     }
 
     @Override

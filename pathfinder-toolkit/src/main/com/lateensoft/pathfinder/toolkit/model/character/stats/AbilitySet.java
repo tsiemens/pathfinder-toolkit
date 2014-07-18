@@ -91,13 +91,6 @@ public class AbilitySet extends ValidatedTypedStatSet<Ability, AbilityType> impl
         return abilities.size();
     }
 
-    @Deprecated
-    public void setCharacterID(long id) {
-        for (Ability ability : abilities) {
-            ability.setCharacterID(id);
-        }
-    }
-
     @Override
     public Iterator<Ability> iterator() {
         return new Iterator<Ability>() {

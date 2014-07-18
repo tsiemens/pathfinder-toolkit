@@ -29,8 +29,8 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
 
     private void initAndTestAdd() throws DataAccessException {
         dao = new ItemDAO(Robolectric.application);
-        item1 = new Item(getTestCharacterId(), "Cauldron", 5.0, 1, false);
-        item2 = new Item(getTestCharacterId(), "Wands", 1.0, 2, true);
+        item1 = new Item("Cauldron", 5.0, 1, false);
+        item2 = new Item("Wands", 1.0, 2, true);
         dao.add(getTestCharacterId(), item1);
         dao.add(getTestCharacterId(), item2);
     }
@@ -43,7 +43,7 @@ public class ItemDAOTest extends CharacterComponentDAOTest {
 
     @Test
     public void testUpdate() throws DataAccessException {
-        Item toUpdate = new Item(item2.getId(), getTestCharacterId(), "Big Wand", 2.0, 1, false);
+        Item toUpdate = new Item(item2.getId(), "Big Wand", 2.0, 1, false);
 
         dao.update(getTestCharacterId(), toUpdate);
         Item updated = dao.find(toUpdate.getId());

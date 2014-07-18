@@ -169,20 +169,9 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
         return id;
     }
     
-    /**
-     * Sets the character ID, and all character IDs of components
-     */
     @Override
     public void setId(long id) {
         this.id = id;
-        abilitySet.setCharacterID(id);
-        combatStatSet.setId(id);
-        skillSet.setCharacterID(id);
-        saveSet.setCharacterID(id);
-        fluffInfo.setId(id);
-        inventory.setCharacterID(id);
-        feats.setCharacterID(id);
-        spellBook.setCharacterID(id);
     }
 
     public int getMaxDex() {

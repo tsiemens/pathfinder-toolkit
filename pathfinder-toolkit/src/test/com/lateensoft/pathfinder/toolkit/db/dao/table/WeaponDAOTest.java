@@ -32,11 +32,11 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
         dao = new WeaponDAO(Robolectric.application);
 
         weapon1 = new Weapon();
-        setValues(weapon1, weapon1.getId(), getTestCharacterId(), "Great Sword",
+        setValues(weapon1, weapon1.getId(), "Great Sword",
                 7.5, 5, "4/2", "x2", 5, "It's on fire!", 0, WeaponType.SLASHING_PIERCING, Size.LARGE);
 
         weapon2 = new Weapon();
-        setValues(weapon2, weapon2.getId(), getTestCharacterId(), "Long Bow",
+        setValues(weapon2, weapon2.getId(), "Long Bow",
                 4.0, 3, "5", "x3", 100, "None", 20, WeaponType.PIERCING, Size.MEDIUM);
 
         dao.add(getTestCharacterId(), weapon1);
@@ -53,7 +53,7 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
     @Test
     public void testUpdate() throws DataAccessException {
         Weapon toUpdate = weapon2;
-        setValues(toUpdate, weapon2.getId(), weapon2.getCharacterID(), "Longer Bow",
+        setValues(toUpdate, weapon2.getId(), "Longer Bow",
                 5.0, 3, "6", "x3", 120, "N/A", 40, WeaponType.PIERCING, Size.LARGE);
 
         dao.update(getTestCharacterId(), toUpdate);
@@ -74,11 +74,10 @@ public class WeaponDAOTest extends CharacterComponentDAOTest {
         assertEquals(queriedItems.get(1), weapon2);
     }
 
-    private void setValues(Weapon toUpdate, long id, long characterId, String name,
+    private void setValues(Weapon toUpdate, long id, String name,
                            double weight, int totalAttackB, String dmg, String crit, int range, String specProp,
                            int ammo, WeaponType type, Size size) {
         toUpdate.setId(id);
-        toUpdate.setCharacterID(characterId);
         toUpdate.setName(name);
         toUpdate.setWeight(weight);
         toUpdate.setTotalAttackBonus(totalAttackB);

@@ -33,11 +33,11 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
         dao = new ArmorDAO(Robolectric.application);
 
         m_armor1 = new Armor();
-        setValues(m_armor1, m_armor1.getId(), getTestCharacterId(), "Heavy armor",
+        setValues(m_armor1, m_armor1.getId(), "Heavy armor",
                 7.5, true, 1, /*ACP*/-2, 3, 4, 5, "armor", Size.MEDIUM);
 
         m_armor2 = new Armor();
-        setValues(m_armor2, m_armor2.getId(), getTestCharacterId(), "Hat",
+        setValues(m_armor2, m_armor2.getId(), "Hat",
                 1.0, false, 10, /*ACP*/-4, 100, 11, 20, "Hat", Size.SMALL);
 
         dao.add(getTestCharacterId(), m_armor1);
@@ -54,7 +54,7 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
     @Test
     public void testUpdate() throws DataAccessException {
         Armor toUpdate = m_armor2;
-        setValues(m_armor2, m_armor2.getId(), getTestCharacterId(), "Larger Hat",
+        setValues(m_armor2, m_armor2.getId(), "Larger Hat",
                 2.0, true, 11, 25, 101, 12, 21, "Hat thing", Size.MEDIUM);
 
         dao.update(getTestCharacterId(), toUpdate);
@@ -77,11 +77,11 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
     @Test
     public void testMaxDex() throws DataAccessException {
         Armor armor1 = new Armor();
-        setValues(armor1, armor1.getId(), getTestCharacterId(), "Hat",
+        setValues(armor1, armor1.getId(), "Hat",
                 1.0, true, 10, 24, 2, 11, 20, "Hat", Size.SMALL);
         dao.add(getTestCharacterId(), armor1);
         Armor armor2 = new Armor();
-        setValues(armor2, armor2.getId(), getTestCharacterId(), "Hat",
+        setValues(armor2, armor2.getId(), "Hat",
                 1.0, true, 10, 24, 42, 11, 20, "Hat", Size.SMALL);
         dao.add(getTestCharacterId(), armor2);
 
@@ -99,7 +99,7 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
     @Test
     public void testArmorCheck() throws DataAccessException {
         Armor armor1 = new Armor();
-        setValues(armor1, armor1.getId(), getTestCharacterId(), "Heavy armor",
+        setValues(armor1, armor1.getId(), "Heavy armor",
                 7.5, true, 1, /*ACP*/-5, 3, 4, 5, "armor", Size.MEDIUM);
         dao.add(getTestCharacterId(), armor1);
         assertEquals(-7, dao.getArmorCheckPenaltyForCharacter(getTestCharacterId()));
@@ -109,11 +109,10 @@ public class ArmorDAOTest extends CharacterComponentDAOTest {
         assertEquals(0, dao.getArmorCheckPenaltyForCharacter(getTestCharacterId()));
     }
 
-    private void setValues(Armor toUpdate, long id, long characterId, String name,
+    private void setValues(Armor toUpdate, long id, String name,
                            double weight, boolean worn, int ACBonus, int checkPen, int maxDex, int spellFail,
                            int speed, String specProp, Size size) {
         toUpdate.setId(id);
-        toUpdate.setCharacterID(characterId);
         toUpdate.setName(name);
         toUpdate.setWeight(weight);
         toUpdate.setWorn(worn);

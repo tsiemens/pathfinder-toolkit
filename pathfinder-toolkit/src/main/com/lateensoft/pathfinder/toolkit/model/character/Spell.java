@@ -15,8 +15,7 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
     private String m_description;
     
     private long m_id;
-    private long m_characterId;
-    
+
     public Spell() {
         this("");
     }
@@ -29,13 +28,12 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
         this(UNSET_ID, name, level, 0, "");
     }
     
-    public Spell(long characterId, String name, int level, int prepared, String description) {
-        this(UNSET_ID, characterId, name, level, prepared, description);
+    public Spell(String name, int level, int prepared, String description) {
+        this(UNSET_ID,  name, level, prepared, description);
     }
     
-    public Spell(long id, long characterId, String name, int level, int prepared, String description) {
+    public Spell(long id,  String name, int level, int prepared, String description) {
         m_id = id;
-        m_characterId = characterId;
         m_name = name;
         m_level = level;
         m_prepared = prepared;
@@ -43,7 +41,7 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
     }
     
     public Spell(Spell spell) {
-        this(spell.getId(), spell.getCharacterID(), spell.getName(),
+        this(spell.getId(), spell.getName(),
                 spell.getLevel(), spell.getPrepared(), spell.getDescription());
     }
     
@@ -53,7 +51,6 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
         m_prepared = in.readInt();
         m_description = in.readString();
         m_id = in.readLong();
-        m_characterId = in.readLong();
     }
 
     @Override
@@ -63,7 +60,6 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
         out.writeInt(m_prepared);
         out.writeString(m_description);
         out.writeLong(m_id);
-        out.writeLong(m_characterId);
     }
     
     public String getName() {
@@ -103,14 +99,6 @@ public class Spell implements Parcelable, Identifiable, Comparable<Spell> {
     
     public void setPrepared(int prepared) {
         m_prepared = prepared;
-    }
-    
-    public void setCharacterID(long characterId) {
-        m_characterId = characterId;
-    }
-    
-    public long getCharacterID() {
-        return m_characterId;
     }
     
     @Override
