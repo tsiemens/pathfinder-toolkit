@@ -205,7 +205,8 @@ public class PartyManagerFragment extends BasePageFragment {
     private void addNewPartyAndSetSelected() {
         try {
             NamedList<IdNamePair> newParty = new NamedList<IdNamePair>("New Party");
-            partyDao.add(newParty.idNamePair());
+            long id = partyDao.add(newParty.idNamePair());
+            newParty.setId(id);
             party = newParty;
             setSelectedParty(newParty.getId());
             refreshPartyView();

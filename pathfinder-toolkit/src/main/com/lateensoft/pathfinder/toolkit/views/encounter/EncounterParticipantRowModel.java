@@ -12,6 +12,9 @@ import java.util.List;
 public class EncounterParticipantRowModel implements Comparable<EncounterParticipantRowModel> {
     private final EncounterParticipant participant;
     private int lastCheckRoll = 0;
+    private RollState lastCheckRollState = null;
+
+    public enum RollState { NORMAL, CRIT_FAIL, CRIT }
 
     public static List<EncounterParticipantRowModel> listFrom(Collection<EncounterParticipant> participants) {
         List<EncounterParticipantRowModel> rows = Lists.newArrayListWithCapacity(participants.size());
@@ -35,6 +38,14 @@ public class EncounterParticipantRowModel implements Comparable<EncounterPartici
 
     public void setLastCheckRoll(int lastCheckRoll) {
         this.lastCheckRoll = lastCheckRoll;
+    }
+
+    public RollState getLastCheckRollState() {
+        return lastCheckRollState;
+    }
+
+    public void setLastCheckRollState(RollState lastCheckRollState) {
+        this.lastCheckRollState = lastCheckRollState;
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.lateensoft.pathfinder.toolkit.views.encounter;
 
+import android.util.Pair;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillType;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import com.lateensoft.pathfinder.toolkit.util.DiceSet;
+
+import static com.lateensoft.pathfinder.toolkit.views.encounter.EncounterParticipantRowModel.RollState;
 
 public class EncounterRoller {
 
@@ -20,12 +23,19 @@ public class EncounterRoller {
     public void rollInitiatives() {
         for (EncounterParticipantRowModel row : encounter) {
             EncounterParticipant participant = row.getParticipant();
-            participant.setInitiativeScore(rollWithModifier(INIT_DIE, participant.getInitiativeMod()));
+            participant.setInitiativeScore(rollWithModifier(INIT_DIE, participant.getInitiativeMod()).first);
         }
     }
 
-    private int rollWithModifier(DiceSet.Die die, int modifier) {
-        return dice.roll(die) + modifier;
+    private Pair<Integer, RollState> rollWithModifier(DiceSet.Die die, int modifier) {
+        int roll = dice.roll(die);
+        RollState state = RollState.NORMAL;
+        if (roll == 1) {
+            state = RollState.CRIT_FAIL;
+        } else if (roll == die.getSides()) {
+            state = RollState.CRIT;
+        }
+        return new Pair<Integer, RollState>(roll + modifier, state);
     }
 
     public void resetInitiatives() {
@@ -37,13 +47,14 @@ public class EncounterRoller {
     public enum SkillCheckType { FORT, REFLEX, WILL, BLUFF, DISGUISE, PERCEPTION, SENSE, STEALTH }
 
     public void rollSkillChecks(SkillCheckType checkType) {
-        // TODO account for crit values
         for (EncounterParticipantRowModel row : encounter) {
-            row.setLastCheckRoll(rollSkillCheck(row.getParticipant(), checkType));
+            Pair<Integer, RollState> roll = rollSkillCheck(row.getParticipant(), checkType);
+            row.setLastCheckRoll(roll.first);
+            row.setLastCheckRollState(roll.second);
         }
     }
 
-    private int rollSkillCheck(EncounterParticipant participant, SkillCheckType checkType) {
+    private Pair<Integer, RollState> rollSkillCheck(EncounterParticipant participant, SkillCheckType checkType) {
         return rollWithModifier(SKILL_CHECK_DIE, getModForSkillCheckType(participant, checkType));
     }
 

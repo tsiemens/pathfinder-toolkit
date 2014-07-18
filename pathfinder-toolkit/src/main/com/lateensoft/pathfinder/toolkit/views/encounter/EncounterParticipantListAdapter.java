@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.encounter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.lateensoft.pathfinder.toolkit.views.widget.ListViewRowFactory;
 
 import java.util.Collections;
 import java.util.List;
+
+import static com.lateensoft.pathfinder.toolkit.views.encounter.EncounterParticipantRowModel.*;
 
 /**
  * @author tsiemens
@@ -102,6 +105,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
             holder.initRoll.setText(Integer.toString(rowModel.getParticipant().getInitiativeScore()));
             int lastCheck = rowModel.getLastCheckRoll();
             holder.checkRoll.setText(lastCheck != 0 ? Integer.toString(lastCheck) : "-");
+            holder.checkRoll.setTextColor(getCheckRollColor(rowModel.getLastCheckRollState()));
 
             holder.dragIcon.setClickable(true);
             holder.dragIcon.setEnabled(true);
@@ -126,6 +130,13 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
                         getContext().getResources().getColor(R.color.holo_blue_light_translucent) :
                         getContext().getResources().getColor(android.R.color.transparent));
             }
+        }
+
+        private int getCheckRollColor(RollState state) {
+            Resources r = getContext().getResources();
+            if (state == RollState.CRIT) return Color.GREEN;
+            if (state == RollState.CRIT_FAIL) return Color.RED;
+            else return r.getColor(R.color.skill_check_text);
         }
     }
 
