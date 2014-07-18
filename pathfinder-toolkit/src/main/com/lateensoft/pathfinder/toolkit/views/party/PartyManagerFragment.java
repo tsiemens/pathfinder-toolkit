@@ -293,11 +293,10 @@ public class PartyManagerFragment extends BasePageFragment {
 
     private void showPartyPicker() {
         List<IdNamePair> parties = partyDao.findAll();
-        parties.remove(new IdNamePair(party.getId(), party.getName()));
         PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
                 .setSingleChoice(true)
-                .setPickableParties(parties);
+                .setPickableParties(parties, party.idNamePair());
         Intent pickerIntent = builder.build();
         startActivityForResult(pickerIntent, GET_PARTY_CODE);
     }

@@ -288,7 +288,7 @@ public class EncounterFragment extends BasePageFragment {
                 .setTitle("Select Encounter") // TODO strings.xml
                 .setSingleChoice(true)
                 .addPickableItems(ENCOUNTER_PICKER_ITEM_KEY, "Encounters",
-                        presenter.getSelectableEncounters())
+                        presenter.getSelectableEncounters(), presenter.getModel().idNamePair())
                 .build();
         startActivityForResult(pickerIntent, SELECT_ENCOUNTER_REQUEST_CODE);
     }

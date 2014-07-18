@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.picker;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,42 +13,42 @@ import java.util.List;
 */
 public class PickerList extends ArrayList<SelectablePair> implements Parcelable {
 
-    private String m_key;
-    private String m_name;
+    private String key;
+    private String name;
 
-    public PickerList(String key, String name, List<IdNamePair> items) {
-        this(SelectablePair.createSelectableObjects(items), key, name);
+    public PickerList(String key, String name, List<IdNamePair> items, @Nullable List<IdNamePair> selectedItems) {
+        this(SelectablePair.createSelectableObjects(items, selectedItems), key, name);
     }
 
     public PickerList(List<SelectablePair> items, String key, String name) {
         super(items);
-        m_key = key;
-        m_name = name;
+        this.key = key;
+        this.name = name;
     }
 
     public PickerList(Parcel in) {
-        m_key = in.readString();
-        m_name = in.readString();
+        key = in.readString();
+        name = in.readString();
         in.readTypedList(this, SelectablePair.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(m_key);
-        out.writeString(m_name);
+        out.writeString(key);
+        out.writeString(name);
         out.writeTypedList(this);
     }
 
     public String getKey() {
-        return m_key;
+        return key;
     }
 
     public String getName() {
-        return m_name;
+        return name;
     }
 
     public void setName(String name) {
-        m_name = name;
+        this.name = name;
     }
 
     @Override

@@ -247,6 +247,7 @@ public class EncounterPresenter {
     }
 
     public List<IdNamePair> getSelectableEncounters() {
+        updateDatabase();
         List<IdNamePair> encounters = encounterDao.findAll();
         Collections.sort(encounters);
         return encounters;
