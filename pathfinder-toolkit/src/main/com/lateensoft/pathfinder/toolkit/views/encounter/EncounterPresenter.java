@@ -143,6 +143,18 @@ public class EncounterPresenter {
         getModel().setName(editedName != null ? editedName.toString() : "");
     }
 
+    public void onNextTurnSelected() {
+        EncounterParticipantRowModel currentTurn = encounter.getCurrentTurn();
+        if (currentTurn == null && !encounter.isEmpty()) {
+            encounter.setCurrentTurn(encounter.get(0));
+        } else if (currentTurn != null) {
+            int currentTurnIndex = encounter.indexOf(currentTurn);
+            int nextTurnIndex = (currentTurnIndex + 1) % encounter.size();
+            encounter.setCurrentTurn(encounter.get(nextTurnIndex));
+        }
+        notifyModelAttributesChanged();
+    }
+
     public void onParticipantSelected(EncounterParticipantRowModel participant) {
         showParticipantDetails(participant);
     }
@@ -243,6 +255,7 @@ public class EncounterPresenter {
         roller.resetInitiatives();
         roller.resetLastSkillChecks();
         lastSkillCheck = null;
+        encounter.setCurrentTurn(null);
         notifyModelAttributesChanged();
     }
 

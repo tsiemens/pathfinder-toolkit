@@ -57,6 +57,7 @@ public class EncounterFragment extends BasePageFragment {
         participantList.setOnItemClickListener(listItemClickListener);
         participantList.setOnItemLongClickListener(listItemLongClickListener);
         encounterNameEditor.addTextChangedListener(encounterNameEditListener);
+        nextTurnButton.setOnClickListener(nextTurnClickListener);
     }
 
     private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
@@ -86,6 +87,12 @@ public class EncounterFragment extends BasePageFragment {
 
         @Override public void afterTextChanged(Editable s) {
             presenter.onEncounterNameEdited(s);
+        }
+    };
+
+    private View.OnClickListener nextTurnClickListener = new View.OnClickListener() {
+        @Override public void onClick(View v) {
+            presenter.onNextTurnSelected();
         }
     };
 
@@ -169,7 +176,7 @@ public class EncounterFragment extends BasePageFragment {
         SkillCheckType lastSkillCheck = presenter.getLastSkillCheck();
         lastSkillCheckName.setText(lastSkillCheck != null ? lastSkillCheck.toString() : "-"); // TODO display string
 
-        // TODO enable/disable turn button
+        nextTurnButton.setEnabled(presenter.isEncounterOngoing());
         getActivity().invalidateOptionsMenu();
     }
 

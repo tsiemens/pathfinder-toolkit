@@ -761,7 +761,7 @@
     <string name="menu_item_check_skill">Check Skill</string>
     <string name="menu_item_select_encounter">Encounters</string>
     <string name="menu_item_new_encounter">New Encounter</string>
-    <string name="menu_item_add_participants">Add Participant</string>
+    <string name="menu_item_add_participants">Add Participants</string>
     <string name="menu_item_delete_encounter">Delete Encounter</string>
 
     <string name="menu_item_fort_check">"Fort Save</string>

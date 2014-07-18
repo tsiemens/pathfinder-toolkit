@@ -11,6 +11,8 @@ import java.util.List;
 
 public class EncounterViewModel extends NamedList<EncounterParticipantRowModel> {
 
+    private EncounterParticipantRowModel currentTurn;
+
     public EncounterViewModel() {
         super("New Encounter");
     }
@@ -32,6 +34,14 @@ public class EncounterViewModel extends NamedList<EncounterParticipantRowModel> 
             rows.add(new EncounterParticipantRowModel(participant));
         }
         return rows;
+    }
+
+    public EncounterParticipantRowModel getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void setCurrentTurn(EncounterParticipantRowModel currentTurn) {
+        this.currentTurn = currentTurn;
     }
 
     public NamedList<EncounterParticipant> buildEncounterForModel() {

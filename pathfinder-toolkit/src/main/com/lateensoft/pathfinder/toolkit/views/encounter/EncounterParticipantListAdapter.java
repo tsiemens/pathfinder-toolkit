@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.encounter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -12,7 +13,6 @@ import com.lateensoft.pathfinder.toolkit.views.widget.DynamicArrayAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.ListViewRowFactory;
 
 import java.util.Collections;
-import java.util.List;
 
 import static com.lateensoft.pathfinder.toolkit.views.encounter.EncounterParticipantRowModel.*;
 
@@ -36,12 +36,12 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
     private RowTouchListener dragIconTouchListener;
     private RowComponentClickListener rollsClickListener;
 
-    private List<EncounterParticipantRowModel> participantRows;
+    private EncounterViewModel model;
 
-    public EncounterParticipantListAdapter(Context context, List<EncounterParticipantRowModel> objects) {
-        super(context, LAYOUT_RESOURCE_ID, objects);
-        participantRows = objects;
-        Collections.sort(participantRows);
+    public EncounterParticipantListAdapter(Context context, EncounterViewModel model) {
+        super(context, LAYOUT_RESOURCE_ID, model);
+        this.model = model;
+        Collections.sort(this.model);
     }
 
     @Override
@@ -59,10 +59,10 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
 
     @Override
     public void doItemSwap(int pos1, int pos2) {
-        EncounterParticipantRowModel tmp1 = participantRows.get(pos1);
-        EncounterParticipantRowModel tmp2 = participantRows.get(pos2);
-        participantRows.set(pos1, tmp2);
-        participantRows.set(pos2, tmp1);
+        EncounterParticipantRowModel tmp1 = model.get(pos1);
+        EncounterParticipantRowModel tmp2 = model.get(pos2);
+        model.set(pos1, tmp2);
+        model.set(pos2, tmp1);
     }
 
     private static class RowHolder {
@@ -80,6 +80,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
     }
 
     private class RowFactory extends ListViewRowFactory<RowHolder> {
+        private Resources resources = getContext().getResources();
 
         @Override
         protected int getRowLayoutResourceIdForPosition(int position) {
@@ -100,8 +101,13 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
 
         @Override
         protected void setRowContent(final RowHolder holder, final int position) {
+
             EncounterParticipantRowModel rowModel = getItem(position);
             holder.textView.setText(rowModel.getParticipant().getName());
+            holder.textView.setTextColor(model.getCurrentTurn() == rowModel ?
+                    resources.getColor(R.color.skill_check_text) :
+                    resources.getColor(R.color.default_text_color));
+
             holder.initRoll.setText(Integer.toString(rowModel.getParticipant().getInitiativeScore()));
             int lastCheck = rowModel.getLastCheckRoll();
             holder.checkRoll.setText(lastCheck != 0 ? Integer.toString(lastCheck) : "-");
@@ -133,10 +139,9 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
         }
 
         private int getCheckRollColor(RollState state) {
-            Resources r = getContext().getResources();
             if (state == RollState.CRIT) return Color.GREEN;
             if (state == RollState.CRIT_FAIL) return Color.RED;
-            else return r.getColor(R.color.skill_check_text);
+            else return resources.getColor(R.color.skill_check_text);
         }
     }
 
