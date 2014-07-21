@@ -764,14 +764,14 @@
     <string name="menu_item_add_participants">Add Participants</string>
     <string name="menu_item_delete_encounter">Delete Encounter</string>
 
-    <string name="menu_item_fort_check">"Fort Save</string>
-    <string name="menu_item_reflex_check">"Reflex Save</string>
-    <string name="menu_item_will_check">"Will Save</string>
-    <string name="menu_item_bluff_check">"Bluff</string>
-    <string name="menu_item_disguise_check">"Disguise</string>
-    <string name="menu_item_perception_check">"Perception</string>
-    <string name="menu_item_sense_check">"Sense Motive</string>
-    <string name="menu_item_stealth_check">"Stealth</string>
+    <string name="fort_check">"Fort Save</string>
+    <string name="reflex_check">"Reflex Save</string>
+    <string name="will_check">"Will Save</string>
+    <string name="bluff_check">"Bluff</string>
+    <string name="disguise_check">"Disguise</string>
+    <string name="perception_check">"Perception</string>
+    <string name="sense_check">"Sense Motive</string>
+    <string name="stealth_check">"Stealth</string>
 
     <string name="next_turn_button">Next Turn</string>
     <string name="last_skill_check_label">Last Skill Check:</string>

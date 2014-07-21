@@ -174,7 +174,8 @@ public class EncounterFragment extends BasePageFragment {
         encounterNameEditor.setText(model != null ? model.getName() : "");
 
         SkillCheckType lastSkillCheck = presenter.getLastSkillCheck();
-        lastSkillCheckName.setText(lastSkillCheck != null ? lastSkillCheck.toString() : "-"); // TODO display string
+        lastSkillCheckName.setText(lastSkillCheck != null ?
+                getString(lastSkillCheck.getDisplayNameResId()) : "-");
 
         nextTurnButton.setEnabled(presenter.isEncounterOngoing());
         getActivity().invalidateOptionsMenu();
@@ -209,8 +210,7 @@ public class EncounterFragment extends BasePageFragment {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
+    protected void onPreparePageOptionsMenu(Menu menu) {
         menu.findItem(R.id.mi_reset).setVisible(presenter.isEncounterOngoing());
         menu.findItem(R.id.mi_start).setVisible(!presenter.isEncounterOngoing());
     }

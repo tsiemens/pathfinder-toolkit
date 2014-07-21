@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.MainActivity;
 
@@ -35,6 +36,20 @@ public abstract class BasePageFragment extends RoboFragment{
     }
 
     protected void onResumeWithoutResult() { }
+
+    @Override
+    public final void onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        new MainActivityAction() {
+            @Override public void performOnMainActivity(MainActivity activity) {
+                if (!activity.isDrawerOpen()) {
+                    onPreparePageOptionsMenu(menu);
+                }
+            }
+        }.performAction();
+    }
+
+    protected void onPreparePageOptionsMenu(Menu menu) { }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {

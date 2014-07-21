@@ -195,6 +195,10 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         return super.onPrepareOptionsMenu(menu);
     }
 
+    public boolean isDrawerOpen() {
+        return m_drawerLayout.isDrawerOpen(m_leftDrawer);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -320,10 +324,6 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         } else {
             m_drawerLayout.closeDrawer(m_leftDrawer);
         }
-    }
-
-    private boolean isDrawerOpen() {
-        return m_drawerLayout.isDrawerOpen(m_leftDrawer);
     }
 
     private List<NavDrawerGroupItem> buildNavDrawerList() {

@@ -1,6 +1,7 @@
 package com.lateensoft.pathfinder.toolkit.views.encounter;
 
 import android.util.Pair;
+import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SaveType;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.SkillType;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
@@ -44,7 +45,26 @@ public class EncounterRoller {
         }
     }
 
-    public enum SkillCheckType { FORT, REFLEX, WILL, BLUFF, DISGUISE, PERCEPTION, SENSE, STEALTH }
+    public enum SkillCheckType {
+        FORT(R.string.fort_check),
+        REFLEX(R.string.reflex_check),
+        WILL(R.string.will_check),
+        BLUFF(R.string.bluff_check),
+        DISGUISE(R.string.disguise_check),
+        PERCEPTION(R.string.perception_check),
+        SENSE(R.string.sense_check),
+        STEALTH(R.string.stealth_check);
+
+        private int displayNameResId;
+
+        SkillCheckType(int displayNameResId) {
+            this.displayNameResId = displayNameResId;
+        }
+
+        public int getDisplayNameResId() {
+            return displayNameResId;
+        }
+    }
 
     public void rollSkillChecks(SkillCheckType checkType) {
         for (EncounterParticipantRowModel row : encounter) {

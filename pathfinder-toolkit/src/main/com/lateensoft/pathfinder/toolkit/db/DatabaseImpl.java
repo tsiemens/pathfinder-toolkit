@@ -18,27 +18,11 @@ public class DatabaseImpl extends SQLiteOpenHelper implements Database {
     public static final int DB_VERSION = 1;
     private SQLiteDatabase database;
     
-    private static DatabaseImpl s_instance;
-    
-    public static DatabaseImpl getInstance() {
-        if (s_instance == null) {
-            throw new IllegalStateException("should not be null");
-//            s_instance = new DatabaseImpl();
-        }
-        return s_instance;
-    }
-
     public DatabaseImpl(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         open();
-        s_instance = this; // TODO temporary hack
     }
     
-    public void forceCreate() {
-        TableCreator tableCreator = new TableCreator();
-        tableCreator.createTables(database);
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         TableCreator tableCreator = new TableCreator();
