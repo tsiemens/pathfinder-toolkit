@@ -7,7 +7,6 @@ import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
 import com.lateensoft.pathfinder.toolkit.util.CharacterUtils;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,14 +14,13 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
 
 @Config(manifest=Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class PartyDAOTest extends BaseDatabaseTest {
-    private PartyDAO partyDao;
+    private PartyDAO<IdNamePair> partyDao;
     private PartyMemberNameDAO memberDao;
     
     private CharacterModelDAO charDao;
@@ -35,8 +33,8 @@ public class PartyDAOTest extends BaseDatabaseTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        partyDao = new PartyDAO(Robolectric.application);
         memberDao = new PartyMemberNameDAO(Robolectric.application);
+        partyDao = new PartyDAO<IdNamePair>(Robolectric.application, memberDao);
         charDao = new CharacterModelDAO(Robolectric.application);
 
         character1a = CharacterUtils.buildTestCharacter();
@@ -46,7 +44,7 @@ public class PartyDAOTest extends BaseDatabaseTest {
 
         party1 = new NamedList<IdNamePair>("Party 1", Lists.newArrayList(member1a));
 
-        assertTrue(partyDao.add(party1, memberDao) != -1);
+        assertTrue(partyDao.add(party1) != -1);
     }
 
     @After
@@ -76,7 +74,7 @@ public class PartyDAOTest extends BaseDatabaseTest {
     public void updateValid() throws DataAccessException {
         party1.setName("new name");
         partyDao.update(party1.idNamePair());
-        NamedList<IdNamePair> updated = partyDao.find(party1.getId(), memberDao);
+        NamedList<IdNamePair> updated = partyDao.findList(party1.getId());
         assertEquals(party1, updated);
     }
 
@@ -100,13 +98,13 @@ public class PartyDAOTest extends BaseDatabaseTest {
 
     @Test
     public void findValidModel() {
-        NamedList<IdNamePair> foundParty = partyDao.find(party1.getId(), memberDao);
+        NamedList<IdNamePair> foundParty = partyDao.findList(party1.getId());
         assertEquals(party1, foundParty);
     }
 
     @Test
     public void findInvalidModel() {
-        assertNull(partyDao.find(-1L, memberDao));
+        assertNull(partyDao.findList(-1L));
     }
 
     @Test

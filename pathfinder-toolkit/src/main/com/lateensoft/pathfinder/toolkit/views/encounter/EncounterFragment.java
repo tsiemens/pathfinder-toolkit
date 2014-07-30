@@ -23,7 +23,6 @@ import static com.lateensoft.pathfinder.toolkit.views.encounter.EncounterPresent
 import static com.lateensoft.pathfinder.toolkit.views.encounter.EncounterRoller.SkillCheckType;
 
 public class EncounterFragment extends BasePageFragment {
-    private static final String TAG = EncounterFragment.class.getSimpleName();
     private static final int ADD_PARTICIPANTS_REQUEST_CODE = 2338;
     private static final int SELECT_ENCOUNTER_REQUEST_CODE = 8526;
 
@@ -111,7 +110,7 @@ public class EncounterFragment extends BasePageFragment {
 
         @Override public boolean onActionItemClicked(MultiSelectActionModeController controller, MenuItem item) {
             if (item.getItemId() == R.id.mi_remove) {
-                showRemoveCharactersFromPartyDialog(getSelectedItems(presenter.getModel()));
+                showRemoveParticipantsFromEncounterDialog(getSelectedItems(presenter.getModel()));
                 controller.finishActionMode();
                 return true;
             }
@@ -119,10 +118,10 @@ public class EncounterFragment extends BasePageFragment {
         }
     };
 
-    private void showRemoveCharactersFromPartyDialog(final List<EncounterParticipantRowModel> participantsToRemove) {
+    private void showRemoveParticipantsFromEncounterDialog(final List<EncounterParticipantRowModel> participantsToRemove) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
-                .setMessage(String.format("Remove (%d) participants from encounter?", // TODO strings.xml
+                .setMessage(String.format(getString(R.string.remove_participants_from_encounter_msg),
                         presenter.getModel().size()));
 
         builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
@@ -193,9 +192,43 @@ public class EncounterFragment extends BasePageFragment {
     private EncounterParticipantListAdapter.RowComponentClickListener rollsClickedListener =
             new EncounterParticipantListAdapter.RowComponentClickListener() {
         @Override public void onClick(View v, int position) {
-            // TODO show edit roll dialog
+            new InitiativeEditorDialog(presenter.getModel().get(position)).show();
         }
     };
+
+    private class InitiativeEditorDialog {
+        private AlertDialog dialog;
+        private EditText initiativeEditor;
+        private EncounterParticipantRowModel row;
+
+        public InitiativeEditorDialog(EncounterParticipantRowModel row) {
+            this.row = row;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+
+            View dialogView = inflater.inflate(R.layout.edit_initiative_dialog, null);
+            initiativeEditor = (EditText) dialogView.findViewById(R.id.editor);
+
+            builder.setTitle(R.string.initiative_editor_title);
+            initiativeEditor.append(Integer.toString(row.getParticipant().getInitiativeScore()));
+
+            builder.setView(dialogView)
+                    .setPositiveButton(R.string.ok_button_text, okListener)
+                    .setNegativeButton(R.string.cancel_button_text, null);
+            dialog = builder.create();
+        }
+
+        private DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                presenter.onInitiativeEdited(initiativeEditor.getText(), row);
+                hideKeyboardDelayed(0);
+            }
+        };
+
+        private void show() {
+            dialog.show();
+        }
+    }
 
     private DynamicArrayAdapter.OnItemsSwappedListener itemsSwappedListener = new DynamicArrayAdapter.OnItemsSwappedListener() {
         @Override public void onItemsSwapped(int pos1, int pos2) {
@@ -211,8 +244,9 @@ public class EncounterFragment extends BasePageFragment {
 
     @Override
     protected void onPreparePageOptionsMenu(Menu menu) {
-        menu.findItem(R.id.mi_reset).setVisible(presenter.isEncounterOngoing());
-        menu.findItem(R.id.mi_start).setVisible(!presenter.isEncounterOngoing());
+        boolean isEncounterOngoing = presenter.isEncounterOngoing();
+        menu.findItem(R.id.mi_reset).setVisible(isEncounterOngoing);
+        menu.findItem(R.id.mi_start).setVisible(!isEncounterOngoing);
     }
 
     @Override
@@ -236,7 +270,7 @@ public class EncounterFragment extends BasePageFragment {
                 showAddCharactersPicker();
                 break;
             case R.id.mi_new_encounter:
-                presenter.onNewEncounterSelected();
+                showNewEncounterDialog();
                 break;
             case R.id.mi_delete_encounter:
                 showConfirmDeleteDialog();
@@ -292,9 +326,9 @@ public class EncounterFragment extends BasePageFragment {
 
     private void showChooseEncounterPicker() {
         Intent pickerIntent = new PickerUtil.Builder(getContext())
-                .setTitle("Select Encounter") // TODO strings.xml
+                .setTitle(R.string.encounter_picker_title)
                 .setSingleChoice(true)
-                .addPickableItems(ENCOUNTER_PICKER_ITEM_KEY, "Encounters",
+                .addPickableItems(ENCOUNTER_PICKER_ITEM_KEY, getString(R.string.title_fragment_encounters),
                         presenter.getSelectableEncounters(), presenter.getModel().idNamePair())
                 .build();
         startActivityForResult(pickerIntent, SELECT_ENCOUNTER_REQUEST_CODE);
@@ -302,7 +336,7 @@ public class EncounterFragment extends BasePageFragment {
 
     private void showAddCharactersPicker() {
         Intent pickerIntent = new PickerUtil.Builder(getContext())
-                .setTitle("Add Participants") // TODO strings.xml
+                .setTitle(R.string.add_participants_to_encounter_picker_title)
                 .setSingleChoice(false)
                 .setPickableCharacters(presenter.getCharactersAvailableToAddToEncounter())
                 .setPickableParties(presenter.getPartiesAvailableToAddToEncounter())
@@ -332,7 +366,7 @@ public class EncounterFragment extends BasePageFragment {
     private void showConfirmDeleteDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.delete_alert_title)
-                .setMessage(String.format("Delete encounter \"%s\"?", // TODO strings.xml
+                .setMessage(String.format(getString(R.string.delete_encounter_dialog_title),
                         presenter.getModel().getName()));
 
         builder.setPositiveButton(R.string.cancel_button_text, null)
@@ -348,8 +382,7 @@ public class EncounterFragment extends BasePageFragment {
     private void showNewEncounterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_item_new_encounter)
-                .setMessage("Create new encounter?" // TODO strings.xml
-                        );
+                .setMessage(R.string.new_encounter_dialog_msg);
 
         builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
@@ -362,7 +395,7 @@ public class EncounterFragment extends BasePageFragment {
 
     @Override
     public void updateTitle() {
-        setTitle("Encounters"); // TODO strings.xml
+        setTitle(R.string.title_fragment_encounters);
         setSubtitle(null);
     }
 }

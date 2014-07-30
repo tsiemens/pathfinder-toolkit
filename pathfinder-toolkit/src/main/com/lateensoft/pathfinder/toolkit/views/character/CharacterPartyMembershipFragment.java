@@ -29,15 +29,15 @@ public class CharacterPartyMembershipFragment extends AbstractCharacterSheetFrag
     private ListView partyListView;
     private Button addButton;
 
-    private PartyDAO partyDao;
+    private PartyDAO<Long> partyDao;
     private PartyMemberIdDAO partyMemberDao;
     private List<IdNamePair> parties;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        partyDao = new PartyDAO(getContext());
         partyMemberDao = new PartyMemberIdDAO(getContext());
+        partyDao = new PartyDAO<Long>(getContext(), partyMemberDao);
     }
 
     @Override

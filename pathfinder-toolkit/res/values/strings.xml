@@ -775,6 +775,13 @@
 
     <string name="next_turn_button">Next Turn</string>
     <string name="last_skill_check_label">Last Skill Check:</string>
+    <string name="encounter_picker_title">Select Encounter</string>
+    <string name="add_participants_to_encounter_picker_title">Add Participants</string>
+    <string name="remove_participants_from_encounter_msg">"Remove (%d) participants from encounter?"</string>
+    <string name="delete_encounter_dialog_title">Delete encounter "%s"?</string>
+    <string name="new_encounter_dialog_msg">Create new encounter?</string>
+    <string name="initiative_editor_title">Edit Initiative</string>
+    <string name="initiative_editor_hint">Initiative</string>
 
     <!-- Skill Checker Strings -->
     <string name="skill_checker_roll_button">Roll</string>

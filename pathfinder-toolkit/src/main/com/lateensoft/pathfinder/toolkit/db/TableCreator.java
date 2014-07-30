@@ -234,7 +234,11 @@ public class TableCreator {
         Log.d(TAG, "Creating encounter table");
         return "CREATE TABLE Encounter (" +
                 "encounter_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "Name TEXT " +
+                "Name TEXT, " +
+                "IsInCombat INTEGER, " +
+                "CurrentTurnParticipantId INTEGER, " +
+                "FOREIGN KEY (CurrentTurnParticipantId) REFERENCES Character(character_id) " +
+                "ON DELETE SET NULL " +
                 ");";
     }
 

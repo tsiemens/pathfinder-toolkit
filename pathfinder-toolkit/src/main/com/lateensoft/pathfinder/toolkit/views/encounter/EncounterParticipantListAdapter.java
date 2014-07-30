@@ -3,10 +3,10 @@ package com.lateensoft.pathfinder.toolkit.views.encounter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
+import com.google.common.base.Objects;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SelectableItemAdapter;
 import com.lateensoft.pathfinder.toolkit.views.widget.DynamicArrayAdapter;
@@ -104,7 +104,7 @@ public class EncounterParticipantListAdapter extends DynamicArrayAdapter<Encount
 
             EncounterParticipantRowModel rowModel = getItem(position);
             holder.textView.setText(rowModel.getParticipant().getName());
-            holder.textView.setTextColor(model.getCurrentTurn() == rowModel ?
+            holder.textView.setTextColor(Objects.equal(model.getCurrentTurn(), rowModel) ?
                     resources.getColor(R.color.skill_check_text) :
                     resources.getColor(R.color.default_text_color));
 

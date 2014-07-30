@@ -41,7 +41,7 @@ public class PartyManagerFragment extends BasePageFragment {
     private EditText partyNameEditText;
     private ListView partyMemberList;
     
-    private PartyDAO partyDao;
+    private PartyDAO<IdNamePair> partyDao;
     private PartyMemberNameDAO memberDao;
 
     private Preferences preferences;
@@ -49,8 +49,8 @@ public class PartyManagerFragment extends BasePageFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        partyDao = new PartyDAO(getContext());
         memberDao = new PartyMemberNameDAO(getContext());
+        partyDao = new PartyDAO<IdNamePair>(getContext(), memberDao);
         preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
     }
 
@@ -142,7 +142,7 @@ public class PartyManagerFragment extends BasePageFragment {
             // There was no current party set in shared prefs
             addNewPartyAndSetSelected();
         } else {
-            party = partyDao.find(currentPartyID, memberDao);
+            party = partyDao.findList(currentPartyID);
             if (party == null) {
                 handleInvalidSelectedParty();
             }
@@ -162,7 +162,7 @@ public class PartyManagerFragment extends BasePageFragment {
     private void handleInvalidSelectedParty() {
         List<IdNamePair> ids = partyDao.findAll();
         for (IdNamePair id : ids) {
-            party = partyDao.find(id.getId(), memberDao);
+            party = partyDao.findList(id.getId());
             if (party != null) {
                 setSelectedParty(party.getId());
                 break;

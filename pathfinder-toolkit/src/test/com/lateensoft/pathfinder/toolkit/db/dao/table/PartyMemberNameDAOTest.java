@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 @Config(manifest=Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class PartyMemberNameDAOTest extends BaseDatabaseTest {
-    private PartyDAO partyDao;
+    private PartyDAO<IdNamePair> partyDao;
     private PartyMemberNameDAO memberDao;
     
     private CharacterModelDAO charDao;
@@ -35,8 +35,8 @@ public class PartyMemberNameDAOTest extends BaseDatabaseTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        partyDao = new PartyDAO(Robolectric.application);
         memberDao = new PartyMemberNameDAO(Robolectric.application);
+        partyDao = new PartyDAO<IdNamePair>(Robolectric.application, memberDao);
         charDao = new CharacterModelDAO(Robolectric.application);
 
         character1a = CharacterUtils.buildTestCharacter();
@@ -50,7 +50,7 @@ public class PartyMemberNameDAOTest extends BaseDatabaseTest {
         party1 = new NamedList<IdNamePair>("Party 1",
                 Lists.newArrayList(member1a, member1b));
         
-        partyDao.add(party1, memberDao);
+        partyDao.add(party1);
     }
 
     @After

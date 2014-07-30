@@ -220,9 +220,9 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
 
         PathfinderCharacter character = (PathfinderCharacter) o;
 
+        if (id != character.id) return false;
         if (!Objects.equal(this.name, character.name)) return false;
         if (Double.compare(character.gold, gold) != 0) return false;
-        if (id != character.id) return false;
         if (!abilitySet.equals(character.abilitySet)) return false;
         if (!combatStatSet.equals(character.combatStatSet)) return false;
         if (!feats.equals(character.feats)) return false;

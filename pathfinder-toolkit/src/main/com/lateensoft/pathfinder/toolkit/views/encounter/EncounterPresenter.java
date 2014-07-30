@@ -11,6 +11,7 @@ import com.lateensoft.pathfinder.toolkit.db.dao.table.*;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
+import com.lateensoft.pathfinder.toolkit.model.party.Encounter;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
@@ -24,7 +25,7 @@ public class EncounterPresenter {
 
     private Context context;
     private Preferences preferences;
-    private EncounterDAO encounterDao;
+    private EncounterDAO<EncounterParticipant> encounterDao;
     private EncounterParticipantDAO participantDao;
 
     private EncounterFragment fragment;
@@ -36,8 +37,8 @@ public class EncounterPresenter {
 
     public EncounterPresenter(Context context) {
         this.context = context;
-        encounterDao = new EncounterDAO(context);
         participantDao = new EncounterParticipantDAO(context);
+        encounterDao = new EncounterDAO<EncounterParticipant>(context, participantDao);
         preferences = RoboGuice.getInjector(context).getInstance(Preferences.class);
     }
 
@@ -72,7 +73,7 @@ public class EncounterPresenter {
     }
 
     private EncounterViewModel loadEncounterFromDatabase(long id) throws IllegalArgumentException {
-        NamedList<EncounterParticipant> encounter = encounterDao.find(id, participantDao);
+        Encounter<EncounterParticipant> encounter = encounterDao.findList(id);
         if (encounter != null) {
             return new EncounterViewModel(encounter);
         } else {
@@ -81,19 +82,20 @@ public class EncounterPresenter {
     }
 
     private EncounterViewModel loadDefaultEncounter() {
-        List<IdNamePair> allParties = encounterDao.findAll();
+        List<? extends IdNamePair> allParties = encounterDao.findAll();
         if (allParties.isEmpty()) {
             return loadNewEncounter();
         } else {
             long defaultEncounterId = allParties.get(0).getId();
-            return new EncounterViewModel(encounterDao.find(defaultEncounterId, participantDao));
+            return new EncounterViewModel(encounterDao.findList(defaultEncounterId));
         }
     }
 
     private EncounterViewModel loadNewEncounter() {
         try {
             EncounterViewModel encounter = new EncounterViewModel();
-            encounterDao.add(encounter.buildEncounterForModel(), participantDao);
+            long id = encounterDao.add(encounter.buildEncounterForModel());
+            encounter.setId(id);
             return encounter;
         } catch (DataAccessException e) {
             throw new IllegalStateException(e);
@@ -101,13 +103,7 @@ public class EncounterPresenter {
     }
 
     public boolean isEncounterOngoing() {
-        if (encounter == null) return false;
-        for (EncounterParticipantRowModel row : encounter) {
-            if (row.getParticipant().getInitiativeScore() > 0) {
-                return true;
-            }
-        }
-        return false;
+        return encounter != null && encounter.isInCombat();
     }
 
     public void onViewLostFocus() {
@@ -116,8 +112,8 @@ public class EncounterPresenter {
 
     private void updateDatabase() {
         try {
-            NamedList<EncounterParticipant> encounter = this.encounter.buildEncounterForModel();
-            encounterDao.update(encounter.idNamePair());
+            Encounter<EncounterParticipant> encounter = this.encounter.buildEncounterForModel();
+            encounterDao.updateFields(encounter);
             for (EncounterParticipant participant : encounter) {
                 participantDao.update(encounter.getId(), participant);
             }
@@ -211,6 +207,16 @@ public class EncounterPresenter {
         notifyModelChanged();
     }
 
+    public void onInitiativeEdited(Editable initText, EncounterParticipantRowModel row) {
+        try {
+            int init = Integer.parseInt(initText.toString());
+            row.getParticipant().setInitiativeScore(init);
+            notifyModelAttributesChanged();
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Failed to parse int from \"" + initText.toString() + "\"");
+        }
+    }
+
     private void removeParticipantsFromEncounter(List<EncounterParticipantRowModel> participantsToRemove) {
         for (EncounterParticipantRowModel row : participantsToRemove) {
             try {
@@ -238,7 +244,7 @@ public class EncounterPresenter {
                 }
             });
         }
-        notifyModelAttributesChanged();
+        onNextTurnSelected();
     }
 
     private void notifyModelAttributesChanged() {
@@ -256,14 +262,15 @@ public class EncounterPresenter {
         roller.resetLastSkillChecks();
         lastSkillCheck = null;
         encounter.setCurrentTurn(null);
+        encounter.setInCombat(false);
         notifyModelAttributesChanged();
     }
 
     public List<IdNamePair> getSelectableEncounters() {
         updateDatabase();
-        List<IdNamePair> encounters = encounterDao.findAll();
-        Collections.sort(encounters);
-        return encounters;
+        List<? extends IdNamePair> encounterFields = encounterDao.findAll();
+        Collections.sort(encounterFields);
+        return Lists.newArrayList(encounterFields);
     }
 
     public List<IdNamePair> getCharactersAvailableToAddToEncounter() {
@@ -282,15 +289,15 @@ public class EncounterPresenter {
     }
 
     private List<IdNamePair> getPartiesNotEntirelyInEncounter() {
-        PartyDAO partyDao = new PartyDAO(context);
-        List<IdNamePair> allPartyIds = partyDao.findAll();
-
         PartyMemberNameDAO memberDao = new PartyMemberNameDAO(context);
+        PartyDAO<IdNamePair> partyDao = new PartyDAO<IdNamePair>(context, memberDao);
+
+        List<IdNamePair> allPartyIds = partyDao.findAll();
         List<IdNamePair> nonSelectedParties = Lists.newArrayList();
 
         List<IdNamePair> participantsInEncounter = getModel().getParticipantIds();
         for (IdNamePair partyId : allPartyIds) {
-            NamedList<IdNamePair> party = partyDao.find(partyId.getId(), memberDao);
+            NamedList<IdNamePair> party = partyDao.findList(partyId.getId());
             party.removeAll(participantsInEncounter);
             if (!party.isEmpty()) {
                 nonSelectedParties.add(party.idNamePair());
@@ -307,7 +314,7 @@ public class EncounterPresenter {
 
     private void deleteCurrentEncounter() {
         try {
-            encounterDao.remove(encounter);
+            encounterDao.removeById(encounter.getId());
         } catch (DataAccessException e) {
             Log.e(TAG, "Failed to delete encounter with id=" + encounter.getId(), e);
         }

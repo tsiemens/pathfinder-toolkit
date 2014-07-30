@@ -2,23 +2,27 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 
 import android.content.ContentValues;
 import android.content.Context;
+import com.lateensoft.pathfinder.toolkit.dao.OwnedGenericDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.Table;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
+import com.lateensoft.pathfinder.toolkit.model.NamedList;
 
 import java.util.Hashtable;
 import java.util.List;
 
-public class PartyDAO extends NamedListDAO {
+public class PartyDAO<T> extends ListBasedDAO<NamedList<T>, T, IdNamePair> {
     private static final String TABLE = "Party";
 
     private static final String PARTY_ID = "party_id";
     private static final String NAME = "Name";
 
     private AbstractPartyMembershipDAO memberDao;
+    private OwnedGenericDAO<Long, ?, T> itemDao;
 
-    public PartyDAO(Context context) {
+    public PartyDAO(Context context, OwnedGenericDAO<Long, ?, T> itemDao) {
         super(context);
         memberDao = new PartyMemberIdDAO(context);
+        this.itemDao = itemDao;
     }
 
     @Override
@@ -47,6 +51,21 @@ public class PartyDAO extends NamedListDAO {
         String name = (String) hashTable.get(NAME);
 
         return new IdNamePair(id, name);
+    }
+
+    @Override
+    protected IdNamePair getListFields(NamedList<T> list) {
+        return list.idNamePair();
+    }
+
+    @Override
+    protected OwnedGenericDAO<Long, ?, T> getItemDao() {
+        return itemDao;
+    }
+
+    @Override
+    protected NamedList<T> buildList(IdNamePair idNamePair, List<T> items) {
+        return new NamedList<T>(idNamePair, items);
     }
 
     @Override

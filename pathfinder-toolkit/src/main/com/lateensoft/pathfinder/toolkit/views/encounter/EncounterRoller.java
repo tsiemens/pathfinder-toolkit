@@ -26,6 +26,7 @@ public class EncounterRoller {
             EncounterParticipant participant = row.getParticipant();
             participant.setInitiativeScore(rollWithModifier(INIT_DIE, participant.getInitiativeMod()).first);
         }
+        encounter.setInCombat(true);
     }
 
     private Pair<Integer, RollState> rollWithModifier(DiceSet.Die die, int modifier) {

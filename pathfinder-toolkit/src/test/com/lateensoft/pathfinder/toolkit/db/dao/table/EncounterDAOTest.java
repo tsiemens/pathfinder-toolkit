@@ -3,7 +3,7 @@ package com.lateensoft.pathfinder.toolkit.db.dao.table;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.db.BaseDatabaseTest;
-import com.lateensoft.pathfinder.toolkit.model.NamedList;
+import com.lateensoft.pathfinder.toolkit.model.party.Encounter;
 import com.lateensoft.pathfinder.toolkit.model.party.EncounterParticipant;
 import com.lateensoft.pathfinder.toolkit.util.CharacterUtils;
 import org.junit.After;
@@ -20,10 +20,10 @@ import static org.junit.Assert.assertTrue;
 @Config(manifest=Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class EncounterDAOTest extends BaseDatabaseTest {
-    private EncounterDAO encounterDao;
+    private EncounterDAO<EncounterParticipant> encounterDao;
     private EncounterParticipantDAO participantDao;
 
-    private NamedList<EncounterParticipant> encounter1;
+    private Encounter<EncounterParticipant> encounter1;
 
     private EncounterParticipant participant1a;
     private EncounterParticipant participant1b;
@@ -31,15 +31,16 @@ public class EncounterDAOTest extends BaseDatabaseTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        encounterDao = new EncounterDAO(Robolectric.application);
         participantDao = new EncounterParticipantDAO(Robolectric.application);
+        encounterDao = new EncounterDAO<EncounterParticipant>(Robolectric.application, participantDao);
 
         participant1a = CharacterUtils.buildTestEncounterParticipant();
         participant1b = new EncounterParticipant.Builder().build();
-        encounter1 = new NamedList<EncounterParticipant>("Encounter 1",
+        encounter1 = new Encounter<EncounterParticipant>("Encounter 1",
                 Lists.newArrayList(participant1a, participant1b));
+        encounter1.setInCombat(true);
 
-        assertTrue(encounterDao.add(encounter1, participantDao) != -1);
+        assertTrue(encounterDao.add(encounter1) != -1);
     }
 
     @After
@@ -70,8 +71,15 @@ public class EncounterDAOTest extends BaseDatabaseTest {
     @Test
     public void updateValidEncounter() throws DataAccessException {
         encounter1.setName("new name");
-        encounterDao.update(encounter1.idNamePair());
-        NamedList<EncounterParticipant> updated = encounterDao.find(encounter1.getId(), participantDao);
+        encounter1.setCurrentTurn(participant1a);
+        encounter1.setInCombat(false);
+        encounterDao.updateFields(encounter1);
+        Encounter<EncounterParticipant> updated = encounterDao.findList(encounter1.getId());
+        assertEquals(encounter1, updated);
+
+        encounter1.setCurrentTurn(null);
+        encounterDao.updateFields(encounter1);
+        updated = encounterDao.findList(encounter1.getId());
         assertEquals(encounter1, updated);
     }
 
@@ -79,12 +87,12 @@ public class EncounterDAOTest extends BaseDatabaseTest {
     public void updateInvalidEncounter() throws DataAccessException {
         encounter1.setName("new name");
         encounter1.setId(-1L);
-        encounterDao.update(encounter1.idNamePair());
+        encounterDao.updateFields(encounter1);
     }
 
     @Test
     public void findValidEncounter() {
-        NamedList<EncounterParticipant> encounter = encounterDao.find(encounter1.getId(), participantDao);
+        Encounter<EncounterParticipant> encounter = encounterDao.findList(encounter1.getId());
         assertEquals(encounter1, encounter);
     }
 
