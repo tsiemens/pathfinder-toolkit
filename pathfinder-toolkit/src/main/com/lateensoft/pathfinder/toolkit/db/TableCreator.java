@@ -6,9 +6,6 @@ import android.util.Log;
 public class TableCreator {
     private static final String TAG = TableCreator.class.getSimpleName();
     
-    public TableCreator() {
-    }
-    
     public void createTables(SQLiteDatabase db) {
         db.execSQL(createCharacter());
         db.execSQL(createSkill());

@@ -23,4 +23,6 @@ public interface Database {
 
     /**Performs delete on table and returns the number of rows deleted, 0 otherwise */
     public int delete(String table, String selector);
+
+    public void execSQL(String sqlStatement);
 }

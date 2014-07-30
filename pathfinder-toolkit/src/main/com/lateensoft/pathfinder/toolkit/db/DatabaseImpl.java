@@ -101,4 +101,10 @@ public class DatabaseImpl extends SQLiteOpenHelper implements Database {
         open();
         return database.delete(table, selector, null);
     }
+
+    @Override
+    public void execSQL(String sqlStatement) {
+        open();
+        database.execSQL(sqlStatement);
+    }
 }

@@ -7,6 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
 import com.lateensoft.pathfinder.toolkit.dao.GenericDAO;
+import com.lateensoft.pathfinder.toolkit.db.CursorUtil;
 import com.lateensoft.pathfinder.toolkit.db.Database;
 import org.jetbrains.annotations.Nullable;
 import roboguice.RoboGuice;
@@ -32,7 +33,7 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         Cursor cursor = database.query(tables, columns, selector);
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            Hashtable<String, Object> hashTable =  getTableOfValues(cursor);
+            Hashtable<String, Object> hashTable =  CursorUtil.getTableOfValues(cursor);
             return buildFromHashTable(hashTable);
         } else {
             return null;
@@ -78,7 +79,7 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
         List<Entity> entities = Lists.newArrayListWithCapacity(cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Hashtable<String, Object> hashTable = getTableOfValues(cursor);
+            Hashtable<String, Object> hashTable = CursorUtil.getTableOfValues(cursor);
             entities.add(buildFromHashTable(hashTable));
             cursor.moveToNext();
         }
@@ -172,40 +173,6 @@ public abstract class GenericTableDAO<RowId, Entity, RowData> implements Generic
 
     public Table getTable() {
         return table;
-    }
-
-    protected static Hashtable<String, Object> getTableOfValues(Cursor cursor) {
-        Hashtable<String, Object> table = new Hashtable<String, Object>();
-        String[] columns = cursor.getColumnNames();
-        for (String column : columns) {
-            Object datum = getDatum(cursor, column);
-            if (datum != null) {
-                table.put(column, datum);
-            }
-        }
-        return table;
-    }
-
-    protected static Object getDatum(Cursor cursor, String column) {
-        int index = cursor.getColumnIndex(column);
-        int type = cursor.getType(index);
-        Object data;
-        switch (type) {
-            case Cursor.FIELD_TYPE_STRING:
-                data = cursor.getString(index);
-                break;
-            case Cursor.FIELD_TYPE_INTEGER:
-                // Because INTEGER can store Long and Integer, we need to use Long, and cast later
-                data = cursor.getLong(index);
-                break;
-            case Cursor.FIELD_TYPE_FLOAT:
-                data = cursor.getDouble(index);
-                break;
-            default:
-                data = null;
-                break;
-        }
-        return data;
     }
 
     public static String andSelectors(String... selectors) {

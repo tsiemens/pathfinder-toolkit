@@ -254,6 +254,10 @@ public class PathfinderCharacter implements Parcelable, Identifiable {
         return result;
     }
 
+    public static Builder builder() {
+        return new Builder<Builder>();
+    }
+
     @SuppressWarnings("unchecked")
     public static class Builder<T extends Builder> {
         private long id = UNSET_ID;

@@ -99,7 +99,7 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
         return result;
     }
 
-    public static Builder<Builder> builder() {
+    public static Builder builder() {
         return new Builder<Builder>();
     }
 

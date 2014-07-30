@@ -1,4 +1,4 @@
-package com.lateensoft.pathfinder.toolkit.patching;
+package com.lateensoft.pathfinder.toolkit.patching.v6;
 
 import com.lateensoft.pathfinder.toolkit.model.character.*;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
@@ -6,7 +6,7 @@ import com.lateensoft.pathfinder.toolkit.model.character.items.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Skill;
 
-public class CharacterConverter {
+public class PreV6CharacterConverter {
 
     public static PathfinderCharacter convertCharacter(com.lateensoft.pathfinder.toolkit.deprecated.v1.model.character.PTCharacter oldCharacter) {
         PathfinderCharacter newCharacter = PathfinderCharacter.newDefaultCharacter("");
