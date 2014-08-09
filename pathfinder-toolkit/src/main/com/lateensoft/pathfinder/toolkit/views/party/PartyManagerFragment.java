@@ -292,6 +292,7 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showPartyPicker() {
+        updateDatabase();
         List<IdNamePair> parties = partyDao.findAll();
         PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
