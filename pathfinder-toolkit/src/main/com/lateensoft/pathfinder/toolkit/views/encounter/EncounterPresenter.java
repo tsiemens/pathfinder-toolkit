@@ -244,6 +244,7 @@ public class EncounterPresenter {
                 }
             });
         }
+        encounter.setInCombat(true);
         onNextTurnSelected();
     }
 

@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 import org.dom4j.DocumentException;
 import roboguice.RoboGuice;
 
@@ -39,7 +40,8 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     private static final String TAG = AbstractCharacterSheetFragment.class.getSimpleName();
 
     public static final int GET_IMPORT_REQ_CODE = 3056;
-    
+    public static final int SELECT_CHARACTER_REQ_CODE = 7563;
+
     private long currentCharacterID;
 
     private CharacterModelDAO characterModelDao;
@@ -197,49 +199,13 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     }
 
     private void showCharacterSelectionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.select_character_dialog_header));
-
-        List<IdNamePair> characterEntries = characterNameDao.findAll();
-        String[] characterNames = IdNamePair.nameArray(characterEntries);
-        int currentCharacterIndex = 0;
-
-        for (int i = 0; i < characterEntries.size(); i++) {
-            if (currentCharacterID == characterEntries.get(i).getId()) {
-                currentCharacterIndex = i;
-            }
-        }
-
-        CharacterSelectionClickListener clickListener = new CharacterSelectionClickListener(characterEntries, currentCharacterIndex);
-        builder.setSingleChoiceItems(characterNames, currentCharacterIndex,
-                clickListener)
-                .setPositiveButton(R.string.ok_button_text, clickListener)
-                .setNegativeButton(R.string.cancel_button_text, null);
-        builder.show();
-    }
-
-    private class CharacterSelectionClickListener implements OnClickListener {
-        private List<IdNamePair> characterEntries;
-        private long selectedCharacterId;
-
-        public CharacterSelectionClickListener(List<IdNamePair> characterEntries, int initialSelection) {
-            this.characterEntries = characterEntries;
-            this.selectedCharacterId = characterEntries.get(initialSelection).getId();
-        }
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                if (selectedCharacterId != currentCharacterID) {
-                    updateDatabase();
-
-                    setSelectedCharacter(selectedCharacterId);
-                    loadSelectedCharacter();
-                }
-            } else if (which >= 0 && which < characterEntries.size()) {
-                selectedCharacterId = characterEntries.get(which).getId();
-            }
-        }
+        List<IdNamePair> characters = characterNameDao.findAll();
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
+        builder.setTitle(R.string.select_character_dialog_header)
+                .setSingleChoice(true)
+                .setPickableCharacters(characters, characterNameDao.find(getCurrentCharacterID()));
+        Intent pickerIntent = builder.build();
+        startActivityForResult(pickerIntent, SELECT_CHARACTER_REQ_CODE);
     }
 
     private void showCreateCharacterDialog() {
@@ -290,50 +256,67 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_IMPORT_REQ_CODE ) {
-            if (resultCode == Activity.RESULT_OK) {
-                Uri uri = data.getData();
-                Exception thrownException = null;
-                try {
-                    if (uri == null) {
-                        throw new FileNotFoundException();
-                    }
+            handleCharacterImportResult(resultCode, data);
+        } else if (requestCode == SELECT_CHARACTER_REQ_CODE) {
+            handleCharacterSelectionResult(resultCode, data);
+        }
+    }
 
-                    InputStream is = getContext().getContentResolver().openInputStream(uri);
-                    List<PathfinderCharacter> characters = ImportExportUtils.importCharactersFromStream(is);
+    private void handleCharacterImportResult(int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            Exception thrownException = null;
+            try {
+                if (uri == null) {
+                    throw new FileNotFoundException();
+                }
 
-                    long lastCharacterId = -1;
-                    boolean didFailToImport = false;
-                    for(PathfinderCharacter character : characters) {
-                        lastCharacterId = addCharacterToDB(character);
-                        if (lastCharacterId == -1) {
-                            didFailToImport = true;
-                        }
-                    }
-                    if (lastCharacterId != -1) {
-                        setSelectedCharacter(lastCharacterId);
-                        loadSelectedCharacter();
-                    }
-                    if(didFailToImport) {
-                        Toast.makeText(getContext(), R.string.import_error_unknown, Toast.LENGTH_LONG).show();
-                    }
+                InputStream is = getContext().getContentResolver().openInputStream(uri);
+                List<PathfinderCharacter> characters = ImportExportUtils.importCharactersFromStream(is);
 
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(getContext(), R.string.import_error_file_not_found, Toast.LENGTH_LONG).show();
-                    thrownException = e;
-                } catch (DocumentException e) {
-                    Toast.makeText(getContext(), R.string.import_error_invalid_xml, Toast.LENGTH_LONG).show();
-                    thrownException = e;
-                } catch (InvalidObjectException e) {
-                    Toast.makeText(getContext(), String.format(getString(R.string.import_error_exception), e.getMessage()),
-                            Toast.LENGTH_LONG).show();
-                    thrownException = e;
-                } finally {
-                    if (thrownException != null) {
-                        Log.e(TAG, "Failed to import character(s) from " + uri, thrownException);
+                long lastCharacterId = -1;
+                boolean didFailToImport = false;
+                for(PathfinderCharacter character : characters) {
+                    lastCharacterId = addCharacterToDB(character);
+                    if (lastCharacterId == -1) {
+                        didFailToImport = true;
                     }
                 }
-            } else {
-                Toast.makeText(getContext(), R.string.unable_to_load_file_msg, Toast.LENGTH_LONG).show();
+                if (lastCharacterId != -1) {
+                    setSelectedCharacter(lastCharacterId);
+                    loadSelectedCharacter();
+                }
+                if(didFailToImport) {
+                    Toast.makeText(getContext(), R.string.import_error_unknown, Toast.LENGTH_LONG).show();
+                }
+
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getContext(), R.string.import_error_file_not_found, Toast.LENGTH_LONG).show();
+                thrownException = e;
+            } catch (DocumentException e) {
+                Toast.makeText(getContext(), R.string.import_error_invalid_xml, Toast.LENGTH_LONG).show();
+                thrownException = e;
+            } catch (InvalidObjectException e) {
+                Toast.makeText(getContext(), String.format(getString(R.string.import_error_exception), e.getMessage()),
+                        Toast.LENGTH_LONG).show();
+                thrownException = e;
+            } finally {
+                if (thrownException != null) {
+                    Log.e(TAG, "Failed to import character(s) from " + uri, thrownException);
+                }
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.unable_to_load_file_msg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleCharacterSelectionResult(int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            PickerUtil.ResultData pickerData = new PickerUtil.ResultData(data);
+            IdNamePair selectedCharacter = pickerData.getCharacter();
+            if (selectedCharacter != null && selectedCharacter.getId() != getCurrentCharacterID()) {
+                setSelectedCharacter(selectedCharacter.getId());
+                loadSelectedCharacter();
             }
         }
     }
