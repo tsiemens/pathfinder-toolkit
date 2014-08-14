@@ -19,7 +19,8 @@
 
     <dimen name="fluff_padding">5dp</dimen>
     <dimen name="fluff_padding_right">10dp</dimen>
-    <dimen name="fluff_dialog_padding">5dp</dimen>
+
+    <dimen name="value_dialog_padding">5dp</dimen>
 
     <dimen name="ability_calc_header_height">40sp</dimen>
     <dimen name="ability_calc_padding">3dp</dimen>

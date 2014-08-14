@@ -246,10 +246,15 @@
     <string name="combat_stats_empty_field">-</string>
     <string name="combat_stats_current_hp">HP:</string>
     <string name="combat_stats_total_hp">Total:</string>
-    <string name="combat_stats_damage_reduction">DR:</string>
+    <string name="combat_stats_total_hp_editor_title">Total HP</string>
+    <string name="combat_stats_damage_reduction">Dmg Reduct.:</string>
+    <string name="combat_stats_damage_reduction_editor_title">Dmg Reduction</string>
     <string name="combat_stats_wounds">Wounds:</string>
+    <string name="combat_stats_wounds_editor_title">Wounds</string>
     <string name="combat_stats_non_lethal">Non-Lethal Dmg:</string>
+    <string name="combat_stats_non_lethal_editor_title">Non-Lethal Dmg</string>
     <string name="combat_stats_base_speed">Base Speed:</string>
+    <string name="combat_stats_base_speed_editor_title">Base Speed</string>
     <string name="combat_stats_initiative">Initiative:</string>
     <string name="combat_stats_fort">FORT:</string>
     <string name="combat_stats_ref">REF:</string>
@@ -270,14 +275,20 @@
     <string name="combat_stats_touch">Touch:</string>
     <string name="combat_stats_flat_footed">Flat Footed:</string>
     <string name="combat_stats_spell_resist">Spell Resistance:</string>
+    <string name="combat_stats_spell_resist_editor_title">Spell Resistance</string>
     <string name="combat_stats_bab">BAB:</string>
     <string name="combat_stats_bab_primary">Primary</string>
+    <string name="combat_stats_bab_primary_editor_title">BAB Primary</string>
     <string name="combat_stats_slash">/</string>
     <string name="combat_stats_bab_secondary">Second/Third/\u2026</string>
+    <string name="combat_stats_bab_secondary_editor_title">BAB Second/Third/\u2026</string>
     <string name="combat_stats_cmb">CMB:</string>
     <string name="combat_stats_cmb_bab">BAB</string>
     <string name="combat_stats_cmd">CMD:</string>
     <string name="combat_stats_cmd_equals">"10 + CMB + "</string>
+    
+    <string name="value_editor_hint">Value</string>
+    <string name="value_editor_title">Edit</string>
 
     <!-- Skills -->
     <string name="skills_total_header">Total</string>

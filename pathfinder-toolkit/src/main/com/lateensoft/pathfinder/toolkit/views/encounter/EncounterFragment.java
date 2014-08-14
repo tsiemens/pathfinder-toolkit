@@ -206,8 +206,9 @@ public class EncounterFragment extends BasePageFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             LayoutInflater inflater = LayoutInflater.from(getContext());
 
-            View dialogView = inflater.inflate(R.layout.edit_initiative_dialog, null);
+            View dialogView = inflater.inflate(R.layout.edit_value_dialog, null);
             initiativeEditor = (EditText) dialogView.findViewById(R.id.editor);
+            initiativeEditor.setHint(R.string.initiative_editor_hint);
 
             builder.setTitle(R.string.initiative_editor_title);
             initiativeEditor.append(Integer.toString(row.getParticipant().getInitiativeScore()));

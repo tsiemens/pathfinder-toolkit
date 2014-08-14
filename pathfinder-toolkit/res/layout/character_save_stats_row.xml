@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/combat_stats_row_header_bar" >
+
+        <TextView
+            android:id="@+id/tv_save_row_name"
+            style="@style/combat_stats_row_header_name" />
+
+        <TextView
+            android:id="@+id/tv_save_total_value"
+            style="@style/combat_stats_row_header_value" />
+
+    </LinearLayout>
+
+    <HorizontalScrollView style="@style/combat_stats_horizontal_scroll" >
+
+        <LinearLayout style="@style/combat_stats_horizontal_scroll_linear_layout">
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                <TextView
+                    android:id="@+id/tv_save_base_value"
+                    style="@style/combat_stats_clickable_text_view" />
+
+                <TextView
+                    android:text="@string/combat_stats_base"
+                    style="@style/combat_stats_vertically_labeled_property_label" />
+            </LinearLayout>
+
+            <include
+                layout="@layout/character_combat_stats_plus"/>
+
+            <TextView
+                android:id="@+id/tv_save_ability"
+                style="@style/combat_stats_clickable_text_view"
+                android:layout_gravity="top"/>
+
+            <include
+                layout="@layout/character_combat_stats_plus"/>
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                <TextView
+                    android:id="@+id/tv_save_magic_value"
+                    style="@style/combat_stats_clickable_text_view" />
+
+                <TextView
+                    android:text="@string/combat_stats_magic_mod"
+                    style="@style/combat_stats_vertically_labeled_property_label" />
+            </LinearLayout>
+
+            <include
+                layout="@layout/character_combat_stats_plus"/>
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                <TextView
+                    android:id="@+id/tv_save_misc_value"
+                    style="@style/combat_stats_clickable_text_view" />
+
+                <TextView
+                    android:text="@string/combat_stats_misc_mod"
+                    style="@style/combat_stats_vertically_labeled_property_label" />
+            </LinearLayout>
+
+            <include
+                layout="@layout/character_combat_stats_plus"/>
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                <TextView
+                    android:id="@+id/tv_save_temp_value"
+                    style="@style/combat_stats_clickable_text_view" />
+
+                <TextView
+                    android:text="@string/combat_stats_temp_mod"
+                    style="@style/combat_stats_vertically_labeled_property_label" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

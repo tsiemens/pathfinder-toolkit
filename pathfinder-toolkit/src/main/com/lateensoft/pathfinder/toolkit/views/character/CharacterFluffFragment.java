@@ -1,15 +1,13 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.common.collect.Lists;
@@ -20,6 +18,7 @@ import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
 import com.lateensoft.pathfinder.toolkit.db.dao.table.FluffDAO;
 import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.character.FluffInfo;
+import com.lateensoft.pathfinder.toolkit.views.SimpleValueEditorDialog;
 
 import java.util.List;
 
@@ -34,8 +33,6 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
 
     private String[] fluffNames;
     private List<String> fluffValues;
-    
-    private EditText editDialogField;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,31 +64,21 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
     };
     
     private void showItemDialog(int fluffIndex) {
-        
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        //Set up dialog layout
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-
-        View dialogView = inflater.inflate(R.layout.character_fluff_dialog, null);
-        editDialogField = (EditText) dialogView.findViewById(R.id.dialogFluffText);
-
-        builder.setTitle(fluffNames[fluffIndex]);
-        editDialogField.append(fluffValues.get(fluffIndex));
-
-        DialogInterface.OnClickListener listener = new EditDialogClickListener();
-        builder.setView(dialogView)
-                .setPositiveButton(R.string.ok_button_text, listener)
-                .setNegativeButton(R.string.cancel_button_text, listener);
-        
-        AlertDialog alert = builder.create();
-        alert.show();
+        SimpleValueEditorDialog.builder(getContext())
+                .forType(SimpleValueEditorDialog.ValueType.TEXT_MULTILINE)
+                .withHint(R.string.fluff_hint)
+                .withTitle(fluffNames[fluffIndex])
+                .withInitialValue(fluffValues.get(fluffIndex))
+                .withOnFinishedListener(new EditDialogListener())
+                .build()
+                .show();
     }
 
-    private class EditDialogClickListener implements DialogInterface.OnClickListener {
+    private class EditDialogListener implements SimpleValueEditorDialog.OnEditingFinishedListener {
 
-        @Override public void onClick(DialogInterface dialog, int which) {
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                fluffValues.set(fluffIndexSelectedForEdit, getFluffValueFromDialog());
+        @Override public void onEditingFinished(boolean okWasPressed, Editable editable) {
+            if (okWasPressed) {
+                fluffValues.set(fluffIndexSelectedForEdit, editable.toString());
                 updateDatabase();
                 refreshFluffListView();
             }
@@ -111,10 +98,6 @@ public class CharacterFluffFragment extends AbstractCharacterSheetFragment {
 
     private String getCharacterName() {
         return fluffValues.get(0);
-    }
-
-    private String getFluffValueFromDialog() {
-        return editDialogField.getText().toString();
     }
 
     @Override

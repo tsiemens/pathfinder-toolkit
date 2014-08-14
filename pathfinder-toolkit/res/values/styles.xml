@@ -31,33 +31,65 @@
         <item name="android:background">@android:color/black</item>
     </style>
 
-      <style name="listDividerStyle">
-          <item name="android:layout_width">fill_parent</item>
-          <item name="android:layout_height">1dp</item>
-          <item name="android:background">#10FFFFFF</item>
-      </style>
-      
-      <style name="clickable_text_view">
-          <item name="android:clickable">true</item>
-          <item name="android:enabled">true</item>
-          <item name="android:background">@drawable/clickable_text_background</item>
-          <item name="android:padding">3dp</item>
-      </style>
-      
-      <style name="row_header_bar">
-          <item name="android:paddingLeft">5dp</item>
-          <item name="android:paddingRight">5dp</item>
-          <item name="android:paddingTop">3dp</item>
-          <item name="android:paddingBottom">3dp</item>
-          <item name="android:background">@color/holo_dialog_lighter_grey</item>
-      </style>
+    <style name="listDividerStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#10FFFFFF</item>
+    </style>
 
-      <style name="dividerless_list">
-          <item name="android:divider">@null</item>
-          <item name="android:dividerHeight">0dp</item>
-      </style>
+    <style name="clickable_text_view">
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@drawable/clickable_text_background</item>
+        <item name="android:padding">3dp</item>
+    </style>
+
+    <style name="combat_stats_clickable_text_view" parent="clickable_text_view">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">40dp</item>
+    </style>
+
+    <style name="combat_stats_row_header_bar" parent="row_header_bar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="combat_stats_row_header_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="combat_stats_row_header_value">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="combat_stats_row_header_sub_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="combat_stats_row_header_sub_value">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
 
     <style name="combat_stats_horizontal_scroll">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fadeScrollbars">true</item>
         <item name="android:scrollbarStyle">insideInset</item>
         <item name="android:scrollbars">horizontal</item>
@@ -65,4 +97,67 @@
         <item name="android:requiresFadingEdge">horizontal</item>
         <item name="android:fadingEdgeLength">50dp</item>
     </style>
+
+    <style name="combat_stats_horizontal_linear_layout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">@dimen/combat_stats_side_padding</item>
+        <item name="android:paddingRight">@dimen/combat_stats_side_padding</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:baselineAligned">false</item>
+    </style>
+
+    <style name="combat_stats_horizontal_scroll_linear_layout" parent="combat_stats_horizontal_linear_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="combat_stats_vertically_labeled_property_layout">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="combat_stats_vertically_labeled_property_label">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="combat_stats_symbol_label">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingLeft">@dimen/combat_stats_symbol_padding</item>
+        <item name="android:paddingRight">@dimen/combat_stats_symbol_padding</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="combat_stats_hp_row_label">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">3dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="row_header_bar">
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:background">@color/holo_dialog_lighter_grey</item>
+    </style>
+
+    <style name="dividerless_list">
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
 </resources>
