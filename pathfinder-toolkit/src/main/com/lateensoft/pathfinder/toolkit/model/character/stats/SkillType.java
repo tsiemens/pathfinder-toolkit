@@ -9,12 +9,12 @@ import java.util.List;
 import static com.lateensoft.pathfinder.toolkit.model.character.stats.AbilityType.*;
 
 public enum SkillType {
-    ACRO            (1,  DEX, R.string.skill_name_acro),
+    ACROBATICS      (1,  DEX, R.string.skill_name_acro),
     APPRAISE        (2,  INT, R.string.skill_name_appraise),
     BLUFF           (3,  CHA, R.string.skill_name_bluff),
     CLIMB           (4,  STR, R.string.skill_name_climb),
     CRAFT           (5,  INT, R.string.skill_name_craft),
-    DIPLOM          (6,  CHA, R.string.skill_name_diplom),
+    DIPLOMACY       (6,  CHA, R.string.skill_name_diplom),
     DISABLE_DEV     (7,  DEX, R.string.skill_name_disable_dev),
     DISGUISE        (8,  CHA, R.string.skill_name_disguise),
     ESCAPE          (9,  DEX, R.string.skill_name_escape),
@@ -32,10 +32,10 @@ public enum SkillType {
     KNOW_NOBILITY   (21, INT, R.string.skill_name_know_nobility),
     KNOW_PLANES     (22, INT, R.string.skill_name_know_planes),
     KNOW_RELIGION   (23, INT, R.string.skill_name_know_religion),
-    LING            (24, INT, R.string.skill_name_ling),
-    PERCEPT         (25, WIS, R.string.skill_name_percept),
+    LINGUISTICS     (24, INT, R.string.skill_name_ling),
+    PERCEPTION      (25, WIS, R.string.skill_name_percept),
     PERFORM         (26, CHA, R.string.skill_name_perform),
-    PROF            (27, WIS, R.string.skill_name_prof),
+    PROFESSION      (27, WIS, R.string.skill_name_prof),
     RIDE            (28, DEX, R.string.skill_name_ride),
     SENSE_MOTIVE    (29, WIS, R.string.skill_name_sense_motive),
     SLEIGHT_OF_HAND (30, DEX, R.string.skill_name_sleight_of_hand),
@@ -70,7 +70,7 @@ public enum SkillType {
     public boolean canBeSubTyped() {
         return  this == CRAFT ||
                 this == PERFORM ||
-                this == PROF;
+                this == PROFESSION;
     }
 
     public static List<SkillType> getKeySortedValues() {

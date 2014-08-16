@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ptx version="1">
+    <character gold="22.9999">
+        <fluff>
+            <name><![CDATA[Character name]]></name>
+            <alignment><![CDATA[]]></alignment>
+            <xp><![CDATA[]]></xp>
+            <next-level-xp><![CDATA[]]></next-level-xp>
+            <class><![CDATA[]]></class>
+            <race><![CDATA[Human]]></race>
+            <deity><![CDATA[]]></deity>
+            <level><![CDATA[]]></level>
+            <size><![CDATA[]]></size>
+            <gender><![CDATA[]]></gender>
+            <height><![CDATA[]]></height>
+            <weight><![CDATA[]]></weight>
+            <eyes><![CDATA[]]></eyes>
+            <hair><![CDATA[]]></hair>
+            <languages><![CDATA[]]></languages>
+            <desc><![CDATA[TV TYG ghhggttgtttyybfixiycoyci
+in ihi
+khi
+]]></desc>
+        </fluff>
+        <abilities>
+            <ability ability-key="STR" score="13" temp-bonus="4"/>
+            <ability ability-key="DEX" score="10" temp-bonus="0"/>
+            <ability ability-key="CON" score="10" temp-bonus="0"/>
+            <ability ability-key="INT" score="10" temp-bonus="0"/>
+            <ability ability-key="WIS" score="10" temp-bonus="0"/>
+            <ability ability-key="CHA" score="10" temp-bonus="0"/>
+        </abilities>
+        <combat-stats total-HP="0" wounds="0" non-lethal-dmg="0" dmg-reduct="0" base-spd="0" init-ability="DEX" init-misc-mod="0" AC-armour="0" AC-shield="0" AC-ability="DEX" size-mod="0" AC-natural-armour="0" deflect-mod="0" AC-misc-mod="0" spell-resist="0" BAB-primary="0" BAB-secondary="" CMB-ability="STR" CMD-ability="DEX" CMD-misc-mod="0"/>
+        <featlist>
+            <feat>
+                <name><![CDATA[zgmdgm
+dgms]]></name>
+                <desc><![CDATA[dhmd
+hkey]]></desc>
+            </feat>
+        </featlist>
+        <inventory>
+            <item weight="1.0" quantity="1" contained="false">
+                <name><![CDATA[gt thy GB]]></name>
+            </item>
+            <armor weight="1.0" quantity="1" contained="false" worn="true" ac="0" armor-check-penalty="0" max-dex="10" spell-failure="0" speed="30" size="M">
+                <name><![CDATA[fig if uh hu]]></name>
+                <special-properties><![CDATA[]]></special-properties>
+            </armor>
+            <weapon weight="1.0" quantity="1" contained="false" attack-bonus="0" range="5" ammo="0" type="S" size="S">
+                <name><![CDATA[vvb]]></name>
+                <damage><![CDATA[]]></damage>
+                <crit><![CDATA[]]></crit>
+                <special-properties><![CDATA[]]></special-properties>
+            </weapon>
+        </inventory>
+        <saves>
+            <save save-key="FORT" ability="CON" base-mod="5" magic-mod="8" misc-mod="6" temp-mod="0"/>
+            <save save-key="REF" ability="DEX" base-mod="9" magic-mod="0" misc-mod="5" temp-mod="0"/>
+            <save save-key="WILL" ability="CON" base-mod="-6" magic-mod="0" misc-mod="0" temp-mod="0"/>
+        </saves>
+        <skills>
+            <skill skill-key="Acrobatics" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Appraise" ability="INT" class-skill="false" rank="2" misc="0"/>
+            <skill skill-key="Bluff" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Climb" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0">
+                <sub-type><![CDATA[HTC T
+TF GH]]></sub-type>
+            </skill>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Diplomacy" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="DisableDevice" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Disguise" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="EscapeArtist" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Fly" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Handle Animal" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Heal" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Intimidate" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeArcana" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeDungeoneering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeEngineering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeGeography" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeHistory" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeLocal" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNature" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNobility" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgePlanes" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeReligion" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Linguistics" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perception" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perform" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Profession" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Ride" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SenseMotive" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SleightOfHand" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Spellcraft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Stealth" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Survival" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Swim" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="UseMagicDevice" ability="CHA" class-skill="false" rank="0" misc="0"/>
+        </skills>
+        <spellbook>
+            <spell level="0" prepared="0">
+                <name><![CDATA[ugh g]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+        </spellbook>
+    </character>
+    <character gold="0.0">
+        <fluff>
+            <name><![CDATA[New Adventurer]]></name>
+            <alignment><![CDATA[BG go GH GB]]></alignment>
+            <xp><![CDATA[JC gig CV]]></xp>
+            <next-level-xp><![CDATA[]]></next-level-xp>
+            <class><![CDATA[]]></class>
+            <race><![CDATA[]]></race>
+            <deity><![CDATA[]]></deity>
+            <level><![CDATA[]]></level>
+            <size><![CDATA[]]></size>
+            <gender><![CDATA[]]></gender>
+            <height><![CDATA[]]></height>
+            <weight><![CDATA[]]></weight>
+            <eyes><![CDATA[]]></eyes>
+            <hair><![CDATA[]]></hair>
+            <languages><![CDATA[]]></languages>
+            <desc><![CDATA[]]></desc>
+        </fluff>
+        <abilities>
+            <ability ability-key="STR" score="10" temp-bonus="0"/>
+            <ability ability-key="DEX" score="10" temp-bonus="0"/>
+            <ability ability-key="CON" score="10" temp-bonus="0"/>
+            <ability ability-key="INT" score="10" temp-bonus="0"/>
+            <ability ability-key="WIS" score="10" temp-bonus="0"/>
+            <ability ability-key="CHA" score="10" temp-bonus="0"/>
+        </abilities>
+        <combat-stats total-HP="0" wounds="0" non-lethal-dmg="0" dmg-reduct="0" base-spd="0" init-ability="DEX" init-misc-mod="0" AC-armour="0" AC-shield="0" AC-ability="DEX" size-mod="0" AC-natural-armour="0" deflect-mod="0" AC-misc-mod="0" spell-resist="0" BAB-primary="0" BAB-secondary="" CMB-ability="STR" CMD-ability="DEX" CMD-misc-mod="0"/>
+        <featlist>
+            <feat>
+                <name><![CDATA[Something]]></name>
+                <desc><![CDATA[HF uh hu]]></desc>
+            </feat>
+            <feat>
+                <name><![CDATA[aaaa]]></name>
+                <desc><![CDATA[]]></desc>
+            </feat>
+            <feat>
+                <name><![CDATA[gt DG egg]]></name>
+                <desc><![CDATA[]]></desc>
+            </feat>
+            <feat>
+                <name><![CDATA[sss]]></name>
+                <desc><![CDATA[]]></desc>
+            </feat>
+        </featlist>
+        <inventory>
+            <item weight="1.0" quantity="1" contained="false">
+                <name><![CDATA[fry]]></name>
+            </item>
+            <item weight="99.0" quantity="55" contained="false">
+                <name><![CDATA[hhh]]></name>
+            </item>
+            <item weight="1.0" quantity="1" contained="false">
+                <name><![CDATA[vv]]></name>
+            </item>
+            <armor weight="1.0" quantity="1" contained="false" worn="true" ac="0" armor-check-penalty="0" max-dex="10" spell-failure="0" speed="30" size="M">
+                <name><![CDATA[aaaa]]></name>
+                <special-properties><![CDATA[]]></special-properties>
+            </armor>
+            <armor weight="1.0" quantity="1" contained="false" worn="true" ac="0" armor-check-penalty="0" max-dex="10" spell-failure="0" speed="30" size="M">
+                <name><![CDATA[vg]]></name>
+                <special-properties><![CDATA[]]></special-properties>
+            </armor>
+            <weapon weight="1.0" quantity="1" contained="false" attack-bonus="0" range="5" ammo="0" type="S" size="S">
+                <name><![CDATA[HF hug g]]></name>
+                <damage><![CDATA[]]></damage>
+                <crit><![CDATA[]]></crit>
+                <special-properties><![CDATA[]]></special-properties>
+            </weapon>
+            <weapon weight="1.0" quantity="1" contained="false" attack-bonus="0" range="5" ammo="0" type="S" size="S">
+                <name><![CDATA[aaa]]></name>
+                <damage><![CDATA[]]></damage>
+                <crit><![CDATA[]]></crit>
+                <special-properties><![CDATA[]]></special-properties>
+            </weapon>
+            <weapon weight="1.0" quantity="1" contained="false" attack-bonus="0" range="5" ammo="0" type="S" size="S">
+                <name><![CDATA[zzz]]></name>
+                <damage><![CDATA[]]></damage>
+                <crit><![CDATA[]]></crit>
+                <special-properties><![CDATA[]]></special-properties>
+            </weapon>
+        </inventory>
+        <saves>
+            <save save-key="FORT" ability="CON" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+            <save save-key="REF" ability="DEX" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+            <save save-key="WILL" ability="WIS" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+        </saves>
+        <skills>
+            <skill skill-key="Acrobatics" ability="DEX" class-skill="false" rank="2" misc="0"/>
+            <skill skill-key="Appraise" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Bluff" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Climb" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Diplomacy" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="DisableDevice" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Disguise" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="EscapeArtist" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Fly" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Handle Animal" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Heal" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Intimidate" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeArcana" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeDungeoneering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeEngineering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeGeography" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeHistory" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeLocal" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNature" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNobility" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgePlanes" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeReligion" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Linguistics" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perception" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perform" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Profession" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Ride" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SenseMotive" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SleightOfHand" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Spellcraft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Stealth" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Survival" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Swim" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="UseMagicDevice" ability="CHA" class-skill="false" rank="0" misc="0"/>
+        </skills>
+        <spellbook>
+            <spell level="0" prepared="0">
+                <name><![CDATA[ugh guy]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+            <spell level="4" prepared="4">
+                <name><![CDATA[ng guy GU]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+            <spell level="4" prepared="0">
+                <name><![CDATA[zgh GH]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+            <spell level="5" prepared="0">
+                <name><![CDATA[by chu GH]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+        </spellbook>
+    </character>
+    <character gold="0.0">
+        <fluff>
+            <name><![CDATA[New 3]]></name>
+            <alignment><![CDATA[]]></alignment>
+            <xp><![CDATA[]]></xp>
+            <next-level-xp><![CDATA[]]></next-level-xp>
+            <class><![CDATA[]]></class>
+            <race><![CDATA[]]></race>
+            <deity><![CDATA[]]></deity>
+            <level><![CDATA[]]></level>
+            <size><![CDATA[]]></size>
+            <gender><![CDATA[]]></gender>
+            <height><![CDATA[]]></height>
+            <weight><![CDATA[]]></weight>
+            <eyes><![CDATA[]]></eyes>
+            <hair><![CDATA[]]></hair>
+            <languages><![CDATA[]]></languages>
+            <desc><![CDATA[]]></desc>
+        </fluff>
+        <abilities>
+            <ability ability-key="STR" score="10" temp-bonus="0"/>
+            <ability ability-key="DEX" score="10" temp-bonus="0"/>
+            <ability ability-key="CON" score="10" temp-bonus="0"/>
+            <ability ability-key="INT" score="10" temp-bonus="0"/>
+            <ability ability-key="WIS" score="10" temp-bonus="0"/>
+            <ability ability-key="CHA" score="10" temp-bonus="0"/>
+        </abilities>
+        <combat-stats total-HP="0" wounds="0" non-lethal-dmg="0" dmg-reduct="0" base-spd="0" init-ability="DEX" init-misc-mod="0" AC-armour="0" AC-shield="0" AC-ability="DEX" size-mod="0" AC-natural-armour="0" deflect-mod="0" AC-misc-mod="0" spell-resist="0" BAB-primary="0" BAB-secondary="" CMB-ability="STR" CMD-ability="DEX" CMD-misc-mod="0"/>
+        <featlist/>
+        <inventory/>
+        <saves>
+            <save save-key="FORT" ability="CON" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+            <save save-key="REF" ability="DEX" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+            <save save-key="WILL" ability="WIS" base-mod="0" magic-mod="0" misc-mod="0" temp-mod="0"/>
+        </saves>
+        <skills>
+            <skill skill-key="Acrobatics" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Appraise" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Bluff" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Climb" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Diplomacy" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="DisableDevice" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Disguise" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="EscapeArtist" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Fly" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Handle Animal" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Heal" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Intimidate" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeArcana" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeDungeoneering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeEngineering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeGeography" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeHistory" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeLocal" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNature" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNobility" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgePlanes" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeReligion" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Linguistics" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perception" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perform" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Profession" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Ride" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SenseMotive" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SleightOfHand" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Spellcraft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Stealth" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Survival" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Swim" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="UseMagicDevice" ability="CHA" class-skill="false" rank="0" misc="0"/>
+        </skills>
+        <spellbook/>
+    </character>
+    <character gold="22.9999">
+        <fluff>
+            <name><![CDATA[import adventurer old]]></name>
+            <alignment><![CDATA[]]></alignment>
+            <xp><![CDATA[]]></xp>
+            <next-level-xp><![CDATA[]]></next-level-xp>
+            <class><![CDATA[]]></class>
+            <race><![CDATA[Human]]></race>
+            <deity><![CDATA[]]></deity>
+            <level><![CDATA[]]></level>
+            <size><![CDATA[]]></size>
+            <gender><![CDATA[]]></gender>
+            <height><![CDATA[]]></height>
+            <weight><![CDATA[]]></weight>
+            <eyes><![CDATA[]]></eyes>
+            <hair><![CDATA[]]></hair>
+            <languages><![CDATA[]]></languages>
+            <desc><![CDATA[TV TYG ghhggttgtttyybfixiycoyci
+in ihi
+khi
+]]></desc>
+        </fluff>
+        <abilities>
+            <ability ability-key="STR" score="13" temp-bonus="4"/>
+            <ability ability-key="DEX" score="10" temp-bonus="0"/>
+            <ability ability-key="CON" score="10" temp-bonus="0"/>
+            <ability ability-key="INT" score="10" temp-bonus="0"/>
+            <ability ability-key="WIS" score="10" temp-bonus="0"/>
+            <ability ability-key="CHA" score="10" temp-bonus="0"/>
+        </abilities>
+        <combat-stats total-HP="0" wounds="0" non-lethal-dmg="0" dmg-reduct="0" base-spd="0" init-ability="DEX" init-misc-mod="0" AC-armour="0" AC-shield="0" AC-ability="DEX" size-mod="0" AC-natural-armour="0" deflect-mod="0" AC-misc-mod="0" spell-resist="0" BAB-primary="0" BAB-secondary="" CMB-ability="STR" CMD-ability="DEX" CMD-misc-mod="0"/>
+        <featlist>
+            <feat>
+                <name><![CDATA[zgmdgm
+dgms]]></name>
+                <desc><![CDATA[dhmd
+hkey]]></desc>
+            </feat>
+        </featlist>
+        <inventory>
+            <item weight="1.0" quantity="1" contained="false">
+                <name><![CDATA[gt thy GB]]></name>
+            </item>
+            <armor weight="1.0" quantity="1" contained="false" worn="true" ac="0" armor-check-penalty="0" max-dex="10" spell-failure="0" speed="30" size="M">
+                <name><![CDATA[fig if uh hu]]></name>
+                <special-properties><![CDATA[]]></special-properties>
+            </armor>
+            <weapon weight="1.0" quantity="1" contained="false" attack-bonus="0" range="5" ammo="0" type="S" size="S">
+                <name><![CDATA[vvb]]></name>
+                <damage><![CDATA[]]></damage>
+                <crit><![CDATA[]]></crit>
+                <special-properties><![CDATA[]]></special-properties>
+            </weapon>
+        </inventory>
+        <saves>
+            <save save-key="FORT" ability="CON" base-mod="5" magic-mod="8" misc-mod="6" temp-mod="0"/>
+            <save save-key="REF" ability="DEX" base-mod="9" magic-mod="0" misc-mod="5" temp-mod="0"/>
+            <save save-key="WILL" ability="CON" base-mod="-6" magic-mod="0" misc-mod="0" temp-mod="0"/>
+        </saves>
+        <skills>
+            <skill skill-key="Acrobatics" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Appraise" ability="INT" class-skill="false" rank="2" misc="0"/>
+            <skill skill-key="Bluff" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Climb" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0">
+                <sub-type><![CDATA[HTC T
+TF GH]]></sub-type>
+            </skill>
+            <skill skill-key="Craft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Diplomacy" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="DisableDevice" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Disguise" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="EscapeArtist" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Fly" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Handle Animal" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Heal" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Intimidate" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeArcana" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeDungeoneering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeEngineering" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeGeography" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeHistory" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeLocal" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNature" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeNobility" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgePlanes" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="KnowledgeReligion" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Linguistics" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perception" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Perform" ability="CHA" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Profession" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Ride" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SenseMotive" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="SleightOfHand" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Spellcraft" ability="INT" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Stealth" ability="DEX" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Survival" ability="WIS" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="Swim" ability="STR" class-skill="false" rank="0" misc="0"/>
+            <skill skill-key="UseMagicDevice" ability="CHA" class-skill="false" rank="0" misc="0"/>
+        </skills>
+        <spellbook>
+            <spell level="0" prepared="0">
+                <name><![CDATA[ugh g]]></name>
+                <desc><![CDATA[]]></desc>
+            </spell>
+        </spellbook>
+    </character>
+</ptx>

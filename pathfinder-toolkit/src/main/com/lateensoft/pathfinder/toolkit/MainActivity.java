@@ -40,20 +40,18 @@ import com.lateensoft.pathfinder.toolkit.views.*;
 import com.lateensoft.pathfinder.toolkit.views.character.*;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterSkillsFragment;
 import com.lateensoft.pathfinder.toolkit.views.encounter.EncounterFragment;
-import com.lateensoft.pathfinder.toolkit.views.party.InitiativeTrackerFragment;
 import com.lateensoft.pathfinder.toolkit.views.party.PartyManagerFragment;
-import com.lateensoft.pathfinder.toolkit.views.party.PartySkillCheckerFragment;
 import com.lateensoft.pathfinder.toolkit.views.settings.SettingsActivity;
 import org.jetbrains.annotations.NotNull;
 import roboguice.activity.RoboFragmentActivity;
 
 public class MainActivity extends RoboFragmentActivity implements OnChildClickListener, OnGroupClickListener,
-		OnGroupExpandListener, OnGroupCollapseListener {
-	private static final String TAG = MainActivity.class.getSimpleName();
+        OnGroupExpandListener, OnGroupCollapseListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-	private static final String KEY_CURRENT_FRAGMENT = "fragment_class_name";
+    private static final String KEY_CURRENT_FRAGMENT = "fragment_class_name";
 
-	private DrawerLayout m_drawerLayout;
+    private DrawerLayout m_drawerLayout;
     private RelativeLayout m_leftDrawer;
 	private ExpandableListView m_drawerList;
 	
@@ -62,51 +60,51 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
 
     private Deque<Class<? extends BasePageFragment>> m_fragmentBackStack;
 
-	@Override
-	public void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         m_fragmentBackStack = new ArrayDeque<Class<? extends BasePageFragment>>();
 
-		setContentView(R.layout.activity_drawer_main);
-		
-		setupNavDrawer();
+        setContentView(R.layout.activity_drawer_main);
+        
+        setupNavDrawer();
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-		
-		// Patching
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        
+        // Patching
         UpdatePatcher patcher = new UpdatePatcher(this);
-		if (patcher.isPatchRequired()) {
+        if (patcher.isPatchRequired()) {
 
-			final ProgressDialog progDialog = new ProgressDialog(this);
-			progDialog.setCancelable(false);
-			progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progDialog.setTitle(getString(R.string.updating_dialog_message));
-			progDialog.show();
+            final ProgressDialog progDialog = new ProgressDialog(this);
+            progDialog.setCancelable(false);
+            progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progDialog.setTitle(getString(R.string.updating_dialog_message));
+            progDialog.show();
 
-			PatcherTask task = new PatcherTask(patcher);
-			PatcherListener patchListener = new PatcherListener() {
-				@Override public void onPatchComplete(boolean completeSuccess) {
-					progDialog.dismiss();
-					MainActivity.this.showStartupFragment(savedInstanceState);
-				}
-			};
-			task.execute(patchListener);
+            PatcherTask task = new PatcherTask(patcher);
+            PatcherListener patchListener = new PatcherListener() {
+                @Override public void onPatchComplete(boolean completeSuccess) {
+                    progDialog.dismiss();
+                    MainActivity.this.showStartupFragment(savedInstanceState);
+                }
+            };
+            task.execute(patchListener);
 
-		} else {
-			showStartupFragment(savedInstanceState);
-		}
-		
-		showRateDialogIfRequired();
-	}
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(KEY_CURRENT_FRAGMENT, m_currentFragment.getSupportClass().getCanonicalName());
-		super.onSaveInstanceState(outState);
-	}
+        } else {
+            showStartupFragment(savedInstanceState);
+        }
+        
+        showRateDialogIfRequired();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY_CURRENT_FRAGMENT, m_currentFragment.getSupportClass().getCanonicalName());
+        super.onSaveInstanceState(outState);
+    }
 
-	private void showStartupFragment(Bundle savedInstanceState) {
+    private void showStartupFragment(Bundle savedInstanceState) {
         String fragmentName = savedInstanceState != null ?
                 savedInstanceState.getString(KEY_CURRENT_FRAGMENT) : null;
         Class<? extends BasePageFragment> fragmentClass = null;
@@ -117,7 +115,7 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
             fragmentClass = CharacterFluffFragment.class;
         }
         showFragment(fragmentClass);
-	}
+    }
 
     @SuppressWarnings("unchecked")
     private Class<? extends BasePageFragment> toPageFragmentClass(final String className){
@@ -128,52 +126,52 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         }
     }
 
-	private void setupNavDrawer() {
-		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		m_drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
+    private void setupNavDrawer() {
+        m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        m_drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+                GravityCompat.START);
         m_leftDrawer = (RelativeLayout) findViewById(R.id.left_drawer);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-				m_drawerLayout, /* DrawerLayout object */
-				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-				R.string.app_name, /* "open drawer" description */
-				R.string.app_name /* "close drawer" description */
-				) {
+                m_drawerLayout, /* DrawerLayout object */
+                R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+                R.string.app_name, /* "open drawer" description */
+                R.string.app_name /* "close drawer" description */
+                ) {
 
-			/** Called when a drawer has settled in a completely closed state. */
-			public void onDrawerClosed(View view) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
                 if (m_currentFragment != null) {
                     m_currentFragment.updateTitle();
                     showFragmentForNavItem(m_toOpen);
                 }
-				invalidateOptionsMenu();
-			}
+                invalidateOptionsMenu();
+            }
 
-			/** Called when a drawer has settled in a completely open state. */
-			public void onDrawerOpened(View drawerView) {
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
                 ActionBar ab = getActionBar();
                 if (ab != null) {
                     ab.setTitle(R.string.app_name);
                     ab.setSubtitle(null);
                 }
-				invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 InputMethodUtils.hideSoftKeyboard(MainActivity.this);
-			}
-		};
-		drawerToggle.syncState();
+            }
+        };
+        drawerToggle.syncState();
 
-		m_drawerLayout.setDrawerListener(drawerToggle);
+        m_drawerLayout.setDrawerListener(drawerToggle);
 
-		m_drawerList = (ExpandableListView) findViewById(R.id.drawer_exp_lv);
+        m_drawerList = (ExpandableListView) findViewById(R.id.drawer_exp_lv);
 
-		// Set the adapter for the list view
-		m_drawerList.setAdapter(new NavDrawerAdapter(this, buildNavDrawerList()));
-		m_drawerList.setGroupIndicator(getResources().getDrawable(R.drawable.nav_item_expand_icon));
-		// Set the list's click listener
-		m_drawerList.setOnChildClickListener(this);
-		m_drawerList.setOnGroupClickListener(this);
-		m_drawerList.setOnGroupExpandListener(this);
-		m_drawerList.setOnGroupCollapseListener(this);
+        // Set the adapter for the list view
+        m_drawerList.setAdapter(new NavDrawerAdapter(this, buildNavDrawerList()));
+        m_drawerList.setGroupIndicator(getResources().getDrawable(R.drawable.nav_item_expand_icon));
+        // Set the list's click listener
+        m_drawerList.setOnChildClickListener(this);
+        m_drawerList.setOnGroupClickListener(this);
+        m_drawerList.setOnGroupExpandListener(this);
+        m_drawerList.setOnGroupCollapseListener(this);
 
         ImageView settingsButton = (ImageView) findViewById(R.id.iv_settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -181,32 +179,36 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
-	}
+    }
 
-	private void showRateDialogIfRequired() {
-		RateDialogHelper rateHelper = new RateDialogHelper(this);
+    private void showRateDialogIfRequired() {
+        RateDialogHelper rateHelper = new RateDialogHelper(this);
         if (rateHelper.shouldPromptToRate()) {
             rateHelper.buildAndShowDialog();
         }
-	}
+    }
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean drawerOpen = isDrawerOpen();
-		for (int i = 0; i < menu.size(); i++) {
-			menu.getItem(i).setVisible(!drawerOpen);
-		}
-		return super.onPrepareOptionsMenu(menu);
-	}
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean drawerOpen = isDrawerOpen();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setVisible(!drawerOpen);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
+    public boolean isDrawerOpen() {
+        return m_drawerLayout.isDrawerOpen(m_leftDrawer);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             setDrawerOpen(!isDrawerOpen());
-		}
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBackPressed() {
@@ -280,18 +282,18 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         m_currentFragment = fragment;
     }
 
-	@Override
-	public void onGroupCollapse(int arg0) {
-		// Do nothing
-	}
+    @Override
+    public void onGroupCollapse(int arg0) {
+        // Do nothing
+    }
 
-	@Override
-	public void onGroupExpand(int arg0) {
-		// Do nothing
-	}
+    @Override
+    public void onGroupExpand(int arg0) {
+        // Do nothing
+    }
 
-	@Override
-	public boolean onGroupClick(ExpandableListView list, View parent, int groupPosition, long id){
+    @Override
+    public boolean onGroupClick(ExpandableListView list, View parent, int groupPosition, long id){
         NavDrawerAdapter adapter = (NavDrawerAdapter) list.getExpandableListAdapter();
         if (adapter != null) {
             NavDrawerGroupItem group = (NavDrawerGroupItem) adapter.getGroup(groupPosition);
@@ -302,18 +304,18 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
             }
         }
         return false;
-	}
+    }
 
-	@Override
-	public boolean onChildClick(ExpandableListView list, View parent, int groupPosition,
-			int childPosition, long id) {
+    @Override
+    public boolean onChildClick(ExpandableListView list, View parent, int groupPosition,
+            int childPosition, long id) {
         NavDrawerAdapter adapter = (NavDrawerAdapter) list.getExpandableListAdapter();
         if (adapter != null) {
             m_toOpen = (NavDrawerChildItem) adapter.getChild(groupPosition, childPosition);
         }
         setDrawerOpen(false);
-		return false;
-	}
+        return false;
+    }
 
     private void setDrawerOpen(boolean open) {
         if (open) {
@@ -321,10 +323,6 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         } else {
             m_drawerLayout.closeDrawer(m_leftDrawer);
         }
-    }
-
-    private boolean isDrawerOpen() {
-        return m_drawerLayout.isDrawerOpen(m_leftDrawer);
     }
 
     private List<NavDrawerGroupItem> buildNavDrawerList() {
@@ -344,8 +342,6 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         return Lists.newArrayList(
                 new NavDrawerGroupItem(getString(R.string.main_menu_character_group), R.drawable.character_sheet_icon, characterPages),
                 new NavDrawerGroupItem(getString(R.string.main_menu_encounters), R.drawable.initiative_icon, EncounterFragment.class),
-                new NavDrawerGroupItem(getString(R.string.main_menu_init_tracker), R.drawable.initiative_icon, InitiativeTrackerFragment.class), // TODO remove
-                new NavDrawerGroupItem(getString(R.string.main_menu_party_skill_checker), R.drawable.skill_checker_icon, PartySkillCheckerFragment.class), // TODO remove
                 new NavDrawerGroupItem(getString(R.string.main_menu_party_manager), R.drawable.party_icon, PartyManagerFragment.class),
                 new NavDrawerGroupItem(getString(R.string.main_menu_pointbuy), R.drawable.stat_calc_icon, PointbuyCalculatorFragment.class),
                 new NavDrawerGroupItem(getString(R.string.main_menu_dice_roller), R.drawable.dice_roller_icon, DiceRollerFragment.class)
@@ -357,13 +353,13 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         item.setIconVisibility(View.INVISIBLE);
         return item;
     }
-	
-	public void hideKeyboardDelayed(long delayMs) {
-		new Handler().postDelayed(new Runnable() {
-		    @Override
-		    public void run() {
-		    	InputMethodUtils.hideSoftKeyboard(MainActivity.this);
-		    }
-		 }, delayMs);
-	}
+    
+    public void hideKeyboardDelayed(long delayMs) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodUtils.hideSoftKeyboard(MainActivity.this);
+            }
+         }, delayMs);
+    }
 }

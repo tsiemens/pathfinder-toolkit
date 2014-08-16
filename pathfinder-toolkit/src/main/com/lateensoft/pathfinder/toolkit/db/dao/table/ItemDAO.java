@@ -63,14 +63,12 @@ public class ItemDAO extends OwnedIdentifiableTableDAO<Long, Item> {
 
     protected void populateFromHashTable(Hashtable<String, Object> hashTable, Item item) {
         long id = (Long) hashTable.get(ID);
-        long characterId = (Long) hashTable.get(CHARACTER_ID);
         String name = (String) hashTable.get(NAME);
         double weight = ((Double) hashTable.get(WEIGHT));
         int quantity = ((Long) hashTable.get(QUANTITY)).intValue();
         boolean isContained = ((Long) hashTable.get(IS_CONTAINED)).intValue() != 0;
 
         item.setId(id);
-        item.setCharacterID(characterId);
         item.setName(name);
         item.setWeight(weight);
         item.setQuantity(quantity);

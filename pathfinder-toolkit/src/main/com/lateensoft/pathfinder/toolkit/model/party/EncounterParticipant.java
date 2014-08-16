@@ -4,68 +4,62 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.common.primitives.Ints;
 import com.lateensoft.pathfinder.toolkit.model.character.PathfinderCharacter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author tsiemens
  */
 public class EncounterParticipant extends PathfinderCharacter implements Comparable<EncounterParticipant> {
 
-    private int m_initiativeScore;
-    private int m_turnOrder;
+    private int initiativeScore;
+    private int turnOrder;
 
-    private long m_encounterId;
+    public EncounterParticipant(PathfinderCharacter character) {
+        super(character);
+        initiativeScore = 0;
+        turnOrder = 0;
+    }
 
     protected EncounterParticipant(Builder builder) {
         super(builder);
-        m_initiativeScore = builder.initiativeScore;
-        m_turnOrder = builder.turnOrder;
-        m_encounterId = builder.encounterId;
+        initiativeScore = builder.initiativeScore;
+        turnOrder = builder.turnOrder;
     }
 
     public EncounterParticipant(Parcel in) {
         super(in);
-        m_encounterId = in.readLong();
-        m_initiativeScore = in.readInt();
-        m_turnOrder = in.readInt();
+        initiativeScore = in.readInt();
+        turnOrder = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeLong(m_encounterId);
-        out.writeInt(m_initiativeScore);
-        out.writeInt(m_turnOrder);
+        out.writeInt(initiativeScore);
+        out.writeInt(turnOrder);
     }
 
     public int getInitiativeScore() {
-        return m_initiativeScore;
+        return initiativeScore;
     }
 
     public void setInitiativeScore(int initiativeScore) {
-        m_initiativeScore = initiativeScore;
+        this.initiativeScore = initiativeScore;
     }
 
     public int getTurnOrder() {
-        return m_turnOrder;
+        return turnOrder;
     }
 
     public void setTurnOrder(int turnOrder) {
-        m_turnOrder = turnOrder;
-    }
-
-    public long getEncounterId() {
-        return m_encounterId;
-    }
-
-    public void setEncounterId(long encounterId) {
-        m_encounterId = encounterId;
+        this.turnOrder = turnOrder;
     }
 
     @Override
-    public int compareTo(EncounterParticipant another) {
-        int turnCompared = Ints.compare(this.m_turnOrder, another.m_turnOrder);
+    public int compareTo(@NotNull EncounterParticipant another) {
+        int turnCompared = Ints.compare(this.turnOrder, another.turnOrder);
         return turnCompared != 0 ? turnCompared :
-                -1 * Ints.compare(this.m_initiativeScore, another.m_initiativeScore);
+                -1 * Ints.compare(this.initiativeScore, another.initiativeScore);
     }
 
     @Override
@@ -91,9 +85,8 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
 
         EncounterParticipant that = (EncounterParticipant) o;
 
-        if (m_encounterId != that.m_encounterId) return false;
-        if (m_initiativeScore != that.m_initiativeScore) return false;
-        if (m_turnOrder != that.m_turnOrder) return false;
+        if (initiativeScore != that.initiativeScore) return false;
+        if (turnOrder != that.turnOrder) return false;
 
         return true;
     }
@@ -101,13 +94,12 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + m_initiativeScore;
-        result = 31 * result + m_turnOrder;
-        result = 31 * result + (int) (m_encounterId ^ (m_encounterId >>> 32));
+        result = 31 * result + initiativeScore;
+        result = 31 * result + turnOrder;
         return result;
     }
 
-    public static Builder<Builder> builder() {
+    public static Builder builder() {
         return new Builder<Builder>();
     }
 
@@ -115,7 +107,6 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
     public static class Builder<T extends Builder> extends PathfinderCharacter.Builder<T> {
         private int initiativeScore = 0;
         private int turnOrder = 0;
-        private long encounterId = UNSET_ID;
 
         public Builder() {
             super();
@@ -132,11 +123,6 @@ public class EncounterParticipant extends PathfinderCharacter implements Compara
 
         public T setTurnOrder(int turnOrder) {
             this.turnOrder = turnOrder;
-            return (T) this;
-        }
-
-        public T setEncounterId(long encounterId) {
-            this.encounterId = encounterId;
             return (T) this;
         }
     }

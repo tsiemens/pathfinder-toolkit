@@ -9,4 +9,5 @@ public class GlobalPrefs {
     public static final IntPreference LAST_USED_VERSION = new IntPreference("lastUsedVersion");
     public static final LongPreference SELECTED_CHARACTER_ID = new LongPreference("selectedCharacter");
     public static final LongPreference SELECTED_PARTY_ID = new LongPreference("selectedParty");
+    public static final LongPreference SELECTED_ENCOUNTER_ID = new LongPreference("selectedEncounter");
 }

@@ -5,15 +5,15 @@ import com.lateensoft.pathfinder.toolkit.dao.OwnedGenericDAO;
 
 import java.util.List;
 
-public abstract class OwnedTableDAO<OwnerId, RowId, T>
-        extends GenericTableDAO<RowId, T, OwnedObject<OwnerId, T>> implements OwnedGenericDAO<OwnerId, RowId, T> {
+public abstract class OwnedTableDAO<OwnerId, EntityId, RowId, Entity>
+        extends GenericTableDAO<RowId, Entity, OwnedObject<OwnerId, Entity>> implements OwnedGenericDAO<OwnerId, EntityId, Entity> {
 
     public OwnedTableDAO(Context context) {
         super(context);
     }
 
     @Override
-    public List<T> findAllForOwner(OwnerId ownerId) {
+    public List<Entity> findAllForOwner(OwnerId ownerId) {
         return findFiltered(andSelectors(getOwnerIdSelector(ownerId), getBaseSelector()),
                 getDefaultOrderBy());
     }

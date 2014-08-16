@@ -2,7 +2,9 @@ package com.lateensoft.pathfinder.toolkit.views;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import com.google.common.base.Preconditions;
 import com.lateensoft.pathfinder.toolkit.MainActivity;
 
@@ -12,7 +14,9 @@ import roboguice.fragment.RoboFragment;
 
 public abstract class BasePageFragment extends RoboFragment{
 
-	private View m_rootView;
+    private View rootView;
+
+    private boolean isWaitingForResult = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,13 +25,39 @@ public abstract class BasePageFragment extends RoboFragment{
     }
 
     @Override
-	public void onResume() {
-		super.onResume();
+    public void onResume() {
+        super.onResume();
+        if (!isWaitingForResult) {
+            onResumeWithoutResult();
+        }
         updateTitle();
-		hideKeyboardDelayed(100);
-	}
+        isWaitingForResult = false;
+        hideKeyboardDelayed(100);
+    }
 
-	public void setTitle(String title) {
+    protected void onResumeWithoutResult() { }
+
+    @Override
+    public final void onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        new MainActivityAction() {
+            @Override public void performOnMainActivity(MainActivity activity) {
+                if (!activity.isDrawerOpen()) {
+                    onPreparePageOptionsMenu(menu);
+                }
+            }
+        }.performAction();
+    }
+
+    protected void onPreparePageOptionsMenu(Menu menu) { }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        isWaitingForResult = true;
+    }
+
+    public void setTitle(String title) {
         Activity a = getActivity();
         if (a != null) {
             ActionBar ab = a.getActionBar();
@@ -35,9 +65,9 @@ public abstract class BasePageFragment extends RoboFragment{
                 ab.setTitle(title);
             }
         }
-	}
-	
-	public void setTitle(int resId) {
+    }
+    
+    public void setTitle(int resId) {
         Activity a = getActivity();
         if (a != null) {
             ActionBar ab = a.getActionBar();
@@ -45,9 +75,9 @@ public abstract class BasePageFragment extends RoboFragment{
                 ab.setTitle(resId);
             }
         }
-	}
-	
-	public void setSubtitle(String subtitle) {
+    }
+    
+    public void setSubtitle(String subtitle) {
         Activity a = getActivity();
         if (a != null) {
             ActionBar ab = a.getActionBar();
@@ -55,18 +85,18 @@ public abstract class BasePageFragment extends RoboFragment{
                 ab.setSubtitle(subtitle);
             }
         }
-	}
+    }
 
     /** Sets the default title and subtitle for the fragment */
     public abstract void updateTitle();
-	
-	public View getRootView() {
-		return m_rootView;
-	}
-	
-	protected void setRootView(View rootView) {
-		m_rootView = rootView;
-	}
+    
+    public View getRootView() {
+        return rootView;
+    }
+    
+    protected void setRootView(View rootView) {
+        this.rootView = rootView;
+    }
 
     public Context getContext() {
         Activity a = getActivity();

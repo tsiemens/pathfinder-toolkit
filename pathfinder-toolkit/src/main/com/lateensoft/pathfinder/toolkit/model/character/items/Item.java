@@ -11,133 +11,108 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
     private String name;
     private double weight;
     private int quantity;
-	//set if in a container such as a bag of holding (will be used to set effective weight to 0)
+    //set if in a container such as a bag of holding (will be used to set effective weight to 0)
     private boolean isContained;
 
     private long id;
 
-    @Deprecated // once the DAOs are implemented, no owned objects will reference the character.
-    private long characterId;
-	
-	public Item(long id, long characterId, String name, double weight, int quantity, boolean contained) {
-		this.id = id;
-		this.characterId = characterId;
-		this.name = name;
-		this.weight = weight;
-		this.quantity = quantity;
-		isContained = contained;
-	}
-	
-	public Item(long characterId, String name, double weight, int quantity, boolean contained) {
-		this(UNSET_ID, characterId, name, weight, quantity, contained);
-	}
-	
-	/**
-	 * Creates new instance of an Item. Defaults quantity to 1 and contained to false.
-	 */
-	public Item(long characterId, String name, double weight) {
-		this(characterId, name, weight, 1, false);
-	}
-	
-	public Item(long characterId, String name) {
-		this(characterId, name, 1);
-	}
-	
-	public Item(long characterId) {
-		this(characterId, "");
-	}
-	
-	public Item() {
-		this(UNSET_ID);
-	}
-	
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(name);
-		out.writeDouble(weight);
-		out.writeInt(quantity);
-		boolean[] contained = new boolean[1];
-		contained[0] = isContained;
-		out.writeBooleanArray(contained);
-		out.writeLong(id);
-		out.writeLong(characterId);
-	}
-	
-	public Item(Parcel in) {
-		name = in.readString();
-		weight = in.readDouble();
-		quantity = in.readInt();
-		boolean[] contained = new boolean[1];
-		in.readBooleanArray(contained);
-		isContained = contained[0];
-		id = in.readLong();
-		characterId = in.readLong();
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public double getWeight() {
-		return weight;
-	}
-	
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
-	
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
-	public boolean isContained(){
-		return isContained;
-	}
-	
-	public void setContained(boolean isContained){
-		this.isContained = isContained;
-	}
-	
-	@Override
-	public void setId(long id) {
-		this.id = id;
-	}
+    public Item(long id, String name, double weight, int quantity, boolean contained) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.quantity = quantity;
+        isContained = contained;
+    }
+    
+    public Item(String name, double weight, int quantity, boolean contained) {
+        this(UNSET_ID, name, weight, quantity, contained);
+    }
+    
+    public Item(String name) {
+        this(name, 1, 1, false);
+    }
+    
+    public Item() {
+        this("");
+    }
+    
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeDouble(weight);
+        out.writeInt(quantity);
+        boolean[] contained = new boolean[1];
+        contained[0] = isContained;
+        out.writeBooleanArray(contained);
+        out.writeLong(id);
+    }
+    
+    public Item(Parcel in) {
+        name = in.readString();
+        weight = in.readDouble();
+        quantity = in.readInt();
+        boolean[] contained = new boolean[1];
+        in.readBooleanArray(contained);
+        isContained = contained[0];
+        id = in.readLong();
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+    
+    public int getQuantity() {
+        return quantity;
+    }
+    
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    
+    public boolean isContained(){
+        return isContained;
+    }
+    
+    public void setContained(boolean isContained){
+        this.isContained = isContained;
+    }
+    
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	@Override
-	public long getId() {
-		return id;
-	}
-	
-	public void setCharacterID (long id) {
-		characterId = id;
-	}
-	
-	public long getCharacterID() {
-		return characterId;
-	}
+    @Override
+    public long getId() {
+        return id;
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
-		public Item createFromParcel(Parcel in) {
-			return new Item(in);
-		}
-		
-		public Item[] newArray(int size) {
-			return new Item[size];
-		}
-	};
+    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+        
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 
     @Override
     public int compareTo(Item another) {
@@ -151,7 +126,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
 
         Item item = (Item) o;
 
-        if (characterId != item.characterId) return false;
         if (id != item.id) return false;
         if (isContained != item.isContained) return false;
         if (quantity != item.quantity) return false;
@@ -171,7 +145,6 @@ public class Item implements Parcelable, Identifiable, Comparable<Item> {
         result = 31 * result + quantity;
         result = 31 * result + (isContained ? 1 : 0);
         result = 31 * result + (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (characterId ^ (characterId >>> 32));
         return result;
     }
 

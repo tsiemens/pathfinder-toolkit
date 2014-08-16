@@ -1,744 +1,682 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.text.Editable;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.lateensoft.pathfinder.toolkit.R;
-import com.lateensoft.pathfinder.toolkit.db.repository.AbilityRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.ArmorRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.CombatStatRepository;
-import com.lateensoft.pathfinder.toolkit.db.repository.SaveRepository;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.AbilitySetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.set.SaveSetDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.ArmorDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CombatStatDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.*;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.CombatStatSet;
 import com.lateensoft.pathfinder.toolkit.model.character.stats.Save;
-
-public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment
-		implements OnFocusChangeListener, OnEditorActionListener {
-
-	@SuppressWarnings("unused")
-	private static final String TAG = CharacterCombatStatsFragment.class.getSimpleName();
-	
-	private static enum EAbilityMod { INIT, AC, CMB, CMD, FORT, REF, WILL }
-	private EAbilityMod m_abilityModSelectedForEdit;
-
-	private TextView m_currentHPTextView;
-	private EditText m_totalHPEditText;
-	private EditText m_damageReductEditText;
-	private EditText m_woundsEditText;
-	private EditText m_nonLethalDmgEditText;
-
-	private EditText m_baseSpeedEditText;
-
-	private TextView m_initTextView;
-	private TextView m_initAbilityTv;
-	private EditText m_initMiscEditText;
-
-	private TextView m_ACTextView;
-	private EditText m_armourBonusEditText;
-	private EditText m_shieldBonusEditText;
-	private TextView m_ACAbilityTv;
-	private EditText m_ACSizeEditText;
-	private EditText m_naturalArmourEditText;
-	private EditText m_deflectEditText;
-	private EditText m_ACMiscEditText;
-	private TextView m_ACTouchTextView;
-	private TextView m_ACFFTextView;
-	private EditText m_spellResistEditText;
-
-	private EditText m_BABPrimaryEditText;
-	private EditText m_BABSecondaryEditText;
-	private TextView m_CMBTextView;
-	private EditText m_CmbBABEditText;
-	private TextView m_CMBAbilityTv;
-	private EditText m_CMBSizeEditText;
-	private TextView m_CMDTextView;
-	private TextView m_CMDAbilityTv;
-	private EditText m_CMDMiscModEditText;
-
-	private TextView m_fortTextView;
-	private EditText m_fortBaseEditText;
-	private TextView m_fortAbilityTv;
-	private EditText m_fortMagicModEditText;
-	private EditText m_fortMiscModEditText;
-	private EditText m_fortTempModEditText;
-
-	private TextView m_refTextView;
-	private EditText m_refBaseEditText;
-	private TextView m_refAbilityTv;
-	private EditText m_refMagicModEditText;
-	private EditText m_refMiscModEditText;
-	private EditText m_refTempModEditText;
-
-	private TextView m_willTextView;
-	private EditText m_willBaseEditText;
-	private TextView m_willAbilityTv;
-	private EditText m_willMagicModEditText;
-	private EditText m_willMiscModEditText;
-	private EditText m_willTempModEditText;
-	
-	private OnAbilityTextClickListener m_abilityTextListener;
-	
-	private CombatStatRepository m_statsRepo;
-	private SaveRepository m_saveRepo;
-	private AbilityRepository m_abilityRepo;
-	private ArmorRepository m_armorRepo;
-	
-	private CombatStatSet m_combatStats;
-	private SaveSet m_saveSet;
-	private AbilitySet m_abilitySet;
-	private int m_maxDex;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		m_statsRepo = new CombatStatRepository();
-		m_saveRepo = new SaveRepository();
-		m_abilityRepo = new AbilityRepository();
-		m_armorRepo = new ArmorRepository();
-		
-		m_abilityTextListener = new OnAbilityTextClickListener();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-
-		setRootView(inflater.inflate(
-				R.layout.character_combat_stats_fragment, container, false));
-		setupViews(getRootView());
-
-		return getRootView();
-	}
-
-	private void updateAllViews() {
-		updateHPViews();
-		updateSpeedViews();
-		updateInitiativeViews();
-		updateACViews();
-		updateBABViews();
-		updateCombatManeuverViews();
-		updateSaveViews();
-	}
-	
-	private void updateAbilityView(TextView abilityTv) {
-		AbilityType ability = null;
-		if (abilityTv == m_initAbilityTv) {
-			ability = m_combatStats.getInitAbility();
-		} else if (abilityTv == m_ACAbilityTv) {
-			ability = m_combatStats.getACAbility();
-		} else if (abilityTv == m_CMBAbilityTv) {
-			ability = m_combatStats.getCMBAbility();
-		} else if (abilityTv == m_CMDAbilityTv) {
-			ability = m_combatStats.getCMDAbility();
-		}
-		// Saves
-		else if (abilityTv == m_fortAbilityTv) {
-			ability = m_saveSet.getSave(SaveType.FORT).getAbilityType();
-		} else if (abilityTv == m_refAbilityTv) {
-			ability = m_saveSet.getSave(SaveType.REF).getAbilityType();
-		}else if (abilityTv == m_willAbilityTv) {
-			ability = m_saveSet.getSave(SaveType.WILL).getAbilityType();
-		}
-		
-		if (ability != null) {
-			abilityTv.setText(getString(ability.getNameResId())
-					+ " (" + m_abilitySet.getTotalAbilityMod(ability, m_maxDex) + ")");
-		}
-	}
-
-	/**
-	 * Updates all stats for HP
-	 */
-	private void updateHP() {
-		m_combatStats.setTotalHP(getEditTextInt(m_totalHPEditText));
-		m_combatStats.setWounds(getEditTextInt(m_woundsEditText));
-		m_combatStats.setNonLethalDamage(getEditTextInt(m_nonLethalDmgEditText));
-		m_combatStats.setDamageReduction(getEditTextInt(m_damageReductEditText));
-		updateHPViews();
-	}
-
-	/**
-	 * Updates all views for HP
-	 */
-	private void updateHPViews() {
-		setIntText(m_currentHPTextView, m_combatStats.getCurrentHP());
-		setIntText(m_totalHPEditText, m_combatStats.getTotalHP());
-		setIntText(m_woundsEditText, m_combatStats.getWounds());
-		setIntText(m_nonLethalDmgEditText, m_combatStats.getNonLethalDamage());
-		setIntText(m_damageReductEditText, m_combatStats.getDamageReduction());
-	}
-
-	/**
-	 * Updates all stats for speed
-	 */
-	private void updateSpeed() {
-		m_combatStats.setBaseSpeed(getEditTextInt(m_baseSpeedEditText));
-	}
-
-	/**
-	 * Updates all views for speed
-	 */
-	private void updateSpeedViews() {
-		setIntText(m_baseSpeedEditText, m_combatStats.getBaseSpeed());
-	}
-
-	/**
-	 * Updates all stats for initiative
-	 */
-	private void updateInitiative() {
-		m_combatStats.setInitiativeMiscMod(getEditTextInt(m_initMiscEditText));
-		updateInitiativeViews();
-	}
-
-	/**
-	 * Updates all views for initiative
-	 */
-	private void updateInitiativeViews() {
-		setIntText(m_initTextView, m_combatStats.getInitiativeMod(m_abilitySet, m_maxDex));
-		updateAbilityView(m_initAbilityTv);
-		setIntText(m_initMiscEditText, m_combatStats.getInitiativeMiscMod());
-	}
-
-	/**
-	 * Updates all stats for AC
-	 */
-	private void updateAC() {
-		m_combatStats.setACArmourBonus(getEditTextInt(m_armourBonusEditText));
-		m_combatStats.setACShieldBonus(getEditTextInt(m_shieldBonusEditText));
-		m_combatStats.setSizeModifier(getEditTextInt(m_ACSizeEditText));
-		m_combatStats.setNaturalArmour(getEditTextInt(m_naturalArmourEditText));
-		m_combatStats.setDeflectionMod(getEditTextInt(m_deflectEditText));
-		m_combatStats.setACMiscMod(getEditTextInt(m_ACMiscEditText));
-		m_combatStats.setSpellResistance(getEditTextInt(m_spellResistEditText));
-		updateACViews();
-	}
-
-	/**
-	 * Updates all views for ac
-	 */
-	private void updateACViews() {
-		setIntText(m_ACTextView, m_combatStats.getTotalAC(m_abilitySet, m_maxDex));
-		setIntText(m_ACTouchTextView, m_combatStats.getTouchAC(m_abilitySet, m_maxDex));
-		setIntText(m_ACFFTextView, m_combatStats.getFlatFootedAC());
-		setIntText(m_armourBonusEditText, m_combatStats.getACArmourBonus());
-		setIntText(m_shieldBonusEditText, m_combatStats.getACShieldBonus());
-		updateAbilityView(m_ACAbilityTv);
-		updateSizeModViews();
-		setIntText(m_naturalArmourEditText, m_combatStats.getNaturalArmour());
-		setIntText(m_deflectEditText, m_combatStats.getDeflectionMod());
-		setIntText(m_ACMiscEditText, m_combatStats.getACMiscMod());
-		setIntText(m_spellResistEditText, m_combatStats.getSpellResist());
-	}
-
-	/**
-	 * Updates all stats for BAB
-	 */
-	private void updateBAB() {
-		m_combatStats.setBABPrimary(getEditTextInt(m_BABPrimaryEditText));
-		m_combatStats.setBABSecondary(m_BABSecondaryEditText.getText().toString());
-		updateBABViews();
-	}
-
-	private void updateBABViews() {
-		updateCombatManeuverViews();
-		m_BABSecondaryEditText.setText(m_combatStats
-				.getBABSecondary());
-	}
-
-	/**
-	 * Updates all stats for combat maneuvers
-	 */
-	private void updateCombatManeuvers() {
-		m_combatStats.setBABPrimary(getEditTextInt(m_CmbBABEditText));
-		m_combatStats.setSizeModifier(getEditTextInt(m_CMBSizeEditText));
-		m_combatStats.setCMDMiscMod(getEditTextInt(m_CMDMiscModEditText));
-		updateCombatManeuverViews();
-	}
-
-	/**
-	 * Updates all stats for saves
-	 */
-	private void updateSaves() {
-		updateFort();
-		updateRef();
-		updateWill();
-	}
-
-	private void updateFort() {
-		m_saveSet.getSaveByIndex(0).setBaseSave(getEditTextInt(m_fortBaseEditText));
-		m_saveSet.getSaveByIndex(0).setMagicMod(getEditTextInt(m_fortMagicModEditText));
-		m_saveSet.getSaveByIndex(0).setMiscMod(getEditTextInt(m_fortMiscModEditText));
-		m_saveSet.getSaveByIndex(0).setTempMod(getEditTextInt(m_fortTempModEditText));
-	}
-
-	private void updateRef() {
-		m_saveSet.getSaveByIndex(1).setBaseSave(getEditTextInt(m_refBaseEditText));
-		m_saveSet.getSaveByIndex(1).setMagicMod(getEditTextInt(m_refMagicModEditText));
-		m_saveSet.getSaveByIndex(1).setMiscMod(getEditTextInt(m_refMiscModEditText));
-		m_saveSet.getSaveByIndex(1).setTempMod(getEditTextInt(m_refTempModEditText));
-	}
-
-	private void updateWill() {
-		m_saveSet.getSaveByIndex(2).setBaseSave(getEditTextInt(m_willBaseEditText));
-		m_saveSet.getSaveByIndex(2).setMagicMod(getEditTextInt(m_willMagicModEditText));
-		m_saveSet.getSaveByIndex(2).setMiscMod(getEditTextInt(m_willMiscModEditText));
-		m_saveSet.getSaveByIndex(2).setTempMod(getEditTextInt(m_willTempModEditText));
-	}
-
-	/**
-	 * Updates all views for combat maneuvers
-	 */
-	private void updateCombatManeuverViews() {
-		setIntText(m_CMBTextView, m_combatStats.getCombatManeuverBonus(m_abilitySet, m_maxDex));
-		updatePrimaryBABViews();
-		updateAbilityView(m_CMBAbilityTv);
-		updateSizeModViews();
-		setIntText(m_CMDTextView, m_combatStats.getCombatManeuverDefense(m_abilitySet, m_maxDex));
-		updateAbilityView(m_CMDAbilityTv);
-		setIntText(m_CMDMiscModEditText, m_combatStats.getCMDMiscMod());
-	}
-
-	/**
-	 * Updates the BAB edit texts in BAB and CMB
-	 */
-	private void updatePrimaryBABViews() {
-		setIntText(m_BABPrimaryEditText, m_combatStats.getBABPrimary());
-		setIntText(m_CmbBABEditText, m_combatStats.getBABPrimary());
-	}
-
-	/**
-	 * Updates the size mod edit texts in AC and CMB
-	 */
-	private void updateSizeModViews() {
-		setIntText(m_ACSizeEditText, m_combatStats.getSizeModifier());
-		setIntText(m_CMBSizeEditText, m_combatStats.getSizeModifier());
-	}
-
-	private void setIntText(TextView textView, int number) {
-		textView.setText(Integer.toString(number));
-	}
-
-	private void updateSaveViews() {
-		updateFortSaveViews();
-		updateRefSaveViews();
-		updateWillSaveViews();
-	}
-
-	private void updateFortSaveViews() {
-		updateSaveViews(SaveType.FORT, m_fortTextView, m_fortBaseEditText, m_fortAbilityTv,
-				m_fortMagicModEditText, m_fortMiscModEditText, m_fortTempModEditText);
-	}
-
-	private void updateRefSaveViews() {
-		updateSaveViews(SaveType.REF, m_refTextView, m_refBaseEditText, m_refAbilityTv,
-				m_refMagicModEditText, m_refMiscModEditText, m_refTempModEditText);
-	}
-
-	private void updateWillSaveViews() {
-		updateSaveViews(SaveType.WILL, m_willTextView, m_willBaseEditText, m_willAbilityTv,
-				m_willMagicModEditText, m_willMiscModEditText, m_willTempModEditText);
-	}
-	
-	private void updateSaveViews(SaveType saveType, TextView sumView, EditText baseEt, TextView abilityText,
-			EditText magicEt, EditText miscEt, EditText tempEt) {
-		Save save = m_saveSet.getSave(saveType);
-		setIntText(sumView, save.getTotal(m_abilitySet, m_maxDex));
-		setIntText(baseEt, save.getBaseSave());
-		updateAbilityView(abilityText);
-		setIntText(magicEt, save.getMagicMod());
-		setIntText(miscEt, save.getMiscMod());
-		setIntText(tempEt, save.getTempMod());
-	}
-
-	/**
-	 * @return the value in the edit text. Returns 0 if the parse failed
-	 */
-	private int getEditTextInt(EditText editText) {
-		try {
-			return Integer.parseInt(editText.getText().toString());
-		} catch (NumberFormatException e) {
-			return 0;
-		}
-	}
-
-	// Sets edittext listeners
-	private void setEditTextListeners(EditText editText) {
-		editText.setOnFocusChangeListener(this);
-		editText.setOnEditorActionListener(this);
-	}
-	
-	private void setAbilityTextViewListener(TextView tv) {
-		tv.setOnClickListener(m_abilityTextListener);
-	}
-	
-	private class OnAbilityTextClickListener implements OnClickListener {
-
-		@Override public void onClick(View v) {
-			AbilityType defaultAbilityKey = null;
-			AbilityType currentAbility = AbilityType.DEX;
-			if (v == m_initAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.INIT;
-				defaultAbilityKey = CombatStatSet.DEFAULT_INIT_ABILITY;
-				currentAbility = m_combatStats.getInitAbility();
-			} else if (v == m_ACAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.AC;
-				defaultAbilityKey = CombatStatSet.DEFAULT_AC_ABILITY;
-				currentAbility = m_combatStats.getACAbility();
-			} else if (v == m_CMBAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.CMB;
-				defaultAbilityKey = CombatStatSet.DEFAULT_CMB_ABILITY;
-				currentAbility = m_combatStats.getCMBAbility();
-			} else if (v == m_CMDAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.CMD;
-				defaultAbilityKey = CombatStatSet.DEFAULT_CMD_ABILITY;
-				currentAbility = m_combatStats.getCMDAbility();
-			} else if (v == m_fortAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.FORT;
-				defaultAbilityKey = SaveType.FORT.getDefaultAbility();
-				currentAbility = m_saveSet.getSave(SaveType.FORT).getAbilityType();
-			} else if (v == m_refAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.REF;
-				defaultAbilityKey = SaveType.REF.getDefaultAbility();
-				currentAbility = m_saveSet.getSave(SaveType.REF).getAbilityType();
-			} else if (v == m_willAbilityTv) {
-				m_abilityModSelectedForEdit = EAbilityMod.WILL;
-				defaultAbilityKey = SaveType.WILL.getDefaultAbility();
-				currentAbility = m_saveSet.getSave(SaveType.WILL).getAbilityType();
-			}
-			
-			if (defaultAbilityKey != null) {
-				AbilitySelectionDialog dialog =
-						new AbilitySelectionDialog(getContext(), currentAbility, defaultAbilityKey);
-				dialog.setOnAbilitySelectedListener(new AbilityDialogListener());
-				dialog.show();
-			}
-		}
-		
-	}
-	
-	private class AbilityDialogListener implements AbilitySelectionDialog.OnAbilitySelectedListener {
-
-		@Override public void onAbilitySelected(AbilityType abilityKey) {
-			if (abilityKey != null) {
-				int viewID;
-				switch (m_abilityModSelectedForEdit) {
-				case AC:
-					m_combatStats.setACAbility(abilityKey);
-					viewID = m_ACAbilityTv.getId();
-					break;
-				case CMB:
-					m_combatStats.setCMBAbilityKey(abilityKey);
-					viewID = m_CMBAbilityTv.getId();
-					break;
-				case CMD:
-					m_combatStats.setCMDAbility(abilityKey);
-					viewID = m_CMDAbilityTv.getId();
-					break;
-				case FORT:
-					m_saveSet.getSave(SaveType.FORT).setAbilityType(abilityKey);
-					viewID = m_fortAbilityTv.getId();
-					break;
-				case INIT:
-					m_combatStats.setInitAbility(abilityKey);
-					viewID = m_initAbilityTv.getId();
-					break;
-				case REF:
-					m_saveSet.getSave(SaveType.REF).setAbilityType(abilityKey);
-					viewID = m_refAbilityTv.getId();
-					break;
-				case WILL:
-					m_saveSet.getSave(SaveType.WILL).setAbilityType(abilityKey);
-					viewID = m_willAbilityTv.getId();
-					break;
-				default:
-					return;
-				}
-
-				finishedEditing(viewID);
-			}
-		}
-		
-	}
-
-	// Sets up all the text and edit texts
-	private void setupViews(View fragmentView) {
-		m_currentHPTextView = (TextView) fragmentView
-				.findViewById(R.id.textViewCurrentHP);
-		m_totalHPEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextTotalHP);
-		setEditTextListeners(m_totalHPEditText);
-
-		m_damageReductEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextDamageReduction);
-		setEditTextListeners(m_damageReductEditText);
-
-		m_woundsEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextWounds);
-		setEditTextListeners(m_woundsEditText);
-
-		m_nonLethalDmgEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextNonLethalDmg);
-		setEditTextListeners(m_nonLethalDmgEditText);
-
-		m_baseSpeedEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextBaseSpeed);
-		setEditTextListeners(m_baseSpeedEditText);
-
-		m_initTextView = (TextView) fragmentView
-				.findViewById(R.id.textViewInitiative);
-		m_initAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvInitAbility);
-		setAbilityTextViewListener(m_initAbilityTv);
-
-		m_initMiscEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextInitMiscMod);
-		setEditTextListeners(m_initMiscEditText);
-
-		m_ACTextView = (TextView) fragmentView.findViewById(R.id.textViewAC);
-		m_armourBonusEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextArmourBonus);
-		setEditTextListeners(m_armourBonusEditText);
-
-		m_shieldBonusEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextShieldBonus);
-		setEditTextListeners(m_shieldBonusEditText);
-
-		m_ACAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvACAbility);
-		setAbilityTextViewListener(m_ACAbilityTv);
-
-		m_ACSizeEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextACSizeMod);
-		setEditTextListeners(m_ACSizeEditText);
-
-		m_naturalArmourEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextNaturalArmour);
-		setEditTextListeners(m_naturalArmourEditText);
-
-		m_deflectEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextDeflectionMod);
-		setEditTextListeners(m_deflectEditText);
-
-		m_ACMiscEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextACMiscMod);
-		setEditTextListeners(m_ACMiscEditText);
-
-		m_ACTouchTextView = (TextView) fragmentView
-				.findViewById(R.id.textViewTouchAC);
-		m_ACFFTextView = (TextView) fragmentView
-				.findViewById(R.id.textViewFlatFootedAC);
-		m_spellResistEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextSpellResist);
-		setEditTextListeners(m_spellResistEditText);
-
-		m_BABPrimaryEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextBABPrimary);
-		setEditTextListeners(m_BABPrimaryEditText);
-
-		m_BABSecondaryEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextBABSecondary);
-		setEditTextListeners(m_BABSecondaryEditText);
-
-		m_CMBTextView = (TextView) fragmentView.findViewById(R.id.textViewCMB);
-		m_CmbBABEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextCmbBAB);
-		setEditTextListeners(m_CmbBABEditText);
-
-		m_CMBAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvCMBAbility);
-		setAbilityTextViewListener(m_CMBAbilityTv);
-
-		m_CMBSizeEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextCMBSizeMod);
-		setEditTextListeners(m_CMBSizeEditText);
-
-		m_CMDTextView = (TextView) fragmentView.findViewById(R.id.textViewCMD);
-		m_CMDAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvCMDAbility);
-		m_CMDMiscModEditText = (EditText) fragmentView
-				.findViewById(R.id.editTextCMDMiscMod);
-		setAbilityTextViewListener(m_CMDAbilityTv);
-		setEditTextListeners(m_CMDMiscModEditText);
-
-		m_fortTextView = (TextView) fragmentView.findViewById(R.id.tvFort);
-		m_fortBaseEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveFortBase);
-		m_fortAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvFortAbility);
-		m_fortMagicModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveFortMagicMod);
-		m_fortMiscModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveFortMiscMod);
-		m_fortTempModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveFortTempMod);
-		setEditTextListeners(m_fortBaseEditText);
-		setAbilityTextViewListener(m_fortAbilityTv);
-		setEditTextListeners(m_fortMagicModEditText);
-		setEditTextListeners(m_fortMiscModEditText);
-		setEditTextListeners(m_fortTempModEditText);
-
-		m_refTextView = (TextView) fragmentView.findViewById(R.id.tvRef);
-		m_refBaseEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveRefBase);
-		m_refAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvReflexAbility);
-		m_refMagicModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveRefMagicMod);
-		m_refMiscModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveRefMiscMod);
-		m_refTempModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveRefTempMod);
-		setEditTextListeners(m_refBaseEditText);
-		setAbilityTextViewListener(m_refAbilityTv);
-		setEditTextListeners(m_refMagicModEditText);
-		setEditTextListeners(m_refMiscModEditText);
-		setEditTextListeners(m_refTempModEditText);
-
-		m_willTextView = (TextView) fragmentView.findViewById(R.id.tvWill);
-		m_willBaseEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveWillBase);
-		m_willAbilityTv = (TextView) fragmentView
-				.findViewById(R.id.tvWillAbility);
-		m_willMagicModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveWillMagicMod);
-		m_willMiscModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveWillMiscMod);
-		m_willTempModEditText = (EditText) fragmentView
-				.findViewById(R.id.etSaveWillTempMod);
-		setEditTextListeners(m_willBaseEditText);
-		setAbilityTextViewListener(m_willAbilityTv);
-		setEditTextListeners(m_willMagicModEditText);
-		setEditTextListeners(m_willMiscModEditText);
-		setEditTextListeners(m_willTempModEditText);
-	}
-
-	/**
-	 * Updates the view which has finished being edited
-	 */
-	private void finishedEditing(int viewID) {
-		if (viewID == m_woundsEditText.getId()
-				|| viewID == m_totalHPEditText.getId()
-				|| viewID == m_nonLethalDmgEditText.getId()
-				|| viewID == m_damageReductEditText.getId())
-			updateHP();
-
-		else if (viewID == m_baseSpeedEditText.getId())
-			updateSpeed();
-
-		else if (viewID == m_initAbilityTv.getId()
-				|| viewID == m_initMiscEditText.getId())
-			updateInitiative();
-
-		else if (viewID == m_armourBonusEditText.getId()
-				|| viewID == m_shieldBonusEditText.getId()
-				|| viewID == m_ACAbilityTv.getId()
-				|| viewID == m_ACSizeEditText.getId()
-				|| viewID == m_naturalArmourEditText.getId()
-				|| viewID == m_deflectEditText.getId()
-				|| viewID == m_ACMiscEditText.getId()
-				|| viewID == m_spellResistEditText.getId()) {
-			updateAC();
-			updateCombatManeuverViews();
-		}
-
-		else if (viewID == m_BABPrimaryEditText.getId()
-				|| viewID == m_BABSecondaryEditText.getId())
-			updateBAB();
-
-		else if (viewID == m_CmbBABEditText.getId()
-				|| viewID == m_CMBAbilityTv.getId()
-				|| viewID == m_CMDAbilityTv.getId()
-				|| viewID == m_CMBSizeEditText.getId()
-				|| viewID == m_CMDMiscModEditText.getId()) {
-			updateCombatManeuvers();
-			updateACViews();
-		}
-
-		else if (viewID == m_fortBaseEditText.getId()
-				|| viewID == m_fortAbilityTv.getId()
-				|| viewID == m_fortMagicModEditText.getId()
-				|| viewID == m_fortMiscModEditText.getId()
-				|| viewID == m_fortTempModEditText.getId()) {
-			updateFort();
-			updateFortSaveViews();
-		}
-
-		else if (viewID == m_refBaseEditText.getId()
-				|| viewID == m_refAbilityTv.getId()
-				|| viewID == m_refMagicModEditText.getId()
-				|| viewID == m_refMiscModEditText.getId()
-				|| viewID == m_refTempModEditText.getId()) {
-			updateRef();
-			updateRefSaveViews();
-		}
-
-		else if (viewID == m_willBaseEditText.getId()
-				|| viewID == m_willAbilityTv.getId()
-				|| viewID == m_willMagicModEditText.getId()
-				|| viewID == m_willMiscModEditText.getId()
-				|| viewID == m_willTempModEditText.getId()) {
-			updateWill();
-			updateWillSaveViews();
-		}
-
-	}
-
-	// TODO this should be an object
-	public void onFocusChange(View view, boolean hasFocus) {
-		if (!hasFocus) {
-			finishedEditing(view.getId());
-		}
-	}
-
-	// TODO this should be an object
-	public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-		finishedEditing(view.getId());
-		return false;
-	}
-
-	@Override
-	public void updateFragmentUI() {
-		updateAllViews();
-	}
-	
-	@Override
-	public String getFragmentTitle() {
-		return getString(R.string.tab_character_combat_stats);
-	}
-
-	@Override
-	public void updateDatabase() {
-		updateHP();
-		updateSpeed();
-		updateInitiative();
-		updateAC();
-		updateBAB();
-		updateCombatManeuvers();
-		updateSaves();
-		
-		if (m_combatStats != null) {
-			m_statsRepo.update(m_combatStats);
-			for(Save save : m_saveSet) {
-				m_saveRepo.update(save);
-			}
-		}
-	}
-
-	@Override
-	public void loadFromDatabase() {
-		m_combatStats = m_statsRepo.query(getCurrentCharacterID());
-		m_saveSet = m_saveRepo.querySet(getCurrentCharacterID());
-		m_maxDex = m_armorRepo.getMaxDex(getCurrentCharacterID());
-		m_abilitySet = m_abilityRepo.querySet(getCurrentCharacterID());
-	}
+import com.lateensoft.pathfinder.toolkit.views.SimpleValueEditorDialog;
+import roboguice.inject.InjectView;
+
+import java.util.List;
+import java.util.Map;
+
+public class CharacterCombatStatsFragment extends AbstractCharacterSheetFragment {
+    private static final String TAG = CharacterCombatStatsFragment.class.getSimpleName();
+
+    private enum AbilityProperty { INIT, AC, CMB, CMD }
+
+    private enum VariableProperty {
+        TOTAL_HP(R.string.combat_stats_total_hp_editor_title),
+        WOUNDS(R.string.combat_stats_wounds_editor_title),
+        NON_LETHAL_DMG(R.string.combat_stats_non_lethal_editor_title),
+        DMG_REDUCT(R.string.combat_stats_damage_reduction_editor_title),
+        BASE_SPEED(R.string.combat_stats_base_speed_editor_title),
+        INIT_MISC_MOD(R.string.combat_stats_misc_mod),
+        AC_ARMOR(R.string.combat_stats_armour),
+        AC_SHIELD(R.string.combat_stats_shield),
+        SIZE_MOD(R.string.combat_stats_size_mod),
+        AC_NATURAL_ARMOR(R.string.combat_stats_natural_armour),
+        DEFLECT_MOD(R.string.combat_stats_deflect_mod),
+        AC_MISC_MOD(R.string.combat_stats_misc_mod),
+        SPELL_RESIST(R.string.combat_stats_spell_resist_editor_title),
+        BAB_PRIMARY(R.string.combat_stats_bab_primary_editor_title),
+        BAB_SECONDARY(R.string.combat_stats_bab_secondary_editor_title),
+        CMD_MISC_MOD(R.string.combat_stats_misc_mod);
+
+        private final int NameResId;
+
+        VariableProperty(int nameResId) {
+            this.NameResId = nameResId;
+        }
+
+        public boolean isStringStat() { return this == BAB_SECONDARY; }
+
+        public int getNameResId() {
+            return NameResId;
+        }
+    }
+
+    private enum SaveProperty {
+        BASE(R.string.combat_stats_base),
+        MAGIC(R.string.combat_stats_magic_mod),
+        MISC(R.string.combat_stats_misc_mod),
+        TEMP(R.string.combat_stats_temp_mod);
+
+        private final int nameResId;
+
+        SaveProperty(int nameResId) {
+            this.nameResId = nameResId;
+        }
+
+        public int getNameResId() {
+            return nameResId;
+        }
+    }
+
+    private @InjectView(R.id.tv_current_hp) TextView currentHPLabel;
+    private @InjectView(R.id.tv_initiative) TextView initLabel;
+    private @InjectView(R.id.tv_ac) TextView ACLabel;
+    private @InjectView(R.id.tv_touch_ac) TextView ACTouchLabel;
+    private @InjectView(R.id.tv_flat_footed_ac) TextView ACFlatFootedLabel;
+    private @InjectView(R.id.tv_cmb) TextView CMBLabel;
+    private @InjectView(R.id.tv_cmd) TextView CMDLabel;
+
+    private Map<VariableProperty, List<TextView>> variablePropertyFields;
+    private Map<AbilityProperty, AbilityView> abilityPropertyFields;
+    private List<ComputedCombatStat> computedStats;
+
+    private Map<SaveType, SaveRow> saveRows;
+
+    private CombatStatDAO combatStatsDao;
+    private SaveSetDAO saveSetDao;
+    private AbilitySetDAO abilitySetDao;
+    private ArmorDAO armorDao;
+    
+    private CombatStatSet combatStats;
+    private SaveSet saveSet;
+    private AbilitySet abilitySet;
+    private int maxDex;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Context context = getContext();
+        combatStatsDao = new CombatStatDAO(context);
+        saveSetDao = new SaveSetDAO(context);
+        abilitySetDao = new AbilitySetDAO(context);
+        armorDao = new ArmorDAO(context);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        setRootView(inflater.inflate(
+                R.layout.character_combat_stats_fragment, container, false));
+
+        return getRootView();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
+    }
+
+    private void initViews() {
+        initCombatStatViews();
+        initSaveRows();
+        initComputedStats();
+    }
+
+    private void initCombatStatViews() {
+        View root = getRootView();
+        variablePropertyFields = Maps.newHashMap();
+        variablePropertyFields.put(VariableProperty.TOTAL_HP, findTextViews(root, R.id.tv_total_hp_val));
+        variablePropertyFields.put(VariableProperty.WOUNDS, findTextViews(root, R.id.tv_wounds_val));
+        variablePropertyFields.put(VariableProperty.NON_LETHAL_DMG, findTextViews(root, R.id.tv_non_lethal_dmg_val));
+        variablePropertyFields.put(VariableProperty.DMG_REDUCT, findTextViews(root, R.id.tv_dmg_reduct_val));
+        variablePropertyFields.put(VariableProperty.BASE_SPEED, findTextViews(root, R.id.tv_base_speed_val));
+        variablePropertyFields.put(VariableProperty.INIT_MISC_MOD, findTextViews(root, R.id.tv_init_misc_val));
+        variablePropertyFields.put(VariableProperty.AC_ARMOR, findTextViews(root, R.id.tv_ac_armor_val));
+        variablePropertyFields.put(VariableProperty.AC_SHIELD, findTextViews(root, R.id.tv_ac_shield_val));
+        variablePropertyFields.put(VariableProperty.SIZE_MOD, findTextViews(root, R.id.tv_ac_size_mod_val, R.id.tv_cmb_size_mod_val));
+        variablePropertyFields.put(VariableProperty.AC_NATURAL_ARMOR, findTextViews(root, R.id.tv_ac_natural_armor_val));
+        variablePropertyFields.put(VariableProperty.DEFLECT_MOD, findTextViews(root, R.id.tv_deflect_mod_val));
+        variablePropertyFields.put(VariableProperty.AC_MISC_MOD, findTextViews(root, R.id.tv_ac_misc_val));
+        variablePropertyFields.put(VariableProperty.SPELL_RESIST, findTextViews(root, R.id.tv_spell_resist_val));
+        variablePropertyFields.put(VariableProperty.BAB_PRIMARY, findTextViews(root, R.id.tv_bab_primary_val, R.id.tv_cmb_bab_val));
+        variablePropertyFields.put(VariableProperty.BAB_SECONDARY, findTextViews(root, R.id.tv_bab_secondary_val));
+        variablePropertyFields.put(VariableProperty.CMD_MISC_MOD, findTextViews(root, R.id.tv_cmd_misc_mod_val));
+
+        for (VariableProperty property : variablePropertyFields.keySet()) {
+            for (TextView tv : variablePropertyFields.get(property)) {
+                tv.setTag(property);
+                tv.setOnClickListener(numberValueTextListener);
+            }
+        }
+
+        abilityPropertyFields = Maps.newHashMap();
+        abilityPropertyFields.put(AbilityProperty.INIT, abilityViewFrom(root, R.id.tv_init_ability));
+        abilityPropertyFields.put(AbilityProperty.AC, abilityViewFrom(root, R.id.tv_ac_ability));
+        abilityPropertyFields.put(AbilityProperty.CMB, abilityViewFrom(root, R.id.tv_cmb_ability));
+        abilityPropertyFields.put(AbilityProperty.CMD, abilityViewFrom(root, R.id.tv_cmd_ability));
+
+        for (AbilityProperty property : abilityPropertyFields.keySet()) {
+            AbilityView abilityView = abilityPropertyFields.get(property);
+            abilityView.setTextViewTag(property);
+            abilityView.setOnClickListener(combatStatAbilityTextListener);
+        }
+    }
+
+    private static List<TextView> findTextViews(View v, int... ids) {
+        List<TextView> textViews = Lists.newArrayListWithCapacity(ids.length);
+        for (int id : ids) {
+            textViews.add((TextView) v.findViewById(id));
+        }
+        return textViews;
+    }
+
+    private AbilityView abilityViewFrom(View parent, int id) {
+        return new AbilityView((TextView) parent.findViewById(id));
+    }
+
+    private OnClickListener numberValueTextListener = new OnClickListener() {
+        @Override public void onClick(View v) {
+            showValueEditorForProperty(getPropertyForTextView((TextView) v));
+        }
+    };
+
+    private VariableProperty getPropertyForTextView(TextView v) {
+        return (VariableProperty) v.getTag();
+    }
+
+    private void showValueEditorForProperty(VariableProperty property) {
+        if (property == null) return;
+        SimpleValueEditorDialog.builder(getContext())
+                .forType(property.isStringStat() ? SimpleValueEditorDialog.ValueType.TEXT
+                        : SimpleValueEditorDialog.ValueType.NUMBER_SIGNED)
+                .withTitle(property.getNameResId())
+                .withInitialValue(getTextValueForProperty(property))
+                .withOnFinishedListener(new NumberValueEditListener(property))
+                .build()
+                .show();
+    }
+
+    private String getTextValueForProperty(VariableProperty property) {
+        if (property == VariableProperty.BAB_SECONDARY) {
+            return combatStats.getBABSecondary();
+        } else {
+            int val;
+            switch (property) {
+                case TOTAL_HP:          val = combatStats.getTotalHP();           break;
+                case WOUNDS:            val = combatStats.getWounds();            break;
+                case NON_LETHAL_DMG:    val = combatStats.getNonLethalDamage();   break;
+                case DMG_REDUCT:        val = combatStats.getDamageReduction();   break;
+                case BASE_SPEED:        val = combatStats.getBaseSpeed();         break;
+                case INIT_MISC_MOD:     val = combatStats.getInitiativeMiscMod(); break;
+                case AC_ARMOR:          val = combatStats.getACArmourBonus();     break;
+                case AC_SHIELD:         val = combatStats.getACShieldBonus();     break;
+                case SIZE_MOD:          val = combatStats.getSizeModifier();      break;
+                case AC_NATURAL_ARMOR:  val = combatStats.getNaturalArmour();     break;
+                case DEFLECT_MOD:       val = combatStats.getDeflectionMod();     break;
+                case AC_MISC_MOD:       val = combatStats.getACMiscMod();         break;
+                case SPELL_RESIST:      val = combatStats.getSpellResist();       break;
+                case BAB_PRIMARY:       val = combatStats.getBABPrimary();        break;
+                case CMD_MISC_MOD:      val = combatStats.getCMDMiscMod();        break;
+                default: throw new IllegalArgumentException("Unexpected property: " + property);
+            }
+            return Integer.toString(val);
+        }
+    }
+
+    private class NumberValueEditListener implements SimpleValueEditorDialog.OnEditingFinishedListener {
+        VariableProperty property;
+
+        public NumberValueEditListener(VariableProperty property) {
+            this.property = property;
+        }
+
+        @Override
+        public void onEditingFinished(boolean okWasPressed, Editable editable) {
+            if (okWasPressed) {
+                setStatForPropertyFromText(property, editable.toString());
+            }
+            hideKeyboardDelayed(0);
+        }
+    }
+
+    private void setStatForPropertyFromText(VariableProperty property, String valueString) {
+        if (property == VariableProperty.BAB_SECONDARY) {
+            combatStats.setBABSecondary(valueString == null ? "" : valueString);
+        } else {
+            try {
+                int value = Integer.parseInt(valueString);
+                switch (property) {
+                    case TOTAL_HP:          combatStats.setTotalHP(value);           break;
+                    case WOUNDS:            combatStats.setWounds(value);            break;
+                    case NON_LETHAL_DMG:    combatStats.setNonLethalDamage(value);   break;
+                    case DMG_REDUCT:        combatStats.setDamageReduction(value);   break;
+                    case BASE_SPEED:        combatStats.setBaseSpeed(value);         break;
+                    case INIT_MISC_MOD:     combatStats.setInitiativeMiscMod(value); break;
+                    case AC_ARMOR:          combatStats.setACArmourBonus(value);     break;
+                    case AC_SHIELD:         combatStats.setACShieldBonus(value);     break;
+                    case SIZE_MOD:          combatStats.setSizeModifier(value);      break;
+                    case AC_NATURAL_ARMOR:  combatStats.setNaturalArmour(value);     break;
+                    case DEFLECT_MOD:       combatStats.setDeflectionMod(value);     break;
+                    case AC_MISC_MOD:       combatStats.setACMiscMod(value);         break;
+                    case SPELL_RESIST:      combatStats.setSpellResistance(value);   break;
+                    case BAB_PRIMARY:       combatStats.setBABPrimary(value);        break;
+                    case CMD_MISC_MOD:      combatStats.setCMDMiscMod(value);        break;
+                    default: throw new IllegalArgumentException("Unexpected property: " + property);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Failed to parse int from " + valueString);
+            }
+        }
+        onPropertyValueChanged(property);
+    }
+
+    private void onPropertyValueChanged(VariableProperty property) {
+        updateViewsForProperty(property);
+        updateComputedStatsForPropertyChange(property);
+    }
+
+    private void updateComputedStatsForPropertyChange(Object property) {
+        for (ComputedCombatStat c : computedStats) {
+            c.onPropertyChange(property);
+        }
+    }
+
+    private void updateViewsForProperty(VariableProperty property) {
+        for (TextView tv : variablePropertyFields.get(property)) {
+            tv.setText(getTextValueForProperty(property));
+        }
+    }
+
+    private OnClickListener combatStatAbilityTextListener = new OnClickListener() {
+        @Override public void onClick(View v) {
+            AbilityProperty ability = (AbilityProperty) v.getTag();
+
+            AbilityType defaultAbilityKey = getDefaultAbilityForProperty(ability);
+            AbilityType currentAbility = getCurrentAbilityForProperty(ability);
+
+            AbilitySelectionDialog dialog =
+                    new AbilitySelectionDialog(getContext(), currentAbility, defaultAbilityKey);
+            dialog.setOnAbilitySelectedListener(new AbilityTypeDialogListener(ability));
+            dialog.show();
+        }
+    };
+
+    private AbilityType getDefaultAbilityForProperty(AbilityProperty ability) {
+        switch (ability) {
+            case INIT:  return CombatStatSet.DEFAULT_INIT_ABILITY;
+            case AC:    return CombatStatSet.DEFAULT_AC_ABILITY;
+            case CMB:   return CombatStatSet.DEFAULT_CMB_ABILITY;
+            case CMD:   return CombatStatSet.DEFAULT_CMD_ABILITY;
+            default: throw new IllegalArgumentException("Unexpected ability " + ability);
+        }
+    }
+
+    private AbilityType getCurrentAbilityForProperty(AbilityProperty ability) {
+        switch (ability) {
+            case INIT:  return combatStats.getInitAbility();
+            case AC:    return combatStats.getACAbility();
+            case CMB:   return combatStats.getCMBAbility();
+            case CMD:   return combatStats.getCMDAbility();
+            default: throw new IllegalArgumentException("Unexpected ability " + ability);
+        }
+    }
+
+    private class AbilityTypeDialogListener implements AbilitySelectionDialog.OnAbilitySelectedListener {
+        final AbilityProperty ability;
+
+        private AbilityTypeDialogListener(AbilityProperty ability) {
+            this.ability = ability;
+        }
+
+        @Override public void onAbilitySelected(AbilityType abilityKey) {
+            if (abilityKey != null) {
+                setAbilityType(ability, abilityKey);
+            }
+        }
+    }
+
+    private void setAbilityType(AbilityProperty ability, AbilityType type) {
+        switch (ability) {
+            case INIT:  combatStats.setInitAbility(type);
+            case AC:    combatStats.setACAbility(type);
+            case CMB:   combatStats.setCMBAbility(type);
+            case CMD:   combatStats.setCMDAbility(type);
+        }
+        onAbilityPropertyValueChanged(ability, type);
+    }
+
+    private void onAbilityPropertyValueChanged(AbilityProperty ability, AbilityType newValue) {
+        abilityPropertyFields.get(ability).setAbility(newValue);
+        updateComputedStatsForPropertyChange(ability);
+    }
+
+    private void initSaveRows() {
+        View root = getRootView();
+
+        saveRows = Maps.newHashMap();
+        Map<SaveType, Pair<Integer, Integer>> rowIdsAndTitles = Maps.newHashMap();
+        rowIdsAndTitles.put(SaveType.FORT, new Pair<Integer, Integer>(R.id.row_fort_stats, R.string.combat_stats_fort));
+        rowIdsAndTitles.put(SaveType.REF, new Pair<Integer, Integer>(R.id.row_ref_stats, R.string.combat_stats_ref));
+        rowIdsAndTitles.put(SaveType.WILL, new Pair<Integer, Integer>(R.id.row_will_stats, R.string.combat_stats_will));
+
+        for (SaveType saveType : rowIdsAndTitles.keySet()) {
+            Pair<Integer, Integer> idAndTitle = rowIdsAndTitles.get(saveType);
+            View saveRow = root.findViewById(idAndTitle.first);
+            ((TextView) saveRow.findViewById(R.id.tv_save_row_name)).setText(idAndTitle.second);
+
+            saveRows.put(saveType, new SaveRow(saveType,
+                    (TextView) saveRow.findViewById(R.id.tv_save_total_value),
+                    (TextView) saveRow.findViewById(R.id.tv_save_base_value),
+                    (TextView) saveRow.findViewById(R.id.tv_save_magic_value),
+                    (TextView) saveRow.findViewById(R.id.tv_save_misc_value),
+                    (TextView) saveRow.findViewById(R.id.tv_save_temp_value),
+                    (TextView) saveRow.findViewById(R.id.tv_save_ability)));
+        }
+    }
+
+    private class SaveRow {
+        SaveType saveType;
+
+        TextView total;
+        AbilityView ability;
+        Map<SaveProperty, TextView> propertyViews;
+
+        private SaveRow(SaveType saveType, TextView total, TextView base, TextView magic, TextView misc, TextView temp, TextView ability) {
+            this.saveType = saveType;
+            this.total = total;
+            this.ability = new AbilityView(ability);
+            propertyViews = Maps.newHashMap();
+            propertyViews.put(SaveProperty.BASE, base);
+            propertyViews.put(SaveProperty.MAGIC, magic);
+            propertyViews.put(SaveProperty.MISC, misc);
+            propertyViews.put(SaveProperty.TEMP, temp);
+
+            configurePropertyViews();
+            this.ability.setOnClickListener(abilityTextClickListener);
+        }
+
+        private void configurePropertyViews() {
+            for (SaveProperty property : propertyViews.keySet()) {
+                TextView view = propertyViews.get(property);
+                view.setTag(property);
+                view.setOnClickListener(valueTextListener);
+            }
+        }
+
+        private OnClickListener valueTextListener = new OnClickListener() {
+            @Override public void onClick(View v) {
+                showValueEditorForSave(getPropertyForView((TextView) v));
+            }
+        };
+
+        private SaveProperty getPropertyForView(TextView v) {
+            return (SaveProperty) v.getTag();
+        }
+
+        private void showValueEditorForSave(SaveProperty property) {
+            if (property == null) return;
+            SimpleValueEditorDialog.builder(getContext())
+                    .forType(SimpleValueEditorDialog.ValueType.NUMBER_SIGNED)
+                    .withTitle(property.getNameResId())
+                    .withInitialValue(Integer.toString(getValueForProperty(property)))
+                    .withOnFinishedListener(new SaveValueEditListener(property))
+                    .build()
+                    .show();
+        }
+
+        private int getValueForProperty(SaveProperty property) {
+            Save save = getSave();
+            switch (property) {
+                case BASE:  return save.getBaseSave();
+                case MAGIC: return save.getMagicMod();
+                case MISC:  return save.getMiscMod();
+                case TEMP:  return save.getTempMod();
+                default:    throw new IllegalArgumentException("Unexpected property " + property);
+            }
+        }
+
+        public Save getSave() {
+            return saveSet.getSave(saveType);
+        }
+
+        private class SaveValueEditListener implements SimpleValueEditorDialog.OnEditingFinishedListener {
+            SaveProperty property;
+
+            public SaveValueEditListener(SaveProperty property) {
+                this.property = property;
+            }
+
+            @Override
+            public void onEditingFinished(boolean okWasPressed, Editable editable) {
+                if (okWasPressed) {
+                    try {
+                        setSavePropertyValue(property, Integer.parseInt(editable.toString()));
+                    } catch (NumberFormatException e) {
+                        setSavePropertyValue(property, 0);
+                    }
+                }
+                hideKeyboardDelayed(0);
+            }
+        }
+
+        private void setSavePropertyValue(SaveProperty property, int val) {
+            Save save = getSave();
+            switch (property) {
+                case BASE:  save.setBaseSave(val);  break;
+                case MAGIC: save.setMagicMod(val);  break;
+                case MISC:  save.setMiscMod(val);   break;
+                case TEMP:  save.setTempMod(val);   break;
+                default: throw new IllegalArgumentException("Unexpected property " + property);
+            }
+            onSavePropertyValueChanged(property, val);
+        }
+
+        private void onSavePropertyValueChanged(SaveProperty property, int newVal) {
+            updateViewForPropertyValue(property, newVal);
+            updateTotalView();
+        }
+
+        private void updateViewForPropertyValue(SaveProperty property, int newVal) {
+            propertyViews.get(property).setText(Integer.toString(newVal));
+        }
+
+        private void updateTotalView() {
+            total.setText(Integer.toString(getSave().getTotal(abilitySet, maxDex)));
+        }
+
+        private OnClickListener abilityTextClickListener = new OnClickListener() {
+
+            @Override public void onClick(View v) {
+                AbilityType defaultAbilityKey = saveType.getDefaultAbility();
+                AbilityType currentAbility = getSave().getAbilityType();
+
+                if (defaultAbilityKey != null) {
+                    AbilitySelectionDialog dialog =
+                            new AbilitySelectionDialog(getContext(), currentAbility, defaultAbilityKey);
+                    dialog.setOnAbilitySelectedListener(new SaveAbilityDialogListener());
+                    dialog.show();
+                }
+            }
+        };
+
+        private class SaveAbilityDialogListener implements AbilitySelectionDialog.OnAbilitySelectedListener {
+            @Override public void onAbilitySelected(AbilityType abilityKey) {
+                if (abilityKey != null) {
+                    getSave().setAbilityType(abilityKey);
+                    onAbilityChanged(abilityKey);
+                }
+            }
+        }
+
+        private void onAbilityChanged(AbilityType abilityKey) {
+            ability.setAbility(abilityKey);
+            updateTotalView();
+        }
+
+        public void updateViews() {
+            for (SaveProperty property : propertyViews.keySet()) {
+                updateViewForProperty(property);
+            }
+            ability.setAbility(getSave().getAbilityType());
+            updateTotalView();
+        }
+
+        private void updateViewForProperty(SaveProperty property) {
+            updateViewForPropertyValue(property, getValueForProperty(property));
+        }
+    }
+
+    private abstract class ComputedCombatStat {
+        private List<Object> dependees;
+
+        public ComputedCombatStat(Object... dependees) {
+            this.dependees = Lists.newArrayList(dependees);
+        }
+
+        public void onPropertyChange(Object property) {
+            if (dependees.contains(property)) {
+                this.updateViews();
+            }
+        }
+
+        protected abstract void updateViews();
+    }
+
+    private void initComputedStats() {
+        computedStats = Lists.newArrayList(
+                new ComputedCombatStat(VariableProperty.TOTAL_HP, VariableProperty.WOUNDS, VariableProperty.NON_LETHAL_DMG) {
+                    @Override protected void updateViews() {
+                        setIntText(currentHPLabel, combatStats.getCurrentHP());
+                    }
+                },
+                new ComputedCombatStat(VariableProperty.INIT_MISC_MOD, AbilityProperty.INIT) {
+                    @Override protected void updateViews() {
+                        setIntText(initLabel, combatStats.getInitiativeMod(abilitySet, maxDex));
+                    }
+                },
+                new ComputedCombatStat(AbilityProperty.AC, VariableProperty.AC_ARMOR, VariableProperty.AC_SHIELD,
+                        VariableProperty.SIZE_MOD, VariableProperty.AC_NATURAL_ARMOR, VariableProperty.DEFLECT_MOD,
+                        VariableProperty.AC_MISC_MOD) {
+                    @Override protected void updateViews() {
+                        setIntText(ACLabel, combatStats.getTotalAC(abilitySet, maxDex));
+                    }
+                },
+                new ComputedCombatStat(AbilityProperty.AC, VariableProperty.SIZE_MOD, VariableProperty.DEFLECT_MOD,
+                        VariableProperty.AC_MISC_MOD) {
+                    @Override protected void updateViews() {
+                        setIntText(ACTouchLabel, combatStats.getTouchAC(abilitySet, maxDex));
+                    }
+                },
+                new ComputedCombatStat(VariableProperty.AC_ARMOR, VariableProperty.AC_SHIELD,
+                        VariableProperty.SIZE_MOD, VariableProperty.AC_NATURAL_ARMOR, VariableProperty.DEFLECT_MOD,
+                        VariableProperty.AC_MISC_MOD) {
+                    @Override protected void updateViews() {
+                        setIntText(ACFlatFootedLabel, combatStats.getFlatFootedAC());
+                    }
+                },
+                new ComputedCombatStat(AbilityProperty.CMB, VariableProperty.SIZE_MOD, VariableProperty.BAB_PRIMARY) {
+                    @Override protected void updateViews() {
+                        setIntText(CMBLabel, combatStats.getCombatManeuverBonus(abilitySet, maxDex));
+                    }
+                },
+                new ComputedCombatStat(AbilityProperty.CMD, AbilityProperty.CMB, VariableProperty.SIZE_MOD,
+                        VariableProperty.BAB_PRIMARY, VariableProperty.CMD_MISC_MOD) {
+                    @Override protected void updateViews() {
+                        setIntText(CMDLabel, combatStats.getCombatManeuverDefense(abilitySet, maxDex));
+                    }
+                }
+        );
+    }
+
+    private class AbilityView {
+        private final TextView textView;
+
+        public AbilityView(TextView textView) {
+            this.textView = textView;
+        }
+
+        public void setAbility(AbilityType ability) {
+            textView.setText(getString(ability.getNameResId())
+                    + " (" + abilitySet.getTotalAbilityMod(ability, maxDex) + ")");
+        }
+
+        public void setOnClickListener(OnClickListener l) {
+            textView.setOnClickListener(l);
+        }
+
+        public void setTextViewTag(Object tag) {
+            textView.setTag(tag);
+        }
+    }
+
+    private static void setIntText(TextView textView, int number) {
+        textView.setText(Integer.toString(number));
+    }
+
+    @Override
+    public void updateFragmentUI() {
+        updateAllViews();
+    }
+
+    private void updateAllViews() {
+        for (VariableProperty property : variablePropertyFields.keySet()) {
+            updateViewsForProperty(property);
+        }
+
+        for (AbilityProperty abilityProp : abilityPropertyFields.keySet()) {
+            abilityPropertyFields.get(abilityProp).setAbility(getCurrentAbilityForProperty(abilityProp));
+        }
+
+        for (ComputedCombatStat combatStat : computedStats) {
+            combatStat.updateViews();
+        }
+
+        for (SaveType saveType : saveRows.keySet()) {
+            saveRows.get(saveType).updateViews();
+        }
+    }
+    
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.tab_character_combat_stats);
+    }
+
+    @Override
+    public void updateDatabase() {
+        if (combatStats != null) {
+            try {
+                combatStatsDao.update(getCurrentCharacterID(), combatStats);
+                for(Save save : saveSet) {
+                    saveSetDao.getComponentDAO().update(getCurrentCharacterID(), save);
+                }
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to update stats", e);
+            }
+        }
+    }
+
+    @Override
+    public void loadFromDatabase() {
+        combatStats = combatStatsDao.find(getCurrentCharacterID());
+        saveSet = saveSetDao.findSet(getCurrentCharacterID());
+        maxDex = armorDao.getMaxDexForCharacter(getCurrentCharacterID());
+        abilitySet = abilitySetDao.findSet(getCurrentCharacterID());
+    }
 
 }

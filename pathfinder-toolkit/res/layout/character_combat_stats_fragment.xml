@@ -12,1204 +12,392 @@
 
         <!-- HP section -->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar">
+        <LinearLayout style="@style/combat_stats_row_header_bar">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
                 android:text="@string/combat_stats_current_hp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+                style="@style/combat_stats_row_header_name" />
 
             <TextView
-                android:id="@+id/textViewCurrentHP"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:paddingRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/tv_current_hp"
+                style="@style/combat_stats_row_header_value" />
 
         </LinearLayout>
 
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/combat_stats_horizontal_scroll" >
+        <HorizontalScrollView style="@style/combat_stats_horizontal_scroll" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/combat_stats_side_padding"
-                android:paddingRight="@dimen/combat_stats_side_padding"
-                android:orientation="horizontal" >
+            <LinearLayout style="@style/combat_stats_horizontal_scroll_linear_layout">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/combat_stats_total_hp" />
-
-                <EditText
-                    android:id="@+id/editTextTotalHP"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                    android:text="@string/combat_stats_total_hp"
+                    style="@style/combat_stats_hp_row_label"
+                    android:paddingLeft="0dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/combat_stats_damage_reduction" />
-
-                <EditText
-                    android:id="@+id/editTextDamageReduction"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                    android:id="@+id/tv_total_hp_val"
+                    style="@style/combat_stats_clickable_text_view"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/combat_stats_wounds" />
-
-                <EditText
-                    android:id="@+id/editTextWounds"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                    android:text="@string/combat_stats_wounds"
+                    style="@style/combat_stats_hp_row_label" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/combat_stats_non_lethal" />
+                    android:id="@+id/tv_wounds_val"
+                    style="@style/combat_stats_clickable_text_view"/>
 
-                <EditText
-                    android:id="@+id/editTextNonLethalDmg"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                <TextView
+                    android:text="@string/combat_stats_non_lethal"
+                    style="@style/combat_stats_hp_row_label" />
+
+                <TextView
+                    android:id="@+id/tv_non_lethal_dmg_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
+                    android:text="@string/combat_stats_damage_reduction"
+                    style="@style/combat_stats_hp_row_label" />
+
+                <TextView
+                    android:id="@+id/tv_dmg_reduct_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
             </LinearLayout>
         </HorizontalScrollView>
 
         <!-- Speed section -->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:orientation="horizontal" >
+        <LinearLayout style="@style/combat_stats_horizontal_linear_layout">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/combat_stats_base_speed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
+                style="@style/combat_stats_row_header_sub_name" />
 
-            <EditText
-                android:id="@+id/editTextBaseSpeed"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/combat_stats_empty_field"
-                android:imeOptions="actionDone"
-                android:inputType="numberSigned"
-                android:gravity="center"
-                android:selectAllOnFocus="true"
-                android:maxLines="1" />
+            <TextView
+                android:id="@+id/tv_base_speed_val"
+                style="@style/combat_stats_clickable_text_view"/>
+
         </LinearLayout>
 
         <!-- Initiative section -->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar">
+        <LinearLayout style="@style/combat_stats_row_header_bar">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
                 android:text="@string/combat_stats_initiative"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+                style="@style/combat_stats_row_header_name" />
 
             <TextView
-                android:id="@+id/textViewInitiative"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/tv_initiative"
+                style="@style/combat_stats_row_header_value" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+        <LinearLayout style="@style/combat_stats_horizontal_linear_layout">
 
             <TextView
-                android:id="@+id/tvInitAbility"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="60dp"
-                android:layout_margin="3dp"
-                style="@style/clickable_text_view"
-                android:gravity="center" />
+                android:id="@+id/tv_init_ability"
+                style="@style/combat_stats_clickable_text_view" />
 
             <include
-                 layout="@layout/character_combat_stats_plus"/>
+                layout="@layout/character_combat_stats_plus"/>
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextInitMiscMod"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:id="@+id/tv_init_misc_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
                     android:text="@string/combat_stats_misc_mod"
-                    android:textSize="12sp" />
+                    style="@style/combat_stats_vertically_labeled_property_label" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- AC section -->
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar"
+            style="@style/combat_stats_row_header_bar"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:text="@string/combat_stats_ac"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textViewAC"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/combat_stats_touch"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/textViewTouchAC"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:paddingRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/combat_stats_flat_footed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/textViewFlatFootedAC"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:paddingRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/combat_stats_horizontal_scroll" >
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/combat_stats_side_padding"
-                android:paddingRight="@dimen/combat_stats_side_padding"
-                android:paddingTop="5dp" >
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextArmourBonus"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_armour"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextShieldBonus"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_shield"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvACAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
+                    android:text="@string/combat_stats_ac"
+                    style="@style/combat_stats_row_header_name" />
 
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
+                <TextView
+                    android:id="@+id/tv_ac"
+                    style="@style/combat_stats_row_header_value" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-                    <EditText
-                        android:id="@+id/editTextACSizeMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
+                <TextView
+                    android:text="@string/combat_stats_touch"
+                    style="@style/combat_stats_row_header_sub_name" />
+
+                <TextView
+                    android:id="@+id/tv_touch_ac"
+                    style="@style/combat_stats_row_header_sub_value" />
+
+                <TextView
+                    android:text="@string/combat_stats_flat_footed"
+                    style="@style/combat_stats_row_header_sub_name"/>
+
+                <TextView
+                    android:id="@+id/tv_flat_footed_ac"
+                    style="@style/combat_stats_row_header_sub_value" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <HorizontalScrollView style="@style/combat_stats_horizontal_scroll" >
+
+            <LinearLayout style="@style/combat_stats_horizontal_scroll_linear_layout">
+
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:id="@+id/tv_ac_armor_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
+                        android:text="@string/combat_stats_armour"
+                        style="@style/combat_stats_vertically_labeled_property_label" />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/character_combat_stats_plus"/>
+
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                    <TextView
+                        android:id="@+id/tv_ac_shield_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
+                        android:text="@string/combat_stats_shield"
+                        style="@style/combat_stats_vertically_labeled_property_label" />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/character_combat_stats_plus"/>
+
+                <TextView
+                    android:id="@+id/tv_ac_ability"
+                    style="@style/combat_stats_clickable_text_view" />
+
+                <include
+                    layout="@layout/character_combat_stats_plus"/>
+
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                    <TextView
+                        android:id="@+id/tv_ac_size_mod_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
                         android:text="@string/combat_stats_size_mod"
-                        android:textSize="12sp" />
+                        style="@style/combat_stats_vertically_labeled_property_label" />
                 </LinearLayout>
 
                 <include
-                     layout="@layout/character_combat_stats_plus"/>
+                    layout="@layout/character_combat_stats_plus"/>
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextNaturalArmour"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:id="@+id/tv_ac_natural_armor_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
                         android:text="@string/combat_stats_natural_armour"
-                        android:textSize="12sp" />
+                        style="@style/combat_stats_vertically_labeled_property_label" />
                 </LinearLayout>
 
                 <include
-                     layout="@layout/character_combat_stats_plus"/>
+                    layout="@layout/character_combat_stats_plus"/>
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextDeflectionMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:id="@+id/tv_deflect_mod_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
                         android:text="@string/combat_stats_deflect_mod"
-                        android:textSize="12sp" />
+                        style="@style/combat_stats_vertically_labeled_property_label" />
                 </LinearLayout>
 
                 <include
-                     layout="@layout/character_combat_stats_plus"/>
+                    layout="@layout/character_combat_stats_plus"/>
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/editTextACMiscMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:selectAllOnFocus="true"
-                        android:maxLines="1" />
+                <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                     <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:id="@+id/tv_ac_misc_val"
+                        style="@style/combat_stats_clickable_text_view"/>
+
+                    <TextView
                         android:text="@string/combat_stats_misc_mod"
-                        android:textSize="12sp" />
+                        style="@style/combat_stats_vertically_labeled_property_label" />
                 </LinearLayout>
             </LinearLayout>
         </HorizontalScrollView>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:paddingBottom="5dp">
+        <LinearLayout style="@style/combat_stats_horizontal_linear_layout">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
                 android:text="@string/combat_stats_spell_resist"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"/>
+                style="@style/combat_stats_row_header_sub_name" />
 
-            <EditText
-                android:id="@+id/editTextSpellResist"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/combat_stats_empty_field"
-                android:imeOptions="actionDone"
-                android:inputType="numberSigned"
-                android:gravity="center"
-                android:selectAllOnFocus="true"
-                android:maxLines="1" />
+            <TextView
+                android:id="@+id/tv_spell_resist_val"
+                style="@style/combat_stats_clickable_text_view"/>
+
         </LinearLayout>
 
         <!-- BAB section -->
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar"
+            style="@style/combat_stats_row_header_bar"
             android:text="@string/combat_stats_bab"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+        <LinearLayout style="@style/combat_stats_horizontal_linear_layout">
 
             <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextBABPrimary"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                style="@style/combat_stats_vertically_labeled_property_layout">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:id="@+id/tv_bab_primary_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
                     android:text="@string/combat_stats_bab_primary"
-                    android:textSize="12sp" />
+                    style="@style/combat_stats_vertically_labeled_property_label" />
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/combat_stats_slash" />
+                android:text="@string/combat_stats_slash"
+                style="@style/combat_stats_symbol_label"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextBABSecondary"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:id="@+id/tv_bab_secondary_val"
+                    style="@style/combat_stats_clickable_text_view"
+                    android:layout_width="fill_parent"/>
+
+                <TextView
                     android:text="@string/combat_stats_bab_secondary"
-                    android:textSize="12sp" />
+                    style="@style/combat_stats_vertically_labeled_property_label" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- Combat Maneuver section -->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar" >
+        <LinearLayout style="@style/combat_stats_row_header_bar">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
                 android:text="@string/combat_stats_cmb"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+                style="@style/combat_stats_row_header_name" />
 
             <TextView
-                android:id="@+id/textViewCMB"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/tv_cmb"
+                style="@style/combat_stats_row_header_value" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" >
+            style="@style/combat_stats_horizontal_linear_layout">
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextCmbBAB"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:id="@+id/tv_cmb_bab_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
                     android:text="@string/combat_stats_cmb_bab"
-                    android:textSize="12sp" />
+                    style="@style/combat_stats_vertically_labeled_property_label" />
             </LinearLayout>
-
-            <include
-                 layout="@layout/character_combat_stats_plus"/>
-
-            <TextView
-                    android:id="@+id/tvCMBAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
-
-            <include
-                 layout="@layout/character_combat_stats_minus"/>
-
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/editTextCMBSizeMod"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/combat_stats_size_mod"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <!-- Combat Maneuver Defence -->
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:text="@string/combat_stats_cmd"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textViewCMD"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/combat_stats_side_padding"
-            android:paddingRight="@dimen/combat_stats_side_padding"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/combat_stats_cmd_equals" />
-
-            <TextView
-                    android:id="@+id/tvCMDAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
 
             <include
                 layout="@layout/character_combat_stats_plus"/>
 
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
+            <TextView
+                android:id="@+id/tv_cmb_ability"
+                style="@style/combat_stats_clickable_text_view" />
 
-                <EditText
-                    android:id="@+id/editTextCMDMiscMod"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/combat_stats_empty_field"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberSigned"
-                    android:gravity="center"
-                    android:selectAllOnFocus="true"
-                    android:maxLines="1" />
+            <include
+                layout="@layout/character_combat_stats_minus"/>
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:id="@+id/tv_cmb_size_mod_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
+                    android:text="@string/combat_stats_size_mod"
+                    style="@style/combat_stats_vertically_labeled_property_label" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Combat Maneuver Defence -->
+
+        <LinearLayout style="@style/combat_stats_row_header_bar">
+
+            <TextView
+                android:text="@string/combat_stats_cmd"
+                style="@style/combat_stats_row_header_name" />
+
+            <TextView
+                android:id="@+id/tv_cmd"
+                style="@style/combat_stats_row_header_value" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/combat_stats_horizontal_linear_layout" >
+
+            <TextView
+                android:text="@string/combat_stats_cmd_equals"
+                style="@style/combat_stats_symbol_label"/>
+
+            <TextView
+                android:id="@+id/tv_cmd_ability"
+                style="@style/combat_stats_clickable_text_view" />
+
+            <include
+                layout="@layout/character_combat_stats_plus"/>
+
+            <LinearLayout style="@style/combat_stats_vertically_labeled_property_layout">
+
+                <TextView
+                    android:id="@+id/tv_cmd_misc_mod_val"
+                    style="@style/combat_stats_clickable_text_view"/>
+
+                <TextView
                     android:text="@string/combat_stats_misc_mod"
-                    android:textSize="12sp" />
+                    style="@style/combat_stats_vertically_labeled_property_label" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Fort Save -->
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:text="@string/combat_stats_fort"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvFort"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/combat_stats_horizontal_scroll" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/combat_stats_side_padding"
-                android:paddingRight="@dimen/combat_stats_side_padding"
-                android:paddingTop="5dp" >
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveFortBase"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_base"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <TextView
-                    android:id="@+id/tvFortAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveFortMagicMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_magic_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveFortMiscMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_misc_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveFortTempMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_temp_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <!-- Reflex Save -->
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:text="@string/combat_stats_ref"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvRef"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/combat_stats_horizontal_scroll" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/combat_stats_side_padding"
-                android:paddingRight="@dimen/combat_stats_side_padding"
-                android:paddingTop="5dp" >
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveRefBase"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_base"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <TextView
-                    android:id="@+id/tvReflexAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveRefMagicMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_magic_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveRefMiscMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_misc_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveRefTempMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_temp_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <!-- Will Save -->
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/row_header_bar" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:text="@string/combat_stats_will"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvWill"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/combat_stats_horizontal_scroll" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/combat_stats_side_padding"
-                android:paddingRight="@dimen/combat_stats_side_padding"
-                android:paddingTop="5dp" >
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveWillBase"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_base"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <TextView
-                    android:id="@+id/tvWillAbility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="60dp"
-                    android:layout_margin="3dp"
-                    style="@style/clickable_text_view"
-                    android:gravity="center" />
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveWillMagicMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_magic_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveWillMiscMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_misc_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <include
-                     layout="@layout/character_combat_stats_plus"/>
-
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <EditText
-                        android:id="@+id/etSaveWillTempMod"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/combat_stats_empty_field"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberSigned"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/combat_stats_temp_mod"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
+        <!-- Saves -->
+
+        <include layout="@layout/character_save_stats_row" android:id="@+id/row_fort_stats" />
+        <include layout="@layout/character_save_stats_row" android:id="@+id/row_ref_stats" />
+        <include layout="@layout/character_save_stats_row" android:id="@+id/row_will_stats" />
     </LinearLayout>
 
 </ScrollView>

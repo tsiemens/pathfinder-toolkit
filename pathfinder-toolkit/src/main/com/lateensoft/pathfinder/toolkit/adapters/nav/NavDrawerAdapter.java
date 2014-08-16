@@ -17,15 +17,15 @@ import java.util.List;
 
 public class NavDrawerAdapter implements ExpandableListAdapter {
 
-	private Context m_context;
+    private Context m_context;
     List<NavDrawerGroupItem> m_items;
-	
-	private NavDrawerItem m_selectedItem = null;
-	
-	public NavDrawerAdapter(Context context, List<NavDrawerGroupItem> navDrawerItems) {
-		m_context = context;
+    
+    private NavDrawerItem m_selectedItem = null;
+    
+    public NavDrawerAdapter(Context context, List<NavDrawerGroupItem> navDrawerItems) {
+        m_context = context;
         m_items = navDrawerItems;
-	}
+    }
 
     @Override
     public View getChildView(int groupPosition, int childPosition,
@@ -118,17 +118,17 @@ public class NavDrawerAdapter implements ExpandableListAdapter {
 
         return row;
     }
-	
-	@Override
-	public boolean areAllItemsEnabled() {
-		return false;
-	}
+    
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
 
-	@Override
-	public Object getChild(int groupPosition, int childPosition) {
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
         List<NavDrawerChildItem> children = m_items.get(groupPosition).getChildren();
         return children != null ? children.get(childPosition) : null;
-	}
+    }
 
     @Override
      public Object getGroup(int groupPosition) {
@@ -140,76 +140,76 @@ public class NavDrawerAdapter implements ExpandableListAdapter {
         return ((Integer) groupPosition).longValue();
     }
 
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
         return ((Integer) childPosition).longValue();
-	}
+    }
 
     @Override
     public int getGroupCount() {
         return m_items.size();
     }
 
-	@Override
-	public int getChildrenCount(int groupPosition) {
+    @Override
+    public int getChildrenCount(int groupPosition) {
         List<NavDrawerChildItem> children = m_items.get(groupPosition).getChildren();
         return children != null ? children.size() : 0;
-	}
+    }
 
     private static long COMBINED_ID_GROUP_MOD = 10000L;
 
-	@Override
-	public long getCombinedChildId(long groupId, long childId) {
-		return groupId * COMBINED_ID_GROUP_MOD + (childId + 1);
-	}
+    @Override
+    public long getCombinedChildId(long groupId, long childId) {
+        return groupId * COMBINED_ID_GROUP_MOD + (childId + 1);
+    }
 
-	@Override
-	public long getCombinedGroupId(long groupId) {
-		return groupId * COMBINED_ID_GROUP_MOD;
-	}
+    @Override
+    public long getCombinedGroupId(long groupId) {
+        return groupId * COMBINED_ID_GROUP_MOD;
+    }
 
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
 
-	@Override
-	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return true;
-	}
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return m_items.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return m_items.isEmpty();
+    }
 
-	@Override
-	public void onGroupCollapsed(int groupPosition) {
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
 
-	}
+    }
 
-	@Override
-	public void onGroupExpanded(int groupPosition) {
-		
-	}
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        
+    }
 
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer) {
-		
-	}
+    @Override
+    public void registerDataSetObserver(DataSetObserver observer) {
+        
+    }
 
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer) {
-		
-	}
-	
-	public void setSelectedItem(NavDrawerItem item) {
-		m_selectedItem = item;
-	}
-	
-	public NavDrawerItem getSelectedItem() {
-		return m_selectedItem;
-	}
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver observer) {
+        
+    }
+    
+    public void setSelectedItem(NavDrawerItem item) {
+        m_selectedItem = item;
+    }
+    
+    public NavDrawerItem getSelectedItem() {
+        return m_selectedItem;
+    }
 
     public int getGroupIndexForItem(NavDrawerItem item) {
         boolean isGroup = item instanceof NavDrawerGroupItem;
@@ -253,10 +253,10 @@ public class NavDrawerAdapter implements ExpandableListAdapter {
         return null;
     }
 
-	static class ItemHolder {
-		TextView name;
-		ImageView icon;
-		ImageView groupState;
-	}
+    static class ItemHolder {
+        TextView name;
+        ImageView icon;
+        ImageView groupState;
+    }
 
 }

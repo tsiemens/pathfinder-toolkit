@@ -3,20 +3,23 @@ package com.lateensoft.pathfinder.toolkit.views.party;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.Activity;
 import android.text.Editable;
 import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
-import com.google.common.collect.Lists;
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.SimpleSelectableListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.*;
-import com.lateensoft.pathfinder.toolkit.model.IdStringPair;
+import com.lateensoft.pathfinder.toolkit.dao.DataAccessException;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.CharacterNameDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyDAO;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.PartyMemberNameDAO;
+import com.lateensoft.pathfinder.toolkit.model.IdNamePair;
 import com.lateensoft.pathfinder.toolkit.model.NamedList;
 import com.lateensoft.pathfinder.toolkit.pref.GlobalPrefs;
 import com.lateensoft.pathfinder.toolkit.pref.Preferences;
 import com.lateensoft.pathfinder.toolkit.views.BasePageFragment;
-import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeCallback;
+import com.lateensoft.pathfinder.toolkit.views.MultiSelectActionModeController;
 import com.lateensoft.pathfinder.toolkit.views.character.CharacterCombatStatsFragment;
 
 import android.app.AlertDialog;
@@ -25,77 +28,97 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
-import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtils;
+import com.lateensoft.pathfinder.toolkit.views.picker.PickerUtil;
 import roboguice.RoboGuice;
 
 public class PartyManagerFragment extends BasePageFragment {
-	private static final String TAG = PartyManagerFragment.class.getSimpleName();
+    private static final String TAG = PartyManagerFragment.class.getSimpleName();
     private static final int GET_NEW_MEMBERS_CODE = 18880;
     private static final int GET_PARTY_CODE = 54716;
 
-	public NamedList<IdStringPair> m_party;
+    public NamedList<IdNamePair> party;
 
-	private EditText m_partyNameEditText;
-	private ListView m_partyMemberList;
-	
-	private LitePartyRepository m_partyRepo = new LitePartyRepository();
-
-    private ActionMode m_actionMode;
-    private ActionModeCallback m_actionModeCallback;
+    private EditText partyNameEditText;
+    private ListView partyMemberList;
+    
+    private PartyDAO<IdNamePair> partyDao;
+    private PartyMemberNameDAO memberDao;
 
     private Preferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        memberDao = new PartyMemberNameDAO(getContext());
+        partyDao = new PartyDAO<IdNamePair>(getContext(), memberDao);
         preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
     }
 
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
 
-		setRootView(inflater.inflate(R.layout.fragment_party_manager,
-				container, false));
+        setRootView(inflater.inflate(R.layout.fragment_party_manager,
+                container, false));
 
-		m_partyNameEditText = (EditText) getRootView()
-				.findViewById(R.id.editTextPartyName);
+        partyNameEditText = (EditText) getRootView()
+                .findViewById(R.id.editTextPartyName);
 
-		m_partyMemberList = (ListView) getRootView()
-				.findViewById(R.id.listViewPartyMembers);
-		m_partyMemberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        partyMemberList = (ListView) getRootView()
+                .findViewById(R.id.listViewPartyMembers);
+        partyMemberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (m_actionModeCallback == null) {
-                    showMemberDetails(m_party.get(position).getId());
+                if (actionModeController.isActionModeStarted()) {
+                    actionModeController.toggleListItemSelection(position);
                 } else {
-                    m_actionModeCallback.toggleListItemSelection(position);
+                    showMemberDetails(party.get(position).getId());
                 }
             }
         });
-        m_partyMemberList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        partyMemberList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (m_actionMode != null) {
-                    return false;
+                if (!actionModeController.isActionModeStarted()) {
+                    actionModeController.startActionModeWithInitialSelection(position);
+                    return true;
                 }
-
-                m_actionModeCallback = new ActionModeCallback();
-                m_actionMode = getActivity().startActionMode(m_actionModeCallback);
-                m_actionModeCallback.selectListItem(position, true);
-                return true;
+                return false;
             }
         });
 
-		loadCurrentParty();
-		return getRootView();
-	}
-	
-	@Override
-	public void onPause() {
-		updateDatabase();
-		super.onPause();
-	}
+        loadCurrentParty();
+        return getRootView();
+    }
+
+    private MultiSelectActionModeController actionModeController = new MultiSelectActionModeController() {
+        @Override public Activity getActivity() {
+            return PartyManagerFragment.this.getActivity();
+        }
+
+        @Override public int getActionMenuResourceId() {
+            return R.menu.remove_action_mode_menu;
+        }
+
+        @Override public ListView getListView() {
+            return partyMemberList;
+        }
+
+        @Override public boolean onActionItemClicked(MultiSelectActionModeController controller, MenuItem item) {
+            if (item.getItemId() == R.id.mi_remove) {
+                showRemoveCharactersFromPartyDialog(getSelectedItems(party));
+                controller.finishActionMode();
+                return true;
+            }
+            return false;
+        }
+    };
+    
+    @Override
+    public void onPause() {
+        updateDatabase();
+        super.onPause();
+    }
 
     @Override
     public void updateTitle() {
@@ -108,25 +131,25 @@ public class PartyManagerFragment extends BasePageFragment {
         switchToPage(CharacterCombatStatsFragment.class);
     }
 
-	/**
-	 * Load the currently set party in shared prefs If there is no party set in
-	 * user prefs, it automatically generates a new one.
-	 */
-	private void loadCurrentParty() {
-		long currentPartyID = getSelectedPartyId();
+    /**
+     * Load the currently set party in shared prefs If there is no party set in
+     * user prefs, it automatically generates a new one.
+     */
+    private void loadCurrentParty() {
+        long currentPartyID = getSelectedPartyId();
 
-		if (currentPartyID == -1) {
-			// There was no current party set in shared prefs
-			addNewPartyAndSetSelected();
-		} else {
-			m_party = m_partyRepo.query(currentPartyID);
-			if (m_party == null) {
-				handleInvalidSelectedParty();
-			}
-			refreshPartyView();
+        if (currentPartyID == -1) {
+            // There was no current party set in shared prefs
+            addNewPartyAndSetSelected();
+        } else {
+            party = partyDao.findList(currentPartyID);
+            if (party == null) {
+                handleInvalidSelectedParty();
+            }
+            refreshPartyView();
 
-		}
-	}
+        }
+    }
 
     private void setSelectedParty(long partyId) {
         preferences.put(GlobalPrefs.SELECTED_PARTY_ID, partyId);
@@ -137,53 +160,24 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void handleInvalidSelectedParty() {
-        List<IdStringPair> ids = m_partyRepo.queryIdNameList();
-        for (IdStringPair id : ids) {
-            m_party = m_partyRepo.query(id.getId());
-            if (m_party != null) {
-                setSelectedParty(m_party.getId());
+        List<IdNamePair> ids = partyDao.findAll();
+        for (IdNamePair id : ids) {
+            party = partyDao.findList(id.getId());
+            if (party != null) {
+                setSelectedParty(party.getId());
                 break;
             }
         }
-        if (m_party == null) {
+        if (party == null) {
             addNewPartyAndSetSelected();
         }
     }
 
-    private class ActionModeCallback extends MultiSelectActionModeCallback {
-
-        public ActionModeCallback() {
-            super(R.menu.membership_action_mode_menu);
-        }
-
-        @Override
-        public ListView getListView() {
-            return m_partyMemberList;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.mi_remove) {
-                showRemoveCharactersFromPartyDialog(getSelectedItems(m_party));
-                mode.finish();
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            super.onDestroyActionMode(mode);
-            m_actionMode = null;
-            m_actionModeCallback = null;
-        }
-    }
-
-    private void showRemoveCharactersFromPartyDialog(final List<IdStringPair> membersToRemove) {
+    private void showRemoveCharactersFromPartyDialog(final List<IdNamePair> membersToRemove) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
                 .setMessage(String.format(getString(R.string.party_remove_members_dialog_msg),
-                        m_party.size()));
+                        party.size()));
 
         builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
@@ -196,93 +190,100 @@ public class PartyManagerFragment extends BasePageFragment {
                 .show();
     }
 
-    private void removeMembersFromParty(List<IdStringPair> membersToRemove) {
-        List<Long> memberIds = Lists.newArrayList();
-        for (IdStringPair pair : membersToRemove) {
-            memberIds.add(pair.getId());
-        }
-
-        int numberOfDeletions = m_partyRepo.removeCharactersFromParty(m_party.getId(), memberIds);
-        if (numberOfDeletions > 0) {
-            m_party.removeAll(membersToRemove);
+    private void removeMembersFromParty(List<IdNamePair> membersToRemove) {
+        for (IdNamePair member : membersToRemove) {
+            try {
+                memberDao.remove(party.getId(), member);
+                party.remove(member);
+            } catch (DataAccessException e) {
+                Log.e(TAG, "Failed to remove member" + member, e);
+            }
         }
         refreshPartyView();
     }
 
-	private void addNewPartyAndSetSelected() {
-		m_party = new NamedList<IdStringPair>("New Party");
-		m_partyRepo.insert(m_party);
-		setSelectedParty(m_party.getId());
-		refreshPartyView();
-	}
+    private void addNewPartyAndSetSelected() {
+        try {
+            NamedList<IdNamePair> newParty = new NamedList<IdNamePair>("New Party");
+            long id = partyDao.add(newParty.idNamePair());
+            newParty.setId(id);
+            party = newParty;
+            setSelectedParty(newParty.getId());
+            refreshPartyView();
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to add party", e);
+        }
+    }
 
-	private void deleteCurrentPartyAndSelectAnother() {
-        m_partyRepo.delete(m_party);
-		List<IdStringPair> partyIDs = m_partyRepo.queryIdNameList();
+    private void deleteCurrentPartyAndSelectAnother() {
+        try {
+            partyDao.remove(party.idNamePair());
+            List<IdNamePair> partyIDs = partyDao.findAll();
 
-		if (partyIDs.isEmpty()) {
-			addNewPartyAndSetSelected();
-		} else {
-			setSelectedParty(partyIDs.get(0).getId());
-			loadCurrentParty();
-		}
-	}
+            if (partyIDs.isEmpty()) {
+                addNewPartyAndSetSelected();
+            } else {
+                setSelectedParty(partyIDs.get(0).getId());
+                loadCurrentParty();
+            }
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to delete party " + party.idNamePair(), e);
+        }
+    }
 
-	private void updateDatabase() {
-        Editable text = m_partyNameEditText.getText();
-		m_party.setName(text != null ? text.toString() : "");
-		m_partyRepo.update(m_party);
-	}
+    private void updateDatabase() {
+        Editable text = partyNameEditText.getText();
+        party.setName(text != null ? text.toString() : "");
+        try {
+            partyDao.update(party.idNamePair());
+        } catch (DataAccessException e) {
+            Log.e(TAG, "Failed to update party", e);
+        }
+    }
 
-	private void refreshPartyView() {
-        if (m_actionMode != null) {
-            m_actionMode.finish();
-            m_actionModeCallback = null;
-            m_actionMode = null;
+    private void refreshPartyView() {
+        if (actionModeController.isActionModeStarted()) {
+            actionModeController.finishActionMode();
         }
 
-        Collections.sort(m_party);
-		m_partyNameEditText.setText(m_party.getName());
-        SimpleSelectableListAdapter<IdStringPair> adapter = new SimpleSelectableListAdapter<IdStringPair>(
-                getContext(), m_party,
-                new SimpleSelectableListAdapter.DisplayStringGetter<IdStringPair>() {
-                    @Override public String getDisplayString(IdStringPair object) {
-                        return object.getValue();
+        Collections.sort(party);
+        partyNameEditText.setText(party.getName());
+        SimpleSelectableListAdapter<IdNamePair> adapter = new SimpleSelectableListAdapter<IdNamePair>(
+                getContext(), party,
+                new SimpleSelectableListAdapter.DisplayStringGetter<IdNamePair>() {
+                    @Override public String getDisplayString(IdNamePair object) {
+                        return object.getName();
                     }
                 });
         adapter.setItemSelectionGetter(new SimpleSelectableListAdapter.ItemSelectionGetter() {
             @Override public boolean isItemSelected(int position) {
-                if (m_actionModeCallback != null) {
-                    return m_actionModeCallback.isListItemSelected(position);
-                } else {
-                    return false;
-                }
+                return actionModeController.isListItemSelected(position);
             }
         });
-		m_partyMemberList.setAdapter(adapter);
-	}
+        partyMemberList.setAdapter(adapter);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.mi_party_list:
-			showPartyPicker();
-			break;
-		case R.id.mi_new_member:
-			showMemberPicker();
-			break;
-		case R.id.mi_new_party:
-			showCreateNewPartyDialog();
-			break;
-		case R.id.mi_delete_party:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.mi_party_list:
+            showPartyPicker();
+            break;
+        case R.id.mi_new_member:
+            showMemberPicker();
+            break;
+        case R.id.mi_new_party:
+            showCreateNewPartyDialog();
+            break;
+        case R.id.mi_delete_party:
             showDeletePartyDialog();
-			break;
-		}
+            break;
+        }
 
-		super.onOptionsItemSelected(item);
-		return true;
+        super.onOptionsItemSelected(item);
+        return true;
 
-	}
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -291,21 +292,21 @@ public class PartyManagerFragment extends BasePageFragment {
     }
 
     private void showPartyPicker() {
-        List<IdStringPair> parties = m_partyRepo.queryIdNameList();
-        parties.remove(new IdStringPair(m_party.getId(), m_party.getName()));
-        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        updateDatabase();
+        List<IdNamePair> parties = partyDao.findAll();
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.single_party_picker_title)
                 .setSingleChoice(true)
-                .setPickableParties(parties);
+                .setPickableParties(parties, party.idNamePair());
         Intent pickerIntent = builder.build();
         startActivityForResult(pickerIntent, GET_PARTY_CODE);
     }
 
     private void showMemberPicker() {
-        CharacterRepository charRepo = new CharacterRepository();
-        List<IdStringPair> characters = charRepo.queryIdNameList();;
-        characters.removeAll(m_party);
-        PickerUtils.Builder builder = new PickerUtils.Builder(getActivity());
+        CharacterNameDAO charDao = new CharacterNameDAO(getContext());
+        List<IdNamePair> characters = charDao.findAll();
+        characters.removeAll(party);
+        PickerUtil.Builder builder = new PickerUtil.Builder(getActivity());
         builder.setTitle(R.string.select_members_picker_title)
                 .setSingleChoice(false)
                 .setPickableCharacters(characters);
@@ -329,9 +330,10 @@ public class PartyManagerFragment extends BasePageFragment {
     private void showDeletePartyDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(String.format(getString(R.string.confirm_delete_item_message),
-                m_party.getName()))
+                party.getName()))
                 .setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         deleteCurrentPartyAndSelectAnother();
                     }
                 })
@@ -339,27 +341,24 @@ public class PartyManagerFragment extends BasePageFragment {
         builder.create().show();
     }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
-            PickerUtils.ResultData pickerData = new PickerUtils.ResultData(data);
+            PickerUtil.ResultData pickerData = new PickerUtil.ResultData(data);
             if (requestCode == GET_PARTY_CODE) {
-                IdStringPair party = pickerData.getParty();
+                IdNamePair party = pickerData.getParty();
                 if (party != null) {
                     setSelectedParty(party.getId());
                     loadCurrentParty();
                 }
             } else {
-                List<IdStringPair> membersToAdd = pickerData.getCharacters();
+                List<IdNamePair> membersToAdd = pickerData.getCharacters();
                 if (membersToAdd != null) {
-                    PartyMembershipRepository membersRepo = m_partyRepo.getMembersRepo();
-                    for (IdStringPair member : membersToAdd) {
-                        long id = membersRepo.insert(new PartyMembershipRepository.Membership(m_party.getId(), member.getId()));
-                        if (id >= 0) {
-                            m_party.add(member);
-                        } else {
-                            Log.e(TAG, "Database returned " + id + " while adding character "
-                                    + member + " to " + m_party.getId());
+                    for (IdNamePair member : membersToAdd) {
+                        try {
+                            memberDao.add(party.getId(), member);
+                        } catch (DataAccessException e) {
+                            Log.e(TAG, "Failed to add member", e);
                         }
                     }
                     refreshPartyView();
@@ -367,6 +366,6 @@ public class PartyManagerFragment extends BasePageFragment {
             }
         }
 
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

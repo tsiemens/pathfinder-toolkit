@@ -19,7 +19,8 @@
 
     <dimen name="fluff_padding">5dp</dimen>
     <dimen name="fluff_padding_right">10dp</dimen>
-    <dimen name="fluff_dialog_padding">5dp</dimen>
+
+    <dimen name="value_dialog_padding">5dp</dimen>
 
     <dimen name="ability_calc_header_height">40sp</dimen>
     <dimen name="ability_calc_padding">3dp</dimen>
@@ -29,6 +30,8 @@
     <dimen name="ability_calc_dialog_row_height">50sp</dimen>
 
     <dimen name="small_divider">1dp</dimen>
+    <dimen name="small_divider_margin">15dp</dimen>
+
     <dimen name="large_divider">2dp</dimen>
 
     <dimen name="button_background_corner_radius">2dp</dimen>

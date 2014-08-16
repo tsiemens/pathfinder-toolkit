@@ -70,12 +70,12 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
 
     private static ImmutableBiMap<SkillType, String> buildSkillKeyStrings() {
         ImmutableBiMap.Builder<SkillType, String> builder = ImmutableBiMap.builder();
-        builder.put(SkillType.ACRO, "Acrobatics");
+        builder.put(SkillType.ACROBATICS, "Acrobatics");
         builder.put(SkillType.APPRAISE, "Appraise");
         builder.put(SkillType.BLUFF, "Bluff");
         builder.put(SkillType.CLIMB, "Climb");
         builder.put(SkillType.CRAFT, "Craft");
-        builder.put(SkillType.DIPLOM, "Diplomacy");
+        builder.put(SkillType.DIPLOMACY, "Diplomacy");
         builder.put(SkillType.DISABLE_DEV, "DisableDevice");
         builder.put(SkillType.DISGUISE, "Disguise");
         builder.put(SkillType.ESCAPE, "EscapeArtist");
@@ -93,10 +93,10 @@ public class SkillXMLAdapter extends XMLObjectAdapter<Skill> {
         builder.put(SkillType.KNOW_NOBILITY, "KnowledgeNobility");
         builder.put(SkillType.KNOW_PLANES, "KnowledgePlanes");
         builder.put(SkillType.KNOW_RELIGION, "KnowledgeReligion");
-        builder.put(SkillType.LING, "Linguistics");
-        builder.put(SkillType.PERCEPT, "Perception");
+        builder.put(SkillType.LINGUISTICS, "Linguistics");
+        builder.put(SkillType.PERCEPTION, "Perception");
         builder.put(SkillType.PERFORM, "Perform");
-        builder.put(SkillType.PROF, "Profession");
+        builder.put(SkillType.PROFESSION, "Profession");
         builder.put(SkillType.RIDE, "Ride");
         builder.put(SkillType.SENSE_MOTIVE, "SenseMotive");
         builder.put(SkillType.SLEIGHT_OF_HAND, "SleightOfHand");

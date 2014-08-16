@@ -1,9 +1,6 @@
 package com.lateensoft.pathfinder.toolkit.views.character;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,141 +12,83 @@ import android.widget.ListView;
 
 import com.lateensoft.pathfinder.toolkit.R;
 import com.lateensoft.pathfinder.toolkit.adapters.character.FeatListAdapter;
-import com.lateensoft.pathfinder.toolkit.db.repository.FeatRepository;
+import com.lateensoft.pathfinder.toolkit.db.dao.table.FeatDAO;
 import com.lateensoft.pathfinder.toolkit.model.character.Feat;
 import com.lateensoft.pathfinder.toolkit.model.character.FeatList;
 import com.lateensoft.pathfinder.toolkit.views.ParcelableEditorActivity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 
-public class CharacterFeatsFragment extends AbstractCharacterSheetFragment
-		implements OnClickListener, OnItemClickListener {
+public class CharacterFeatsFragment extends IndexedParcelableListFragment<Feat, FeatDAO> {
+    private static final String TAG = CharacterFeatsFragment.class.getSimpleName();
 
-	private static final String TAG = CharacterFeatsFragment.class.getSimpleName();
-	private ListView m_featsListView;
-	private Button m_addButton;
+    private ListView featsListView;
+    private Button addButton;
 
-	private int m_featSelectedForEdit;
-	
-	private FeatRepository m_featRepo;
-	private FeatList m_featList;
+    private FeatDAO featDao;
+    private FeatList feats;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		m_featRepo = new FeatRepository();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        featDao = new FeatDAO(getContext());
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-		setRootView(inflater.inflate(R.layout.character_feats_fragment,
-				container, false));
+        setRootView(inflater.inflate(R.layout.character_feats_fragment,
+                container, false));
 
-		m_addButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
-		m_addButton.setOnClickListener(this);
+        addButton = (Button) getRootView().findViewById(R.id.buttonAddFeat);
+        addButton.setOnClickListener(getAddButtonClickListener());
 
-		m_featsListView = (ListView) getRootView()
-				.findViewById(R.id.listViewFeats);
-		m_featsListView.setOnItemClickListener(this);
+        featsListView = (ListView) getRootView()
+                .findViewById(R.id.listViewFeats);
+        featsListView.setOnItemClickListener(getListItemClickListener());
 
-		return getRootView();
-	}
+        return getRootView();
+    }
 
-	private void refreshFeatsListView() {
-        Collections.sort(m_featList);
-		FeatListAdapter adapter = new FeatListAdapter(getActivity(),
-				R.layout.character_feats_row, m_featList);
+    @Override
+    protected Class<? extends ParcelableEditorActivity> getParcelableEditorActivity() {
+        return FeatEditActivity.class;
+    }
 
-		m_featsListView.setAdapter(adapter);
-	}
+    @Override
+    protected FeatDAO getDAO() {
+        return featDao;
+    }
 
-	// Add Feat button was tapped
-	public void onClick(View button) {
-		m_featSelectedForEdit = -1;
-		showFeatEditor(null);
-	}
+    @Override
+    protected List<Feat> getModel() {
+        return feats;
+    }
 
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		m_featSelectedForEdit = position;
-		showFeatEditor(m_featList.get(position));
-	}
+    @Override
+    public void updateFragmentUI() {
+        refreshFeatsListView();
+    }
 
-	private void showFeatEditor(Feat feat) {
-		Intent featEditIntent = new Intent(getContext(),
-				FeatEditActivity.class);
-		featEditIntent.putExtra(
-				FeatEditActivity.INTENT_EXTRAS_KEY_EDITABLE_PARCELABLE, feat);
-		startActivityForResult(featEditIntent, ParcelableEditorActivity.DEFAULT_REQUEST_CODE);
-	}
+    private void refreshFeatsListView() {
+        Collections.sort(feats);
+        FeatListAdapter adapter = new FeatListAdapter(getActivity(),
+                R.layout.character_feats_row, feats);
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != ParcelableEditorActivity.DEFAULT_REQUEST_CODE) {
-            return;
-        }
-		switch (resultCode) {
-		case Activity.RESULT_OK:
-			Feat feat = ParcelableEditorActivity.getParcelableFromIntent(data);
-            if (feat != null && m_featList != null) {
-                if(m_featSelectedForEdit < 0) {
-                    Log.v(TAG, "Adding a feat");
-                    feat.setCharacterID(getCurrentCharacterID());
-                    if(m_featRepo.insert(feat) != -1) {
-                        m_featList.add(feat);
-                        refreshFeatsListView();
-                    }
-                } else {
-                    Log.v(TAG, "Editing a feat");
-                    if(m_featRepo.update(feat) != 0) {
-                        m_featList.set(m_featSelectedForEdit, feat);
-                        refreshFeatsListView();
-                    }
-                }
-            }
-			
-			break;
-		
-		case FeatEditActivity.RESULT_DELETE:
-			Log.v(TAG, "Deleting an item");
-			Feat featToDelete = m_featList.get(m_featSelectedForEdit);
-			if(featToDelete != null && m_featRepo.delete(featToDelete) != 0) {
-				m_featList.remove(m_featSelectedForEdit);
-				refreshFeatsListView();
-			}
-			break;
-		
-		case Activity.RESULT_CANCELED:
-			break;
-		
-		default:
-			break;
-		}
-		updateDatabase();
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+        featsListView.setAdapter(adapter);
+    }
+    
+    @Override
+    public String getFragmentTitle() {
+        return getString(R.string.tab_character_feats);
+    }
 
-	@Override
-	public void updateFragmentUI() {
-		refreshFeatsListView();
-	}
-	
-	@Override
-	public String getFragmentTitle() {
-		return getString(R.string.tab_character_feats);
-	}
-
-	@Override
-	public void updateDatabase() {
-		// Done dynamically
-	}
-
-	@Override
-	public void loadFromDatabase() {
-		m_featList = new FeatList(m_featRepo.querySet(getCurrentCharacterID()));
-	}
-
+    @Override
+    public void loadFromDatabase() {
+        feats = new FeatList(featDao.findAllForOwner(getCurrentCharacterID()));
+    }
 }

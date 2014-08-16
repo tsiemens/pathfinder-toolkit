@@ -48,44 +48,6 @@
         <item >2</item>
     </integer-array>
 
-    <integer-array name="default_skill_ability_keys">
-        <item>2</item>
-        <item>4</item>
-        <item>6</item>
-        <item>1</item>
-        <item>4</item>
-        <item>6</item>
-        <item>2</item>
-        <item>6</item>
-        <item>2</item>
-        <item>2</item>
-        <item>6</item>
-        <item>5</item>
-        <item>6</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>5</item>
-        <item>2</item>
-        <item>5</item>
-        <item>2</item>
-        <item>4</item>
-        <item>2</item>
-        <item>5</item>
-        <item>1</item>
-        <item>6</item>
-    </integer-array>
-
     <integer name="spell_row_description_visibility">2</integer>
 
     <integer name="feat_row_description_visibility">2</integer>

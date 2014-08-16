@@ -6,22 +6,22 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 public class Table {
-	private ImmutableList<String> columns;
-	private String name;
-	
-	public Table(String table, String... columns) {
-		name = table;
+    private ImmutableList<String> columns;
+    private String name;
+    
+    public Table(String table, String... columns) {
+        name = table;
         this.columns = ImmutableList.copyOf(columns);
-	}
+    }
 
-	public String[] getColumnNames() {
+    public String[] getColumnNames() {
         String[] colNames = new String[columns.size()];
         return columns.toArray(colNames);
-	}
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
     /**
      * Union of columns will merge ourColumnToJoin and othercolumnToJoin.

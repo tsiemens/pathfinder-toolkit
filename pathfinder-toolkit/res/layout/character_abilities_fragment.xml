@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    	
+        
     <TableRow>
         <TextView
             android:text="@string/ability"
@@ -25,9 +25,9 @@
         <TextView
             android:text="@string/temp_bonus"
             android:padding="3dip"
-        	android:gravity="center"
-        	android:layout_weight="0.20"
-        	android:layout_height="fill_parent"/>
+            android:gravity="center"
+            android:layout_weight="0.20"
+            android:layout_height="fill_parent"/>
         <TextView
             android:text="@string/temp_mod" 
             android:padding="3dp"
@@ -73,12 +73,12 @@
             android:layout_weight="0.20"
             android:layout_height="fill_parent"/>
     </TableRow>
-	
+    
     <View
         android:layout_height="1dip"
         android:background="#FF909090" />
-	
-	<TableRow android:id="@+id/dexRow" android:layout_weight="0.10">
+    
+    <TableRow android:id="@+id/dexRow" android:layout_weight="0.10">
         <TextView
             android:text="@string/ability_name_dex"
             android:padding="3dp"
@@ -114,8 +114,8 @@
 <View
         android:layout_height="1dip"
         android:background="#FF909090" />
-	
-	<TableRow android:id="@+id/conRow" android:layout_weight="0.10">
+    
+    <TableRow android:id="@+id/conRow" android:layout_weight="0.10">
         <TextView
             android:text="@string/ability_name_con"
             android:padding="3dp" 
@@ -151,8 +151,8 @@
 <View
         android:layout_height="1dip"
         android:background="#FF909090" />
-	
-	<TableRow android:id="@+id/intRow" android:layout_weight="0.10">
+    
+    <TableRow android:id="@+id/intRow" android:layout_weight="0.10">
         <TextView
             android:text="@string/ability_name_int"
             android:padding="3dp" 
@@ -184,14 +184,14 @@
             android:layout_weight="0.20"
             android:layout_height="fill_parent"/>
     </TableRow>    
-	
+    
 
 
 <View
         android:layout_height="1dip"
         android:background="#FF909090" />
-	
-	<TableRow android:id="@+id/wisRow" android:layout_weight="0.10">
+    
+    <TableRow android:id="@+id/wisRow" android:layout_weight="0.10">
         <TextView
             android:text="@string/ability_name_wis"
             android:padding="3dp" 
@@ -227,8 +227,8 @@
 <View
         android:layout_height="1dip"
         android:background="#FF909090" />
-	
-	<TableRow android:id="@+id/chaRow" android:layout_weight="0.10">
+    
+    <TableRow android:id="@+id/chaRow" android:layout_weight="0.10">
         <TextView
             android:text="@string/ability_name_cha"
             android:padding="3dp" 
@@ -260,5 +260,5 @@
             android:layout_weight="0.20"
             android:layout_height="fill_parent"/>
     </TableRow>    
-    	
+        
 </TableLayout>

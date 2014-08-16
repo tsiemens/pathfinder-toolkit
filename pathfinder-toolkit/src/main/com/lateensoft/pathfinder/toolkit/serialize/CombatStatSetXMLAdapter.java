@@ -75,7 +75,7 @@ public class CombatStatSetXMLAdapter extends XMLObjectAdapter<CombatStatSet> {
             combatStats.setBABSecondary(getStringAttribute(element, BAB_S_ATTR));
         }
 
-        combatStats.setCMBAbilityKey(getAbilityKey(abilityStringsToKeys,
+        combatStats.setCMBAbility(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, CMB_ABILITY_ATTR)));
         combatStats.setCMDAbility(getAbilityKey(abilityStringsToKeys,
                 getStringAttribute(element, CMD_ABILITY_ATTR)));

@@ -10,19 +10,23 @@ import java.util.Collection;
  */
 public class NamedList<E> extends ArrayList<E> implements Identifiable {
 
-    private long m_id = UNSET_ID;
-    private String m_name;
+    private long id = UNSET_ID;
+    private String name;
 
     public NamedList(String name) {
         super();
-        m_id = UNSET_ID;
-        m_name = name;
+        id = UNSET_ID;
+        this.name = name;
     }
 
     public NamedList(long id, String name, Collection<E> items) {
         super(items);
-        m_id = id;
-        m_name = name;
+        this.id = id;
+        this.name = name;
+    }
+
+    public NamedList(IdNamePair idNamePair, Collection<E> items) {
+        this(idNamePair.getId(), idNamePair.getName(), items);
     }
 
     public NamedList(String name, Collection<E> items) {
@@ -30,21 +34,25 @@ public class NamedList<E> extends ArrayList<E> implements Identifiable {
     }
 
     public String getName() {
-        return m_name;
+        return name;
     }
 
     public void setName(String name) {
-        m_name = name;
+        this.name = name;
     }
 
     @Override
     public void setId(long id) {
-        m_id = id;
+        this.id = id;
     }
 
     @Override
     public long getId() {
-        return m_id;
+        return id;
+    }
+
+    public IdNamePair idNamePair() {
+        return new IdNamePair(id, name);
     }
 
     @Override
@@ -55,8 +63,8 @@ public class NamedList<E> extends ArrayList<E> implements Identifiable {
 
         NamedList namedList = (NamedList) o;
 
-        if (m_id != namedList.m_id) return false;
-        if (m_name != null ? !m_name.equals(namedList.m_name) : namedList.m_name != null) return false;
+        if (id != namedList.id) return false;
+        if (name != null ? !name.equals(namedList.name) : namedList.name != null) return false;
 
         return true;
     }
@@ -64,8 +72,8 @@ public class NamedList<E> extends ArrayList<E> implements Identifiable {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (int) (m_id ^ (m_id >>> 32));
-        result = 31 * result + (m_name != null ? m_name.hashCode() : 0);
+        result = 31 * result + (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 }

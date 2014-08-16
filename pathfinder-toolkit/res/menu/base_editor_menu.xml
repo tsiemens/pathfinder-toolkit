@@ -3,14 +3,14 @@
     <item 
         android:id="@+id/mi_done"
         android:title="@string/editor_menu_item_done"
-       	android:icon="@drawable/ic_cab_done_holo_dark"
+           android:icon="@drawable/ic_cab_done_holo_dark"
         android:showAsAction="always" />
-	<item 
+    <item 
         android:id="@+id/mi_cancel"
         android:title="@string/editor_menu_item_cancel"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:showAsAction="ifRoom" />
-	<item 
+    <item 
         android:id="@+id/mi_delete"
         android:title="@string/editor_menu_item_delete"
         android:icon="@android:drawable/ic_menu_delete"

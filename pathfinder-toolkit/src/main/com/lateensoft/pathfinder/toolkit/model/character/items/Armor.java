@@ -3,135 +3,147 @@ package com.lateensoft.pathfinder.toolkit.model.character.items;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Collection;
+
 public class Armor extends Item {
-	private boolean worn;
-	private int ACBonus;
-	private int checkPen;
-	private int maxDex;
-	private int spellFail;
-	private int speed;
-	private String specialProperties;
-	private Size size;
-	
-	public Armor() {
-		super();
-		worn =  true;
-		ACBonus = 0;
-		checkPen = 0;
-		maxDex = 10;
-		spellFail = 0;
-		speed = 30;
-		specialProperties = "";
-		size = Size.MEDIUM;
-	}
-	
-	public Armor(Parcel in) {
-		super(in);
-		boolean[] wornAr = new boolean[1];
-		in.readBooleanArray(wornAr);
-		this.worn = wornAr[0];
-		ACBonus = in.readInt();
-		checkPen = in.readInt();
-		maxDex = in.readInt();
-		spellFail = in.readInt();
-		speed = in.readInt();
-		specialProperties = in.readString();
-		size = Size.forKey(in.readString());
-	}
-	
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		super.writeToParcel(out, flags);
-		boolean[] wornAr = new boolean[1];
-		wornAr[0] = worn;
-		out.writeBooleanArray(wornAr);
-		out.writeInt(ACBonus);
-		out.writeInt(checkPen);
-		out.writeInt(maxDex);
-		out.writeInt(spellFail);
-		out.writeInt(speed);
-		out.writeString(specialProperties);
-		out.writeString(size.getKey());
-	}
-	
-	public void setSize(Size size) {
-		this.size = size;
-	}
-	
-	public Size getSize() {
-		return size;
-	}
-	
-	public void setSpecialProperties(String properties) {
-		specialProperties = properties;
-	}
-	
-	public String getSpecialProperties() {
-		return specialProperties;
-	}
-		
-	public boolean isWorn() {
-		return worn;
-	}
+    private boolean worn;
+    private int ACBonus;
+    private int checkPen;
+    private int maxDex;
+    private int spellFail;
+    private int speed;
+    private String specialProperties;
+    private Size size;
+    
+    public Armor() {
+        super();
+        worn =  true;
+        ACBonus = 0;
+        checkPen = 0;
+        maxDex = 10;
+        spellFail = 0;
+        speed = 30;
+        specialProperties = "";
+        size = Size.MEDIUM;
+    }
+    
+    public Armor(Parcel in) {
+        super(in);
+        boolean[] wornAr = new boolean[1];
+        in.readBooleanArray(wornAr);
+        this.worn = wornAr[0];
+        ACBonus = in.readInt();
+        checkPen = in.readInt();
+        maxDex = in.readInt();
+        spellFail = in.readInt();
+        speed = in.readInt();
+        specialProperties = in.readString();
+        size = Size.forKey(in.readString());
+    }
+    
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        boolean[] wornAr = new boolean[1];
+        wornAr[0] = worn;
+        out.writeBooleanArray(wornAr);
+        out.writeInt(ACBonus);
+        out.writeInt(checkPen);
+        out.writeInt(maxDex);
+        out.writeInt(spellFail);
+        out.writeInt(speed);
+        out.writeString(specialProperties);
+        out.writeString(size.getKey());
+    }
+    
+    public void setSize(Size size) {
+        this.size = size;
+    }
+    
+    public Size getSize() {
+        return size;
+    }
+    
+    public void setSpecialProperties(String properties) {
+        specialProperties = properties;
+    }
+    
+    public String getSpecialProperties() {
+        return specialProperties;
+    }
+        
+    public boolean isWorn() {
+        return worn;
+    }
 
-	public void setWorn(boolean worn) {
-		this.worn = worn;
-	}
+    public void setWorn(boolean worn) {
+        this.worn = worn;
+    }
 
-	public int getACBonus() {
-		return ACBonus;
-	}
+    public int getACBonus() {
+        return ACBonus;
+    }
 
-	public void setACBonus(int ACBonus) {
-		this.ACBonus = ACBonus;
-	}
-	
-	public int getCheckPen() {
-		return checkPen;
-	}
-	
-	public void setCheckPen(int checkPen) {
-		this.checkPen = checkPen;
-	}
-	
-	public int getMaxDex() {
-		return maxDex;
-	}
-	
-	public void setMaxDex(int maxDex) {
-		this.maxDex = maxDex;
-	}
-	
-	public int getSpellFail() {
-		return spellFail;
-	}
-	
-	public void setSpellFail(int spellFail) {
-		this.spellFail = spellFail;
-	}
-	
-	public int getSpeed() {
-		return speed;
-	}
-	
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-	
-	public String getSpeedString() {
-		String speedString = Integer.toString(speed) + " ft.";
-		return speedString;
-	}
+    public void setACBonus(int ACBonus) {
+        this.ACBonus = ACBonus;
+    }
+    
+    public int getArmorCheckPenalty() {
+        return checkPen;
+    }
+    
+    public void setArmorCheckPenalty(int checkPen) {
+        this.checkPen = checkPen;
+    }
+    
+    public int getMaxDex() {
+        return maxDex;
+    }
+    
+    public void setMaxDex(int maxDex) {
+        this.maxDex = maxDex;
+    }
 
-	public static final Parcelable.Creator<Armor> CREATOR = new Parcelable.Creator<Armor>() {
-		public Armor createFromParcel(Parcel in) {
-			return new Armor(in);
-		}
-		
-		public Armor[] newArray(int size) {
-			return new Armor[size];
-		}
-	};
+    public static int maxDexForAll(Collection<Armor> armors) {
+        int maxDex = Integer.MAX_VALUE;
+        for (Armor armor : armors) {
+            if (armor.isWorn() && armor.getMaxDex() < maxDex) {
+                maxDex = armor.getMaxDex();
+            }
+        }
+        return maxDex;
+    }
+    
+    public int getSpellFail() {
+        return spellFail;
+    }
+    
+    public void setSpellFail(int spellFail) {
+        this.spellFail = spellFail;
+    }
+    
+    public int getSpeed() {
+        return speed;
+    }
+    
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+    
+    public String getSpeedString() {
+        String speedString = Integer.toString(speed) + " ft.";
+        return speedString;
+    }
+
+    public static final Parcelable.Creator<Armor> CREATOR = new Parcelable.Creator<Armor>() {
+        public Armor createFromParcel(Parcel in) {
+            return new Armor(in);
+        }
+        
+        public Armor[] newArray(int size) {
+            return new Armor[size];
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

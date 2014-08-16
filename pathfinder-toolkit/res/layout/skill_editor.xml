@@ -47,7 +47,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 style="@style/clickable_text_view"
-                android:gravity="center"
                 android:minWidth="90dp" />
         </LinearLayout>
 

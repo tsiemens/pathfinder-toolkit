@@ -23,10 +23,10 @@ public class RateDialogHelper {
     private Context context;
     private Preferences preferences;
 
-	public RateDialogHelper(Context context) {
+    public RateDialogHelper(Context context) {
         this.context = context;
         preferences = RoboGuice.getInjector(context).getInstance(Preferences.class);
-	}
+    }
 
     public void buildAndShowDialog() {
         build();
