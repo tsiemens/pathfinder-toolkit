@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:id="@+id/pbLoading"
+            android:visibility="visible" android:paddingTop="200dp" android:paddingBottom="200dp"
+            android:paddingRight="200dp" android:paddingLeft="200dp"/>
+
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"

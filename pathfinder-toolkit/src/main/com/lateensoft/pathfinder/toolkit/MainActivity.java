@@ -254,6 +254,8 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
                 Log.e(TAG, null, e);
             }
         }
+        View v = this.findViewById(R.id.pbLoading);
+        v.setVisibility(View.GONE);
     }
 
     public void showFragment(@NotNull Class<? extends BasePageFragment> fragmentClass) {
@@ -312,6 +314,8 @@ public class MainActivity extends RoboFragmentActivity implements OnChildClickLi
         NavDrawerAdapter adapter = (NavDrawerAdapter) list.getExpandableListAdapter();
         if (adapter != null) {
             m_toOpen = (NavDrawerChildItem) adapter.getChild(groupPosition, childPosition);
+            View v = this.findViewById(R.id.pbLoading);
+            v.setVisibility(View.VISIBLE);
         }
         setDrawerOpen(false);
         return false;
