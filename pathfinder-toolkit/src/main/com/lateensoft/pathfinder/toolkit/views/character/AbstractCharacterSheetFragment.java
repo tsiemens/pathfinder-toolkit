@@ -83,6 +83,7 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         Preferences preferences = RoboGuice.getInjector(getContext()).getInstance(Preferences.class);
         preferences.put(GlobalPrefs.SELECTED_CHARACTER_ID, characterId);
         currentCharacterID = characterId;
+        loadSelectedCharacter();
     }
 
     /**
@@ -154,7 +155,6 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
         } else {
             int charToSelect = (currentCharacterIndex == 0) ? 1 : 0;
             setSelectedCharacter(characters.get(charToSelect).getId());
-            loadSelectedCharacter();
         }
 
         try {
@@ -284,7 +284,6 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
                 }
                 if (lastCharacterId != -1) {
                     setSelectedCharacter(lastCharacterId);
-                    loadSelectedCharacter();
                 }
                 if(didFailToImport) {
                     Toast.makeText(getContext(), R.string.import_error_unknown, Toast.LENGTH_LONG).show();
@@ -316,7 +315,6 @@ public abstract class AbstractCharacterSheetFragment extends BasePageFragment {
             IdNamePair selectedCharacter = pickerData.getCharacter();
             if (selectedCharacter != null && selectedCharacter.getId() != getCurrentCharacterID()) {
                 setSelectedCharacter(selectedCharacter.getId());
-                loadSelectedCharacter();
             }
         }
     }
