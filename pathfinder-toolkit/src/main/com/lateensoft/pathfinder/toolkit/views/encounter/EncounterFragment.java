@@ -231,7 +231,12 @@ public class EncounterFragment extends BasePageFragment {
         }
     }
 
-    private DynamicArrayAdapter.OnItemsSwappedListener itemsSwappedListener = new DynamicArrayAdapter.OnItemsSwappedListener() {
+    private DynamicArrayAdapter.ItemSwapListener itemsSwappedListener = new DynamicArrayAdapter.ItemSwapListener() {
+        @Override
+        public void onHoverEventFinished(DynamicListView.HoverEvent event) {
+            presenter.onParticipantOrderChangeConfirmed(event.getStart(), event.getEnd());
+        }
+
         @Override public void onItemsSwapped(int pos1, int pos2) {
             presenter.onParticipantOrdersChanged();
         }

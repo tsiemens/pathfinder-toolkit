@@ -3,6 +3,7 @@ package com.lateensoft.pathfinder.toolkit.views.encounter;
 import android.content.Context;
 import android.text.Editable;
 import android.util.Log;
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -142,12 +143,16 @@ public class EncounterPresenter {
     public void onNextTurnSelected() {
         EncounterParticipantRowModel currentTurn = encounter.getCurrentTurn();
         if (currentTurn == null && !encounter.isEmpty()) {
-            encounter.setCurrentTurn(encounter.get(0));
+            setCurrentTurn(0);
         } else if (currentTurn != null) {
             int currentTurnIndex = encounter.indexOf(currentTurn);
             int nextTurnIndex = (currentTurnIndex + 1) % encounter.size();
-            encounter.setCurrentTurn(encounter.get(nextTurnIndex));
+            setCurrentTurn(nextTurnIndex);
         }
+    }
+
+    private void setCurrentTurn(int index) {
+        encounter.setCurrentTurn(encounter.get(index));
         notifyModelAttributesChanged();
     }
 
@@ -226,6 +231,13 @@ public class EncounterPresenter {
                 Log.e(TAG, "Could not remove participant " + row.getParticipant().getId()
                         + " from party " + encounter.getId(), e);
             }
+        }
+    }
+
+    public void onParticipantOrderChangeConfirmed(int initialPosition, int newPosition) {
+        if (initialPosition != newPosition &&
+                Objects.equal(encounter.get(newPosition), encounter.getCurrentTurn())) {
+            setCurrentTurn(initialPosition);
         }
     }
 

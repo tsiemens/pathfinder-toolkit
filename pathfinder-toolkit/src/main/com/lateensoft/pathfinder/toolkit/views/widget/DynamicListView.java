@@ -83,6 +83,21 @@ public class DynamicListView extends ListView {
     private boolean isWaitingForScrollFinish = false;
     private int scrollState = OnScrollListener.SCROLL_STATE_IDLE;
 
+    private HoverEvent currentHoverEvent;
+
+    public static class HoverEvent {
+        final int startIndex;
+        int endIndex;
+
+        HoverEvent(int startIndex) {
+            this.startIndex = startIndex;
+            endIndex = startIndex;
+        }
+
+        public int getStart() { return startIndex; }
+        public int getEnd() { return endIndex; }
+    }
+
     public DynamicListView(Context context) {
         super(context);
         init(context);
@@ -132,7 +147,7 @@ public class DynamicListView extends ListView {
         }
 
         View selectedView = getChildAt(itemNum);
-        mobileItemIndex = position;
+        updateMobileItemIndex(position);
         hoverCell = getAndAddHoverView(selectedView);
         selectedView.setVisibility(INVISIBLE);
 
@@ -291,7 +306,7 @@ public class DynamicListView extends ListView {
 
             DynamicArrayAdapter adapter = (DynamicArrayAdapter) getAdapter();
             adapter.swapItems(originalItemPosition, switchItemPosition);
-            mobileItemIndex = switchItemPosition;
+            updateMobileItemIndex(switchItemPosition);
 
             adapter.notifyDataSetChanged();
 
@@ -328,6 +343,25 @@ public class DynamicListView extends ListView {
                     }
                 });
             }
+        }
+    }
+
+    private void updateMobileItemIndex(int position) {
+        mobileItemIndex = position;
+        updateHoverEvent(position);
+    }
+
+    private void updateHoverEvent(int newHoverIndex) {
+        if (currentHoverEvent != null) {
+            if (newHoverIndex != INVALID_INDEX) {
+                currentHoverEvent.endIndex = newHoverIndex;
+            } else {
+                DynamicArrayAdapter adapter = (DynamicArrayAdapter) getAdapter();
+                adapter.finishedHoverEvent(currentHoverEvent);
+                currentHoverEvent = null;
+            }
+        } else if (newHoverIndex != INVALID_INDEX) {
+            currentHoverEvent = new HoverEvent(newHoverIndex);
         }
     }
 
@@ -371,7 +405,7 @@ public class DynamicListView extends ListView {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mobileItemIndex = INVALID_INDEX;
+                    updateMobileItemIndex(INVALID_INDEX);
                     mobileView.setVisibility(VISIBLE);
                     hoverCell = null;
                     setEnabled(true);
@@ -390,7 +424,7 @@ public class DynamicListView extends ListView {
     private void touchEventsCancelled () {
         View mobileView = getViewForPosition(mobileItemIndex);
         if (cellIsMobile) {
-            mobileItemIndex = INVALID_INDEX;
+            updateMobileItemIndex(INVALID_INDEX);
             mobileView.setVisibility(VISIBLE);
             hoverCell = null;
             invalidate();

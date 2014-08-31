@@ -10,9 +10,10 @@ import java.util.List;
 
 public abstract class DynamicArrayAdapter<T> extends BaseArrayAdapter<T> {
 
-    private OnItemsSwappedListener swapListener;
+    private ItemSwapListener swapListener;
 
-    public interface OnItemsSwappedListener {
+    public interface ItemSwapListener {
+        public void onHoverEventFinished(DynamicListView.HoverEvent event);
         public void onItemsSwapped(int pos1, int pos2);
     }
 
@@ -20,7 +21,7 @@ public abstract class DynamicArrayAdapter<T> extends BaseArrayAdapter<T> {
         super(context, textViewResourceId, objects);
     }
 
-    public void setOnItemsSwappedListener(OnItemsSwappedListener listener) {
+    public void setOnItemsSwappedListener(ItemSwapListener listener) {
         swapListener = listener;
     }
 
@@ -28,6 +29,12 @@ public abstract class DynamicArrayAdapter<T> extends BaseArrayAdapter<T> {
         doItemSwap(pos1, pos2);
         if (swapListener != null) {
             swapListener.onItemsSwapped(pos1, pos2);
+        }
+    }
+
+    public void finishedHoverEvent(DynamicListView.HoverEvent event) {
+        if (swapListener != null) {
+            swapListener.onHoverEventFinished(event);
         }
     }
 
