@@ -3,6 +3,6 @@
     <item 
         android:id="@+id/mi_remove"
         android:title="@string/action_mode_menu_item_remove"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_action_remove_person"
         android:showAsAction="always" />
 </menu>
