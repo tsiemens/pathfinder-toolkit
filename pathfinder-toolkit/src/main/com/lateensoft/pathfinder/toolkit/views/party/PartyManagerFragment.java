@@ -177,7 +177,7 @@ public class PartyManagerFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
                 .setMessage(String.format(getString(R.string.party_remove_members_dialog_msg),
-                        party.size()));
+                        membersToRemove.size()));
 
         builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {

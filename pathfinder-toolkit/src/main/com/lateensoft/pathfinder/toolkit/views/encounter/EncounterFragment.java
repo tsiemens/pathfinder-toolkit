@@ -122,7 +122,7 @@ public class EncounterFragment extends BasePageFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.membership_remove_dialog_title)
                 .setMessage(String.format(getString(R.string.remove_participants_from_encounter_msg),
-                        presenter.getModel().size()));
+                        participantsToRemove.size()));
 
         builder.setPositiveButton(R.string.ok_button_text, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
