@@ -346,26 +346,35 @@ public class PartyManagerFragment extends BasePageFragment {
         if (requestCode == GET_PARTY_CODE || requestCode == GET_NEW_MEMBERS_CODE) {
             PickerUtil.ResultData pickerData = new PickerUtil.ResultData(data);
             if (requestCode == GET_PARTY_CODE) {
-                IdNamePair party = pickerData.getParty();
-                if (party != null) {
-                    setSelectedParty(party.getId());
-                    loadCurrentParty();
-                }
+                onGetPartyResult(pickerData);
             } else {
-                List<IdNamePair> membersToAdd = pickerData.getCharacters();
-                if (membersToAdd != null) {
-                    for (IdNamePair member : membersToAdd) {
-                        try {
-                            memberDao.add(party.getId(), member);
-                        } catch (DataAccessException e) {
-                            Log.e(TAG, "Failed to add member", e);
-                        }
-                    }
-                    refreshPartyView();
-                }
+                onGetNewMembersResult(pickerData);
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void onGetPartyResult(PickerUtil.ResultData pickerData) {
+        IdNamePair party = pickerData.getParty();
+        if (party != null) {
+            setSelectedParty(party.getId());
+            loadCurrentParty();
+        }
+    }
+
+    private void onGetNewMembersResult(PickerUtil.ResultData pickerData) {
+        List<IdNamePair> membersToAdd = pickerData.getCharacters();
+        if (membersToAdd != null) {
+            for (IdNamePair member : membersToAdd) {
+                try {
+                    memberDao.add(party.getId(), member);
+                    party.add(member);
+                } catch (DataAccessException e) {
+                    Log.e(TAG, "Failed to add member", e);
+                }
+            }
+            refreshPartyView();
+        }
     }
 }
