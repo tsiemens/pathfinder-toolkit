@@ -237,7 +237,12 @@ public class EncounterPresenter {
     public void onParticipantOrderChangeConfirmed(int initialPosition, int newPosition) {
         if (initialPosition != newPosition &&
                 Objects.equal(encounter.get(newPosition), encounter.getCurrentTurn())) {
-            setCurrentTurn(initialPosition);
+            if (initialPosition < newPosition)
+                // Character moved down in list
+                setCurrentTurn(initialPosition);
+            else
+                // Character moved up in list
+                setCurrentTurn((initialPosition + 1) % encounter.size());
         }
     }
 
